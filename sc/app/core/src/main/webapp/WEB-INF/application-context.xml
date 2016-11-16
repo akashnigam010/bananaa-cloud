@@ -12,5 +12,4 @@
 	<mvc:annotation-driven />
 	<context:annotation-config />
 	<context:component-scan base-package="in.socyal.sc, in.socyal.sc.*" />
-	<task:annotation-driven />
 </beans>

@@ -4,7 +4,6 @@ import java.security.NoSuchAlgorithmException;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -23,13 +22,7 @@ public class LoginDao {
 	private static final String PIN = "pin";
 	private static final String ACCESS_CODE = "accessCode";
 	@Autowired
-	MongoTemplate senseMongoTemplate;
-	@Autowired
 	LoginMapper mapper;
-
-	public void setSenseMongoTemplate(MongoTemplate senseMongoTemplate) {
-		this.senseMongoTemplate = senseMongoTemplate;
-	}
 
 	public PersonnelDto login(UserSignOnRequest request, Boolean isPinSignOn) throws BusinessException {
 		try {
