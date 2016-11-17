@@ -1,4 +1,4 @@
-package in.socyal.sc.dbhelper;
+package in.socyal.sc.persistence;
 
 import java.util.Properties;
 

@@ -1,4 +1,4 @@
-package in.socyal.sc.dbhelper.cache;
+package in.socyal.sc.persistence.cache;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

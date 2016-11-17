@@ -1,4 +1,4 @@
-package in.socyal.sc.login;
+package in.socyal.sc.login.dao;
 
 import java.security.NoSuchAlgorithmException;
 

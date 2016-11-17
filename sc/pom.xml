@@ -179,6 +179,7 @@
 		<module>api</module>
 		<module>app</module>
 		<module>utility</module>
+		<module>persistence</module>
 	</modules>
 
 	<organization>

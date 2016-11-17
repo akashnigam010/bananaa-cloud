@@ -1,4 +1,4 @@
-package in.socyal.sc.dbhelper.cache;
+package in.socyal.sc.persistence.cache;
 
 import java.util.HashMap;
 import java.util.Map;

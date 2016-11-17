@@ -1,4 +1,4 @@
-package in.socyal.sc.dbhelper;
+package in.socyal.sc.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

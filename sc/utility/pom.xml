@@ -37,7 +37,6 @@
 
 	<modules>
 		<module>helper</module>
-		<module>dbhelper</module>
 		<module>date</module>		
 	</modules>
 </project>

@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>sc</groupId>
-		<artifactId>utility</artifactId>
+		<artifactId>socyalcloud</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>dbhelper</artifactId>
-	<name>SC DB Helper</name>
+	<artifactId>persistence</artifactId>
+	<name>SC Persistence Layer</name>
 	
 	<properties>
         <hibernate.version>4.3.6.Final</hibernate.version>
