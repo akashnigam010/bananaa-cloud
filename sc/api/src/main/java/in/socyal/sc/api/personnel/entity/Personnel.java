@@ -1,4 +1,4 @@
-package in.socyal.sc.api.bo.personnel.entity;
+package in.socyal.sc.api.personnel.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

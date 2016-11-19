@@ -2,9 +2,9 @@ package in.socyal.sc.login.mapper;
 
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.api.bo.personnel.dto.LoggedInUser;
-import in.socyal.sc.api.bo.personnel.dto.PersonnelDto;
-import in.socyal.sc.api.bo.personnel.entity.Personnel;
+import in.socyal.sc.api.personnel.dto.LoggedInUser;
+import in.socyal.sc.api.personnel.dto.PersonnelDto;
+import in.socyal.sc.api.personnel.entity.Personnel;
 import in.socyal.sc.api.type.RoleType;
 
 @Component

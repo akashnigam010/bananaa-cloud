@@ -1,4 +1,4 @@
-package in.socyal.sc.api.bo.personnel.request;
+package in.socyal.sc.api.personnel.request;
 
 public class DeletePersonnelRequest {
 	private Integer id;

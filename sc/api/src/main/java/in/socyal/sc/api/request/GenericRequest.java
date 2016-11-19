@@ -1,4 +1,4 @@
-package in.socyal.sc.api.bo.request;
+package in.socyal.sc.api.request;
 
 import java.io.Serializable;
 

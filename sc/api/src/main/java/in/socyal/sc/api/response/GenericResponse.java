@@ -1,10 +1,10 @@
-package in.socyal.sc.api.bo.response;
+package in.socyal.sc.api.response;
 
 import java.io.Serializable;
 
 import in.socyal.sc.api.ArrayOfStatusCode;
 
-public class GenericResponse<T> implements Serializable {
+public class GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public boolean result;
