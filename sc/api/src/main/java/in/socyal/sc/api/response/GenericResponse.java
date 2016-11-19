@@ -1,4 +1,4 @@
-package in.socyal.sc.api.bo.response;
+package in.socyal.sc.api.response;
 
 import java.io.Serializable;
 

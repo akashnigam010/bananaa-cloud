@@ -1,4 +1,4 @@
-package in.socyal.sc.api.bo.personnel.dto;
+package in.socyal.sc.api.personnel.dto;
 
 public class PersonnelDto {
 	private Integer id;

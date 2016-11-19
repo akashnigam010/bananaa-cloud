@@ -1,7 +1,7 @@
-package in.socyal.sc.api.bo.personnel.response;
+package in.socyal.sc.api.personnel.response;
 
-import in.socyal.sc.api.bo.personnel.dto.LoggedInUser;
-import in.socyal.sc.api.bo.response.GenericResponse;
+import in.socyal.sc.api.personnel.dto.LoggedInUser;
+import in.socyal.sc.api.response.GenericResponse;
 
 @SuppressWarnings("rawtypes")
 public class UserSignOnResponse extends GenericResponse {
