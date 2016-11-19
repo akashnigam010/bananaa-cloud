@@ -3,7 +3,6 @@ package in.socyal.sc.api.personnel.response;
 import in.socyal.sc.api.personnel.dto.LoggedInUser;
 import in.socyal.sc.api.response.GenericResponse;
 
-@SuppressWarnings("rawtypes")
 public class UserSignOnResponse extends GenericResponse {
 	private static final long serialVersionUID = 1L;
 	private String token;
