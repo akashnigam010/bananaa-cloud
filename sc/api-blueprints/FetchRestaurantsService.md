@@ -17,13 +17,14 @@ Retrieves the list of restaurant with given parameters
 
 + Request (application/json)
 
-        {
-            "token" : "abc123abc",
-            "location" : {
-                "longitude" : 001234445,
-                "lattitude" : 334523444
+    + Body
+
+            {
+                "location" : {
+                    "longitude" : 341234445,
+                    "lattitude" : 334523444
+                }
             }
-        }
 
 + Response 200 (application/json)
 
@@ -39,14 +40,8 @@ Retrieves the list of restaurant with given parameters
                         "imageUrl" : "http://www.whitebay.in/images/fusion9.png",
                         "rating" : 4.5,
                         "rewards" : [
-                            {
-                                "id" : 1223,
-                                "description" : "Amazon Gift Card worth Rs. 100"
-                            },
-                            {
-                                "id" : 1224,
-                                "description" : "Flipkart Gift Card worth Rs. 100"
-                            }
+                            "Amazon Gift Cards",
+                            "Flipkart Gift Cards"
                         ],
                         "status" : true,
                         "statusCodes" : []
@@ -59,14 +54,10 @@ Retrieves the list of restaurant with given parameters
                         "imageUrl" : "http://www.whitebay.in/images/heartcupcafecoffee.png",
                         "rating" : 4.2,
                         "rewards" : [
-                            {
-                                "id" : 1223,
-                                "description" : "Amazon Gift Card worth Rs. 100"
-                            },
-                            {
-                                "id" : 1224,
-                                "description" : "Flipkart Gift Card worth Rs. 100"
-                            }
+                            "Amazon Gift Cards",
+                            "Flipkart Gift Cards",
+                            "O2 Spa Coupons",
+                            "Direct Discount"
                         ],
                         "status" : true,
                         "statusCodes" : []
