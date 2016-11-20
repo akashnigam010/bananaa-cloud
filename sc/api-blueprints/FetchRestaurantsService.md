@@ -31,7 +31,7 @@ Retrieves the list of restaurant with given parameters
     + Body 
 
             {
-                [
+                "restaurants" : [
                     {
                         "id" : 12345,
                         "name" : "Fusion 9",
@@ -42,9 +42,7 @@ Retrieves the list of restaurant with given parameters
                         "rewards" : [
                             "Amazon Gift Cards",
                             "Flipkart Gift Cards"
-                        ],
-                        "status" : true,
-                        "statusCodes" : []
+                        ]
                     },
                     {
                         "id" : 12346,
@@ -58,9 +56,9 @@ Retrieves the list of restaurant with given parameters
                             "Flipkart Gift Cards",
                             "O2 Spa Coupons",
                             "Direct Discount"
-                        ],
-                        "status" : true,
-                        "statusCodes" : []
+                        ]
                     }
-                ]
+                ],
+                "status" : true,
+                "statusCodes" : []
             }
