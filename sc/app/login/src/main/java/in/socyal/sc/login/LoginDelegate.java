@@ -5,5 +5,7 @@ import in.socyal.sc.api.personnel.request.UserSignOnRequest;
 import in.socyal.sc.helper.exception.BusinessException;
 
 public interface LoginDelegate {
+	public UserAccessTokenDto thirdPartyLogin(String code) throws BusinessException;
+
 	public UserAccessTokenDto login(UserSignOnRequest request) throws BusinessException;
 }

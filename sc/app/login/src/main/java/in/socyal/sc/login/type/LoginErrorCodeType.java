@@ -3,8 +3,9 @@ package in.socyal.sc.login.type;
 import in.socyal.sc.helper.BusinessErrorCode;
 
 public enum LoginErrorCodeType implements BusinessErrorCode {
-	USERNAME_EMPTY(10001), 
-	PASSWORD_EMPTY(10001);
+	USERNAME_NOT_FOUND(10001), 
+	PASSWORD_NOT_FOUND(10002),
+	CODE_NOT_FOUND(10003);
 
 	private int value;
 
