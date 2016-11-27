@@ -36,27 +36,22 @@ Retrieves the list of restaurant with given parameters
                         "id" : 12345,
                         "name" : "Fusion 9",
                         "address" : "Hitech City, Hyderabad",
-                        "checkins" : 250,
+                        "checkins" : 1844,
                         "imageUrl" : "http://www.whitebay.in/images/fusion9.png",
                         "rating" : 4.5,
-                        "rewards" : [
-                            "Amazon Gift Cards",
-                            "Flipkart Gift Cards"
-                        ]
+                        "isOpen" : true,
+                        "distance" : 6.1
+                        
                     },
                     {
                         "id" : 12346,
                         "name" : "Heartcup Cafe' Coffee",
                         "address" : "Kondapur, Hyderabad",
-                        "checkins" : 136,
+                        "checkins" : 1232,
                         "imageUrl" : "http://www.whitebay.in/images/heartcupcafecoffee.png",
                         "rating" : 4.2,
-                        "rewards" : [
-                            "Amazon Gift Cards",
-                            "Flipkart Gift Cards",
-                            "O2 Spa Coupons",
-                            "Direct Discount"
-                        ]
+                        "isOpen" : false,
+                        "distance" : 1.3                      
                     }
                 ],
                 "status" : true,
