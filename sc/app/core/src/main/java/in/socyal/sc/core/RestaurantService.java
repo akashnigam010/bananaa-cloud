@@ -30,4 +30,10 @@ public class RestaurantService {
 		RestaurantDetailsResponse response = new RestaurantDetailsResponse();
 		return response;
 	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET, headers = "Accept=application/json")
+	public AllRestaurantsResponse test() {
+		AllRestaurantsResponse response = new AllRestaurantsResponse();
+		return response;
+	}
 }
