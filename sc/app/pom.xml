@@ -26,11 +26,11 @@
 			<artifactId>helper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>sc</groupId>
 			<artifactId>dbhelper</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>sc</groupId>
 			<artifactId>date</artifactId>
