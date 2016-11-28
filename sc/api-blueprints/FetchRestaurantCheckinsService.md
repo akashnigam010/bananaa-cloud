@@ -101,7 +101,7 @@ Retrieves the restaurant checkins with given id and page number
                         "likeCount" : 19
                     }
                 ],
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
                     
             }

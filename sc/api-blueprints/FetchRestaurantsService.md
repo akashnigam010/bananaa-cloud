@@ -22,7 +22,7 @@ Retrieves the list of restaurant with given parameters
             {
                 "location" : {
                     "longitude" : 341234445,
-                    "lattitude" : 334523444
+                    "latitude" : 334523444
                 },
                 "page" : 1
             }
@@ -36,7 +36,7 @@ Retrieves the list of restaurant with given parameters
                     {
                         "id" : 12345,
                         "name" : "Fusion 9",
-                        "address" : "Hitech City, Hyderabad",
+                        "shortAddress" : "Hitech City, Hyderabad",
                         "checkins" : 1844,
                         "imageUrl" : "http://www.whitebay.in/images/fusion9.png",
                         "rating" : 4.5,
@@ -47,7 +47,7 @@ Retrieves the list of restaurant with given parameters
                     {
                         "id" : 12346,
                         "name" : "Heartcup Cafe' Coffee",
-                        "address" : "Kondapur, Hyderabad",
+                        "shortAddress" : "Kondapur, Hyderabad",
                         "checkins" : 1232,
                         "imageUrl" : "http://www.whitebay.in/images/heartcupcafecoffee.png",
                         "rating" : 4.2,
@@ -55,6 +55,6 @@ Retrieves the list of restaurant with given parameters
                         "distance" : 1.3                      
                     }
                 ],
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }

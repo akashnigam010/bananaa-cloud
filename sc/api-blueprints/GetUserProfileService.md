@@ -95,7 +95,7 @@ Retrieves the user profile
                         }
                     ]
                 },
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -114,10 +114,10 @@ Retrieves the user profile
 
             {
                 "user" : null,
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]
