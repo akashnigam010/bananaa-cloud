@@ -23,7 +23,8 @@ Retrieves the list of restaurant with given parameters
                 "location" : {
                     "longitude" : 341234445,
                     "lattitude" : 334523444
-                }
+                },
+                "page" : 1
             }
 
 + Response 200 (application/json)
