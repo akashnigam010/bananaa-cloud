@@ -2,9 +2,7 @@ package in.socyal.sc.api.restaurant.response;
 
 import java.io.Serializable;
 
-import in.socyal.sc.api.response.GenericResponse;
-
-public class RestaurantResponse implements Serializable {
+public class RestaurantDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;

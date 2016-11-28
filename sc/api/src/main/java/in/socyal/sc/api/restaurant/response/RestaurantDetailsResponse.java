@@ -16,7 +16,7 @@ public class RestaurantDetailsResponse extends GenericResponse implements Serial
 	private Double rating;
 	private Boolean isOpen;
 	private Double distance;
-	private Date timings;
+	private String openTime;
 	private List<String> cuisines;
 	private List<String> type;
 	private Double averageCost;
@@ -87,14 +87,6 @@ public class RestaurantDetailsResponse extends GenericResponse implements Serial
 		this.distance = distance;
 	}
 
-	public Date getTimings() {
-		return timings;
-	}
-
-	public void setTimings(Date timings) {
-		this.timings = timings;
-	}
-
 	public List<String> getCuisines() {
 		return cuisines;
 	}
@@ -133,5 +125,13 @@ public class RestaurantDetailsResponse extends GenericResponse implements Serial
 
 	public void setLocation(LocationResponse location) {
 		this.location = location;
+	}
+
+	public String getOpenTime() {
+		return openTime;
+	}
+
+	public void setOpenTime(String openTime) {
+		this.openTime = openTime;
 	}
 }

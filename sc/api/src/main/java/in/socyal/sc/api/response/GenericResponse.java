@@ -8,7 +8,7 @@ public class GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public boolean result;
-	public in.socyal.sc.api.ArrayOfStatusCode statusCodes;
+	public ArrayOfStatusCode statusCodes;
 
 	public boolean isResult() {
 		return result;

@@ -1,6 +1,5 @@
 package in.socyal.sc.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.restaurant.dto.RestaurantDetailsRequestDto;
 import in.socyal.sc.api.restaurant.dto.RestaurantDetailsResponseDto;
-import in.socyal.sc.api.restaurant.request.AllRestaurantsRequest;
+import in.socyal.sc.api.restaurant.request.GetRestaurantListRequest;
 import in.socyal.sc.api.restaurant.request.RestaurantDetailsRequest;
-import in.socyal.sc.api.restaurant.response.AllRestaurantsResponse;
+import in.socyal.sc.api.restaurant.response.RestaurantListResponse;
 import in.socyal.sc.api.restaurant.response.RestaurantDetailsResponse;
-import in.socyal.sc.api.restaurant.response.RestaurantResponse;
 import in.socyal.sc.app.restaurant.RestaurantDelegate;
 import in.socyal.sc.core.mapper.RestaurantServiceMapper;
 import in.socyal.sc.helper.ResponseHelper;
@@ -28,8 +26,8 @@ public class RestaurantService {
 	@Autowired ResponseHelper responseHelper;
 	
 	@RequestMapping(value = "/getRestaurants", method = RequestMethod.POST, headers = "Accept=application/json")
-	public AllRestaurantsResponse getRestaurants(@RequestBody AllRestaurantsRequest request) {
-		AllRestaurantsResponse response = new AllRestaurantsResponse();
+	public RestaurantListResponse getRestaurants(@RequestBody GetRestaurantListRequest request) {
+		RestaurantListResponse response = new RestaurantListResponse();
 		RestaurantDetailsRequestDto requestDto = new RestaurantDetailsRequestDto();
 		mapper.map(request, requestDto);
 		List<RestaurantDetailsResponseDto> restaurants = delegate.getRestaurants(requestDto);
@@ -46,8 +44,8 @@ public class RestaurantService {
 	}
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET, headers = "Accept=application/json")
-	public AllRestaurantsResponse test() {
-		AllRestaurantsResponse response = new AllRestaurantsResponse();
+	public RestaurantListResponse test() {
+		RestaurantListResponse response = new RestaurantListResponse();
 		return response;
 	}
 }

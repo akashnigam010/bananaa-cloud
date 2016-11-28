@@ -6,18 +6,18 @@ import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
 
-public class AllRestaurantsResponse extends GenericResponse implements Serializable {
+public class RestaurantListResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<RestaurantResponse> restaurants;
+	private List<RestaurantDto> restaurants;
 
-	public List<RestaurantResponse> getRestaurants() {
+	public List<RestaurantDto> getRestaurants() {
 		if (restaurants == null) {
 			return new ArrayList<>();
 		}
 		return restaurants;
 	}
 
-	public void setRestaurants(List<RestaurantResponse> restaurants) {
+	public void setRestaurants(List<RestaurantDto> restaurants) {
 		this.restaurants = restaurants;
 	}
 }
