@@ -27,7 +27,7 @@ Retrieves the restaurant information with given id
                 
                 "id" : 12345,
                 "name" : "Fusion 9",
-                "address" : "Hitech City, Hyderabad",
+                "shortAddress" : "Hitech City, Hyderabad",
                 "checkins" : 1844,
                 "imageUrl" : "http://www.whitebay.in/images/fusion9.png",
                 "rating" : 4.5,
@@ -36,13 +36,13 @@ Retrieves the restaurant information with given id
                 "cuisines" : ["Continental", "Mexican", "North Indian", "Chinese", "Asian", "Thai"],
                 "type" : ["Casual Dining"],
                 "averageCost" : 1200,
-                "Address" : "3rd Floor 136/137, Ancis Eco Grand, Near Wipro Lake, Nanakramguda, Financial District, Hitech City, Hyderabad",
+                "longAddress" : "3rd Floor 136/137, Ancis Eco Grand, Near Wipro Lake, Nanakramguda, Financial District, Hitech City, Hyderabad",
                 "location" : {
-                    "lattitude" : 341234445,
+                    "latitude" : 341234445,
                     "longitude" : 334523444
                 },
                 "previousCheckins" : 8,
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
                     
             }

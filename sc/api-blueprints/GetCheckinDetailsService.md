@@ -101,7 +101,7 @@ Retrieves the details of a PENDING checkin
                     "checkinMessage" : "with Raman Rao and Shilpa Reddy",
                     "status" : "PENDING"
                 },
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -212,7 +212,7 @@ Retrieves the details of an APPROVED checkin
                     "checkinMessage" : "with Raman Rao and Shilpa Reddy",
                     "status" : "APPROVED"
                 },
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -231,10 +231,10 @@ Retrieves the details of an APPROVED checkin
 
             {
                 "checkin" : null,
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]

@@ -21,7 +21,7 @@ Retrieves the list of checkins in chunk of 10
                 "type" : "AROUNDME",
                 "location" : {
                     "longitude" : 341234445,
-                    "lattitude" : 334523444
+                    "latitude" : 334523444
                 }
             }
 
@@ -86,7 +86,7 @@ Retrieves the list of checkins in chunk of 10
                         "likeCount" : 19
                     }
                 ],
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -99,7 +99,7 @@ Retrieves the list of checkins in chunk of 10
                 "type" : "MYFEED",
                 "location" : {
                     "longitude" : 341234445,
-                    "lattitude" : 334523444
+                    "latitude" : 334523444
                 }
             }
 
@@ -164,7 +164,7 @@ Retrieves the list of checkins in chunk of 10
                         "likeCount" : 19
                     }
                 ],
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -177,7 +177,7 @@ Retrieves the list of checkins in chunk of 10
                 "type" : "AROUNDME",
                 "location" : {
                     "longitude" : 341234445,
-                    "lattitude" : 334523444
+                    "latitude" : 334523444
                 }
             }
 
@@ -187,10 +187,10 @@ Retrieves the list of checkins in chunk of 10
 
             {
                 "checkins" : null,
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]
@@ -215,10 +215,10 @@ Retrieves the list of checkins in chunk of 10
 
             {
                 "checkins" : null,
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]

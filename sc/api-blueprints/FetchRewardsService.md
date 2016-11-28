@@ -46,7 +46,7 @@ Retrieves the list of rewards in a restaurant
                         "longDescription" : "Direct discount"
                     }
                 ],
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -57,10 +57,10 @@ Retrieves the list of rewards in a restaurant
 
             {
                 "rewards" : null,
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]

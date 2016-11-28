@@ -27,7 +27,7 @@ Retrieves my profile
                     "facebookId" : "rajiv.sehgal.43",
                     "userCheckins" : 34
                 },
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -38,10 +38,10 @@ Retrieves my profile
 
             {
                 "user" : null,
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]

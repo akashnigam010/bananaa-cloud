@@ -51,7 +51,7 @@ Submits a list of rewards in a restaurant for a customer against a checkin
 
             {
                 
-                "status" : true,
+                "result" : true,
                 "statusCodes" : []
             }
 
@@ -92,10 +92,10 @@ Submits a list of rewards in a restaurant for a customer against a checkin
     + Body 
 
             {
-                "status" : false,
+                "result" : false,
                 "statusCodes" : [
                     {
-                        "errorCode" : 997862,
+                        "code" : 997862,
                         "description" : "Something went wrong, please try again later"
                     }
                 ]
