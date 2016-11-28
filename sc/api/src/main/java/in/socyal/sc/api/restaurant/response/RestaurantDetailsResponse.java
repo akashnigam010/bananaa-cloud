@@ -1,7 +1,6 @@
 package in.socyal.sc.api.restaurant.response;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
