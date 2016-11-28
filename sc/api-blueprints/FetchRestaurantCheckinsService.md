@@ -5,7 +5,7 @@ Fetch restaurant checkins based on id and page number
 
 ## Group Restaurant
 
-## Restaurant [/restaurant/getRestaurantCheckins]
+## Restaurant [/checkin/getRestaurantCheckins]
 
 Resource to get restaurant checkins
 
