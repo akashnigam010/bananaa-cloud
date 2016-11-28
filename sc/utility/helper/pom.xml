@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>helper</artifactId>
-	<name>SC Helper</name>
+	<name>Socyal Helper Module</name>
 
 	<dependencies>
 		<dependency>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>sc</groupId>
 			<artifactId>date</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -53,6 +53,5 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-
 	</dependencies>
 </project>

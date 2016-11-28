@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>app</artifactId>
-	<name>Application Modules</name>
+	<name>Socyal Applications Module</name>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,11 +26,6 @@
 			<artifactId>helper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>sc</groupId>
-			<artifactId>dbhelper</artifactId>
-			<version>${project.version}</version>
-		</dependency> -->
 		<dependency>
 			<groupId>sc</groupId>
 			<artifactId>date</artifactId>

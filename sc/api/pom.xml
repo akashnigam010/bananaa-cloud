@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>api</artifactId>
-	<name>SC API</name>
+	<name>Socyal API Module</name>
 	<packaging>jar</packaging>
 	
 	<!-- https://mvnrepository.com/artifact/org.jsonschema2pojo/jsonschema2pojo-core -->
