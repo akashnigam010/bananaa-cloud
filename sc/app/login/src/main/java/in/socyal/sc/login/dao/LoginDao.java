@@ -2,6 +2,7 @@ package in.socyal.sc.login.dao;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.login.mapper.LoginMapper;
@@ -11,8 +12,7 @@ public class LoginDao {
 	private static final Logger LOG = Logger.getLogger(LoginDao.class);
 	private static final String PIN = "pin";
 	private static final String ACCESS_CODE = "accessCode";
-	@Autowired
-	LoginMapper mapper;
+	@Autowired @Qualifier("loginMapper") LoginMapper mapper;
 
 	/*public PersonnelDto login(UserSignOnRequest request, Boolean isPinSignOn) throws BusinessException {
 		try {

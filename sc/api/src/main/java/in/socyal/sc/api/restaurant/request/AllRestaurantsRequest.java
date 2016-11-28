@@ -4,22 +4,22 @@ import java.io.Serializable;
 
 public class AllRestaurantsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String latitude;
-	private String longitude;
+	private LocationRequest location;
+	private Integer page;
 
-	public String getLatitude() {
-		return latitude;
+	public LocationRequest getLocation() {
+		return location;
 	}
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+	public void setLocation(LocationRequest location) {
+		this.location = location;
 	}
 
-	public String getLongitude() {
-		return longitude;
+	public Integer getPage() {
+		return page;
 	}
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+	public void setPage(Integer page) {
+		this.page = page;
 	}
 }

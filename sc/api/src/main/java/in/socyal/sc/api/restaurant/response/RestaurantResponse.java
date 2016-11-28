@@ -1,12 +1,10 @@
 package in.socyal.sc.api.restaurant.response;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
 
-public class RestaurantDetailsResponse extends GenericResponse implements Serializable {
+public class RestaurantResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
@@ -16,12 +14,6 @@ public class RestaurantDetailsResponse extends GenericResponse implements Serial
 	private Double rating;
 	private Boolean isOpen;
 	private Double distance;
-	private Date timings;
-	private List<String> cuisines;
-	private List<String> type;
-	private Double averageCost;
-	private String longAddress;
-	private LocationResponse location;
 
 	public Integer getId() {
 		return id;
@@ -85,53 +77,5 @@ public class RestaurantDetailsResponse extends GenericResponse implements Serial
 
 	public void setDistance(Double distance) {
 		this.distance = distance;
-	}
-
-	public Date getTimings() {
-		return timings;
-	}
-
-	public void setTimings(Date timings) {
-		this.timings = timings;
-	}
-
-	public List<String> getCuisines() {
-		return cuisines;
-	}
-
-	public void setCuisines(List<String> cuisines) {
-		this.cuisines = cuisines;
-	}
-
-	public List<String> getType() {
-		return type;
-	}
-
-	public void setType(List<String> type) {
-		this.type = type;
-	}
-
-	public Double getAverageCost() {
-		return averageCost;
-	}
-
-	public void setAverageCost(Double averageCost) {
-		this.averageCost = averageCost;
-	}
-
-	public String getLongAddress() {
-		return longAddress;
-	}
-
-	public void setLongAddress(String longAddress) {
-		this.longAddress = longAddress;
-	}
-
-	public LocationResponse getLocation() {
-		return location;
-	}
-
-	public void setLocation(LocationResponse location) {
-		this.location = location;
 	}
 }

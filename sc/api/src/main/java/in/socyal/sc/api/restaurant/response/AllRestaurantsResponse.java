@@ -8,16 +8,16 @@ import in.socyal.sc.api.response.GenericResponse;
 
 public class AllRestaurantsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<AllRestaurants> restaurants;
+	private List<RestaurantResponse> restaurants;
 
-	public List<AllRestaurants> getRestaurants() {
+	public List<RestaurantResponse> getRestaurants() {
 		if (restaurants == null) {
 			return new ArrayList<>();
 		}
 		return restaurants;
 	}
 
-	public void setRestaurants(List<AllRestaurants> restaurants) {
+	public void setRestaurants(List<RestaurantResponse> restaurants) {
 		this.restaurants = restaurants;
 	}
 }

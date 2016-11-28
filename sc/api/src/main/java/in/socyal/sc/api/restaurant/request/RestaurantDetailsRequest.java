@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class RestaurantDetailsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Integer restaurantId;
+	private Integer id;
 
-	public Integer getRestaurantId() {
-		return restaurantId;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setRestaurantId(Integer restaurantId) {
-		this.restaurantId = restaurantId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

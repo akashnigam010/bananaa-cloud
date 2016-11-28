@@ -10,16 +10,11 @@ import in.socyal.sc.api.personnel.dto.UserAccessTokenDto;
 import in.socyal.sc.api.personnel.request.UserSignOnRequest;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.login.dao.LoginDao;
-import in.socyal.sc.login.mapper.LoginMapper;
 
 @Service
 public class LoginDelegateImpl implements LoginDelegate {
-	@Autowired
-	LoginDao dao;
-	@Autowired
-	LoginMapper mapper;
-	@Autowired
-	OAuth2FbHelper fbHelper;
+	@Autowired LoginDao dao;
+	@Autowired OAuth2FbHelper fbHelper;
 
 	@Override
 	public UserAccessTokenDto login(UserSignOnRequest request) throws BusinessException {
