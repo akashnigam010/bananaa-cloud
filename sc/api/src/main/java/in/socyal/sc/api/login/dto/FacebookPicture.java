@@ -1,4 +1,4 @@
-package in.socyal.sc.api.personnel.dto;
+package in.socyal.sc.api.login.dto;
 
 public class FacebookPicture {
 	private FacebookData data;

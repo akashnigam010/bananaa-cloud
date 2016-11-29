@@ -12,26 +12,26 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-import in.socyal.sc.api.personnel.dto.FacebookUser;
+import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @Service
 public class OAuth2FbHelper {
 	public static final String CLIENT_ID = "232637253824009";
 	public static final String CLIENT_SECRET = "83b2ab6e7e8b23b6b4a1820c10bab80b";
-	public static final String REDIRECT_URI = "http://localhost:8087/socyal/login/thirdPartyLogin";
+	public static final String REDIRECT_URI = "http://localhost:8087/socyal/login/fbLoginWithCode";
 
-	public FacebookUser login(String code) throws BusinessException, IOException {
+	public FacebookUser getUserGraphDataWithCode(String code) throws BusinessException, IOException {
 		String accessToken;
 		accessToken = getFbAccessToken(code);
 		if (accessToken == null) {
 			throw new BusinessException();
 		}
 
-		return getUserGraphData(accessToken);
+		return getUserGraphDataWithAccessToken(accessToken);
 	}
 
-	private FacebookUser getUserGraphData(String accessToken) throws IOException {
+	public FacebookUser getUserGraphDataWithAccessToken(String accessToken) throws IOException {
 		String outputString = "";
 		String line = null;
 		URL graphApiUrl = getGraphApiUrl(accessToken);
