@@ -1,11 +1,11 @@
-package in.socyal.sc.api.restaurant.response;
+package in.socyal.sc.api.merchant.response;
 
 import java.io.Serializable;
 import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
 
-public class RestaurantDetailsResponse extends GenericResponse implements Serializable {
+public class MerchantDetailsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;

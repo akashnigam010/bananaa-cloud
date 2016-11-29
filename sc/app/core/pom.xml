@@ -27,7 +27,7 @@
 		</dependency>
 		<dependency>
 			<groupId>sc</groupId>
-			<artifactId>restaurant</artifactId>
+			<artifactId>merchant</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

@@ -1,4 +1,4 @@
-package in.socyal.sc.api.login.request;
+package in.socyal.sc.api.login.response;
 
 import in.socyal.sc.api.login.dto.UserDto;
 import in.socyal.sc.api.response.GenericResponse;

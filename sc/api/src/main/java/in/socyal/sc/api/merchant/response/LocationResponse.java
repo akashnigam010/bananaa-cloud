@@ -1,4 +1,4 @@
-package in.socyal.sc.api.restaurant.response;
+package in.socyal.sc.api.merchant.response;
 
 import java.io.Serializable;
 

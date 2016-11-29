@@ -22,8 +22,8 @@ public class CheckinService {
 	@Autowired CheckinServiceMapper mapper;
 	@Autowired ResponseHelper responseHelper;
 
-	@RequestMapping(value = "/getRestaurantCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
-	public CheckinResponse getRestaurantCheckins(@RequestBody CheckinRequest request) {
+	@RequestMapping(value = "/getMerchantCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
+	public CheckinResponse getMerchantCheckins(@RequestBody CheckinRequest request) {
 		CheckinResponse response = new CheckinResponse();
 		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(request.getId(), request.getPage());
 		mapper.map(checkins, response);

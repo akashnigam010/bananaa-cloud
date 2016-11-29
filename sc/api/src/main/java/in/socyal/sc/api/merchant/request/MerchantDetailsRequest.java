@@ -1,8 +1,8 @@
-package in.socyal.sc.api.restaurant.request;
+package in.socyal.sc.api.merchant.request;
 
 import java.io.Serializable;
 
-public class RestaurantDetailsRequest implements Serializable {
+public class MerchantDetailsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 

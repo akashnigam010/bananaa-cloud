@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.login.request.LoginRequest;
-import in.socyal.sc.api.login.request.LoginResponse;
+import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.login.dao.LoginDao;
 import in.socyal.sc.login.type.LoginErrorCodeType;

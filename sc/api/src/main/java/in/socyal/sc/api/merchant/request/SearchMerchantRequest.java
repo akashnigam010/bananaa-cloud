@@ -1,11 +1,20 @@
-package in.socyal.sc.api.restaurant.request;
+package in.socyal.sc.api.merchant.request;
 
 import java.io.Serializable;
 
-public class LocationRequest implements Serializable {
+public class SearchMerchantRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private String searchString;
 	private Double latitude;
 	private Double longitude;
+
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
+	}
 
 	public Double getLatitude() {
 		return latitude;

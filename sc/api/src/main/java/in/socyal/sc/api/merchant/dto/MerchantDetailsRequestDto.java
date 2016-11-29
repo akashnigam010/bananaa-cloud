@@ -1,8 +1,8 @@
-package in.socyal.sc.api.restaurant.dto;
+package in.socyal.sc.api.merchant.dto;
 
 import java.io.Serializable;
 
-public class RestaurantDetailsRequestDto implements Serializable {
+public class MerchantDetailsRequestDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Double latitude;
 	private Double longitude;

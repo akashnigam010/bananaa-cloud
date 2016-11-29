@@ -35,6 +35,6 @@
 	<modules>
 		<module>core</module>
 		<module>login</module>
-		<module>restaurant</module>
+		<module>merchant</module>
 	</modules>
 </project>

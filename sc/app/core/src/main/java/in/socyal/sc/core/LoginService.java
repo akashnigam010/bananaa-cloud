@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.login.request.LoginRequest;
-import in.socyal.sc.api.login.request.LoginResponse;
+import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.core.validation.LoginValidator;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;

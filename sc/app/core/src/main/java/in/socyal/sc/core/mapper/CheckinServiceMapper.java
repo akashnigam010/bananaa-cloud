@@ -36,7 +36,7 @@ public class CheckinServiceMapper {
 		checkin1.setTimestamp(new Date());
 		UserDetailsResponse user = new UserDetailsResponse();
 		user.setId(23);
-		user.setImageUrl("https://gl.cyl");
+		user.setImageUrl("http://www.whitebay.in/images/sanjeevven_sec.png");
 		user.setName("Pridhvi Manohar");
 		user.setUserCheckins(8);
 		checkin1.setUser(user);
@@ -46,7 +46,7 @@ public class CheckinServiceMapper {
 		checkin2.setId(23);
 		checkin2.setLikeCount(2);
 		checkin2.setRating(3.9);
-		checkin2.setRewardMessage("Won a Free Chocolate goodie worth Rs. 500");
+		checkin2.setRewardMessage("Won a Free Chocolate goodie worth Rs. 100");
 		List<TaggedUserResponse> taggedUsers2 = new ArrayList<>();
 		TaggedUserResponse taggedUser3 = new TaggedUserResponse();
 		taggedUser3.setId(2);
@@ -60,7 +60,7 @@ public class CheckinServiceMapper {
 		checkin2.setTimestamp(new Date());
 		UserDetailsResponse user2 = new UserDetailsResponse();
 		user2.setId(23);
-		user2.setImageUrl("https://ed.cyl");
+		user2.setImageUrl("http://www.whitebay.in/images/vaibhavgup_sec.png");
 		user2.setName("Pinto Frida");
 		user2.setUserCheckins(8);
 		checkin2.setUser(user2);
@@ -84,7 +84,7 @@ public class CheckinServiceMapper {
 		checkin3.setTimestamp(new Date());
 		UserDetailsResponse user3 = new UserDetailsResponse();
 		user3.setId(23);
-		user3.setImageUrl("https://ed.cyl");
+		user3.setImageUrl("http://www.whitebay.in/images/vikarmchau_sec.png");
 		user3.setName("Pinto Frida");
 		user3.setUserCheckins(8);
 		checkin3.setUser(user3);
