@@ -12,19 +12,28 @@ import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantListResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
+import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.mapper.MerchantServiceMapper;
 import in.socyal.sc.helper.ResponseHelper;
+import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
 @RequestMapping(value = "/merchant")
 public class MerchantService {
+	@Autowired MerchantDelegate delegate;
 	@Autowired MerchantServiceMapper mapper;
 	@Autowired ResponseHelper responseHelper;
 	
 	@RequestMapping(value = "/getMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
-		MerchantListResponse response = mapper.mapMerchantList();
-		return responseHelper.success(response);
+		MerchantListResponse response = new MerchantListResponse();
+		try {
+			delegate.getMerchants();
+			response = mapper.mapMerchantList();
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
 	}
 	
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -42,6 +51,14 @@ public class MerchantService {
 	@RequestMapping(value = "/test", method = RequestMethod.GET, headers = "Accept=application/json")
 	public MerchantListResponse test() {
 		MerchantListResponse response = new MerchantListResponse();
+		return response;
+	}
+	
+	//Testing purpose
+	@RequestMapping(value = "/saveMerchantSample", method = RequestMethod.GET, headers = "Accept=application/json")
+	public MerchantListResponse saveMerchantSample() {
+		MerchantListResponse response = new MerchantListResponse();
+		delegate.saveMerchantSample();
 		return response;
 	}
 }
