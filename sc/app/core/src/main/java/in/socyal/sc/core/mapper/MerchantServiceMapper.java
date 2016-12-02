@@ -65,6 +65,7 @@ public class MerchantServiceMapper {
 		to.setName("Fusion 9");
 		to.setShortAddress("Hitech City, Hyderabad");
 		to.setType(Collections.singletonList("Fine Dining"));
+		to.setRating(4.6);
 		return to;
 	}
 
