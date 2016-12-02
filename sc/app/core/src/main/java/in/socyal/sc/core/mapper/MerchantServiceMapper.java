@@ -6,19 +6,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
-import in.socyal.sc.api.merchant.response.MerchantDto;
-import in.socyal.sc.api.merchant.response.MerchantListResponse;
+import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 
 @Component
 public class MerchantServiceMapper {
 
-	public MerchantListResponse mapMerchantList() {
-		MerchantListResponse to = new MerchantListResponse();
-		List<MerchantDto> merchants = new ArrayList<>();
-		MerchantDto merchant1 = new MerchantDto();
+	public GetMerchantListResponse mapMerchantList() {
+		GetMerchantListResponse to = new GetMerchantListResponse();
+		List<MerchantResponse> merchants = new ArrayList<>();
+		MerchantResponse merchant1 = new MerchantResponse();
 		merchant1.setId(3241);
 		merchant1.setCheckins(56);
 		merchant1.setDistance(5.45);
@@ -27,7 +27,7 @@ public class MerchantServiceMapper {
 		merchant1.setName("Fusion 9");
 		merchant1.setRating(4.2);
 		merchant1.setShortAddress("Hitech City, Hyderabad");
-		MerchantDto merchant2 = new MerchantDto();
+		MerchantResponse merchant2 = new MerchantResponse();
 		merchant2.setId(2345);
 		merchant2.setCheckins(32);
 		merchant2.setDistance(6.20);
@@ -71,12 +71,12 @@ public class MerchantServiceMapper {
 
 	public SearchMerchantResponse mapSearchMerchantResponse() {
 		SearchMerchantResponse to = new SearchMerchantResponse();
-		List<MerchantDto> merchants = new ArrayList<>();
-		MerchantDto merchant1 = new MerchantDto();
+		List<MerchantResponse> merchants = new ArrayList<>();
+		MerchantResponse merchant1 = new MerchantResponse();
 		merchant1.setId(3241);
 		merchant1.setName("Fusion 9");
 		merchant1.setShortAddress("Hitech City, Hyderabad");
-		MerchantDto merchant2 = new MerchantDto();
+		MerchantResponse merchant2 = new MerchantResponse();
 		merchant2.setId(2345);
 		merchant2.setName("Heartcup Cafe Coffee");
 		merchant2.setShortAddress("Madhapur, Hyderabad");

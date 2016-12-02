@@ -1,51 +1,17 @@
-package in.socyal.sc.persistence.entity;
+package in.socyal.sc.api.merchant.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "MERCHANT")
-public class MerchantEntity implements Serializable {
+public class MerchantDto implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
 	private Integer id;
-	
-	@Column(name = "NAME")
 	private String name;
-	
-	@Column(name = "IMAGE_URL")
 	private String imageUrl;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "CONTACT_ID")
-	private ContactEntity contact;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ADDRESS_ID")
-	private AddressEntity address;
-	
-	@Column(name = "OPEN_TIME")
+	private ContactDto contact;
+	private AddressDto address;
 	private Double openTime;
-	
-	@Column(name = "CLOSE_TIME")
 	private Double closeTime;
-	
-	@Column(name = "RATING")
 	private Double rating;
-	
-	@Column(name = "CHECKINS")
 	private Integer checkins;
 
 	public Integer getId() {
@@ -72,19 +38,19 @@ public class MerchantEntity implements Serializable {
 		this.imageUrl = imageUrl;
 	}
 
-	public ContactEntity getContact() {
+	public ContactDto getContact() {
 		return contact;
 	}
 
-	public void setContact(ContactEntity contact) {
+	public void setContact(ContactDto contact) {
 		this.contact = contact;
 	}
 
-	public AddressEntity getAddress() {
+	public AddressDto getAddress() {
 		return address;
 	}
 
-	public void setAddress(AddressEntity address) {
+	public void setAddress(AddressDto address) {
 		this.address = address;
 	}
 

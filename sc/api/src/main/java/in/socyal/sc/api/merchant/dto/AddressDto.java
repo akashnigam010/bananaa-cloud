@@ -1,46 +1,18 @@
-package in.socyal.sc.persistence.entity;
+package in.socyal.sc.api.merchant.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "ADDRESS", schema = "SOCYAL")
-public class AddressEntity implements Serializable {
+public class AddressDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
 	private Integer id;
-
-	@Column(name = "ADDRESS_LINE_1")
 	private String addressLine1;
-
-	@Column(name = "ADDRESS_LINE_2")
 	private String addressLine2;
-
-	@Column(name = "CITY")
 	private String city;
-
-	@Column(name = "STATE")
 	private String state;
-
-	@Column(name = "COUNTRY")
 	private String country;
-
-	@Column(name = "ZIP")
 	private String zip;
-
-	@Column(name = "LATITUDE")
 	private Double latitude;
-
-	@Column(name = "LONGITUDE")
 	private Double longitude;
 
 	public Integer getId() {

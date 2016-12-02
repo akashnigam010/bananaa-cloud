@@ -2,7 +2,7 @@ package in.socyal.sc.api.merchant.dto;
 
 import java.io.Serializable;
 
-public class MerchantDetailsRequestDto implements Serializable {
+public class GetMerchantListRequestDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Double latitude;
 	private Double longitude;
