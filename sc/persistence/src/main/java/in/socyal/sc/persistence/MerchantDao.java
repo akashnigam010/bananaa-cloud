@@ -82,6 +82,7 @@ public class MerchantDao {
          contact.setTelephone("04046464646");
          entity.setContact(contact);
          entity.setCheckins(10);
+         entity.setCuisines("Indian, Chinese, Thai, Malaysian, Continental, Lebanese, Afghani");
          //Delete
          sessionFactory.getCurrentSession().save(entity);
     }

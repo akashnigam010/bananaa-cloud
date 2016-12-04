@@ -53,12 +53,6 @@ public class MerchantService {
 		return responseHelper.success(response);
 	}
 	
-	@RequestMapping(value = "/test", method = RequestMethod.GET, headers = "Accept=application/json")
-	public GetMerchantListResponse test() {
-		GetMerchantListResponse response = new GetMerchantListResponse();
-		return response;
-	}
-	
 	//Testing purpose
 	@RequestMapping(value = "/saveMerchantSample", method = RequestMethod.GET, headers = "Accept=application/json")
 	public GetMerchantListResponse saveMerchantSample() {

@@ -1,6 +1,7 @@
 package in.socyal.sc.app.merchant;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,12 +124,19 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	/**
-	 * This method parses a comma separated string of cuisines 
+	 * This method parses a comma separated string
+	 *  splits the string on a delimiter defined as: 
+	 *  zero or more whitespace, a literal comma, zero or more whitespace 
+	 *  which will place the words into the list and collapse any 
+	 *  whitespace between the words and commas 
 	 * @param cuisines
 	 * @return List of cuisines
 	 */
 	private List<String> parseCuisineStringToList(String cuisines) {
 		List<String> list = new ArrayList<>();
+		if (cuisines != null && !cuisines.isEmpty()) {
+			list = Arrays.asList(cuisines.split("\\s*,\\s*"));
+		}
 		return list;
 	}
 	
