@@ -10,7 +10,10 @@ import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
+import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
+import in.socyal.sc.api.merchant.response.LocationResponse;
+import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.helper.distance.DistanceHelper;
@@ -29,7 +32,21 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
 		mapper.map(request, requestDto);
 		List<MerchantDto> merchants = dao.getMerchants(requestDto);
+		if (merchants == null) {
+			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
+		}
 		buildMerchantListResponse(request, merchants, response);
+		return response;
+	}
+	
+	@Override
+	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException {
+		MerchantDetailsResponse response = new MerchantDetailsResponse();
+		MerchantDto merchantDto = dao.getMerchantDetails(request.getId());
+		if (merchantDto == null) {
+			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
+		}
+		buildMerchantDetailsResponse(merchantDto, response);
 		return response;
 	}
 	
@@ -64,11 +81,61 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private String createShortAddress(AddressDto address) {
-		return address.getAddressLine1() + ", " + address.getCity();
+		StringBuilder shortAddress = new StringBuilder();
+		shortAddress.append(address.getAddressLine1());
+		shortAddress.append(", ");
+		shortAddress.append(address.getCity());
+		return shortAddress.toString();
+	}
+	
+	private String createLongAddress(AddressDto address) {
+		StringBuilder longAddress = new StringBuilder();
+		longAddress.append(address.getAddressLine1());
+		longAddress.append(", ");
+		longAddress.append(address.getAddressLine2());
+		longAddress.append(", ");
+		longAddress.append(address.getCity());
+		return longAddress.toString();
 	}
 
-	private Boolean checkIfMerchantIsOpen(Double double1, Double double2) {
+	private Boolean checkIfMerchantIsOpen(Double openTime, Double closeTime) {
 		//Write logic for isOpen
 		return Boolean.TRUE;
+	}
+	
+	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response) {
+		response.setAverageCost(1300.00);
+		response.setCheckins(merchantDto.getCheckins());
+		response.setCuisines(parseCuisineStringToList(merchantDto.getCuisines()));
+		//For calculating distance we need user's current place latitude and longitude
+		response.setDistance(null);
+		response.setId(merchantDto.getId());
+		response.setImageUrl(merchantDto.getImageUrl());
+		response.setIsOpen(checkIfMerchantIsOpen(merchantDto.getOpenTime(), merchantDto.getCloseTime()));
+		response.setLocation(buildLocationResponse(merchantDto.getAddress()));
+		response.setLongAddress(createLongAddress(merchantDto.getAddress()));
+		response.setName(merchantDto.getName());
+		response.setOpenTime(merchantDto.getOpenTime());
+		response.setRating(merchantDto.getRating());
+		response.setShortAddress(createShortAddress(merchantDto.getAddress()));
+		//Need to confirm on what is restaurant type
+		response.setType(null);
+	}
+
+	/**
+	 * This method parses a comma separated string of cuisines 
+	 * @param cuisines
+	 * @return List of cuisines
+	 */
+	private List<String> parseCuisineStringToList(String cuisines) {
+		List<String> list = new ArrayList<>();
+		return list;
+	}
+	
+	private LocationResponse buildLocationResponse(AddressDto address) {
+		LocationResponse locationResponse = new LocationResponse();
+		locationResponse.setLatitude(address.getLatitude());
+		locationResponse.setLongitude(address.getLongitude());
+		return locationResponse;
 	}
 }

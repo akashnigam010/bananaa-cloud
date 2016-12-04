@@ -48,6 +48,9 @@ public class MerchantEntity implements Serializable {
 	@Column(name = "CHECKINS")
 	private Integer checkins;
 
+	@Column(name = "CUISINES")
+	private String cuisines;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -118,5 +121,13 @@ public class MerchantEntity implements Serializable {
 
 	public void setCheckins(Integer checkins) {
 		this.checkins = checkins;
+	}
+
+	public String getCuisines() {
+		return cuisines;
+	}
+
+	public void setCuisines(String cuisines) {
+		this.cuisines = cuisines;
 	}
 }

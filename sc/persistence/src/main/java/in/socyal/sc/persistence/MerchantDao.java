@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
@@ -31,16 +32,29 @@ public class MerchantDao {
  
     @Transactional
     public List<MerchantDto> getMerchants(GetMerchantListRequestDto request) {
-    	List<MerchantDto> merchantDtos = new ArrayList<>();
+    	List<MerchantDto> merchantDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
     	@SuppressWarnings("unchecked")
 		List<MerchantEntity> merchants = (List<MerchantEntity>) criteria.list();
-    	if (merchants == null || merchants.isEmpty()) {
-			return merchantDtos;
+    	if (merchants != null && !merchants.isEmpty()) {
+    		merchantDtos = new ArrayList<>();
+    		mapper.map(merchants, merchantDtos);
 		}
-    	mapper.map(merchants, merchantDtos);
+    	
     	return merchantDtos;
     	
+    }
+    
+    @Transactional
+    public MerchantDto getMerchantDetails(Integer id) throws BusinessException {
+    	MerchantDto dto = null;
+    	MerchantEntity entity = (MerchantEntity) sessionFactory.getCurrentSession().get(MerchantEntity.class, id);
+    	if (entity != null) {
+    		dto = new MerchantDto();
+    		mapper.map(entity, dto);
+    	}
+    	
+    	return dto;
     }
     
     @Transactional

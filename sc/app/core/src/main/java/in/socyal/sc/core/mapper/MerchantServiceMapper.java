@@ -55,7 +55,7 @@ public class MerchantServiceMapper {
 		to.setId(121);
 		to.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
 		to.setIsOpen(Boolean.TRUE);
-		to.setOpenTime("10:30 AM to 12 Midnight");
+		to.setOpenTime(10.30);
 		LocationResponse location = new LocationResponse();
 		location.setLatitude(76.234567);
 		location.setLongitude(78.398762);

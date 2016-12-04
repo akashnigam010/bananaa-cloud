@@ -1,20 +1,16 @@
 package in.socyal.sc.core;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
-import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
-import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
+import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.mapper.MerchantServiceMapper;
@@ -41,8 +37,14 @@ public class MerchantService {
 	
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
-		MerchantDetailsResponse response = mapper.mapMerchantDetails();
-		return responseHelper.success(response);
+		//MerchantDetailsResponse response = mapper.mapMerchantDetails();
+		MerchantDetailsResponse response = new MerchantDetailsResponse();
+		try {
+			response = delegate.getMerchantDetails(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		} 
 	}
 	
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")

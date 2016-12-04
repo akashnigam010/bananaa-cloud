@@ -19,7 +19,7 @@ import in.socyal.sc.helper.exception.ErrorCodesGettable;
 public class ResponseHelperImpl implements ResponseHelper {
 	private static final boolean DEAFULT_ROLLBACK_FAILURE = true;
 	private static final Integer GENERIC_ERROR = 99999;
-	private ResourceBundle resource = ResourceBundle.getBundle("cw-error-code");
+	private ResourceBundle resource = ResourceBundle.getBundle("socyal-error-code");
 
 	@Override
 	public <T> T success(T response) {

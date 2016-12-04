@@ -13,24 +13,40 @@ import in.socyal.sc.persistence.entity.MerchantEntity;
 
 @Component
 public class MerchantDaoMapper {
+	/**
+	 * Maps MerchantEntity List to MerchantDto List
+	 */
 	public void map(List<MerchantEntity> from, List<MerchantDto> to) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
-			dto.setId(entity.getId());
-			dto.setImageUrl(entity.getImageUrl());
-			dto.setName(entity.getName());
-			dto.setOpenTime(entity.getOpenTime());
-			dto.setCloseTime(entity.getCloseTime());
-			dto.setRating(entity.getRating());
+			map(entity, dto);
+			to.add(dto);
+		}
+	}
+	
+	/**
+	 * Maps MerchantEntity to MerchantDto
+	 */
+	public void map(MerchantEntity entity, MerchantDto dto) {
+		dto.setId(entity.getId());
+		dto.setImageUrl(entity.getImageUrl());
+		dto.setName(entity.getName());
+		dto.setOpenTime(entity.getOpenTime());
+		dto.setCloseTime(entity.getCloseTime());
+		dto.setRating(entity.getRating());
+		if (entity.getAddress() != null) {
 			AddressDto addressDto = new AddressDto();
 			map(entity.getAddress(), addressDto);
 			dto.setAddress(addressDto);
+		}
+		
+		if (entity.getContact() != null) {
 			ContactDto contactDto = new ContactDto();
 			map(entity.getContact(), contactDto);
 			dto.setContact(contactDto);
-			dto.setCheckins(entity.getCheckins());
-			to.add(dto);
 		}
+		dto.setCheckins(entity.getCheckins());
+		dto.setCuisines(entity.getCuisines());
 	}
 
 	public void map(ContactEntity from, ContactDto to) {

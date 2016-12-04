@@ -13,6 +13,7 @@ public class MerchantDto implements Serializable {
 	private Double closeTime;
 	private Double rating;
 	private Integer checkins;
+	private String cuisines;
 
 	public Integer getId() {
 		return id;
@@ -84,5 +85,13 @@ public class MerchantDto implements Serializable {
 
 	public void setCheckins(Integer checkins) {
 		this.checkins = checkins;
+	}
+
+	public String getCuisines() {
+		return cuisines;
+	}
+
+	public void setCuisines(String cuisines) {
+		this.cuisines = cuisines;
 	}
 }
