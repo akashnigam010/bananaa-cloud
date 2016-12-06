@@ -60,7 +60,7 @@
             <handlers>
                 <file-handler name="file" formatter="json-formatter" path="audit-log.log" relative-to="jboss.server.data.dir"/>
             </handlers>
-            <logger log-boot="true" log-read-only="false" enabled="false">
+            <logger log-boot="true" log-read-only="false" enabled="true">
                 <handlers>
                     <handler name="file"/>
                 </handlers>
@@ -368,6 +368,8 @@
                     <location name="/" handler="welcome-content"/>
                     <filter-ref name="server-header"/>
                     <filter-ref name="x-powered-by-header"/>
+                    <!-- This is for logging request in logs -->
+                    <filter-ref name="request-dumper"/>
                 </host>
             </server>
             <servlet-container name="default">
@@ -380,6 +382,7 @@
             <filters>
                 <response-header name="server-header" header-name="Server" header-value="WildFly/9"/>
                 <response-header name="x-powered-by-header" header-name="X-Powered-By" header-value="Undertow/1"/>
+                <filter name="request-dumper" class-name="io.undertow.server.handlers.RequestDumpingHandler" module="io.undertow.core" />
             </filters>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0">

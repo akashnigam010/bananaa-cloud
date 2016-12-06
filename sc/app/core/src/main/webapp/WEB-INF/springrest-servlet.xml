@@ -12,4 +12,16 @@
 	<mvc:annotation-driven />
 	<context:annotation-config />
 	<context:component-scan base-package="in.socyal.sc, in.socyal.sc.*" />
+    <mvc:interceptors>
+	    <mvc:interceptor>
+		<mvc:mapping path="/**" />
+			<bean class="in.socyal.sc.persistence.interceptor.LoggerInterceptor">
+				<!-- <property name="excludeUrls">
+					<list>
+						<value>/app/token</value>
+					</list>
+				</property> -->
+			</bean>
+	    </mvc:interceptor>
+	</mvc:interceptors>
 </beans>
