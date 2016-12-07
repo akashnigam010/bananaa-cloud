@@ -15,11 +15,11 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 @Component
 public class MerchantServiceMapper {
 
-	public MerchantListResponse mapMerchantList() {
+	public MerchantListResponse mapMerchantList(int id1, int id2, int id3, int id4, int id5, int id6) {
 		MerchantListResponse to = new MerchantListResponse();
 		List<MerchantDto> merchants = new ArrayList<>();
 		MerchantDto merchant1 = new MerchantDto();
-		merchant1.setId(3241);
+		merchant1.setId(id1);
 		merchant1.setCheckins(56);
 		merchant1.setDistance(5.45);
 		merchant1.setImageUrl("http://www.whitebay.in/images/fusion9.png");
@@ -28,7 +28,7 @@ public class MerchantServiceMapper {
 		merchant1.setRating(4.2);
 		merchant1.setShortAddress("Hitech City, Hyderabad");
 		MerchantDto merchant2 = new MerchantDto();
-		merchant2.setId(2345);
+		merchant2.setId(id2);
 		merchant2.setCheckins(32);
 		merchant2.setDistance(6.20);
 		merchant2.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
@@ -36,8 +36,48 @@ public class MerchantServiceMapper {
 		merchant2.setName("Heartcup Cafe Coffee");
 		merchant2.setRating(3.8);
 		merchant2.setShortAddress("Madhapur, Hyderabad");
+		MerchantDto merchant3 = new MerchantDto();
+		merchant3.setId(id3);
+		merchant3.setCheckins(32);
+		merchant3.setDistance(6.20);
+		merchant3.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant3.setIsOpen(Boolean.TRUE);
+		merchant3.setName("Via Milano");
+		merchant3.setRating(3.8);
+		merchant3.setShortAddress("Jubilee Hills, Hyderabad");
+		MerchantDto merchant4 = new MerchantDto();
+		merchant4.setId(id4);
+		merchant4.setCheckins(32);
+		merchant4.setDistance(6.20);
+		merchant4.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant4.setIsOpen(Boolean.TRUE);
+		merchant4.setName("Soda Bottle Opener Wala");
+		merchant4.setRating(3.8);
+		merchant4.setShortAddress("Jubilee Hills, Hyderabad");
+		MerchantDto merchant5 = new MerchantDto();
+		merchant5.setId(id5);
+		merchant5.setCheckins(32);
+		merchant5.setDistance(6.20);
+		merchant5.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant5.setIsOpen(Boolean.TRUE);
+		merchant5.setName("Free Flow");
+		merchant5.setRating(3.8);
+		merchant5.setShortAddress("Jubilee Hills, Hyderabad");
+		MerchantDto merchant6 = new MerchantDto();
+		merchant6.setId(id6);
+		merchant6.setCheckins(32);
+		merchant6.setDistance(6.20);
+		merchant6.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant6.setIsOpen(Boolean.TRUE);
+		merchant6.setName("Exotica");
+		merchant6.setRating(3.8);
+		merchant6.setShortAddress("Banjara Hills, Hyderabad");
 		merchants.add(merchant1);
 		merchants.add(merchant2);
+		merchants.add(merchant3);
+		merchants.add(merchant4);
+		merchants.add(merchant5);
+		merchants.add(merchant6);
 		to.setMerchants(merchants);
 		return to;
 	}

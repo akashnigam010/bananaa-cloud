@@ -18,27 +18,32 @@ import in.socyal.sc.helper.ResponseHelper;
 @RestController
 @RequestMapping(value = "/merchant")
 public class MerchantService {
-	@Autowired MerchantServiceMapper mapper;
-	@Autowired ResponseHelper responseHelper;
-	
+	@Autowired
+	MerchantServiceMapper mapper;
+	@Autowired
+	ResponseHelper responseHelper;
+
 	@RequestMapping(value = "/getMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
-		MerchantListResponse response = mapper.mapMerchantList();
+		int pageNumber = request.getPage();
+		int random = pageNumber * 10;
+		MerchantListResponse response = mapper.mapMerchantList(random + 1, random + 2, random + 3, random + 4,
+				random + 5, random + 6);
 		return responseHelper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
 		MerchantDetailsResponse response = mapper.mapMerchantDetails();
 		return responseHelper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
 		SearchMerchantResponse response = mapper.mapSearchMerchantResponse();
 		return responseHelper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/test", method = RequestMethod.GET, headers = "Accept=application/json")
 	public MerchantListResponse test() {
 		MerchantListResponse response = new MerchantListResponse();
