@@ -13,8 +13,6 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.persistence.entity.AddressEntity;
-import in.socyal.sc.persistence.entity.ContactEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 
@@ -58,10 +56,11 @@ public class MerchantDao {
     }
     
     @Transactional
-    public void saveMerchantDetails() {
+    public void saveMerchantDetails(MerchantDto merchantDto) {
     	 MerchantEntity entity = new MerchantEntity();
+    	 mapper.map(merchantDto, entity);
          //Delete
-         entity.setName("Heart Cup Cafe");
+         /*entity.setName("Heart Cup Cafe");
          entity.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
          entity.setRating(3.9);
          entity.setCloseTime(23.00);
@@ -82,7 +81,7 @@ public class MerchantDao {
          contact.setTelephone("04046464646");
          entity.setContact(contact);
          entity.setCheckins(10);
-         entity.setCuisines("Indian, Chinese, Thai, Malaysian, Continental, Lebanese, Afghani");
+         entity.setCuisines("Indian, Chinese, Thai, Malaysian, Continental, Lebanese, Afghani");*/
          //Delete
          sessionFactory.getCurrentSession().save(entity);
     }

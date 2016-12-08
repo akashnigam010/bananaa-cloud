@@ -12,6 +12,7 @@ import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
+import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
@@ -52,8 +53,10 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 	
 	@Override
-	public void saveMerchantSample() {
-		dao.saveMerchantDetails();
+	public void saveMerchantDetails(SaveMerchantDetailsRequest request) throws BusinessException {
+		MerchantDto merchantDto = new MerchantDto();
+		mapper.map(request, merchantDto);
+		dao.saveMerchantDetails(merchantDto);
 	}
 
 	private void buildMerchantListResponse(GetMerchantListRequest request, List<MerchantDto> merchants, GetMerchantListResponse response) {

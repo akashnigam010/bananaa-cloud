@@ -67,6 +67,47 @@ public class MerchantDaoMapper {
 		to.setState(from.getState());
 		to.setZip(from.getZip());
 	}
+
+	public void map(MerchantDto from, MerchantEntity to) {
+		to.setId(from.getId());
+		to.setImageUrl(from.getImageUrl());
+		to.setName(from.getName());
+		to.setOpenTime(from.getOpenTime());
+		to.setCloseTime(from.getCloseTime());
+		to.setRating(from.getRating());
+		if (from.getAddress() != null) {
+			AddressEntity address = new AddressEntity();
+			map(from.getAddress(), address);
+			to.setAddress(address);
+		}
+		
+		if (from.getContact() != null) {
+			ContactEntity contact = new ContactEntity();
+			map(from.getContact(), contact);
+			to.setContact(contact);
+		}
+		to.setCheckins(from.getCheckins());
+		to.setCuisines(from.getCuisines());
+	}
+	
+	private void map(ContactDto from, ContactEntity to) {
+		to.setEmail(from.getEmail());
+		to.setId(from.getId());
+		to.setMobile(from.getMobile());
+		to.setTelephone(from.getTelephone());
+	}
+
+	private void map(AddressDto from, AddressEntity to) {
+		to.setAddressLine1(from.getAddressLine1());
+		to.setAddressLine2(from.getAddressLine2());
+		to.setCity(from.getCity());
+		to.setCountry(from.getCountry());
+		to.setId(from.getId());
+		to.setLatitude(from.getLatitude());
+		to.setLongitude(from.getLongitude());
+		to.setState(from.getState());
+		to.setZip(from.getZip());
+	}
 	
 	
 	

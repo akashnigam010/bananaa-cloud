@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
+import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.mapper.MerchantServiceMapper;
@@ -54,10 +56,14 @@ public class MerchantService {
 	}
 	
 	//Testing purpose
-	@RequestMapping(value = "/saveMerchantSample", method = RequestMethod.GET, headers = "Accept=application/json")
-	public GetMerchantListResponse saveMerchantSample() {
-		GetMerchantListResponse response = new GetMerchantListResponse();
-		delegate.saveMerchantSample();
-		return response;
+	@RequestMapping(value = "/saveMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SaveMerchantDetailsResponse saveMerchantDetails(@RequestBody SaveMerchantDetailsRequest request) {
+		SaveMerchantDetailsResponse response = new SaveMerchantDetailsResponse();
+		try {
+			delegate.saveMerchantDetails(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		} 
 	}
 }
