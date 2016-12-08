@@ -18,23 +18,22 @@ public class CheckinServiceMapper {
 
 	public void map(List<CheckinResponseDto> from, CheckinResponse to, int page) {
 		List<Checkin> checkins = new ArrayList<>();
-		Calendar now = Calendar.getInstance();
 		if (page == 1) {
-			Date currentDate = now.getTime();
+			Date currentDate = Calendar.getInstance().getTime();
 
-			Calendar minus5HoursCal = now;
+			Calendar minus5HoursCal = Calendar.getInstance();;
 			minus5HoursCal.add(Calendar.HOUR, -5);
 			Date minus5Hours = minus5HoursCal.getTime();
 
-			Calendar minus13HoursCal = now;
+			Calendar minus13HoursCal = Calendar.getInstance();;
 			minus13HoursCal.add(Calendar.HOUR, -13);
 			Date minus13Hours = minus13HoursCal.getTime();
 
-			Calendar minus1DayCal = now;
+			Calendar minus1DayCal = Calendar.getInstance();;
 			minus1DayCal.add(Calendar.DATE, -1);
 			Date minus1Day = minus1DayCal.getTime();
 
-			Calendar minus2DayCal = now;
+			Calendar minus2DayCal = Calendar.getInstance();;
 			minus1DayCal.add(Calendar.DATE, -2);
 			Date minus2Day = minus2DayCal.getTime();
 
@@ -97,19 +96,19 @@ public class CheckinServiceMapper {
 		}
 		if (page == 2) {
 			
-			Calendar minus20DayCal = now;
+			Calendar minus20DayCal = Calendar.getInstance();;
 			minus20DayCal.add(Calendar.DATE, -20);
 			Date minus20Day = minus20DayCal.getTime();
 
-			Calendar minus40DayCal = now;
+			Calendar minus40DayCal = Calendar.getInstance();;
 			minus40DayCal.add(Calendar.DATE, -40);
 			Date minus40Day = minus40DayCal.getTime();
 
-			Calendar minus90DayCal = now;
+			Calendar minus90DayCal = Calendar.getInstance();;
 			minus90DayCal.add(Calendar.DATE, -90);
 			Date minus90Day = minus90DayCal.getTime();
 
-			Calendar minus400DayCal = now;
+			Calendar minus400DayCal = Calendar.getInstance();;
 			minus400DayCal.add(Calendar.DATE, -400);
 			Date minus400Day = minus400DayCal.getTime();
 			
