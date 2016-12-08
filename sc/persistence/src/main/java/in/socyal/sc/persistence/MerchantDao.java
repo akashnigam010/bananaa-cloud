@@ -20,6 +20,7 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 public class MerchantDao {
 	@Autowired SessionFactory sessionFactory;
 	@Autowired MerchantDaoMapper mapper;
+	private static Integer RESULTS_PER_PAGE = 3;
  
     public MerchantDao() {
     }
@@ -32,6 +33,9 @@ public class MerchantDao {
     public List<MerchantDto> getMerchants(GetMerchantListRequestDto request) {
     	List<MerchantDto> merchantDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
+    	int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
+    	criteria.setFirstResult(firstResult);
+    	criteria.setMaxResults(RESULTS_PER_PAGE);
     	@SuppressWarnings("unchecked")
 		List<MerchantEntity> merchants = (List<MerchantEntity>) criteria.list();
     	if (merchants != null && !merchants.isEmpty()) {
