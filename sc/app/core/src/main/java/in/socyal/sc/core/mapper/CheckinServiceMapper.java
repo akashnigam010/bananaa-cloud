@@ -21,6 +21,22 @@ public class CheckinServiceMapper {
 		if (page == 1) {
 			Date currentDate = Calendar.getInstance().getTime();
 
+			Calendar minus2MinutesCal = Calendar.getInstance();;
+			minus2MinutesCal.add(Calendar.MINUTE, -2);
+			Date minus2Minutes = minus2MinutesCal.getTime();
+			
+			Calendar minus6MinutesCal = Calendar.getInstance();;
+			minus6MinutesCal.add(Calendar.MINUTE, -6);
+			Date minus6Minutes = minus6MinutesCal.getTime();
+			
+			Calendar minus20MinutesCal = Calendar.getInstance();;
+			minus20MinutesCal.add(Calendar.MINUTE, -20);
+			Date minus20Minutes = minus20MinutesCal.getTime();
+			
+			Calendar minus59MinutesCal = Calendar.getInstance();;
+			minus59MinutesCal.add(Calendar.MINUTE, -59);
+			Date minus59Minutes = minus59MinutesCal.getTime();
+			
 			Calendar minus5HoursCal = Calendar.getInstance();;
 			minus5HoursCal.add(Calendar.HOUR, -5);
 			Date minus5Hours = minus5HoursCal.getTime();
@@ -34,7 +50,7 @@ public class CheckinServiceMapper {
 			Date minus1Day = minus1DayCal.getTime();
 
 			Calendar minus2DayCal = Calendar.getInstance();;
-			minus1DayCal.add(Calendar.DATE, -2);
+			minus2DayCal.add(Calendar.DATE, -2);
 			Date minus2Day = minus2DayCal.getTime();
 
 			// 1
@@ -46,7 +62,47 @@ public class CheckinServiceMapper {
 			checkin1.setTaggedUsers(getTaggedUsersResponse(1));
 			checkin1.setTimestamp(currentDate);
 			checkin1.setUser(getUserDetailsResponse(1));
-
+			
+						// 11
+						Checkin checkin11 = new Checkin();
+						checkin11.setId(11);
+						checkin11.setLikeCount(21);
+						checkin11.setRating(3.9);
+						checkin11.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						checkin11.setTaggedUsers(getTaggedUsersResponse(11));
+						checkin11.setTimestamp(minus2Minutes);
+						checkin11.setUser(getUserDetailsResponse(11));
+						
+						// 12
+						Checkin checkin12 = new Checkin();
+						checkin12.setId(12);
+						checkin12.setLikeCount(21);
+						checkin12.setRating(3.9);
+						checkin12.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						checkin12.setTaggedUsers(getTaggedUsersResponse(12));
+						checkin12.setTimestamp(minus6Minutes);
+						checkin12.setUser(getUserDetailsResponse(12));
+						
+						// 13
+						Checkin checkin13 = new Checkin();
+						checkin13.setId(13);
+						checkin13.setLikeCount(21);
+						checkin13.setRating(3.9);
+						checkin13.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						checkin13.setTaggedUsers(getTaggedUsersResponse(13));
+						checkin13.setTimestamp(minus20Minutes);
+						checkin13.setUser(getUserDetailsResponse(13));
+						
+						// 14
+						Checkin checkin14 = new Checkin();
+						checkin14.setId(14);
+						checkin14.setLikeCount(24);
+						checkin14.setRating(3.9);
+						checkin14.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						checkin14.setTaggedUsers(getTaggedUsersResponse(14));
+						checkin14.setTimestamp(minus59Minutes);
+						checkin14.setUser(getUserDetailsResponse(14));
+					
 			// 2
 			Checkin checkin2 = new Checkin();
 			checkin2.setId(2);
