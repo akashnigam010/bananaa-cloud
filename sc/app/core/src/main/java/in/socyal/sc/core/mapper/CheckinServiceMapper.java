@@ -144,6 +144,10 @@ public class CheckinServiceMapper {
 			checkin5.setUser(getUserDetailsResponse(5));
 
 			checkins.add(checkin1);
+			checkins.add(checkin11);
+			checkins.add(checkin12);
+			checkins.add(checkin13);
+			checkins.add(checkin14);
 			checkins.add(checkin2);
 			checkins.add(checkin3);
 			checkins.add(checkin4);
