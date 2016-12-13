@@ -57,8 +57,8 @@ public class MerchantDaoMapper {
 	}
 
 	public void map(AddressEntity from, AddressDto to) {
-		to.setAddressLine1(from.getAddressLine1());
-		to.setAddressLine2(from.getAddressLine2());
+		to.setAddress(from.getAddress());
+		to.setLocality(from.getLocality());
 		to.setCity(from.getCity());
 		to.setCountry(from.getCountry());
 		to.setId(from.getId());
@@ -98,8 +98,8 @@ public class MerchantDaoMapper {
 	}
 
 	private void map(AddressDto from, AddressEntity to) {
-		to.setAddressLine1(from.getAddressLine1());
-		to.setAddressLine2(from.getAddressLine2());
+		to.setAddress(from.getAddress());
+		to.setLocality(from.getLocality());
 		to.setCity(from.getCity());
 		to.setCountry(from.getCountry());
 		to.setId(from.getId());

@@ -19,11 +19,11 @@ public class AddressEntity implements Serializable {
 	@Column(name = "ID")
 	private Integer id;
 
-	@Column(name = "ADDRESS_LINE_1")
-	private String addressLine1;
+	@Column(name = "ADDRESS")
+	private String address;
 
-	@Column(name = "ADDRESS_LINE_2")
-	private String addressLine2;
+	@Column(name = "LOCALITY")
+	private String locality;
 
 	@Column(name = "CITY")
 	private String city;
@@ -49,22 +49,6 @@ public class AddressEntity implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getAddressLine1() {
-		return addressLine1;
-	}
-
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
-	}
-
-	public String getAddressLine2() {
-		return addressLine2;
-	}
-
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
 	}
 
 	public String getCity() {
@@ -113,5 +97,21 @@ public class AddressEntity implements Serializable {
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getLocality() {
+		return locality;
+	}
+
+	public void setLocality(String locality) {
+		this.locality = locality;
 	}
 }

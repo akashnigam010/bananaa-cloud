@@ -13,8 +13,8 @@ public class SaveMerchantDetailsRequest implements Serializable {
 	private String telephone;
 	private String mobile;
 	private String email;
-	private String addressLine1;
-	private String addressLine2;
+	private String address;
+	private String locality;
 	private String city;
 	private String state;
 	private String country;
@@ -94,20 +94,20 @@ public class SaveMerchantDetailsRequest implements Serializable {
 		this.email = email;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public String getAddressLine2() {
-		return addressLine2;
+	public String getLocality() {
+		return locality;
 	}
 
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
+	public void setLocality(String locality) {
+		this.locality = locality;
 	}
 
 	public String getCity() {

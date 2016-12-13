@@ -20,7 +20,7 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 public class MerchantDao {
 	@Autowired SessionFactory sessionFactory;
 	@Autowired MerchantDaoMapper mapper;
-	private static Integer RESULTS_PER_PAGE = 3;
+	private static Integer RESULTS_PER_PAGE = 10;
  
     public MerchantDao() {
     }

@@ -19,8 +19,8 @@ public class MerchantDelegateMapper {
 
 	public void map(SaveMerchantDetailsRequest from, MerchantDto to) {
 		AddressDto address = new AddressDto();
-		address.setAddressLine1(from.getAddressLine1());
-		address.setAddressLine2(from.getAddressLine2());
+		address.setAddress(from.getAddress());
+		address.setLocality(from.getLocality());
 		address.setCity(from.getCity());
 		address.setCountry(from.getCountry());
 		address.setLatitude(from.getLatitude());

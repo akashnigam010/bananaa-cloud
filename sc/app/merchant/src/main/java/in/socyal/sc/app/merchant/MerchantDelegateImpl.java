@@ -70,7 +70,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setRating(dto.getRating());
 			merchant.setCheckins(dto.getCheckins());
 			merchant.setDistance(calculateDistance(request, dto.getAddress()));
-			merchant.setShortAddress(createShortAddress(dto.getAddress()));
+			merchant.setShortAddress(dto.getAddress().getLocality());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);
@@ -84,21 +84,13 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 								DistanceUnitType.KM.getCode());
 	}
 
-	private String createShortAddress(AddressDto address) {
-		StringBuilder shortAddress = new StringBuilder();
-		shortAddress.append(address.getAddressLine1());
-		shortAddress.append(", ");
-		shortAddress.append(address.getCity());
-		return shortAddress.toString();
-	}
-	
 	private String createLongAddress(AddressDto address) {
 		StringBuilder longAddress = new StringBuilder();
-		longAddress.append(address.getAddressLine1());
-		longAddress.append(", ");
-		longAddress.append(address.getAddressLine2());
+		longAddress.append(address.getAddress());
 		longAddress.append(", ");
 		longAddress.append(address.getCity());
+		longAddress.append(", ");
+		longAddress.append(address.getZip());
 		return longAddress.toString();
 	}
 
@@ -121,7 +113,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setName(merchantDto.getName());
 		response.setOpenTime(merchantDto.getOpenTime());
 		response.setRating(merchantDto.getRating());
-		response.setShortAddress(createShortAddress(merchantDto.getAddress()));
+		response.setShortAddress(merchantDto.getAddress().getLocality());
 		//Need to confirm on what is restaurant type
 		response.setType(null);
 	}

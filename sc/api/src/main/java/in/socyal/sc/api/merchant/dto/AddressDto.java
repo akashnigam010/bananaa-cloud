@@ -6,8 +6,8 @@ public class AddressDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	private String addressLine1;
-	private String addressLine2;
+	private String address;
+	private String locality;
 	private String city;
 	private String state;
 	private String country;
@@ -23,20 +23,20 @@ public class AddressDto implements Serializable {
 		this.id = id;
 	}
 
-	public String getAddressLine1() {
-		return addressLine1;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public String getAddressLine2() {
-		return addressLine2;
+	public String getLocality() {
+		return locality;
 	}
 
-	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
+	public void setLocality(String locality) {
+		this.locality = locality;
 	}
 
 	public String getCity() {
