@@ -13,10 +13,12 @@ import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
+import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
+import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
@@ -53,10 +55,38 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 	
 	@Override
+	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
+		SearchMerchantResponse response = new SearchMerchantResponse();
+		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString());
+		if (merchants == null) {
+			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
+		}
+		buildSearchMerchantsResponse(merchants, response);
+		return response;
+	}
+	
+	@Override
 	public void saveMerchantDetails(SaveMerchantDetailsRequest request) throws BusinessException {
 		MerchantDto merchantDto = new MerchantDto();
 		mapper.map(request, merchantDto);
 		dao.saveMerchantDetails(merchantDto);
+	}
+	
+	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
+		List<MerchantResponse> merchantResponse = new ArrayList<>();
+		for (MerchantDto dto : merchants) {
+			MerchantResponse merchant = new MerchantResponse();
+			merchant.setId(dto.getId());
+			merchant.setName(dto.getName());
+			merchant.setShortAddress(dto.getAddress().getLocality());
+			//These below details are additional information
+			merchant.setImageUrl(dto.getImageUrl());
+			merchant.setIsOpen(checkIfMerchantIsOpen(dto.getOpenTime(), dto.getCloseTime()));
+			merchant.setRating(dto.getRating());
+			merchant.setCheckins(dto.getCheckins());
+			merchantResponse.add(merchant);
+		}
+		response.setMerchants(merchantResponse);
 	}
 
 	private void buildMerchantListResponse(GetMerchantListRequest request, List<MerchantDto> merchants, GetMerchantListResponse response) {

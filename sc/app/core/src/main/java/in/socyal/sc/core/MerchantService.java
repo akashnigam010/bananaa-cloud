@@ -39,6 +39,7 @@ public class MerchantService {
 	
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
+		//Mock data is present in mapper
 		//MerchantDetailsResponse response = mapper.mapMerchantDetails();
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		try {
@@ -51,8 +52,15 @@ public class MerchantService {
 	
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
-		SearchMerchantResponse response = mapper.mapSearchMerchantResponse();
-		return responseHelper.success(response);
+		//Mock data is present in mapper
+		//SearchMerchantResponse response = mapper.mapSearchMerchantResponse();
+		SearchMerchantResponse response = new SearchMerchantResponse();
+		try {
+			response = delegate.searchMerchant(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		} 
 	}
 	
 	//Testing purpose

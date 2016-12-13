@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +20,7 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 
 @Repository
 public class MerchantDao {
+	private static final String NAME = "name";
 	@Autowired SessionFactory sessionFactory;
 	@Autowired MerchantDaoMapper mapper;
 	private static Integer RESULTS_PER_PAGE = 10;
@@ -57,6 +60,20 @@ public class MerchantDao {
     	}
     	
     	return dto;
+    }
+    
+    @Transactional
+    public List<MerchantDto> searchMerchant(String restaurantName) throws BusinessException {
+    	List<MerchantDto> merchantDtos = null;
+    	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
+    	criteria.add(Restrictions.ilike(NAME, restaurantName, MatchMode.ANYWHERE));
+    	@SuppressWarnings("unchecked")
+		List<MerchantEntity> merchants = (List<MerchantEntity>) criteria.list();
+    	if (merchants != null && !merchants.isEmpty()) {
+    		merchantDtos = new ArrayList<>();
+    		mapper.map(merchants, merchantDtos);
+		}
+    	return merchantDtos;
     }
     
     @Transactional
