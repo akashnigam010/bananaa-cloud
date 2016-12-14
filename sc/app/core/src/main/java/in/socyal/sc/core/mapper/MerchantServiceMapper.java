@@ -41,7 +41,7 @@ public class MerchantServiceMapper {
 		merchant3.setId(id3);
 		merchant3.setCheckins(32);
 		merchant3.setDistance(6.20);
-		merchant3.setImageUrl(SERVER + "/heartcupcafecoffee.png");
+		merchant3.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		merchant3.setIsOpen(Boolean.TRUE);
 		merchant3.setName("Via Milano");
 		merchant3.setRating(3.8);
