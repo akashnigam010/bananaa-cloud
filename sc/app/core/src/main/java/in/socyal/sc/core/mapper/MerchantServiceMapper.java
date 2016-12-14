@@ -14,6 +14,7 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 
 @Component
 public class MerchantServiceMapper {
+	public static final String SERVER = "https://s3.ap-south-1.amazonaws.com/bananaimages/";
 
 	public MerchantListResponse mapMerchantList(int id1, int id2, int id3, int id4, int id5, int id6) {
 		MerchantListResponse to = new MerchantListResponse();
@@ -22,7 +23,7 @@ public class MerchantServiceMapper {
 		merchant1.setId(id1);
 		merchant1.setCheckins(56);
 		merchant1.setDistance(5.45);
-		merchant1.setImageUrl("http://www.whitebay.in/images/fusion9.png");
+		merchant1.setImageUrl(SERVER + "fusion9.png");
 		merchant1.setIsOpen(Boolean.TRUE);
 		merchant1.setName("Fusion 9");
 		merchant1.setRating(4.2);
@@ -31,7 +32,7 @@ public class MerchantServiceMapper {
 		merchant2.setId(id2);
 		merchant2.setCheckins(32);
 		merchant2.setDistance(6.20);
-		merchant2.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant2.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		merchant2.setIsOpen(Boolean.TRUE);
 		merchant2.setName("Heartcup Cafe Coffee");
 		merchant2.setRating(3.8);
@@ -40,7 +41,7 @@ public class MerchantServiceMapper {
 		merchant3.setId(id3);
 		merchant3.setCheckins(32);
 		merchant3.setDistance(6.20);
-		merchant3.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant3.setImageUrl(SERVER + "/heartcupcafecoffee.png");
 		merchant3.setIsOpen(Boolean.TRUE);
 		merchant3.setName("Via Milano");
 		merchant3.setRating(3.8);
@@ -49,7 +50,7 @@ public class MerchantServiceMapper {
 		merchant4.setId(id4);
 		merchant4.setCheckins(32);
 		merchant4.setDistance(6.20);
-		merchant4.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant4.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		merchant4.setIsOpen(Boolean.TRUE);
 		merchant4.setName("Soda Bottle Opener Wala");
 		merchant4.setRating(3.8);
@@ -58,7 +59,7 @@ public class MerchantServiceMapper {
 		merchant5.setId(id5);
 		merchant5.setCheckins(32);
 		merchant5.setDistance(6.20);
-		merchant5.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant5.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		merchant5.setIsOpen(Boolean.TRUE);
 		merchant5.setName("Free Flow");
 		merchant5.setRating(3.8);
@@ -67,7 +68,7 @@ public class MerchantServiceMapper {
 		merchant6.setId(id6);
 		merchant6.setCheckins(32);
 		merchant6.setDistance(6.20);
-		merchant6.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		merchant6.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		merchant6.setIsOpen(Boolean.TRUE);
 		merchant6.setName("Exotica");
 		merchant6.setRating(3.8);
@@ -93,7 +94,7 @@ public class MerchantServiceMapper {
 		to.setCuisines(cuisines);
 		to.setDistance(3.46);
 		to.setId(121);
-		to.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");
+		to.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		to.setIsOpen(Boolean.TRUE);
 		to.setOpenTime("10:30 AM to 12 Midnight");
 		LocationResponse location = new LocationResponse();

@@ -15,6 +15,7 @@ import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 
 @Component
 public class CheckinServiceMapper {
+	public static final String SERVER = "https://s3.ap-south-1.amazonaws.com/bananaimages/";
 
 	public void map(List<CheckinResponseDto> from, CheckinResponse to, int page) {
 		List<Checkin> checkins = new ArrayList<>();
@@ -240,17 +241,17 @@ public class CheckinServiceMapper {
 		UserDetailsResponse user = new UserDetailsResponse();
 		if (id % 3 == 0) {
 			user.setId(id * 11);
-			user.setImageUrl("http://www.whitebay.in/images/sanjeevven_sec.png");
+			user.setImageUrl(SERVER + "sanjeevven_sec.png");
 			user.setName("Sanjeev Venkatraman");
 			user.setUserCheckins(8);
 		} else if (id % 3 == 1) {
 			user.setId(id * 11 + 1);
-			user.setImageUrl("http://www.whitebay.in/images/vikarmchau_sec.png");
+			user.setImageUrl(SERVER + "vikarmchau_sec.png");
 			user.setName("Vikram Chaudhary");
 			user.setUserCheckins(134);
 		} else {
 			user.setId(id * 11 + 2);
-			user.setImageUrl("http://www.whitebay.in/images/vaibhavgup_sec.png");
+			user.setImageUrl(SERVER + "vaibhavgup_sec.png");
 			user.setName("Vaibhav Gupta");
 			user.setUserCheckins(12);
 		}
