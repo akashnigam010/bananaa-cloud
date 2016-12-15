@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.ContactDto;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
+import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 
 @Component
@@ -58,7 +60,7 @@ public class MerchantDaoMapper {
 
 	public void map(AddressEntity from, AddressDto to) {
 		to.setAddress(from.getAddress());
-		to.setLocality(from.getLocality());
+		to.setLocality(map(from.getLocality()));
 		to.setCity(from.getCity());
 		to.setCountry(from.getCountry());
 		to.setId(from.getId());
@@ -66,6 +68,16 @@ public class MerchantDaoMapper {
 		to.setLongitude(from.getLongitude());
 		to.setState(from.getState());
 		to.setZip(from.getZip());
+	}
+	
+	private LocalityDto map(LocalityEntity from) {
+		LocalityDto to = new LocalityDto();
+		to.setId(from.getId());
+		to.setCity(from.getCity());
+		to.setLatitude(from.getLatitude());
+		to.setLongitude(from.getLongitude());
+		to.setName(from.getName());
+		return to;
 	}
 
 	public void map(MerchantDto from, MerchantEntity to) {
@@ -99,7 +111,7 @@ public class MerchantDaoMapper {
 
 	private void map(AddressDto from, AddressEntity to) {
 		to.setAddress(from.getAddress());
-		to.setLocality(from.getLocality());
+		to.setLocality(map(from.getLocality()));
 		to.setCity(from.getCity());
 		to.setCountry(from.getCountry());
 		to.setId(from.getId());
@@ -109,6 +121,13 @@ public class MerchantDaoMapper {
 		to.setZip(from.getZip());
 	}
 	
-	
-	
+	private LocalityEntity map(LocalityDto from) {
+		LocalityEntity to = new LocalityEntity();
+		to.setId(from.getId());
+		to.setCity(from.getCity());
+		to.setLatitude(from.getLatitude());
+		to.setLongitude(from.getLongitude());
+		to.setName(from.getName());
+		return to;
+	}
 }

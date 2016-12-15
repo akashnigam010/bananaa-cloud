@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.ContactDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
@@ -20,7 +21,9 @@ public class MerchantDelegateMapper {
 	public void map(SaveMerchantDetailsRequest from, MerchantDto to) {
 		AddressDto address = new AddressDto();
 		address.setAddress(from.getAddress());
-		address.setLocality(from.getLocality());
+		LocalityDto locality = new LocalityDto();
+		locality.setId(from.getLocalityId());
+		address.setLocality(locality);
 		address.setCity(from.getCity());
 		address.setCountry(from.getCountry());
 		address.setLatitude(from.getLatitude());

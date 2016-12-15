@@ -2,11 +2,14 @@ package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +25,9 @@ public class AddressEntity implements Serializable {
 	@Column(name = "ADDRESS")
 	private String address;
 
-	@Column(name = "LOCALITY")
-	private String locality;
+	@ManyToOne
+	@JoinColumn(name = "LOCALITY_ID", nullable = false)
+	private LocalityEntity locality;
 
 	@Column(name = "CITY")
 	private String city;
@@ -107,11 +111,11 @@ public class AddressEntity implements Serializable {
 		this.address = address;
 	}
 
-	public String getLocality() {
+	public LocalityEntity getLocality() {
 		return locality;
 	}
 
-	public void setLocality(String locality) {
+	public void setLocality(LocalityEntity locality) {
 		this.locality = locality;
 	}
 }

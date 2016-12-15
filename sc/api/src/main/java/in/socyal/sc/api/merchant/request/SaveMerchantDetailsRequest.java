@@ -14,7 +14,7 @@ public class SaveMerchantDetailsRequest implements Serializable {
 	private String mobile;
 	private String email;
 	private String address;
-	private String locality;
+	private Integer localityId;
 	private String city;
 	private String state;
 	private String country;
@@ -102,12 +102,12 @@ public class SaveMerchantDetailsRequest implements Serializable {
 		this.address = address;
 	}
 
-	public String getLocality() {
-		return locality;
+	public Integer getLocalityId() {
+		return localityId;
 	}
 
-	public void setLocality(String locality) {
-		this.locality = locality;
+	public void setLocalityId(Integer localityId) {
+		this.localityId = localityId;
 	}
 
 	public String getCity() {

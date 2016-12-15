@@ -78,7 +78,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			MerchantResponse merchant = new MerchantResponse();
 			merchant.setId(dto.getId());
 			merchant.setName(dto.getName());
-			merchant.setShortAddress(dto.getAddress().getLocality());
+			merchant.setShortAddress(dto.getAddress().getLocality().toString());
 			//These below details are additional information
 			merchant.setImageUrl(dto.getImageUrl());
 			merchant.setIsOpen(checkIfMerchantIsOpen(dto.getOpenTime(), dto.getCloseTime()));
@@ -100,7 +100,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setRating(dto.getRating());
 			merchant.setCheckins(dto.getCheckins());
 			merchant.setDistance(calculateDistance(request, dto.getAddress()));
-			merchant.setShortAddress(dto.getAddress().getLocality());
+			merchant.setShortAddress(dto.getAddress().getLocality().toString());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);
@@ -143,7 +143,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setName(merchantDto.getName());
 		response.setOpenTime(merchantDto.getOpenTime());
 		response.setRating(merchantDto.getRating());
-		response.setShortAddress(merchantDto.getAddress().getLocality());
+		response.setShortAddress(merchantDto.getAddress().getLocality().toString());
 		//Need to confirm on what is restaurant type
 		response.setType(null);
 	}

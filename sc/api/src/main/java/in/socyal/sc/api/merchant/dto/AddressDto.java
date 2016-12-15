@@ -7,7 +7,7 @@ public class AddressDto implements Serializable {
 
 	private Integer id;
 	private String address;
-	private String locality;
+	private LocalityDto locality;
 	private String city;
 	private String state;
 	private String country;
@@ -31,11 +31,11 @@ public class AddressDto implements Serializable {
 		this.address = address;
 	}
 
-	public String getLocality() {
+	public LocalityDto getLocality() {
 		return locality;
 	}
 
-	public void setLocality(String locality) {
+	public void setLocality(LocalityDto locality) {
 		this.locality = locality;
 	}
 
