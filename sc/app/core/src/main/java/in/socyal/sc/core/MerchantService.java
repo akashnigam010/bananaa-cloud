@@ -22,6 +22,7 @@ import in.socyal.sc.helper.exception.BusinessException;
 @RestController
 @RequestMapping(value = "/merchant")
 public class MerchantService {
+
 	@Autowired MerchantDelegate delegate;
 	@Autowired MerchantServiceMapper mapper;
 	@Autowired ResponseHelper responseHelper;
@@ -35,8 +36,9 @@ public class MerchantService {
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		}
+
 	}
-	
+
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
 		//Mock data is present in mapper
@@ -49,7 +51,7 @@ public class MerchantService {
 			return responseHelper.failure(response, e);
 		} 
 	}
-	
+
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
 		//Mock data is present in mapper
@@ -73,5 +75,6 @@ public class MerchantService {
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		} 
+
 	}
 }
