@@ -15,7 +15,7 @@ import in.socyal.sc.api.type.DayType;
 
 @Entity
 @Table(name = "TIMING", schema = "Socyal")
-public class Timing implements Serializable {
+public class TimingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id

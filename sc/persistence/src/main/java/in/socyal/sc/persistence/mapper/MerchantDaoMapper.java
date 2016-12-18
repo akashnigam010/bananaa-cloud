@@ -18,7 +18,7 @@ import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
 import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
-import in.socyal.sc.persistence.entity.Timing;
+import in.socyal.sc.persistence.entity.TimingEntity;
 
 @Component
 public class MerchantDaoMapper {
@@ -54,15 +54,15 @@ public class MerchantDaoMapper {
 		dto.setTypes(parseToList(entity.getType()));
 	}
 
-	public Set<TimingDto> mapTimingDtos(Set<Timing> entities) {
+	public Set<TimingDto> mapTimingDtos(Set<TimingEntity> entities) {
 		Set<TimingDto> dtos = new HashSet<>();
-		for (Timing entity : entities) {
+		for (TimingEntity entity : entities) {
 			dtos.add(mapTimingDto(entity));
 		}
 		return dtos;
 	}
 
-	public TimingDto mapTimingDto(Timing entity) {
+	public TimingDto mapTimingDto(TimingEntity entity) {
 		TimingDto dto = new TimingDto();
 		dto.setId(entity.getId());
 		dto.setMerchantId(entity.getMerchantId());
@@ -72,16 +72,16 @@ public class MerchantDaoMapper {
 		return dto;
 	}
 
-	public Set<Timing> mapTimingEntities(Set<TimingDto> dtos) {
-		Set<Timing> entities = new HashSet<>();
+	public Set<TimingEntity> mapTimingEntities(Set<TimingDto> dtos) {
+		Set<TimingEntity> entities = new HashSet<>();
 		for (TimingDto dto : dtos) {
 			entities.add(mapTimingEntity(dto));
 		}
 		return entities;
 	}
 
-	public Timing mapTimingEntity(TimingDto dto) {
-		Timing entity = new Timing();
+	public TimingEntity mapTimingEntity(TimingDto dto) {
+		TimingEntity entity = new TimingEntity();
 		entity.setId(dto.getId());
 		entity.setMerchantId(dto.getMerchantId());
 		entity.setDay(dto.getDay());

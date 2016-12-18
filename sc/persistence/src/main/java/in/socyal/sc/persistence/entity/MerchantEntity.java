@@ -39,9 +39,8 @@ public class MerchantEntity implements Serializable {
 	@JoinColumn(name = "ADDRESS_ID")
 	private AddressEntity address;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "ID", referencedColumnName = "MERCHANT_ID")
-	private Set<Timing> timings;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "MERCHANT_ID")
+	private Set<TimingEntity> timings;
 
 	@Column(name = "RATING")
 	private Double rating;
@@ -122,11 +121,11 @@ public class MerchantEntity implements Serializable {
 		this.cuisine = cuisine;
 	}
 
-	public Set<Timing> getTimings() {
+	public Set<TimingEntity> getTimings() {
 		return timings;
 	}
 
-	public void setTimings(Set<Timing> timings) {
+	public void setTimings(Set<TimingEntity> timings) {
 		this.timings = timings;
 	}
 
