@@ -56,13 +56,17 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
-			throws BusinessException, ParseException {
+			throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		MerchantDto merchantDto = dao.getMerchantDetails(request.getId());
 		if (merchantDto == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
 		}
-		buildMerchantDetailsResponse(merchantDto, response);
+		try {
+			buildMerchantDetailsResponse(merchantDto, response);
+		} catch (ParseException e) {
+			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
+		}
 		return response;
 	}
 

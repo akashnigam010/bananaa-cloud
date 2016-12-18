@@ -26,7 +26,7 @@ public class CheckinService {
 	public CheckinResponse getMerchantCheckins(@RequestBody CheckinRequest request) {
 		CheckinResponse response = new CheckinResponse();
 		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(request.getId(), request.getPage());
-		mapper.map(checkins, response);
+		mapper.map(checkins, response, request.getPage());
 		return responseHelper.success(response);
 	}
 }

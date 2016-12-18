@@ -13,7 +13,7 @@ import in.socyal.sc.helper.exception.BusinessException;
 
 public interface MerchantDelegate {
 	public GetMerchantListResponse getMerchants(GetMerchantListRequest request) throws BusinessException;
-	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException, ParseException;
+	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException;
 	public void saveMerchantDetails(SaveMerchantDetailsRequest request) throws BusinessException;
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException;
 }
