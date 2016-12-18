@@ -19,29 +19,29 @@ public class MerchantDelegateMapper {
 	}
 
 	public void map(SaveMerchantDetailsRequest from, MerchantDto to) {
-		AddressDto address = new AddressDto();
-		address.setAddress(from.getAddress());
-		LocalityDto locality = new LocalityDto();
-		locality.setId(from.getLocalityId());
-		address.setLocality(locality);
-		address.setCity(from.getCity());
-		address.setCountry(from.getCountry());
-		address.setLatitude(from.getLatitude());
-		address.setLongitude(from.getLongitude());
-		address.setState(from.getState());
-		address.setZip(from.getZip());
-		to.setAddress(address);
-		to.setCheckins(0);
-		to.setCloseTime(from.getCloseTime());
-		ContactDto contact = new ContactDto();
-		contact.setEmail(from.getEmail());
-		contact.setMobile(from.getMobile());
-		contact.setTelephone(from.getTelephone());
-		to.setContact(contact);
-		to.setCuisines(from.getCuisines());
-		to.setImageUrl(from.getImageUrl());
-		to.setName(from.getMerchantName());
-		to.setOpenTime(from.getOpenTime());
-		to.setRating(from.getRating());
+//		AddressDto address = new AddressDto();
+//		address.setAddress(from.getAddress());
+//		LocalityDto locality = new LocalityDto();
+//		locality.setId(from.getLocalityId());
+//		address.setLocality(locality);
+//		address.setCity(from.getCity());
+//		address.setCountry(from.getCountry());
+//		address.setLatitude(from.getLatitude());
+//		address.setLongitude(from.getLongitude());
+//		address.setState(from.getState());
+//		address.setZip(from.getZip());
+//		to.setAddress(address);
+//		to.setCheckins(0);
+//		to.setCloseTime(from.getCloseTime());
+//		ContactDto contact = new ContactDto();
+//		contact.setEmail(from.getEmail());
+//		contact.setMobile(from.getMobile());
+//		contact.setTelephone(from.getTelephone());
+//		to.setContact(contact);
+//		to.setCuisines(from.getCuisines());
+//		to.setImageUrl(from.getImageUrl());
+//		to.setName(from.getMerchantName());
+//		to.setOpenTime(from.getOpenTime());
+//		to.setRating(from.getRating());
 	}
 }

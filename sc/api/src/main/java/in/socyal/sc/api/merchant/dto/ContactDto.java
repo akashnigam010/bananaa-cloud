@@ -6,8 +6,8 @@ public class ContactDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-	private String telephone;
-	private String mobile;
+	private String phone1;
+	private String phone2;
 	private String email;
 
 	public Integer getId() {
@@ -18,20 +18,20 @@ public class ContactDto implements Serializable {
 		this.id = id;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getPhone1() {
+		return phone1;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setPhone1(String phone1) {
+		this.phone1 = phone1;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public String getPhone2() {
+		return phone2;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
 	}
 
 	public String getEmail() {

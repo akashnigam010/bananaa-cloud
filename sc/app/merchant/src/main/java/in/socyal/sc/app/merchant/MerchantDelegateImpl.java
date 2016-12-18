@@ -1,8 +1,8 @@
 package in.socyal.sc.app.merchant;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
@@ -79,11 +80,6 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setId(dto.getId());
 			merchant.setName(dto.getName());
 			merchant.setShortAddress(dto.getAddress().getLocality().toString());
-			//These below details are additional information
-			merchant.setImageUrl(dto.getImageUrl());
-			merchant.setIsOpen(checkIfMerchantIsOpen(dto.getOpenTime(), dto.getCloseTime()));
-			merchant.setRating(dto.getRating());
-			merchant.setCheckins(dto.getCheckins());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);
@@ -95,7 +91,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			MerchantResponse merchant = new MerchantResponse();
 			merchant.setId(dto.getId());
 			merchant.setImageUrl(dto.getImageUrl());
-			merchant.setIsOpen(checkIfMerchantIsOpen(dto.getOpenTime(), dto.getCloseTime()));
+			merchant.setIsOpen(checkIfMerchantIsOpen(dto.getTimings()));
 			merchant.setName(dto.getName());
 			merchant.setRating(dto.getRating());
 			merchant.setCheckins(dto.getCheckins());
@@ -124,45 +120,31 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return longAddress.toString();
 	}
 
-	private Boolean checkIfMerchantIsOpen(Double openTime, Double closeTime) {
+	private Boolean checkIfMerchantIsOpen(Set<TimingDto> timings) {
 		//Write logic for isOpen
 		return Boolean.TRUE;
 	}
 	
+	private List<String> getOpeningHours(Set<TimingDto> timings) {
+		return null;
+	}
+	
 	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response) {
-		response.setAverageCost(1300.00);
+		response.setAverageCost(merchantDto.getAverageCost());
 		response.setCheckins(merchantDto.getCheckins());
-		response.setCuisines(parseCuisineStringToList(merchantDto.getCuisines()));
+		response.setCuisines(merchantDto.getCuisines());
 		//For calculating distance we need user's current place latitude and longitude
 		response.setDistance(null);
 		response.setId(merchantDto.getId());
 		response.setImageUrl(merchantDto.getImageUrl());
-		response.setIsOpen(checkIfMerchantIsOpen(merchantDto.getOpenTime(), merchantDto.getCloseTime()));
+		response.setIsOpen(checkIfMerchantIsOpen(merchantDto.getTimings()));
 		response.setLocation(buildLocationResponse(merchantDto.getAddress()));
 		response.setLongAddress(createLongAddress(merchantDto.getAddress()));
 		response.setName(merchantDto.getName());
-		response.setOpenTime(merchantDto.getOpenTime());
+		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().toString());
-		//Need to confirm on what is restaurant type
-		response.setType(null);
-	}
-
-	/**
-	 * This method parses a comma separated string
-	 *  splits the string on a delimiter defined as: 
-	 *  zero or more whitespace, a literal comma, zero or more whitespace 
-	 *  which will place the words into the list and collapse any 
-	 *  whitespace between the words and commas 
-	 * @param cuisines
-	 * @return List of cuisines
-	 */
-	private List<String> parseCuisineStringToList(String cuisines) {
-		List<String> list = new ArrayList<>();
-		if (cuisines != null && !cuisines.isEmpty()) {
-			list = Arrays.asList(cuisines.split("\\s*,\\s*"));
-		}
-		return list;
+		response.setType(merchantDto.getTypes());
 	}
 	
 	private LocationResponse buildLocationResponse(AddressDto address) {

@@ -79,7 +79,7 @@ public class MerchantDao {
     @Transactional
     public void saveMerchantDetails(MerchantDto merchantDto) {
     	 MerchantEntity entity = new MerchantEntity();
-    	 mapper.map(merchantDto, entity);
+    	 //mapper.map(merchantDto, entity);
          //Delete
          /*entity.setName("Heart Cup Cafe");
          entity.setImageUrl("http://www.whitebay.in/images/heartcupcafecoffee.png");

@@ -1,6 +1,8 @@
 package in.socyal.sc.api.merchant.dto;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 public class MerchantDto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -9,11 +11,12 @@ public class MerchantDto implements Serializable {
 	private String imageUrl;
 	private ContactDto contact;
 	private AddressDto address;
-	private Double openTime;
-	private Double closeTime;
+	private Set<TimingDto> timings;
 	private Double rating;
+	private Double averageCost;
 	private Integer checkins;
-	private String cuisines;
+	private List<String> cuisines;
+	private List<String> types;
 
 	public Integer getId() {
 		return id;
@@ -55,22 +58,6 @@ public class MerchantDto implements Serializable {
 		this.address = address;
 	}
 
-	public Double getOpenTime() {
-		return openTime;
-	}
-
-	public void setOpenTime(Double openTime) {
-		this.openTime = openTime;
-	}
-
-	public Double getCloseTime() {
-		return closeTime;
-	}
-
-	public void setCloseTime(Double closeTime) {
-		this.closeTime = closeTime;
-	}
-
 	public Double getRating() {
 		return rating;
 	}
@@ -87,11 +74,35 @@ public class MerchantDto implements Serializable {
 		this.checkins = checkins;
 	}
 
-	public String getCuisines() {
+	public Set<TimingDto> getTimings() {
+		return timings;
+	}
+
+	public void setTimings(Set<TimingDto> timings) {
+		this.timings = timings;
+	}
+
+	public List<String> getCuisines() {
 		return cuisines;
 	}
 
-	public void setCuisines(String cuisines) {
+	public void setCuisines(List<String> cuisines) {
 		this.cuisines = cuisines;
+	}
+
+	public List<String> getTypes() {
+		return types;
+	}
+
+	public void setTypes(List<String> types) {
+		this.types = types;
+	}
+
+	public Double getAverageCost() {
+		return averageCost;
+	}
+
+	public void setAverageCost(Double averageCost) {
+		this.averageCost = averageCost;
 	}
 }

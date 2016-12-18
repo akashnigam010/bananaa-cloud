@@ -19,11 +19,11 @@ public class ContactEntity implements Serializable {
 	@Column(name = "ID")
 	private Integer id;
 
-	@Column(name = "TELEPHONE")
-	private String telephone;
+	@Column(name = "PHONE1")
+	private String phone1;
 
-	@Column(name = "MOBILE")
-	private String mobile;
+	@Column(name = "PHONE2")
+	private String phone2;
 
 	@Column(name = "EMAIL")
 	private String email;
@@ -36,20 +36,20 @@ public class ContactEntity implements Serializable {
 		this.id = id;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getPhone1() {
+		return phone1;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setPhone1(String phone1) {
+		this.phone1 = phone1;
 	}
 
-	public String getMobile() {
-		return mobile;
+	public String getPhone2() {
+		return phone2;
 	}
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
 	}
 
 	public String getEmail() {
@@ -59,5 +59,4 @@ public class ContactEntity implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 }

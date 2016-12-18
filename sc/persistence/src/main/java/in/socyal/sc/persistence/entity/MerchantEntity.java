@@ -1,14 +1,17 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,36 +24,40 @@ public class MerchantEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Integer id;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "CONTACT_ID")
 	private ContactEntity contact;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
 	private AddressEntity address;
-	
-	@Column(name = "OPEN_TIME")
-	private Double openTime;
-	
-	@Column(name = "CLOSE_TIME")
-	private Double closeTime;
-	
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID", referencedColumnName = "MERCHANT_ID")
+	private Set<Timing> timings;
+
 	@Column(name = "RATING")
 	private Double rating;
-	
+
+	@Column(name = "AVERAGE_COST")
+	private Double averageCost;
+
 	@Column(name = "CHECKINS")
 	private Integer checkins;
 
-	@Column(name = "CUISINES")
-	private String cuisines;
-	
+	@Column(name = "CUISINE")
+	private String cuisine;
+
+	@Column(name = "TYPE")
+	private String type;
+
 	public Integer getId() {
 		return id;
 	}
@@ -91,22 +98,6 @@ public class MerchantEntity implements Serializable {
 		this.address = address;
 	}
 
-	public Double getOpenTime() {
-		return openTime;
-	}
-
-	public void setOpenTime(Double openTime) {
-		this.openTime = openTime;
-	}
-
-	public Double getCloseTime() {
-		return closeTime;
-	}
-
-	public void setCloseTime(Double closeTime) {
-		this.closeTime = closeTime;
-	}
-
 	public Double getRating() {
 		return rating;
 	}
@@ -123,11 +114,35 @@ public class MerchantEntity implements Serializable {
 		this.checkins = checkins;
 	}
 
-	public String getCuisines() {
-		return cuisines;
+	public String getCuisine() {
+		return cuisine;
 	}
 
-	public void setCuisines(String cuisines) {
-		this.cuisines = cuisines;
+	public void setCuisine(String cuisine) {
+		this.cuisine = cuisine;
+	}
+
+	public Set<Timing> getTimings() {
+		return timings;
+	}
+
+	public void setTimings(Set<Timing> timings) {
+		this.timings = timings;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Double getAverageCost() {
+		return averageCost;
+	}
+
+	public void setAverageCost(Double averageCost) {
+		this.averageCost = averageCost;
 	}
 }
