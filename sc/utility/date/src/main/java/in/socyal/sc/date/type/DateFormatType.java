@@ -1,10 +1,8 @@
 package in.socyal.sc.date.type;
 
 public enum DateFormatType {
-	DD_MM_YYYY("dd-MM-yyyy"),
-	DD_MM("dd/MM"),
-	DD_MMM_YYYY("dd-MMM-yyyy"),
-	YYYY_MM_DD("yyyy-MM-dd"),
+	DATE_FORMAT_24_HOUR("HHmm"),
+	TIME_FORMAT_AM_PM("hh:mm a"),
 	ISO_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
 	private String value;
@@ -13,7 +11,7 @@ public enum DateFormatType {
 		this.value = value;
 	}
 
-	public String getByFormat() {
+	public String getValue() {
 		return value;
 	}
 }

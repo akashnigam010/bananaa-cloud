@@ -8,45 +8,73 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
+import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
+import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
-import in.socyal.sc.api.merchant.response.MerchantListResponse;
+import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
+import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.mapper.MerchantServiceMapper;
 import in.socyal.sc.helper.ResponseHelper;
+import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
 @RequestMapping(value = "/merchant")
 public class MerchantService {
-	@Autowired
-	MerchantServiceMapper mapper;
-	@Autowired
-	ResponseHelper responseHelper;
 
+	@Autowired MerchantDelegate delegate;
+	@Autowired MerchantServiceMapper mapper;
+	@Autowired ResponseHelper responseHelper;
+	
 	@RequestMapping(value = "/getMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
-	public MerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
-		int pageNumber = request.getPage();
-		int random = pageNumber * 10;
-		MerchantListResponse response = mapper.mapMerchantList(random + 1, random + 2, random + 3, random + 4,
-				random + 5, random + 6);
-		return responseHelper.success(response);
+	public GetMerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
+		GetMerchantListResponse response = new GetMerchantListResponse();
+		try {
+			response = delegate.getMerchants(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+
 	}
 
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
-		MerchantDetailsResponse response = mapper.mapMerchantDetails();
-		return responseHelper.success(response);
+		//Mock data is present in mapper
+		//MerchantDetailsResponse response = mapper.mapMerchantDetails();
+		MerchantDetailsResponse response = new MerchantDetailsResponse();
+		try {
+			response = delegate.getMerchantDetails(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		} 
 	}
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
-		SearchMerchantResponse response = mapper.mapSearchMerchantResponse();
-		return responseHelper.success(response);
+		//Mock data is present in mapper
+		//SearchMerchantResponse response = mapper.mapSearchMerchantResponse();
+		SearchMerchantResponse response = new SearchMerchantResponse();
+		try {
+			response = delegate.searchMerchant(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		} 
 	}
+	
+	//Testing purpose
+	@RequestMapping(value = "/saveMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SaveMerchantDetailsResponse saveMerchantDetails(@RequestBody SaveMerchantDetailsRequest request) {
+		SaveMerchantDetailsResponse response = new SaveMerchantDetailsResponse();
+		try {
+			delegate.saveMerchantDetails(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		} 
 
-	@RequestMapping(value = "/test", method = RequestMethod.GET, headers = "Accept=application/json")
-	public MerchantListResponse test() {
-		MerchantListResponse response = new MerchantListResponse();
-		return response;
 	}
 }

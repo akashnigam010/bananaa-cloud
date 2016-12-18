@@ -12,4 +12,17 @@
 	<mvc:annotation-driven />
 	<context:annotation-config />
 	<context:component-scan base-package="in.socyal.sc, in.socyal.sc.*" />
+   	<!-- <mvc:interceptors>
+	    <mvc:interceptor>
+		<mvc:mapping path="/**" />
+			<bean class="in.socyal.sc.persistence.interceptor.LoggerInterceptor">
+				This below tag is used to exclude the URL patterns
+				<property name="excludeUrls">
+					<list>
+						<value>/login/*</value>
+					</list>
+				</property>
+			</bean>
+	    </mvc:interceptor>
+	</mvc:interceptors> -->
 </beans>

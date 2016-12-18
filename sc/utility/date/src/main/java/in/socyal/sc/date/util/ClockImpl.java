@@ -41,7 +41,7 @@ public class ClockImpl implements Clock {
 	
 	@Override
 	public String getCurrentDateTime() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormatType.ISO_DATE_FORMAT.getByFormat());
+		SimpleDateFormat dateFormat = new SimpleDateFormat(DateFormatType.ISO_DATE_FORMAT.getValue());
 		return dateFormat.format(cal().getTime());
 	}
 

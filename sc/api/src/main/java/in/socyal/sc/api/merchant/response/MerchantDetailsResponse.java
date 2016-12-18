@@ -15,7 +15,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private Double rating;
 	private Boolean isOpen;
 	private Double distance;
-	private String openTime;
+	private List<String> openingHours;
 	private List<String> cuisines;
 	private List<String> type;
 	private Double averageCost;
@@ -126,11 +126,11 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.location = location;
 	}
 
-	public String getOpenTime() {
-		return openTime;
+	public List<String> getOpeningHours() {
+		return openingHours;
 	}
 
-	public void setOpenTime(String openTime) {
-		this.openTime = openTime;
+	public void setOpeningHours(List<String> openingHours) {
+		this.openingHours = openingHours;
 	}
 }

@@ -7,16 +7,16 @@ import in.socyal.sc.api.response.GenericResponse;
 
 public class SearchMerchantResponse extends GenericResponse {
 	private static final long serialVersionUID = 1L;
-	private List<MerchantDto> merchants;
+	private List<MerchantResponse> merchants;
 
-	public List<MerchantDto> getMerchants() {
+	public List<MerchantResponse> getMerchants() {
 		if (merchants == null) {
 			merchants = new ArrayList<>();
 		}
 		return merchants;
 	}
 
-	public void setMerchants(List<MerchantDto> merchants) {
+	public void setMerchants(List<MerchantResponse> merchants) {
 		this.merchants = merchants;
 	}
 }

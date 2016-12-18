@@ -18,12 +18,18 @@ import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import in.socyal.sc.persistence.interceptor.LoggerInterceptor;
  
 @Configuration
 @EnableTransactionManagement
 @ComponentScan({ "in.socyal.sc" })
+@EnableWebMvc
 @PropertySource(value = {"classpath:application.properties"})
-public class SpringConfigurer {
+public class SpringConfigurer extends WebMvcConfigurerAdapter {
 	private static final Logger LOG = Logger.getLogger(SpringConfigurer.class);
 	
     @Autowired
@@ -72,5 +78,10 @@ public class SpringConfigurer {
        HibernateTransactionManager txManager = new HibernateTransactionManager();
        txManager.setSessionFactory(s);
        return txManager;
+    }
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoggerInterceptor()).addPathPatterns("/**");
     }
 }
