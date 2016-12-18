@@ -43,3 +43,12 @@ INSERT INTO `Socyal`.`MERCHANT` (`ID`, `NAME`, `ADDRESS_ID`, `CONTACT_ID`, `IMAG
 INSERT INTO `Socyal`.`MERCHANT` (`ID`, `NAME`, `ADDRESS_ID`, `CONTACT_ID`, `IMAGE_URL`, `RATING`, `CHECKINS`, `CUISINE`, `TYPE`, `AVERAGE_COST`) VALUES ('12355', 'Soda Bottle Opener Wala', '5', '5', 'https://s3.ap-south-1.amazonaws.com/bananaimages/12355.png', '3.3', '568', 'Mexican, Mughlai, Asian, Continental', 'Bar, Kitchen, Bistro', 1600.00);
 
 
+-- Timing
+
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('1', '12345', 'MONDAY', '1000', '2100');
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('2', '12345', 'TUESDAY', '1000', '2100');
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('3', '12345', 'WEDNESDAY', '1000', '2100');
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('4', '12345', 'THURSDAY', '1000', '2100');
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('5', '12345', 'FRIDAY', '1000', '2100');
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('6', '12345', 'SATURDAY', '1000', '2100');
+INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('7', '12345', 'SUNDAY', '1000', '2100');
