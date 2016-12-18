@@ -39,7 +39,8 @@ public class MerchantEntity implements Serializable {
 	@JoinColumn(name = "ADDRESS_ID")
 	private AddressEntity address;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "MERCHANT_ID")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "MERCHANT_ID", referencedColumnName = "ID")
 	private Set<TimingEntity> timings;
 
 	@Column(name = "RATING")
