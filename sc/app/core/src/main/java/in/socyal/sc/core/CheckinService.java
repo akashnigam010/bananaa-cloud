@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
+import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
 import in.socyal.sc.api.checkin.response.CheckinResponse;
+import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
 import in.socyal.sc.core.mapper.CheckinServiceMapper;
 import in.socyal.sc.helper.ResponseHelper;
+import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
 @RequestMapping(value = "/checkin")
@@ -28,5 +31,16 @@ public class CheckinService {
 		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(request.getId(), request.getPage());
 		mapper.map(checkins, response, request.getPage());
 		return responseHelper.success(response);
+	}
+	
+	@RequestMapping(value = "/confirmCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ConfirmCheckinResponse checkin(@RequestBody ConfirmCheckinRequest request) {
+		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
+		try {
+			response = delegate.confirmCheckin(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
 	}
 }

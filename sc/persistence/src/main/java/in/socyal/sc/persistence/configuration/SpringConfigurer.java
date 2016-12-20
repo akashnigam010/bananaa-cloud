@@ -1,4 +1,4 @@
-package in.socyal.sc.persistence;
+package in.socyal.sc.persistence.configuration;
 
 import java.util.Properties;
 
