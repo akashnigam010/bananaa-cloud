@@ -30,6 +30,11 @@
 			<artifactId>merchant</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>location</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>sc</finalName>
