@@ -36,5 +36,6 @@
 		<module>core</module>
 		<module>login</module>
 		<module>merchant</module>
+		<module>location</module>
 	</modules>
 </project>
