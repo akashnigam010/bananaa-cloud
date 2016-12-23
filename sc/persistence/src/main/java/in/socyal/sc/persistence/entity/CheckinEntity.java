@@ -7,9 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import in.socyal.sc.api.type.CheckinStatusType;
@@ -27,8 +30,9 @@ public class CheckinEntity implements Serializable {
 	@Column(name = "USER_ID")
 	private Integer userId;
 	
-	@Column(name = "MERCHANT_ID")
-	private Integer merchantId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MERCHANT_ID")
+	private MerchantEntity merchant;
 
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.STRING)
@@ -71,12 +75,12 @@ public class CheckinEntity implements Serializable {
 		this.userId = userId;
 	}
 
-	public Integer getMerchantId() {
-		return merchantId;
+	public MerchantEntity getMerchant() {
+		return merchant;
 	}
 
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
+	public void setMerchant(MerchantEntity merchant) {
+		this.merchant = merchant;
 	}
 
 	public CheckinStatusType getStatus() {
