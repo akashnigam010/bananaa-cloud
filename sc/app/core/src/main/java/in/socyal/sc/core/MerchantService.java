@@ -18,13 +18,11 @@ import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.mapper.MerchantServiceMapper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.logging.LogManager;
-import in.socyal.sc.helper.logging.Logger;
 
 @RestController
 @RequestMapping(value = "/merchant")
 public class MerchantService {
-	//Logger LOG = LogManager.getLogger(MerchantService.class);
+	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 
 	@Autowired
 	MerchantDelegate delegate;
@@ -48,8 +46,6 @@ public class MerchantService {
 
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
-		// Mock data is present in mapper
-		// MerchantDetailsResponse response = mapper.mapMerchantDetails();
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		try {
 			response = delegate.getMerchantDetails(request);
@@ -64,7 +60,9 @@ public class MerchantService {
 		logSearchMerchantRequest(request);
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		try {
-			response = delegate.searchMerchant(request);
+			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
+				response = delegate.searchMerchant(request);
+			}			
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
