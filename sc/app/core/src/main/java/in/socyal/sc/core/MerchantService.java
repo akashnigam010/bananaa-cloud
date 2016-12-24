@@ -48,10 +48,13 @@ public class MerchantService {
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		try {
+			Thread.sleep(3000);
 			response = delegate.getMerchantDetails(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
+		} catch (InterruptedException e) {
+			return null;
 		}
 	}
 
