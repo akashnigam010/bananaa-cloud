@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.dao.LoginDao;
 import in.socyal.sc.login.type.LoginErrorCodeType;
 
@@ -30,7 +32,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	@Override
 	public LoginResponse skipLogin() {
 		LoginResponse response = new LoginResponse();
-		response.setAccessToken(JWT_LOW_RISK);
+		//Sets JWT access token
+		response.setAccessToken(JwtHelper.createJsonWebToken(RoleType.GUEST.getRole(), RoleType.GUEST.getRole(), 1L));
 		response.setUser(mapper.mapGuestUser());
 		return response;
 	}
@@ -41,7 +44,9 @@ public class LoginDelegateImpl implements LoginDelegate {
 		try {
 			FacebookUser fbUser = fbHelper.getUserGraphDataWithAccessToken(request.getFbAccessToken());
 			if (fbUser.getId().equals(request.getFbId())) {
-				response.setAccessToken(JWT);
+				//Check and validate if the user already exists in the DB
+				//Sets JWT access token
+				response.setAccessToken(JwtHelper.createJsonWebToken(fbUser.getId(), RoleType.USER.getRole(), 365L));
 				response.setUser(mapper.mapFbUserToUserDto(fbUser));
 			} else {
 				throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
@@ -57,7 +62,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 		LoginResponse response = new LoginResponse();
 		try {
 			FacebookUser fbUser = fbHelper.getUserGraphDataWithCode(code);
-			response.setAccessToken(JWT);
+			response.setAccessToken(JwtHelper.createJsonWebToken(fbUser.getId(), RoleType.USER.getRole(), 365L));
 			response.setUser(mapper.mapFbUserToUserDto(fbUser));
 		} catch (IOException e) {
 			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);

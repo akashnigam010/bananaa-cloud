@@ -1,7 +1,8 @@
 package in.socyal.sc.api.type;
 
 public enum RoleType {
-	ADMIN(1, "ADMIN"), OWNER(2, "OWNER"), MANAGER(3, "MANAGER"), STEWARD(4, "STEWARD");
+	USER(1, "USER"), 
+	GUEST(2, "GUEST");
 
 	private Integer id;
 	private String role;

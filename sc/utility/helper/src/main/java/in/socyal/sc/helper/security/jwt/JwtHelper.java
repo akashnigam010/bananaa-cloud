@@ -21,8 +21,8 @@ import net.oauth.jsontoken.discovery.VerifierProvider;
 import net.oauth.jsontoken.discovery.VerifierProviders;
 
 public class JwtHelper {
-	private static final String AUDIENCE = "CantWait Sense Applications";
-	private static final String ISSUER = "ASVYS PVT LTD";
+	private static final String AUDIENCE = "Bananaa Application";
+	private static final String ISSUER = "Bananaa Application";
 	private static final String SIGNING_KEY = "LongAndHardToGuessValueWithSpecialCharacters";
 
 	/**
@@ -112,6 +112,10 @@ public class JwtHelper {
 		} catch (InvalidKeyException e1) {
 			throw new RuntimeException(e1);
 		}
+	}
+	
+	public static void main(String args[]) {
+		System.out.println(createJsonWebToken("yogi", "ADMIN", 1L));
 	}
 	
 	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis) {
