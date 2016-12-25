@@ -8,20 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.location.request.SearchLocationRequest;
 import in.socyal.sc.api.location.response.GetLocalitiesResponse;
-import in.socyal.sc.core.validation.LocationValidator;
 import in.socyal.sc.helper.ResponseHelper;
-import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.location.LocationDelegate;
 
 @RestController
 @RequestMapping(value = "/location")
 public class LocationService {
+	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
+
 	@Autowired
 	ResponseHelper helper;
 	@Autowired
 	LocationDelegate delegate;
-	@Autowired
-	LocationValidator validator;
 
 	@RequestMapping(value = "/getLocalities", method = RequestMethod.GET, headers = "Accept=application/json")
 	public GetLocalitiesResponse getLocalities() {
@@ -32,12 +30,9 @@ public class LocationService {
 	@RequestMapping(value = "/searchLocality", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetLocalitiesResponse searchLocality(@RequestBody SearchLocationRequest request) {
 		GetLocalitiesResponse response = new GetLocalitiesResponse();
-		try {
-			validator.validateSearchLocationRequest(request);
+		if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 			response = delegate.searchLocalities(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
 		}
+		return helper.success(response);
 	}
 }

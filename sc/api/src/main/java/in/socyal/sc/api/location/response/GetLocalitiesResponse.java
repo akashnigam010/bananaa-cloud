@@ -1,5 +1,6 @@
 package in.socyal.sc.api.location.response;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import in.socyal.sc.api.merchant.dto.LocalityDto;
@@ -10,6 +11,9 @@ public class GetLocalitiesResponse extends GenericResponse {
 	List<LocalityDto> localities;
 
 	public List<LocalityDto> getLocalities() {
+		if (localities == null) {
+			localities = new ArrayList<>();
+		}
 		return localities;
 	}
 
