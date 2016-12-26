@@ -9,6 +9,10 @@ public class UserDto implements Serializable {
 	private String lastName;
 	private String imageUrl;
 	private String email;
+	private String facebookId;
+	private String facebookLink;
+	private String facebookToken;
+	private String gender;
 
 	public Integer getId() {
 		return id;
@@ -50,6 +54,38 @@ public class UserDto implements Serializable {
 		this.email = email;
 	}
 	
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
+	}
+
+	public String getFacebookLink() {
+		return facebookLink;
+	}
+
+	public void setFacebookLink(String facebookLink) {
+		this.facebookLink = facebookLink;
+	}
+
+	public String getFacebookToken() {
+		return facebookToken;
+	}
+
+	public void setFacebookToken(String facebookToken) {
+		this.facebookToken = facebookToken;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	@Override
 	public String toString() {
 		return this.firstName + " " + this.lastName;

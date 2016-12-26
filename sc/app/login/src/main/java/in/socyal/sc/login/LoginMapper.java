@@ -10,12 +10,12 @@ public class LoginMapper {
 	private static final String GUEST_NAME = "Guest";
 	private static final String GUEST_IMAGE_URL = "http://www.whitebay.in/images/guestUser.png";
 
-	public UserDto mapFbUserToUserDto(FacebookUser fbUser) {
+	public UserDto mapFbUserToUserDto(in.socyal.sc.api.user.dto.UserDto userDetails) {
 		UserDto userDto = new UserDto();
-		userDto.setFirstName(fbUser.getFirst_name());
-		userDto.setLastName(fbUser.getLast_name());
-		userDto.setId(fbUser.getId());
-		userDto.setImageUrl(fbUser.getPicture().getData().getUrl());
+		userDto.setFirstName(userDetails.getFirstName());
+		userDto.setLastName(userDetails.getLastName());
+		userDto.setId(userDetails.getFacebookId());
+		userDto.setImageUrl(userDetails.getImageUrl());
 		return userDto;
 	}
 
@@ -26,4 +26,12 @@ public class LoginMapper {
 		return userDto;
 	}
 
+	public in.socyal.sc.api.login.dto.UserDto mapFbUserToUserDto(FacebookUser fbUser) {
+		UserDto userDto = new UserDto();
+		userDto.setFirstName(fbUser.getFirst_name());
+		userDto.setLastName(fbUser.getLast_name());
+		userDto.setId(fbUser.getId());
+		userDto.setImageUrl(fbUser.getPicture().getData().getUrl());
+		return userDto;
+	}
 }

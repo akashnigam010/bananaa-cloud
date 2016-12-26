@@ -15,4 +15,11 @@
 	<build>
 		<finalName>login</finalName>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>

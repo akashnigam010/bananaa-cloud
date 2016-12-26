@@ -30,6 +30,18 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "EMAIL")
 	private String email;
+	
+	@Column(name = "FACEBOOK_ID")
+	private String facebookId;
+	
+	@Column(name = "FACEBOOK_LINK")
+	private String facebookLink;
+	
+	@Column(name = "FACEBOOK_TOKEN")
+	private String facebookToken;
+	
+	@Column(name = "GENDER")
+	private String gender;
 
 	public Integer getId() {
 		return id;
@@ -69,5 +81,37 @@ public class UserEntity implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getFacebookId() {
+		return facebookId;
+	}
+
+	public void setFacebookId(String facebookId) {
+		this.facebookId = facebookId;
+	}
+
+	public String getFacebookLink() {
+		return facebookLink;
+	}
+
+	public void setFacebookLink(String facebookLink) {
+		this.facebookLink = facebookLink;
+	}
+
+	public String getFacebookToken() {
+		return facebookToken;
+	}
+
+	public void setFacebookToken(String facebookToken) {
+		this.facebookToken = facebookToken;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 }
