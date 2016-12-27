@@ -1,7 +1,6 @@
 package in.socyal.sc.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +12,6 @@ import in.socyal.sc.user.UserDelegate;
 
 @RestController
 @RequestMapping(value = "/user")
-@PreAuthorize("hasAuthority('USER')")
 public class UserService {
 	@Autowired UserDelegate userDelegate;
 	@Autowired ResponseHelper responseHelper;

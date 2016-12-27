@@ -3,7 +3,7 @@ package in.socyal.sc.user.type;
 import in.socyal.sc.helper.BusinessErrorCode;
 
 public enum UserErrorCodeType implements BusinessErrorCode {
-	USER_ID_NOT_FOUND(10001);
+	USER_NOT_AUTHORIZED(10002);
 
 	private int value;
 

@@ -29,4 +29,14 @@ public enum RoleType {
 
 		return null;
 	}
+	
+	public static RoleType getRole(String role) {
+		for (RoleType type : RoleType.values()) {
+			if (role.equalsIgnoreCase(type.getRole())) {
+				return type;
+			}
+		}
+
+		return null;
+	}
 }
