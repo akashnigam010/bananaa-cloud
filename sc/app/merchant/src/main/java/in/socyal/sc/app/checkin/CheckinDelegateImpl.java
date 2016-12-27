@@ -103,7 +103,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {
 		List<UserDto> taggedUserDetails = new ArrayList<>();
 		for (Integer userId : taggedUserIds) {
-			UserDto user = userDao.fetchUsers(userId);
+			UserDto user = userDao.fetchUser(userId);
 			if (user == null) {
 				throw new BusinessException(CheckinErrorCodeType.USER_NOT_FOUND);
 			}

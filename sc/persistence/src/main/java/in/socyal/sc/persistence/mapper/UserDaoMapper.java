@@ -25,7 +25,7 @@ public class UserDaoMapper {
 		to.setFacebookId(from.getId());
 		to.setFacebookLink(from.getLink());
 		to.setFirstName(from.getFirst_name());
-		to.setLastName(from.getLast_name());
+		to.setLastName(from.getLastName());
 		to.setGender(from.getGender());
 		to.setImageUrl(from.getPicture().getData().getUrl());
 		to.setFacebookToken(fbAccessToken);

@@ -26,7 +26,7 @@ public class UserDao {
     }
     
     @Transactional
-    public UserDto fetchUsers(Integer userId) {
+    public UserDto fetchUser(Integer userId) {
     	UserDto dto = null;
     	UserEntity entity = (UserEntity) sessionFactory.getCurrentSession().get(UserEntity.class, userId);
     	if (entity != null) {

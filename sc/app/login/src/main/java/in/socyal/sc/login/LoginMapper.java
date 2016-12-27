@@ -29,7 +29,7 @@ public class LoginMapper {
 	public in.socyal.sc.api.login.dto.UserDto mapFbUserToUserDto(FacebookUser fbUser) {
 		UserDto userDto = new UserDto();
 		userDto.setFirstName(fbUser.getFirst_name());
-		userDto.setLastName(fbUser.getLast_name());
+		userDto.setLastName(fbUser.getLastName());
 		userDto.setId(fbUser.getId());
 		userDto.setImageUrl(fbUser.getPicture().getData().getUrl());
 		return userDto;
