@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
 import in.socyal.sc.api.checkin.request.AroundMeCheckinsRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
-<<<<<<< HEAD
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
-=======
 import in.socyal.sc.api.checkin.request.MyCheckinsRequest;
->>>>>>> b90b9e3d4f354e34b55e6694c2fb952ebae2d5ae
 import in.socyal.sc.api.checkin.response.CheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
