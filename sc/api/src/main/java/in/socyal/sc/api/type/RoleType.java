@@ -1,7 +1,8 @@
 package in.socyal.sc.api.type;
 
 public enum RoleType {
-	ADMIN(1, "ADMIN"), OWNER(2, "OWNER"), MANAGER(3, "MANAGER"), STEWARD(4, "STEWARD");
+	USER(1, "USER"), 
+	GUEST(2, "GUEST");
 
 	private Integer id;
 	private String role;
@@ -22,6 +23,16 @@ public enum RoleType {
 	public static RoleType getRoleById(Integer id) {
 		for (RoleType type : RoleType.values()) {
 			if (type.getId() == id) {
+				return type;
+			}
+		}
+
+		return null;
+	}
+	
+	public static RoleType getRole(String role) {
+		for (RoleType type : RoleType.values()) {
+			if (role.equalsIgnoreCase(type.getRole())) {
 				return type;
 			}
 		}

@@ -21,8 +21,8 @@ import net.oauth.jsontoken.discovery.VerifierProvider;
 import net.oauth.jsontoken.discovery.VerifierProviders;
 
 public class JwtHelper {
-	private static final String AUDIENCE = "CantWait Sense Applications";
-	private static final String ISSUER = "ASVYS PVT LTD";
+	private static final String AUDIENCE = "Bananaa Application";
+	private static final String ISSUER = "Bananaa Application";
 	private static final String SIGNING_KEY = "LongAndHardToGuessValueWithSpecialCharacters";
 
 	/**
@@ -32,11 +32,11 @@ public class JwtHelper {
 	 * Using a JWT eliminates the need to store authentication session
 	 * information in a database.
 	 * 
-	 * @param name
-	 * @param durationDays
+	 * @param userId
+	 * @param durationInDays
 	 * @return
 	 */
-	public static String createJsonWebToken(String name, String role, Long durationDays) {
+	public static String createJsonWebToken(String userId, String role, Long durationInDays) {
 		// Current time and signing algorithm
 		Calendar cal = Calendar.getInstance();
 		HmacSHA256Signer signer;
@@ -49,10 +49,10 @@ public class JwtHelper {
 		JsonToken token = new net.oauth.jsontoken.JsonToken(signer);
 		token.setAudience(AUDIENCE);
 		token.setIssuedAt(new org.joda.time.Instant(cal.getTimeInMillis()));
-		token.setExpiration(new org.joda.time.Instant(cal.getTimeInMillis() + 1000L * 60L * 60L * 24L * durationDays));
+		token.setExpiration(new org.joda.time.Instant(cal.getTimeInMillis() + 1000L * 60L * 60L * 24L * durationInDays));
 		// Configure request object, which provides information of the item
 		JsonObject request = new JsonObject();
-		request.addProperty("userId", name);
+		request.addProperty("userId", userId);
 		request.addProperty("role", role);
 		JsonObject payload = token.getPayloadAsJsonObject();
 		payload.add("info", request);
@@ -112,6 +112,10 @@ public class JwtHelper {
 		} catch (InvalidKeyException e1) {
 			throw new RuntimeException(e1);
 		}
+	}
+	
+	public static void main(String args[]) {
+		System.out.println(createJsonWebToken("yogi", "ADMIN", 1L));
 	}
 	
 	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis) {

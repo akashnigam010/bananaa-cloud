@@ -135,12 +135,23 @@ INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALU
 INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('77', '12355', 'SATURDAY', '1000', '2100');
 INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('78', '12355', 'SUNDAY', '1000', '2100');
 
+--Merchant_QR_Mapping
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (1, 'SkyhyTab1', 12345, 2, TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (2, 'Fusion9TAB1', 12346, 4, TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (3, 'NewsCafeTAB1', 12347, 3, FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (4, 'ViaMilanoTAB1', 12348, 3, TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (5, 'URBASIATAB1', 12349, 6,TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (6, 'FreeFlowTAB1', 12350, 7, FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (7, 'PunjabGrillTAB1', 12351, 8, TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (8, 'RayalRuchuluTAB1', 12352, 2, TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (9, 'HashtagTAB1', 12353, 1, FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (10, 'TickiShackTAB1', 12354, 2, FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (111, 'SBOWTAB1', 12355, 3, TRUE);
 
-
-
-
-
-
-
-
-
+--Users (Temporary)
+INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (1, 'Yogesh', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Sadula');
+INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (2, 'Xavier', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Johnson');
+INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (3, 'Krish', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Tej');
+INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (4, 'Urmila', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Mamalla');
+INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (5, 'Kriti', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Konda');
+INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (6, 'Karthik', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Putta');
