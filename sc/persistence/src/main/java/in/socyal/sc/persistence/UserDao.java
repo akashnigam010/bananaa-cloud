@@ -54,6 +54,7 @@ public class UserDao {
     	UserEntity entity = new UserEntity();
     	UserDto dto = fetchUserByFbId(user.getId());
     	if (dto == null) {
+    		dto = new UserDto();
     		mapper.map(user, entity, fbAccessToken);
     		sessionFactory.getCurrentSession().save(entity);
     		mapper.map(entity, dto);

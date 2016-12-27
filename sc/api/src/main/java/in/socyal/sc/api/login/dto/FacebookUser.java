@@ -2,8 +2,8 @@ package in.socyal.sc.api.login.dto;
 
 public class FacebookUser {
 	private String id;
-	private String firstName;
-	private String lastName;
+	private String first_name;
+	private String last_name;
 	private String link;
 	private String email;
 	private FacebookPicture picture;
@@ -18,19 +18,19 @@ public class FacebookUser {
 	}
 
 	public String getFirst_name() {
-		return firstName;
+		return first_name;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getLast_name() {
+		return last_name;
 	}
 
-	public void setLast_name(String lastName) {
-		this.lastName = lastName;
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
 	}
 
 	public String getLink() {

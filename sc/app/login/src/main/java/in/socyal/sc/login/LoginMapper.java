@@ -14,7 +14,7 @@ public class LoginMapper {
 		UserDto userDto = new UserDto();
 		userDto.setFirstName(userDetails.getFirstName());
 		userDto.setLastName(userDetails.getLastName());
-		userDto.setId(userDetails.getFacebookId());
+		userDto.setId(userDetails.getId());
 		userDto.setImageUrl(userDetails.getImageUrl());
 		return userDto;
 	}
@@ -29,8 +29,8 @@ public class LoginMapper {
 	public in.socyal.sc.api.login.dto.UserDto mapFbUserToUserDto(FacebookUser fbUser) {
 		UserDto userDto = new UserDto();
 		userDto.setFirstName(fbUser.getFirst_name());
-		userDto.setLastName(fbUser.getLastName());
-		userDto.setId(fbUser.getId());
+		userDto.setLastName(fbUser.getLast_name());
+		userDto.setId(Integer.parseInt(fbUser.getId()));
 		userDto.setImageUrl(fbUser.getPicture().getData().getUrl());
 		return userDto;
 	}
