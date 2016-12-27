@@ -3,7 +3,6 @@ package in.socyal.sc.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import in.socyal.sc.api.type.RoleType;
@@ -34,12 +33,12 @@ public class UserDelegateImpl implements UserDelegate {
 	private void authorizeUser() throws BusinessException {
 		List<String> roles = jwtHelper.getRoles();
 		if (roles == null || roles.isEmpty()) {
-			throw new BusinessException(UserErrorCodeType.USER_NOT_AUTHORIZED);
+			throw new BusinessException(UserErrorCodeType.LOGIN_REQUIRED);
 		}
 		
 		for (String role : roles) {
 			if (RoleType.GUEST == RoleType.getRole(role)) {
-				throw new BusinessException(UserErrorCodeType.USER_NOT_AUTHORIZED);
+				throw new BusinessException(UserErrorCodeType.LOGIN_REQUIRED);
 			}
 		}
 	}
