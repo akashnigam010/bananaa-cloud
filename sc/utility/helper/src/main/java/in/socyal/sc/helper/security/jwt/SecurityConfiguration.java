@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		RestAuthenticationEntryPoint entryPoint = new RestAuthenticationEntryPoint();
-		http.authorizeRequests().antMatchers("/login/**").permitAll().anyRequest().authenticated().and()
+		http.authorizeRequests().antMatchers("/login/**", "/location/**").permitAll().anyRequest().authenticated().and()
 				// .formLogin().loginPage("/login").permitAll().and()
 				.exceptionHandling().authenticationEntryPoint(entryPoint).and().httpBasic()
 				.authenticationEntryPoint(entryPoint).and().logout().permitAll().and().csrf().disable()
@@ -68,6 +68,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/login/**"); // #3
+		web.ignoring().antMatchers("/login/**", "/location/**"); // #3
 	}
 }
