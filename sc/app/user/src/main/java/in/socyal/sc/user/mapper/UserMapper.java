@@ -13,7 +13,7 @@ public class UserMapper {
 		to.setEmail(from.getEmail());
 		to.setFacebookId(from.getFacebookId());
 		to.setName(formFullName(from.getFirstName(), from.getLastName()));
-		to.setPrimaryImageUrl(from.getImageUrl());
+		to.setImageUrl(from.getImageUrl());
 		to.setUserCheckins(1);
 	}
 	

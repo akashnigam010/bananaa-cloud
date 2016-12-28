@@ -8,7 +8,7 @@ public class UserProfileResponse extends GenericResponse implements Serializable
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
-	private String primaryImageUrl;
+	private String imageUrl;
 	private String email;
 	private String facebookId;
 	private Integer userCheckins;
@@ -29,12 +29,12 @@ public class UserProfileResponse extends GenericResponse implements Serializable
 		this.name = name;
 	}
 
-	public String getPrimaryImageUrl() {
-		return primaryImageUrl;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setPrimaryImageUrl(String primaryImageUrl) {
-		this.primaryImageUrl = primaryImageUrl;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	public String getEmail() {
