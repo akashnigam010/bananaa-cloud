@@ -4,20 +4,24 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
+import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
+import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
+import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
-import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.merchant.CheckinErrorCodeType;
 import in.socyal.sc.app.merchant.MerchantQrMappingErrorCodeType;
 import in.socyal.sc.helper.distance.DistanceHelper;
@@ -31,6 +35,7 @@ import in.socyal.sc.persistence.UserDao;
 
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
+	private static final Logger LOG = Logger.getLogger(CheckinDelegateImpl.class);
 	@Autowired CheckinDao checkinDao;
 	@Autowired MerchantQrMappingDao qrMappingDao;
 	@Autowired MerchantDao merchantDao;
@@ -130,7 +135,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 												  qrMapping.getMerchant().getAddress().getLatitude(), 
 												  qrMapping.getMerchant().getAddress().getLongitude());
 		if (!isNearBy) {
-			throw new BusinessException(CheckinErrorCodeType.QR_CODE_OUT_OF_RANGE);
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
 		}
 		
 		response.setPreviousCheckinCount(checkinDao.getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
@@ -141,5 +146,20 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	private Integer getCurrentUserId() {
 		return Integer.valueOf(jwtHelper.getUserName());
+	}
+
+	@Override
+	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
+		CancelCheckinResponse response = new CancelCheckinResponse();
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
+		if (checkin == null) {
+			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getCheckinId());
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		} else if (CheckinStatusType.CANCELLED == checkin.getStatus()) {
+			LOG.error("Checkin is already cancelled for checkinID:" + request.getCheckinId());
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
+		}
+		checkinDao.cancelCheckin(request.getCheckinId());
+		return response;
 	}
 }

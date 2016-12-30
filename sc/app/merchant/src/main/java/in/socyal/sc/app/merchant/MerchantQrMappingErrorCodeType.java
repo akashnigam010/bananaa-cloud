@@ -3,7 +3,8 @@ package in.socyal.sc.app.merchant;
 import in.socyal.sc.helper.BusinessErrorCode;
 
 public enum MerchantQrMappingErrorCodeType implements BusinessErrorCode {
-	QR_NOT_FOUND(10201);
+	QR_NOT_FOUND(10201),
+	QR_CODE_LOCATION_OUT_OF_RANGE(10202);
 
 	private int value;
 

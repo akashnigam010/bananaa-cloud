@@ -1,5 +1,6 @@
 package in.socyal.sc.persistence;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -7,16 +8,19 @@ import javax.transaction.Transactional;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
+import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
 
 @Repository
 public class CheckinDao {
+	private static final Logger LOG = Logger.getLogger(CheckinDao.class);
 	@Autowired SessionFactory sessionFactory;
 	@Autowired CheckinDaoMapper mapper;
  
@@ -45,4 +49,28 @@ public class CheckinDao {
 		List<CheckinEntity> result = criteria.list();
     	return result.size();
     }
+    
+    @Transactional
+    public void cancelCheckin(Integer checkinId) {
+    	CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
+    	if (checkin != null) {
+    		checkin.setStatus(CheckinStatusType.CANCELLED);
+    		checkin.setUpdatedDateTime(Calendar.getInstance());
+        	sessionFactory.getCurrentSession().update(checkin);
+    	} else {
+    		LOG.error("Checkin entity not found for checkinID:" + checkinId);
+    	}
+    }
+
+    @Transactional
+	public CheckinDto getCheckin(Integer checkinId) {
+		CheckinDto checkinDto = null;
+		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
+		if (checkin != null) {
+			checkinDto = new CheckinDto();
+			mapper.map(checkin, checkinDto);
+		}
+		return checkinDto;
+		
+	}
 }

@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
 import in.socyal.sc.api.checkin.request.AroundMeCheckinsRequest;
+import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyCheckinsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
+import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.CheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
@@ -53,6 +55,17 @@ public class CheckinService {
 		ValidateCheckinResponse response = new ValidateCheckinResponse();
 		try {
 			response = delegate.validateCheckin(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/cancelCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public CancelCheckinResponse cancelCheckin(@RequestBody CancelCheckinRequest request) {
+		CancelCheckinResponse response = new CancelCheckinResponse();
+		try {
+			response = delegate.cancelCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
