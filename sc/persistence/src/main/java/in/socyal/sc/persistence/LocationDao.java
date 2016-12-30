@@ -9,7 +9,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.persistence.entity.LocalityEntity;
@@ -32,7 +31,6 @@ public class LocationDao {
 		this.sessionFactory = sessionFactory;
 	}
 
-	@Transactional
 	public List<LocalityDto> getLocalities() {
 		List<LocalityDto> localityDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocalityEntity.class);
@@ -46,7 +44,6 @@ public class LocationDao {
 		return localityDtos;
 	}
 
-	@Transactional
 	public List<LocalityDto> searchLocalities(String searchString) {
 		List<LocalityDto> localityDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocalityEntity.class);

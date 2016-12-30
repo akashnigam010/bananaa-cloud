@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -23,6 +25,7 @@ public class UserDelegateImpl implements UserDelegate {
 	@Autowired UserMapper mapper;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public UserProfileResponse getProfile() throws BusinessException {
 		authorizeUser();
 		UserProfileResponse response = new UserProfileResponse();
@@ -34,6 +37,7 @@ public class UserDelegateImpl implements UserDelegate {
 	
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchUserResponse searchUsers(SearchUserRequest request) throws BusinessException {
 		SearchUserResponse response = new SearchUserResponse(); 
 		List<UserDto> users = userDao.fetchUsers(request.getSearchString());

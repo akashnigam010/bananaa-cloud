@@ -9,7 +9,6 @@ import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
@@ -30,7 +29,6 @@ public class CheckinDao {
         this.sessionFactory = sessionFactory;
     }
  
-    @Transactional
     public Integer confirmCheckin(CheckinDetailsDto checkinDetails) {
     	CheckinEntity entity = new CheckinEntity();
     	mapper.map(checkinDetails, entity);
@@ -38,7 +36,6 @@ public class CheckinDao {
     	return checkinId;
     }
     
-    @Transactional
     public Integer getPreviousCheckins(Integer userId, Integer merchantId) {
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
     	criteria.add(Restrictions.eq("userId", userId));
@@ -49,7 +46,6 @@ public class CheckinDao {
     	return result.size();
     }
     
-    @Transactional
     public void cancelCheckin(Integer checkinId) {
     	CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
     	if (checkin != null) {
@@ -61,7 +57,6 @@ public class CheckinDao {
     	}
     }
 
-    @Transactional
 	public CheckinDto getCheckin(Integer checkinId) {
 		CheckinDto checkinDto = null;
 		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);

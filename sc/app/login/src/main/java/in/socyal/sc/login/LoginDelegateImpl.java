@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.login.request.LoginRequest;
@@ -37,6 +39,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LoginResponse fbLogin(LoginRequest request) throws BusinessException {
 		LoginResponse response = new LoginResponse();
 		try {
@@ -56,6 +59,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LoginResponse fbLoginWithCode(String code) throws BusinessException {
 		LoginResponse response = new LoginResponse();
 		try {

@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.persistence.entity.MerchantQrMappingEntity;
@@ -23,7 +22,6 @@ public class MerchantQrMappingDao {
         this.sessionFactory = sessionFactory;
     }
  
-    @Transactional
     public MerchantQrMappingDto getMerchantQrMapping(String qrCode) {
     	MerchantQrMappingDto dto = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantQrMappingEntity.class);

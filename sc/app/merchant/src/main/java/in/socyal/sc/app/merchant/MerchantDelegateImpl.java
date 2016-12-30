@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
@@ -33,14 +35,12 @@ import in.socyal.sc.persistence.MerchantDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
-	@Autowired
-	MerchantDao dao;
-	@Autowired
-	MerchantDelegateMapper mapper;
-	@Autowired
-	DayUtil dayUtil;
+	@Autowired MerchantDao dao;
+	@Autowired MerchantDelegateMapper mapper;
+	@Autowired DayUtil dayUtil;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public GetMerchantListResponse getMerchants(GetMerchantListRequest request) throws BusinessException {
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
@@ -54,6 +54,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
 			throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
@@ -70,6 +71,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString());
@@ -81,6 +83,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void saveMerchantDetails(SaveMerchantDetailsRequest request) throws BusinessException {
 		MerchantDto merchantDto = new MerchantDto();
 		mapper.map(request, merchantDto);

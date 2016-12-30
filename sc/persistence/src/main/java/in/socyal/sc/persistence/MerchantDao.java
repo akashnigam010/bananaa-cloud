@@ -31,7 +31,6 @@ public class MerchantDao {
         this.sessionFactory = sessionFactory;
     }
  
-    @Transactional
     public List<MerchantDto> getMerchants(GetMerchantListRequestDto request) {
     	List<MerchantDto> merchantDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
@@ -49,7 +48,6 @@ public class MerchantDao {
     	
     }
     
-    @Transactional
     public MerchantDto getMerchantDetails(Integer id) throws BusinessException {
     	MerchantDto dto = null;
     	MerchantEntity entity = (MerchantEntity) sessionFactory.getCurrentSession().get(MerchantEntity.class, id);
@@ -75,7 +73,6 @@ public class MerchantDao {
     	return merchantDtos;
     }
     
-    @Transactional
     public void saveMerchantDetails(MerchantDto merchantDto) {
     	 MerchantEntity entity = new MerchantEntity();
     	 //mapper.map(merchantDto, entity);

@@ -10,7 +10,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -31,7 +30,6 @@ public class UserDao {
         this.sessionFactory = sessionFactory;
     }
     
-    @Transactional
     public UserDto fetchUser(Integer userId) {
     	UserDto dto = null;
     	UserEntity entity = (UserEntity) sessionFactory.getCurrentSession().get(UserEntity.class, userId);
@@ -42,7 +40,6 @@ public class UserDao {
     	return dto;
     }
     
-    @Transactional
     public List<UserDto> fetchUsers(String searchString) {
     	List<UserDto> userDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
@@ -59,7 +56,6 @@ public class UserDao {
 		return userDtos;
     }
     
-    @Transactional
     public UserDto fetchUserByFbId(String fbId) {
     	UserDto dto = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
@@ -72,7 +68,6 @@ public class UserDao {
     	return dto;
     }
     
-    @Transactional
     public UserDto saveUserDetails(FacebookUser user, String fbAccessToken) {
     	UserEntity entity = new UserEntity();
     	UserDto dto = fetchUserByFbId(user.getId());

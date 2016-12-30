@@ -7,6 +7,8 @@ import java.util.List;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
@@ -44,12 +46,14 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Autowired JwtTokenHelper jwtHelper;
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<CheckinResponseDto> getRestaurantCheckins(Integer restaurantId, Integer page) {
 		List<CheckinResponseDto> checkins = new ArrayList<>();
 		return checkins;
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
 		//TODO : Perform all these operations in a transaction
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
@@ -83,6 +87,45 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setTaggedUsers(list);
 		}
 		
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
+		ValidateCheckinResponse response = new ValidateCheckinResponse();
+		MerchantQrMappingDto qrMapping = qrMappingDao.getMerchantQrMapping(request.getQrCode());
+		if (qrMapping == null) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
+		}
+		
+		Boolean isNearBy = DistanceHelper.isNearBy(request.getLocation().getLatitude(), 
+												  request.getLocation().getLongitude(), 
+												  qrMapping.getMerchant().getAddress().getLatitude(), 
+												  qrMapping.getMerchant().getAddress().getLongitude());
+		if (!isNearBy) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
+		}
+		
+		response.setPreviousCheckinCount(checkinDao.getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
+		response.setMerchantName(qrMapping.getMerchant().getName());
+		response.setShortAddress(qrMapping.getMerchant().getAddress().getLocality().getShortAddress());
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
+		CancelCheckinResponse response = new CancelCheckinResponse();
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
+		if (checkin == null) {
+			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getCheckinId());
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		} else if (CheckinStatusType.CANCELLED == checkin.getStatus()) {
+			LOG.error("Checkin is already cancelled for checkinID:" + request.getCheckinId());
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
+		}
+		checkinDao.cancelCheckin(request.getCheckinId());
 		return response;
 	}
 	
@@ -124,44 +167,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return taggedUserDetails;
 	}
 
-	@Override
-	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
-		ValidateCheckinResponse response = new ValidateCheckinResponse();
-		MerchantQrMappingDto qrMapping = qrMappingDao.getMerchantQrMapping(request.getQrCode());
-		if (qrMapping == null) {
-			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
-		}
-		
-		Boolean isNearBy = DistanceHelper.isNearBy(request.getLocation().getLatitude(), 
-												  request.getLocation().getLongitude(), 
-												  qrMapping.getMerchant().getAddress().getLatitude(), 
-												  qrMapping.getMerchant().getAddress().getLongitude());
-		if (!isNearBy) {
-			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
-		}
-		
-		response.setPreviousCheckinCount(checkinDao.getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
-		response.setMerchantName(qrMapping.getMerchant().getName());
-		response.setShortAddress(qrMapping.getMerchant().getAddress().getLocality().getShortAddress());
-		return response;
-	}
-	
 	private Integer getCurrentUserId() {
 		return Integer.valueOf(jwtHelper.getUserName());
-	}
-
-	@Override
-	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
-		CancelCheckinResponse response = new CancelCheckinResponse();
-		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
-		if (checkin == null) {
-			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getCheckinId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		} else if (CheckinStatusType.CANCELLED == checkin.getStatus()) {
-			LOG.error("Checkin is already cancelled for checkinID:" + request.getCheckinId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
-		}
-		checkinDao.cancelCheckin(request.getCheckinId());
-		return response;
 	}
 }
