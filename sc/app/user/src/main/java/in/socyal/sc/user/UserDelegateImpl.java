@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.api.user.request.SearchUserRequest;
+import in.socyal.sc.api.user.response.SearchUserResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
@@ -27,6 +29,17 @@ public class UserDelegateImpl implements UserDelegate {
 		String userId = jwtHelper.getUserName();
 		UserDto user = userDao.fetchUser(Integer.valueOf(userId));
 		mapper.map(user, response);
+		return response;
+	}
+	
+
+	@Override
+	public SearchUserResponse searchUsers(SearchUserRequest request) throws BusinessException {
+		SearchUserResponse response = new SearchUserResponse(); 
+		List<UserDto> users = userDao.fetchUsers(request.getSearchString());
+		if (users != null) {
+			mapper.map(users, response);
+		}
 		return response;
 	}
 	

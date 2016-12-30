@@ -76,7 +76,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			for (UserDto userDto : taggedUserDetails) {
 				TaggedUserResponse taggedUserResponse = new TaggedUserResponse();
 				taggedUserResponse.setId(userDto.getId());
-				taggedUserResponse.setName(userDto.toString());
+				taggedUserResponse.setName(userDto.getName());
 				list.add(taggedUserResponse);
 			}
 			

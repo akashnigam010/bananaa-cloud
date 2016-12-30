@@ -1,9 +1,13 @@
 package in.socyal.sc.user.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.api.user.response.SearchUserResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 
 @Component
@@ -23,5 +27,14 @@ public class UserMapper {
 		name.append(" ");
 		name.append(StringUtils.defaultString(lastName));
 		return name.toString();
+	}
+
+	public void map(List<UserDto> users, SearchUserResponse response) {
+		List<String> names = new ArrayList<>();
+		for (UserDto dto : users) {
+			names.add(dto.getName());
+		}
+		
+		response.setUserNames(names);
 	}
 }
