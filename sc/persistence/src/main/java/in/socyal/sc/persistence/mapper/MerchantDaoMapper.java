@@ -22,7 +22,6 @@ import in.socyal.sc.persistence.entity.TimingEntity;
 
 @Component
 public class MerchantDaoMapper {
-
 	public void map(List<MerchantEntity> from, List<MerchantDto> to) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();

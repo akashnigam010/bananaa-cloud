@@ -13,8 +13,10 @@ import in.socyal.sc.api.checkin.request.AroundMeCheckinsRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyCheckinsRequest;
+import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
+import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
 import in.socyal.sc.core.mapper.CheckinServiceMapper;
 import in.socyal.sc.helper.ResponseHelper;
@@ -40,6 +42,17 @@ public class CheckinService {
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		try {
 			response = delegate.confirmCheckin(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/validateCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ValidateCheckinResponse validateCheckin(@RequestBody ValidateCheckinRequest request) {
+		ValidateCheckinResponse response = new ValidateCheckinResponse();
+		try {
+			response = delegate.validateCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

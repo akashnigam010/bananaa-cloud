@@ -93,7 +93,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			MerchantResponse merchant = new MerchantResponse();
 			merchant.setId(dto.getId());
 			merchant.setName(dto.getName());
-			merchant.setShortAddress(dto.getAddress().getLocality().toString());
+			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);
@@ -111,7 +111,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setRating(dto.getRating());
 			merchant.setCheckins(dto.getCheckins());
 			merchant.setDistance(calculateDistance(request, dto.getAddress()));
-			merchant.setShortAddress(dto.getAddress().getLocality().toString());
+			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);
@@ -182,7 +182,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setName(merchantDto.getName());
 		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
 		response.setRating(merchantDto.getRating());
-		response.setShortAddress(merchantDto.getAddress().getLocality().toString());
+		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
 	}
 

@@ -4,9 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +25,9 @@ public class MerchantQrMappingEntity implements Serializable {
 	@Column(name = "QR_CODE")
 	private String qrCode;
 	
-	@Column(name = "MERCHANT_ID")
-	private Integer merchantId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MERCHANT_ID")
+	private MerchantEntity merchant;
 	
 	@Column(name = "CARD_ID")
 	private Integer cardId;
@@ -47,12 +51,12 @@ public class MerchantQrMappingEntity implements Serializable {
 		this.qrCode = qrCode;
 	}
 
-	public Integer getMerchantId() {
-		return merchantId;
+	public MerchantEntity getMerchant() {
+		return merchant;
 	}
 
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
+	public void setMerchant(MerchantEntity merchant) {
+		this.merchant = merchant;
 	}
 
 	public Integer getCardId() {

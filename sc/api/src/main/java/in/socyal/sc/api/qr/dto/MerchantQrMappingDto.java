@@ -2,11 +2,13 @@ package in.socyal.sc.api.qr.dto;
 
 import java.io.Serializable;
 
+import in.socyal.sc.api.merchant.dto.MerchantDto;
+
 public class MerchantQrMappingDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String qrCode;
-	private Integer merchantId;
+	private MerchantDto merchant;
 	private Integer cardId;
 	private Boolean status;
 
@@ -26,12 +28,12 @@ public class MerchantQrMappingDto implements Serializable {
 		this.qrCode = qrCode;
 	}
 
-	public Integer getMerchantId() {
-		return merchantId;
+	public MerchantDto getMerchant() {
+		return merchant;
 	}
 
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
+	public void setMerchant(MerchantDto merchant) {
+		this.merchant = merchant;
 	}
 
 	public Integer getCardId() {
