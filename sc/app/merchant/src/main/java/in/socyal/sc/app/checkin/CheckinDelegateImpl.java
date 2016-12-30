@@ -51,6 +51,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	@Override
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
+		//TODO : Perform all these operations in a transaction
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		//Fetching Merchant Details
 		MerchantDto merchant = getMerchantDetailsFromQrMapping(request.getQrCode());
@@ -64,6 +65,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			taggedUserDetails = getTaggedUserDetails(request.getTaggedUsers());
 			taggedUserDao.tagUsersToACheckin(checkinId, request.getTaggedUsers());
 		}
+		
+		//Building confirm checkin response
 		response.setCheckinId(checkinId);
 		response.setMerchantName(merchant.getName());
 		response.setPreviousCheckinCount(dto.getPreviousCheckinCount());
@@ -86,7 +89,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	private CheckinDetailsDto prepareCheckinDetails(ConfirmCheckinRequest request, MerchantDto merchant) throws BusinessException {
 		CheckinDetailsDto checkinDetails = new CheckinDetailsDto();
 		checkinDetails.setMerchantId(merchant.getId());
-		//Fetch UserDetails from user token
 		Integer userId = getCurrentUserId();
 		checkinDetails.setUserId(userId);
 		checkinDetails.setCheckinDateTime(Calendar.getInstance());
