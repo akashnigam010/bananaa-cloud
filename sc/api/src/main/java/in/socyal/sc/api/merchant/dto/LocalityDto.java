@@ -51,8 +51,7 @@ public class LocalityDto implements Serializable {
 		this.longitude = longitude;
 	}
 	
-	@Override
-	public String toString() {
+	public String getShortAddress() {
 		return this.name + ", " + this.city;
 	}
 }

@@ -7,8 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import in.socyal.sc.helper.BusinessErrorCode;
-
-public class BusinessException extends Exception implements ErrorCodesGettable {
+/**
+ * BusinessException extends RuntimeException because
+ * springframework.Transactional is rolledback only for unchecked exceptions
+ * @author ysadula
+ *
+ */
+public class BusinessException extends RuntimeException implements ErrorCodesGettable {
 	private static final long serialVersionUID = 1L;
 	private final List<Integer> errorCodes;
 

@@ -3,14 +3,13 @@ package in.socyal.sc.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
@@ -32,7 +31,6 @@ public class MerchantDao {
         this.sessionFactory = sessionFactory;
     }
  
-    @Transactional
     public List<MerchantDto> getMerchants(GetMerchantListRequestDto request) {
     	List<MerchantDto> merchantDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
@@ -50,7 +48,6 @@ public class MerchantDao {
     	
     }
     
-    @Transactional
     public MerchantDto getMerchantDetails(Integer id) throws BusinessException {
     	MerchantDto dto = null;
     	MerchantEntity entity = (MerchantEntity) sessionFactory.getCurrentSession().get(MerchantEntity.class, id);
@@ -76,7 +73,6 @@ public class MerchantDao {
     	return merchantDtos;
     }
     
-    @Transactional
     public void saveMerchantDetails(MerchantDto merchantDto) {
     	 MerchantEntity entity = new MerchantEntity();
     	 //mapper.map(merchantDto, entity);

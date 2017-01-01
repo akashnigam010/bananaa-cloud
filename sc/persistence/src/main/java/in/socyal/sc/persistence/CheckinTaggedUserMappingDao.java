@@ -2,8 +2,6 @@ package in.socyal.sc.persistence;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,7 +19,6 @@ public class CheckinTaggedUserMappingDao {
         this.sessionFactory = sessionFactory;
     }
     
-    @Transactional
     public void tagUsersToACheckin(Integer checkinId, List<Integer> taggedUsers) {
     	for (Integer userId : taggedUsers) {
     		CheckinTaggedUserEntity entity = new CheckinTaggedUserEntity();

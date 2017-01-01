@@ -9,7 +9,7 @@ import in.socyal.sc.login.type.LoginErrorCodeType;
 
 @Component
 public class LoginValidator {
-	public void validateFbLoginRequest(LoginRequest request) throws BusinessException {
+	public void validateFbLoginRequest(LoginRequest request) {
 		if (StringUtils.isEmpty(request.getFbId())) {
 			throw new BusinessException(LoginErrorCodeType.USER_ID_NOT_FOUND);
 		}

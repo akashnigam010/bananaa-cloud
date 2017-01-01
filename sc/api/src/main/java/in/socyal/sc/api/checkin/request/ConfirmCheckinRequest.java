@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.socyal.sc.api.merchant.request.LocationRequest;
+
 public class ConfirmCheckinRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private LocationRequest location;
 	private String qrCode;
 	private List<Integer> taggedUsers;
 	private Boolean shareOnFb;
@@ -30,10 +33,21 @@ public class ConfirmCheckinRequest implements Serializable {
 	}
 
 	public Boolean getShareOnFb() {
+		if (this.shareOnFb == null) {
+			this.shareOnFb = Boolean.FALSE;
+		}
 		return shareOnFb;
 	}
 
 	public void setShareOnFb(Boolean shareOnFb) {
 		this.shareOnFb = shareOnFb;
+	}
+
+	public LocationRequest getLocation() {
+		return location;
+	}
+
+	public void setLocation(LocationRequest location) {
+		this.location = location;
 	}
 }

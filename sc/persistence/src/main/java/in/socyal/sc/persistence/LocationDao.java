@@ -3,8 +3,6 @@ package in.socyal.sc.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
@@ -33,7 +31,6 @@ public class LocationDao {
 		this.sessionFactory = sessionFactory;
 	}
 
-	@Transactional
 	public List<LocalityDto> getLocalities() {
 		List<LocalityDto> localityDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocalityEntity.class);
@@ -47,7 +44,6 @@ public class LocationDao {
 		return localityDtos;
 	}
 
-	@Transactional
 	public List<LocalityDto> searchLocalities(String searchString) {
 		List<LocalityDto> localityDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocalityEntity.class);

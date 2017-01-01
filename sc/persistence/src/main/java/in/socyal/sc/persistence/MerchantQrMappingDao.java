@@ -1,7 +1,5 @@
 package in.socyal.sc.persistence;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -24,7 +22,6 @@ public class MerchantQrMappingDao {
         this.sessionFactory = sessionFactory;
     }
  
-    @Transactional
     public MerchantQrMappingDto getMerchantQrMapping(String qrCode) {
     	MerchantQrMappingDto dto = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantQrMappingEntity.class);

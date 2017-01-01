@@ -86,8 +86,7 @@ public class UserDto implements Serializable {
 		this.gender = gender;
 	}
 
-	@Override
-	public String toString() {
+	public String getName() {
 		return this.firstName + " " + this.lastName;
 	}
 }
