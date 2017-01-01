@@ -55,6 +55,19 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
+		// Added by Akash : on confirm checkin, location check will be made again
+		MerchantQrMappingDto qrMapping = qrMappingDao.getMerchantQrMapping(request.getQrCode());
+		if (qrMapping == null) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
+		}
+		
+		Boolean isNearBy = DistanceHelper.isNearBy(request.getLocation().getLatitude(), 
+												  request.getLocation().getLongitude(), 
+												  qrMapping.getMerchant().getAddress().getLatitude(), 
+												  qrMapping.getMerchant().getAddress().getLongitude());
+		if (!isNearBy) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
+		}
 		//TODO : Perform all these operations in a transaction
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		//Fetching Merchant Details

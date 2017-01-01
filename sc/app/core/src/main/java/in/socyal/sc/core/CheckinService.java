@@ -21,6 +21,7 @@ import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
 import in.socyal.sc.core.mapper.CheckinServiceMapper;
+import in.socyal.sc.core.validation.CheckinValidator;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
@@ -30,6 +31,7 @@ public class CheckinService {
 	@Autowired CheckinDelegate delegate;
 	@Autowired CheckinServiceMapper mapper;
 	@Autowired ResponseHelper responseHelper;
+	@Autowired CheckinValidator validator;
 
 	@RequestMapping(value = "/getMerchantCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
 	public CheckinResponse getMerchantCheckins(@RequestBody CheckinRequest request) {
@@ -43,6 +45,7 @@ public class CheckinService {
 	public ConfirmCheckinResponse checkin(@RequestBody ConfirmCheckinRequest request) {
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		try {
+			validator.validateConfirmCheckinRequest(request);
 			response = delegate.confirmCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -54,6 +57,7 @@ public class CheckinService {
 	public ValidateCheckinResponse validateCheckin(@RequestBody ValidateCheckinRequest request) {
 		ValidateCheckinResponse response = new ValidateCheckinResponse();
 		try {
+			validator.validateValidateCheckinRequest(request);
 			response = delegate.validateCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -65,6 +69,7 @@ public class CheckinService {
 	public CancelCheckinResponse cancelCheckin(@RequestBody CancelCheckinRequest request) {
 		CancelCheckinResponse response = new CancelCheckinResponse();
 		try {
+			validator.validateCancelCheckinRequest(request);
 			response = delegate.cancelCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
