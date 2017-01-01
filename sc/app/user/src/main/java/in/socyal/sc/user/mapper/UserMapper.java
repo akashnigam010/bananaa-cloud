@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.api.user.response.SearchUserResponse;
+import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 
 @Component
@@ -20,7 +20,7 @@ public class UserMapper {
 		to.setImageUrl(from.getImageUrl());
 		to.setUserCheckins(1);
 	}
-	
+
 	private String formFullName(String firstName, String lastName) {
 		StringBuffer name = new StringBuffer();
 		name.append(StringUtils.defaultString(firstName));
@@ -29,12 +29,18 @@ public class UserMapper {
 		return name.toString();
 	}
 
-	public void map(List<UserDto> users, SearchUserResponse response) {
-		List<String> names = new ArrayList<>();
+	public void map(List<UserDto> users, SearchFriendResponse response) {
+		List<in.socyal.sc.api.login.dto.UserDto> friends = new ArrayList<>();
+		in.socyal.sc.api.login.dto.UserDto user = null;
 		for (UserDto dto : users) {
-			names.add(dto.getName());
+			user = new in.socyal.sc.api.login.dto.UserDto();
+			user.setId(dto.getId());
+			user.setFirstName(dto.getFirstName());
+			user.setLastName(dto.getLastName());
+			user.setImageUrl(dto.getImageUrl());
+			friends.add(user);
 		}
-		
-		response.setUserNames(names);
+
+		response.setUsers(friends);
 	}
 }
