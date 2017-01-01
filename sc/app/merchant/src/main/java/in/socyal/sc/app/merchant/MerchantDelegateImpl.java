@@ -187,6 +187,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
+		response.setPreviousCheckinCount(12);
 	}
 
 	private LocationResponse buildLocationResponse(AddressDto address) {

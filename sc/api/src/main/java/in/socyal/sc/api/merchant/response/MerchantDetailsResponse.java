@@ -21,6 +21,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private Double averageCost;
 	private String longAddress;
 	private LocationResponse location;
+	private Integer previousCheckinCount;
 
 	public Integer getId() {
 		return id;
@@ -132,5 +133,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 
 	public void setOpeningHours(List<String> openingHours) {
 		this.openingHours = openingHours;
+	}
+
+	public Integer getPreviousCheckinCount() {
+		return previousCheckinCount;
+	}
+
+	public void setPreviousCheckinCount(Integer previousCheckinCount) {
+		this.previousCheckinCount = previousCheckinCount;
 	}
 }
