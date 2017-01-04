@@ -47,6 +47,11 @@
 			<artifactId>date</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
 		<dependency>
