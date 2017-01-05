@@ -16,7 +16,8 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
-	<filter>
+	<!-- These below lines were commented for cosndiering exceptionHandlerFilter for handling exceptions during filter -->
+	<!-- <filter>
 		<filter-name>CORS</filter-name>
 		<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
 
@@ -57,10 +58,32 @@
 
 	</filter>
 	<filter-mapping>
-		<!-- CORS Filter mapping -->
+		CORS Filter mapping
 		<filter-name>CORS</filter-name>
 		<url-pattern>*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
+	
+	<filter> 
+	    <filter-name>exceptionHandlerFilter</filter-name> 
+	    <filter-class>in.socyal.sc.helper.security.jwt.exception.filter.ExceptionHandlerFilter</filter-class> 
+	</filter> 
+	
+	
+	<filter-mapping> 
+	    <filter-name>exceptionHandlerFilter</filter-name> 
+	    <url-pattern>/*</url-pattern> 
+	</filter-mapping> 
+	
+	<!-- This below lines were commented because spring security filter chain was having same filter class -->
+	<!-- <filter> 
+	    <filter-name>CorsFilter</filter-name> 
+	    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> 
+	</filter> 
+	
+	<filter-mapping>
+	    <filter-name>CorsFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping> -->
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>

@@ -6,11 +6,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 
+import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.helper.type.GenericErrorCodeType;
 import net.oauth.jsontoken.JsonToken;
 import net.oauth.jsontoken.JsonTokenParser;
 import net.oauth.jsontoken.crypto.HmacSHA256Signer;
@@ -21,6 +24,8 @@ import net.oauth.jsontoken.discovery.VerifierProvider;
 import net.oauth.jsontoken.discovery.VerifierProviders;
 
 public class JwtHelper {
+	private static final Logger LOG = Logger.getLogger(JwtHelper.class);
+	
 	private static final String AUDIENCE = "Bananaa Application";
 	private static final String ISSUER = "Bananaa Application";
 	private static final String SIGNING_KEY = "LongAndHardToGuessValueWithSpecialCharacters";
@@ -43,7 +48,8 @@ public class JwtHelper {
 		try {
 			signer = new HmacSHA256Signer(ISSUER, null, SIGNING_KEY.getBytes());
 		} catch (InvalidKeyException e) {
-			throw new RuntimeException(e);
+			LOG.error("Exception occured while creating JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
 		// Configure JSON token
 		JsonToken token = new net.oauth.jsontoken.JsonToken(signer);
@@ -59,7 +65,8 @@ public class JwtHelper {
 		try {
 			return token.serializeAndSign();
 		} catch (SignatureException e) {
-			throw new RuntimeException(e);
+			LOG.error("Exception occured while serializing and signing JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
 	}
 
@@ -94,7 +101,8 @@ public class JwtHelper {
 			try {
 				jt = parser.verifyAndDeserialize(token);
 			} catch (SignatureException e) {
-				throw new RuntimeException(e);
+				LOG.error("Exception occured while verifying and deserializing JWT token ", e);
+				throw new BusinessException(GenericErrorCodeType.JWT_TOKEN_EXPIRED);
 			}
 			JsonObject payload = jt.getPayloadAsJsonObject();
 			TokenInfo tokenInfo = new TokenInfo();
@@ -109,13 +117,14 @@ public class JwtHelper {
 				return tokenInfo;
 			}
 			return null;
-		} catch (InvalidKeyException e1) {
-			throw new RuntimeException(e1);
+		} catch (InvalidKeyException e) {
+			LOG.error("Exception occured for invalid key while verifying JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.JWT_TOKEN_EXPIRED);
 		}
 	}
 	
 	public static void main(String args[]) {
-		System.out.println(createJsonWebToken("yogi", "ADMIN", 1L));
+		System.out.println(createJsonWebToken("yogi", "ADMIN", 0L));
 	}
 	
 	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis) {

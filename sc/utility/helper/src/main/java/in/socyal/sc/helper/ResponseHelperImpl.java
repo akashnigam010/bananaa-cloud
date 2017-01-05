@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.helper.exception.BusinessException;
@@ -17,6 +19,7 @@ import in.socyal.sc.helper.exception.ErrorCodesGettable;
 
 @Component
 public class ResponseHelperImpl implements ResponseHelper {
+	private static final Logger LOG = Logger.getLogger(ResponseHelperImpl.class);
 	private static final boolean DEAFULT_ROLLBACK_FAILURE = true;
 	private static final Integer GENERIC_ERROR = 99999;
 	private ResourceBundle resource = ResourceBundle.getBundle("socyal-error-code");
@@ -123,7 +126,13 @@ public class ResponseHelperImpl implements ResponseHelper {
 		for (Integer errorCode : errorCodes) {
 			Object statusCode = statusCodeType.newInstance();
 			codeField.set(statusCode, errorCode);
-			String errorDescription = resource.getString(errorCode.toString());
+			//This will be the default message, if resource bundle doesn't have error message 
+			String errorDescription = "Something went wrong! Please try again! (Error Message not found in Resource Bundle...)";
+			try {
+				errorDescription = resource.getString(errorCode.toString());
+    		} catch (MissingResourceException mre) {
+    			LOG.error("Resource missing for key:" + errorCode + " in 'socyal-error-code' resource bundle");
+        		}
 			descField.set(statusCode, (StringUtils.isNotBlank(errorDescription)) ? errorDescription : errorCode);
 			statusCodes.add(statusCode);
 		}
