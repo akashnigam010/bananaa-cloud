@@ -1,10 +1,11 @@
 package in.socyal.sc.api.login.dto;
 
-public class UserDto {
+public class LoginUserDto {
 	private Integer id;
 	private String firstName;
 	private String lastName;
 	private String imageUrl;
+	private Integer userCheckins;
 
 	public Integer getId() {
 		return id;
@@ -36,5 +37,13 @@ public class UserDto {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public Integer getUserCheckins() {
+		return userCheckins;
+	}
+
+	public void setUserCheckins(Integer userCheckins) {
+		this.userCheckins = userCheckins;
 	}
 }
