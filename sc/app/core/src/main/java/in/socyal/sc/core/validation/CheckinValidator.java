@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
+import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.type.RoleType;
@@ -35,7 +36,13 @@ public class CheckinValidator {
 	}
 
 	public void validateCancelCheckinRequest(CancelCheckinRequest request) {
-		if (request.getCheckinId() == null) {
+		if (request.getId() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateCheckinRequest(CheckinRequest request) {
+		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

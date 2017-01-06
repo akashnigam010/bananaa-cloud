@@ -1,18 +1,18 @@
 package in.socyal.sc.api.login.response;
 
-import in.socyal.sc.api.login.dto.UserDto;
+import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class LoginResponse extends GenericResponse {
 	private static final long serialVersionUID = 1L;
-	private UserDto user;
+	private LoginUserDto user;
 	private String accessToken;
 
-	public UserDto getUser() {
+	public LoginUserDto getUser() {
 		return user;
 	}
 
-	public void setUser(UserDto user) {
+	public void setUser(LoginUserDto user) {
 		this.user = user;
 	}
 

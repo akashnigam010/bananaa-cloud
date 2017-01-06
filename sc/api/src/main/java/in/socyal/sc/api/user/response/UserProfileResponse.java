@@ -2,62 +2,18 @@ package in.socyal.sc.api.user.response;
 
 import java.io.Serializable;
 
+import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class UserProfileResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private String name;
-	private String imageUrl;
-	private String email;
-	private String facebookId;
-	private Integer userCheckins;
+	private LoginUserDto user;
 
-	public Integer getId() {
-		return id;
+	public LoginUserDto getUser() {
+		return user;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getFacebookId() {
-		return facebookId;
-	}
-
-	public void setFacebookId(String facebookId) {
-		this.facebookId = facebookId;
-	}
-
-	public Integer getUserCheckins() {
-		return userCheckins;
-	}
-
-	public void setUserCheckins(Integer userCheckins) {
-		this.userCheckins = userCheckins;
+	public void setUser(LoginUserDto user) {
+		this.user = user;
 	}
 }
