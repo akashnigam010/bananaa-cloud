@@ -18,6 +18,7 @@ import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.CheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
+import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
 import in.socyal.sc.core.mapper.CheckinServiceMapper;
@@ -91,5 +92,17 @@ public class CheckinService {
 		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
 		mapper.map(checkins, response, request.getPage());
 		return responseHelper.success(response);
+	}
+	
+	@RequestMapping(value = "/getCheckinStatus", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GetCheckinStatusResponse getCheckinStatus(@RequestBody CheckinRequest request) {
+		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
+		try {
+			validator.validateCheckinRequest(request);
+			response = delegate.getCheckinStatus(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
 	}
 }

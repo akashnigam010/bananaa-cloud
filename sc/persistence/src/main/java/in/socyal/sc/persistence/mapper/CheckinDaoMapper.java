@@ -26,6 +26,7 @@ public class CheckinDaoMapper {
 	}
 	
 	public void map(CheckinEntity from, CheckinDto to) {
+		to.setId(from.getId());
 		to.setCheckinDateTime(from.getCheckinDateTime());
 		MerchantDto merchant = new MerchantDto();
 		mapper.map(from.getMerchant(), merchant);
