@@ -25,6 +25,7 @@ import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
+import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.DayUtil;
@@ -45,7 +46,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
 		mapper.map(request, requestDto);
-		List<MerchantDto> merchants = dao.getMerchants(requestDto);
+		List<MerchantDto> merchants = dao.getMerchants(requestDto, MerchantListSortType.RATING);
 		if (merchants == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}

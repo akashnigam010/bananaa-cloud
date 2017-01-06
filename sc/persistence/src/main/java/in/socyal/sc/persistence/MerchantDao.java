@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
@@ -20,9 +22,10 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 @Repository
 public class MerchantDao {
 	private static final String NAME = "name";
+	private static final String RATING = "rating";
 	@Autowired SessionFactory sessionFactory;
 	@Autowired MerchantDaoMapper mapper;
-	private static Integer RESULTS_PER_PAGE = 10;
+	private static final Integer RESULTS_PER_PAGE = 10;
  
     public MerchantDao() {
     }
@@ -31,10 +34,11 @@ public class MerchantDao {
         this.sessionFactory = sessionFactory;
     }
  
-    public List<MerchantDto> getMerchants(GetMerchantListRequestDto request) {
+    public List<MerchantDto> getMerchants(GetMerchantListRequestDto request, MerchantListSortType sortType) {
     	List<MerchantDto> merchantDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
     	int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
+    	criteria.addOrder(Order.desc(sortType.getCode()));
     	criteria.setFirstResult(firstResult);
     	criteria.setMaxResults(RESULTS_PER_PAGE);
     	@SuppressWarnings("unchecked")
@@ -45,7 +49,6 @@ public class MerchantDao {
 		}
     	
     	return merchantDtos;
-    	
     }
     
     public MerchantDto getMerchantDetails(Integer id) throws BusinessException {
