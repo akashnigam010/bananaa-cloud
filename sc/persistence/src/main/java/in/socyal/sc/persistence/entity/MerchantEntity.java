@@ -57,7 +57,10 @@ public class MerchantEntity implements Serializable {
 
 	@Column(name = "TYPE")
 	private String type;
-
+	
+	@Column(name = "PROMOTION")
+	private Integer promotion;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -144,5 +147,13 @@ public class MerchantEntity implements Serializable {
 
 	public void setAverageCost(Double averageCost) {
 		this.averageCost = averageCost;
+	}
+
+	public Integer getPromotion() {
+		return promotion;
+	}
+
+	public void setPromotion(Integer promotion) {
+		this.promotion = promotion;
 	}
 }

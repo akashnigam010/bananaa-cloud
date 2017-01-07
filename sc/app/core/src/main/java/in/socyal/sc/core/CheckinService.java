@@ -99,6 +99,7 @@ public class CheckinService {
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		try {
 			validator.validateCheckinRequest(request);
+			System.out.println("get checkin status for ID : " + request.getId());
 			response = delegate.getCheckinStatus(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
