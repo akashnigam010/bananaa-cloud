@@ -109,7 +109,7 @@ public class MerchantDao {
     private String sortMerchantsByDistanceQuery() {
     	StringBuilder query = new StringBuilder();
     	query.append("SELECT * ");
-    	query.append("FROM SOCYAL.MERCHANT m INNER JOIN SOCYAL.ADDRESS a ");
+    	query.append("FROM Socyal.MERCHANT m INNER JOIN Socyal.ADDRESS a ");
     	query.append("ON m.ADDRESS_ID = a.ID ");
     	query.append("ORDER BY DISTANCE(:latitude, :longitude, a.LATITUDE, a.LONGITUDE) ASC");
     	return query.toString();
