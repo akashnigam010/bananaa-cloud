@@ -10,13 +10,13 @@ public class LoginMapper {
 	private static final String GUEST_NAME = "Guest";
 	private static final String GUEST_IMAGE_URL = "http://www.whitebay.in/images/guestUser.png";
 
-	public LoginUserDto mapFbUserToUserDto(in.socyal.sc.api.user.dto.UserDto userDetails) {
+	public LoginUserDto mapFbUserToUserDto(in.socyal.sc.api.user.dto.UserDto userDetails, Integer userCheckinCount) {
 		LoginUserDto userDto = new LoginUserDto();
 		userDto.setFirstName(userDetails.getFirstName());
 		userDto.setLastName(userDetails.getLastName());
 		userDto.setId(userDetails.getId());
 		userDto.setImageUrl(userDetails.getImageUrl());
-		userDto.setUserCheckins(220);
+		userDto.setUserCheckins(userCheckinCount);
 		return userDto;
 	}
 

@@ -65,6 +65,14 @@ public class CheckinDao {
 			mapper.map(checkin, checkinDto);
 		}
 		return checkinDto;
-		
+	}
+	
+	public Integer getUserCheckinCount(Integer userId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+    	criteria.add(Restrictions.eq("userId", userId));
+    	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+    	return result.size();
 	}
 }
