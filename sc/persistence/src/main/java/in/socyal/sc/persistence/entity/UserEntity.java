@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,6 +43,12 @@ public class UserEntity implements Serializable {
 	
 	@Column(name = "GENDER")
 	private String gender;
+	
+	@Column(name = "CREATED_DATETIME")
+	private Calendar createdDateTime;
+	
+	@Column(name = "UPDATED_DATETIME")
+	private Calendar updatedDateTime;
 
 	public Integer getId() {
 		return id;
@@ -113,5 +120,21 @@ public class UserEntity implements Serializable {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public Calendar getCreatedDateTime() {
+		return createdDateTime;
+	}
+
+	public void setCreatedDateTime(Calendar createdDateTime) {
+		this.createdDateTime = createdDateTime;
+	}
+
+	public Calendar getUpdatedDateTime() {
+		return updatedDateTime;
+	}
+
+	public void setUpdatedDateTime(Calendar updatedDateTime) {
+		this.updatedDateTime = updatedDateTime;
 	}
 }
