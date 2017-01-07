@@ -9,6 +9,7 @@ import in.socyal.sc.api.response.GenericResponse;
 public class ConfirmCheckinResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer checkinId;
+	private Integer merchantId;
 	private String merchantName;
 	private String shortAddress;
 	private Integer previousCheckinCount;
@@ -55,5 +56,13 @@ public class ConfirmCheckinResponse extends GenericResponse implements Serializa
 
 	public void setTaggedUsers(List<TaggedUserResponse> taggedUsers) {
 		this.taggedUsers = taggedUsers;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
 	}
 }
