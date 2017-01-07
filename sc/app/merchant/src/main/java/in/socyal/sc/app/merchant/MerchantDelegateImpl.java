@@ -46,7 +46,15 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
 		mapper.map(request, requestDto);
-		List<MerchantDto> merchants = dao.getMerchants(requestDto, MerchantListSortType.RATING);
+		List<MerchantDto> merchants = null;
+		//TODO - FIX ME: Decide on what Default sorting needs to be happened
+		MerchantListSortType sortType = MerchantListSortType.DISTANCE;
+		if (sortType == MerchantListSortType.RATING || sortType == MerchantListSortType.PROMOTION) {
+			merchants = dao.getMerchantsByRatingOrPromotion(requestDto, sortType);
+		} else {
+			merchants = dao.getMerchantsByDistance(requestDto);
+		}
+		
 		if (merchants == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}
