@@ -3,7 +3,9 @@ package in.socyal.sc.api.type;
 public enum MerchantListSortType {
 	//Add the code value same as the entity field names
 	//So that orderby happens based on the entity field values
-	RATING("rating");
+	RATING("rating"),
+	PROMOTION("promotion"),
+	DISTANCE("distance");
 	
 	private String code;
 

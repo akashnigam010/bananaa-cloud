@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -22,7 +23,6 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 @Repository
 public class MerchantDao {
 	private static final String NAME = "name";
-	private static final String RATING = "rating";
 	@Autowired SessionFactory sessionFactory;
 	@Autowired MerchantDaoMapper mapper;
 	private static final Integer RESULTS_PER_PAGE = 10;
@@ -34,7 +34,13 @@ public class MerchantDao {
         this.sessionFactory = sessionFactory;
     }
  
-    public List<MerchantDto> getMerchants(GetMerchantListRequestDto request, MerchantListSortType sortType) {
+    /**
+     * This method is used to fetch merchant list using criteria
+     * sorting logic is happening on PROMOTION value
+     * @param request
+     * @return
+     */
+    public List<MerchantDto> getMerchantsByRatingOrPromotion(GetMerchantListRequestDto request, MerchantListSortType sortType) {
     	List<MerchantDto> merchantDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
     	int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
@@ -48,6 +54,30 @@ public class MerchantDao {
     		mapper.map(merchants, merchantDtos);
 		}
     	
+    	return merchantDtos;
+    }
+    
+    /**
+     * This method is used to fetch merchant list using native sql query 
+     * sorting logic is happening based on distance
+     * @param request
+     * @return
+     */
+    public List<MerchantDto> getMerchantsByDistance(GetMerchantListRequestDto request) {
+    	List<MerchantDto> merchantDtos = null;
+    	SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sortMerchantsByDistanceQuery());
+    	query.addEntity(MerchantEntity.class);
+    	query.setDouble("latitude", request.getLatitude());
+    	query.setDouble("longitude", request.getLongitude());
+    	int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
+    	query.setFirstResult(firstResult);
+    	query.setMaxResults(RESULTS_PER_PAGE);
+    	@SuppressWarnings("unchecked")
+		List<MerchantEntity> merchants = (List<MerchantEntity>) query.list();
+    	if (merchants != null && !merchants.isEmpty()) {
+    		merchantDtos = new ArrayList<>();
+    		mapper.map(merchants, merchantDtos);
+		}
     	return merchantDtos;
     }
     
@@ -74,6 +104,15 @@ public class MerchantDao {
     		mapper.map(merchants, merchantDtos);
 		}
     	return merchantDtos;
+    }
+    
+    private String sortMerchantsByDistanceQuery() {
+    	StringBuilder query = new StringBuilder();
+    	query.append("SELECT * ");
+    	query.append("FROM SOCYAL.MERCHANT m INNER JOIN SOCYAL.ADDRESS a ");
+    	query.append("ON m.ADDRESS_ID = a.ID ");
+    	query.append("ORDER BY DISTANCE(:latitude, :longitude, a.LATITUDE, a.LONGITUDE) ASC");
+    	return query.toString();
     }
     
     public void saveMerchantDetails(MerchantDto merchantDto) {
