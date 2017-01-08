@@ -1,6 +1,7 @@
 package in.socyal.sc.api.user.dto;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class UserDto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -13,6 +14,8 @@ public class UserDto implements Serializable {
 	private String facebookLink;
 	private String facebookToken;
 	private String gender;
+	private Calendar createdDateTime;
+	private Calendar updatedDateTime;
 
 	public Integer getId() {
 		return id;
@@ -84,6 +87,22 @@ public class UserDto implements Serializable {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public Calendar getCreatedDateTime() {
+		return createdDateTime;
+	}
+
+	public void setCreatedDateTime(Calendar createdDateTime) {
+		this.createdDateTime = createdDateTime;
+	}
+
+	public Calendar getUpdatedDateTime() {
+		return updatedDateTime;
+	}
+
+	public void setUpdatedDateTime(Calendar updatedDateTime) {
+		this.updatedDateTime = updatedDateTime;
 	}
 
 	public String getName() {

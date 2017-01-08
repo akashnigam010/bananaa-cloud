@@ -14,6 +14,7 @@ import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
 import in.socyal.sc.user.mapper.UserMapper;
 import in.socyal.sc.user.type.UserErrorCodeType;
@@ -22,6 +23,7 @@ import in.socyal.sc.user.type.UserErrorCodeType;
 public class UserDelegateImpl implements UserDelegate {
 	@Autowired JwtTokenHelper jwtHelper;
 	@Autowired UserDao userDao;
+	@Autowired CheckinDao checkinDao;
 	@Autowired UserMapper mapper;
 
 	@Override
@@ -29,9 +31,12 @@ public class UserDelegateImpl implements UserDelegate {
 	public UserProfileResponse getProfile() throws BusinessException {
 		authorizeUser();
 		UserProfileResponse response = new UserProfileResponse();
-		String userId = jwtHelper.getUserName();
-		UserDto user = userDao.fetchUser(Integer.valueOf(userId));
-		mapper.map(user, response);
+		Integer userId = Integer.valueOf(jwtHelper.getUserName());
+		//Fetch user details
+		UserDto user = userDao.fetchUser(userId);
+		//Fetch user checkin count
+		Integer userCheckinCount = checkinDao.getUserCheckinCount(userId);
+		mapper.map(user, response, userCheckinCount);
 		return response;
 	}
 	

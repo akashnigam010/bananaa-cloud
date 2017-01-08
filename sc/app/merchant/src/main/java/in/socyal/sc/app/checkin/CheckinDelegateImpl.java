@@ -167,6 +167,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		response.setCheckinId(checkin.getId());
 		response.setPreviousCheckinCount(checkin.getPreviousCheckinCount());
+		response.setMerchantId(checkin.getMerchant().getId());
 		response.setMerchantName(checkin.getMerchant().getName());
 		response.setShortAddress(checkin.getMerchant().getAddress().getLocality().getShortAddress());
 

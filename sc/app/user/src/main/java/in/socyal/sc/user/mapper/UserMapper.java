@@ -12,13 +12,13 @@ import in.socyal.sc.api.user.response.UserProfileResponse;
 
 @Component
 public class UserMapper {
-	public void map(UserDto from, UserProfileResponse to) {
+	public void map(UserDto from, UserProfileResponse to, Integer userCheckinCount) {
 		LoginUserDto user = new LoginUserDto();
 		user.setId(from.getId());
 		user.setFirstName(from.getFirstName());
 		user.setLastName(from.getLastName());
 		user.setImageUrl(from.getImageUrl());
-		user.setUserCheckins(320);
+		user.setUserCheckins(userCheckinCount);
 		to.setUser(user);
 	}
 

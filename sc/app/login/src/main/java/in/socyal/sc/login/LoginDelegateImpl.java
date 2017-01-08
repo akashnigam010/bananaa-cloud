@@ -15,6 +15,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.type.LoginErrorCodeType;
+import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
 
 @Service
@@ -26,6 +27,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 			+ "Kkugkjgigi787798JKH98Y98YOUHJKKJBIYt876ugG87687GHVGFXDTRe64364eytdyte65RUYFKJBMNLiu98787676RYTCNVJYt76"
 			+ "65E75RFiyg87574y5erytcgvuyt76576";*/
 	@Autowired UserDao userDao;
+	@Autowired CheckinDao checkinDao;
 	@Autowired LoginMapper mapper;
 	@Autowired OAuth2FbHelper fbHelper;
 	
@@ -51,7 +53,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 			UserDto userDetails = userDao.saveUserDetails(fbUser, request.getFbAccessToken());
 			//Sets JWT access token
 			response.setAccessToken(JwtHelper.createJsonWebToken(userDetails.getId().toString(), RoleType.USER.getRole(), 365L));
-			response.setUser(mapper.mapFbUserToUserDto(userDetails));
+			Integer userCheckinCount = checkinDao.getUserCheckinCount(userDetails.getId());
+			response.setUser(mapper.mapFbUserToUserDto(userDetails, userCheckinCount));
 		} catch (IOException e) {
 			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
 		}
