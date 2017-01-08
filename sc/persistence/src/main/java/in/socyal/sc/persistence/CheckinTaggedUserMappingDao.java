@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
+import in.socyal.sc.persistence.entity.UserEntity;
 
 @Repository
 public class CheckinTaggedUserMappingDao {
@@ -26,7 +27,9 @@ public class CheckinTaggedUserMappingDao {
 		for (Integer userId : taggedUsers) {
 			CheckinTaggedUserEntity entity = new CheckinTaggedUserEntity();
 			entity.setCheckinId(checkinId);
-			entity.setUserId(userId);
+			UserEntity user = new UserEntity();
+			user.setId(userId);
+			entity.setUser(user);
 			sessionFactory.getCurrentSession().save(entity);
 		}
 	}

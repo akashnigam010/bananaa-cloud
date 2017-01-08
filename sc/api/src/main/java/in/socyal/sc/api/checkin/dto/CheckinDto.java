@@ -1,6 +1,8 @@
 package in.socyal.sc.api.checkin.dto;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.type.CheckinStatusType;
@@ -17,6 +19,7 @@ public class CheckinDto {
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
+	private List<CheckinTaggedUserDto> taggedUsers;
 
 	public Integer getId() {
 		return id;
@@ -104,5 +107,16 @@ public class CheckinDto {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public List<CheckinTaggedUserDto> getTaggedUsers() {
+		if (taggedUsers == null) {
+			return new ArrayList<>();
+		}
+		return taggedUsers;
+	}
+
+	public void setTaggedUsers(List<CheckinTaggedUserDto> taggedUsers) {
+		this.taggedUsers = taggedUsers;
 	}
 }

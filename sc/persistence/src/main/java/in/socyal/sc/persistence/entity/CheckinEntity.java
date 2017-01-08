@@ -2,7 +2,9 @@ package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import in.socyal.sc.api.type.CheckinStatusType;
@@ -58,6 +61,10 @@ public class CheckinEntity implements Serializable {
 	
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
+	private Set<CheckinTaggedUserEntity> taggedUsers;
 
 	public Integer getId() {
 		return id;
@@ -145,5 +152,13 @@ public class CheckinEntity implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public Set<CheckinTaggedUserEntity> getTaggedUsers() {
+		return taggedUsers;
+	}
+
+	public void setTaggedUsers(Set<CheckinTaggedUserEntity> taggedUsers) {
+		this.taggedUsers = taggedUsers;
 	}
 }

@@ -36,7 +36,7 @@ public class CheckinDao {
     	return checkinId;
     }
     
-    public Integer getPreviousCheckins(Integer userId, Integer merchantId) {
+    public Integer getApprovedCheckinCount(Integer userId, Integer merchantId) {
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
     	criteria.add(Restrictions.eq("userId", userId));
     	criteria.add(Restrictions.eq("merchant.id", merchantId));

@@ -2,6 +2,7 @@ package in.socyal.sc.core;
 
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ import in.socyal.sc.helper.exception.BusinessException;
 @RestController
 @RequestMapping(value = "/checkin")
 public class CheckinService {
+	private static final Logger LOG = Logger.getLogger(CheckinService.class);
 	@Autowired CheckinDelegate delegate;
 	@Autowired CheckinServiceMapper mapper;
 	@Autowired ResponseHelper responseHelper;
@@ -99,7 +101,7 @@ public class CheckinService {
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		try {
 			validator.validateCheckinRequest(request);
-			System.out.println("get checkin status for ID : " + request.getId());
+			LOG.info("Fetching checkin status for ID : " + request.getId());
 			response = delegate.getCheckinStatus(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

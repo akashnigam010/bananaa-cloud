@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
+import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
@@ -36,7 +37,7 @@ import in.socyal.sc.persistence.CheckinTaggedUserMappingDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
-import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
+import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
@@ -51,6 +52,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	CheckinTaggedUserMappingDao taggedUserDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	UserDaoMapper userMapper;
 	@Autowired
 	JwtTokenHelper jwtHelper;
 
@@ -105,17 +108,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 
-	private List<TaggedUserResponse> createTaggedUserResponse(List<UserDto> taggedUserDetails) {
-		List<TaggedUserResponse> list = new ArrayList<>();
-		for (UserDto userDto : taggedUserDetails) {
-			TaggedUserResponse taggedUserResponse = new TaggedUserResponse();
-			taggedUserResponse.setId(userDto.getId());
-			taggedUserResponse.setName(userDto.getName());
-			list.add(taggedUserResponse);
-		}
-		return list;
-	}
-
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
@@ -133,7 +125,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 
 		response.setPreviousCheckinCount(
-				checkinDao.getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
+				checkinDao.getApprovedCheckinCount(getCurrentUserId(), qrMapping.getMerchant().getId()));
 		response.setMerchantName(qrMapping.getMerchant().getName());
 		response.setShortAddress(qrMapping.getMerchant().getAddress().getLocality().getShortAddress());
 		return response;
@@ -160,32 +152,26 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request) throws BusinessException {
 		CheckinDto checkin = checkinDao.getCheckin(request.getId());
 		if (checkin == null) {
-			LOG.error("Checkin not found while getting checkin status :" + request.getId());
+			LOG.error("Checkin not found while trying to fetch checkin status :" + request.getId());
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 
+		//Fetch previous checkin count through a DB call
+		Integer checkinCount = checkinDao.getApprovedCheckinCount(getCurrentUserId(), checkin.getMerchant().getId());
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		response.setCheckinId(checkin.getId());
-		response.setPreviousCheckinCount(checkin.getPreviousCheckinCount());
 		response.setMerchantId(checkin.getMerchant().getId());
 		response.setMerchantName(checkin.getMerchant().getName());
 		response.setShortAddress(checkin.getMerchant().getAddress().getLocality().getShortAddress());
-
-		// FIXME : implements actual logic
-		// adding temporary logic to return different statuses for testing
-		// purpose
-		if (checkin.getId() % 3 == 0) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setNewCheckinCount(checkin.getPreviousCheckinCount() + 1);
-			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
-		} else if (checkin.getId() % 3 == 1) {
-			response.setCheckinStatus(CheckinStatusType.CANCELLED);
-		} else {
-			response.setCheckinStatus(CheckinStatusType.PENDING);
-			// FIXME : Need to keep the logic to fetch tagged users in cache
-			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
+		response.setCheckinStatus(checkin.getStatus());
+		if (checkin.getStatus() == CheckinStatusType.PENDING) {
+			response.setPreviousCheckinCount(checkinCount);
+			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
+		} else if (checkin.getStatus() == CheckinStatusType.APPROVED) {
+			response.setPreviousCheckinCount(checkinCount - 1);
+			response.setNewCheckinCount(checkinCount);
+			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
 		}
-
 		return response;
 	}
 
@@ -213,7 +199,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	private Integer getPreviousCheckins(Integer userId, Integer merchantId) {
-		return checkinDao.getPreviousCheckins(userId, merchantId);
+		return checkinDao.getApprovedCheckinCount(userId, merchantId);
 	}
 
 	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {
@@ -230,13 +216,23 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return taggedUserDetails;
 	}
 
-	private List<TaggedUserResponse> getTaggedUsersInCheckin(Integer checkinId) {
-		List<CheckinTaggedUserEntity> taggedUserEntities = taggedUserDao.getTaggedUsers(checkinId);
-		List<Integer> taggedUserEntityIds = new ArrayList<>();
-		for (CheckinTaggedUserEntity entity : taggedUserEntities) {
-			taggedUserEntityIds.add(entity.getUserId());
+	private List<TaggedUserResponse> getTaggedUsersInCheckin(List<CheckinTaggedUserDto> taggedUsers) {
+		List<UserDto> users = new ArrayList<>();
+		for (CheckinTaggedUserDto taggedUser : taggedUsers) {
+			users.add(taggedUser.getUser());
 		}
-		return createTaggedUserResponse(getTaggedUserDetails(taggedUserEntityIds));
+		return createTaggedUserResponse(users);
+	}
+	
+	private List<TaggedUserResponse> createTaggedUserResponse(List<UserDto> taggedUserDetails) {
+		List<TaggedUserResponse> list = new ArrayList<>();
+		for (UserDto userDto : taggedUserDetails) {
+			TaggedUserResponse taggedUserResponse = new TaggedUserResponse();
+			taggedUserResponse.setId(userDto.getId());
+			taggedUserResponse.setName(userDto.getName());
+			list.add(taggedUserResponse);
+		}
+		return list;
 	}
 
 	private Integer getCurrentUserId() {
