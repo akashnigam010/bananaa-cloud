@@ -11,6 +11,7 @@ public class GetCheckinStatusResponse extends GenericResponse implements Seriali
 	private static final long serialVersionUID = 1L;
 	private Integer checkinId;
 	private String merchantName;
+	private Integer merchantId;
 	private String shortAddress;
 	private Integer previousCheckinCount;
 	private Integer newCheckinCount;
@@ -74,5 +75,13 @@ public class GetCheckinStatusResponse extends GenericResponse implements Seriali
 
 	public void setPreviousCheckinCount(Integer previousCheckinCount) {
 		this.previousCheckinCount = previousCheckinCount;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
 	}
 }
