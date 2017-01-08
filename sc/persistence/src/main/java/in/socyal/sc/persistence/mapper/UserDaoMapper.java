@@ -1,5 +1,6 @@
 package in.socyal.sc.persistence.mapper;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,8 @@ public class UserDaoMapper {
 		to.setFacebookLink(from.getFacebookLink());
 		to.setFacebookToken(from.getFacebookToken());
 		to.setGender(from.getGender());
+		to.setCreatedDateTime(from.getCreatedDateTime());
+		to.setUpdatedDateTime(from.getUpdatedDateTime());
 	}
 
 	public void map(FacebookUser from, UserEntity to, String fbAccessToken) {
@@ -36,6 +39,7 @@ public class UserDaoMapper {
 		to.setGender(from.getGender());
 		to.setImageUrl(from.getPicture().getData().getUrl());
 		to.setFacebookToken(fbAccessToken);
+		to.setCreatedDateTime(Calendar.getInstance());
 	}
 
 	public void map(UserDto from, UserEntity to, String fbAccessToken) {
