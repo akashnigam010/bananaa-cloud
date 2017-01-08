@@ -17,10 +17,12 @@ import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
+import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
@@ -28,12 +30,14 @@ import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.merchant.CheckinErrorCodeType;
+import in.socyal.sc.app.merchant.CheckinLikeErrorCodeType;
 import in.socyal.sc.app.merchant.MerchantQrMappingErrorCodeType;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.CheckinTaggedUserMappingDao;
+import in.socyal.sc.persistence.CheckinUserLikeMappingDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
@@ -42,20 +46,14 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
 	private static final Logger LOG = Logger.getLogger(CheckinDelegateImpl.class);
-	@Autowired
-	CheckinDao checkinDao;
-	@Autowired
-	MerchantQrMappingDao qrMappingDao;
-	@Autowired
-	MerchantDao merchantDao;
-	@Autowired
-	CheckinTaggedUserMappingDao taggedUserDao;
-	@Autowired
-	UserDao userDao;
-	@Autowired
-	UserDaoMapper userMapper;
-	@Autowired
-	JwtTokenHelper jwtHelper;
+	@Autowired CheckinDao checkinDao;
+	@Autowired MerchantQrMappingDao qrMappingDao;
+	@Autowired MerchantDao merchantDao;
+	@Autowired CheckinTaggedUserMappingDao taggedUserDao;
+	@Autowired UserDao userDao;
+	@Autowired CheckinUserLikeMappingDao checkinLikeDao;
+	@Autowired UserDaoMapper userMapper;
+	@Autowired JwtTokenHelper jwtHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -172,6 +170,18 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setNewCheckinCount(checkinCount);
 			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
 		}
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
+		LikeCheckinResponse response = new LikeCheckinResponse();
+		//Write logic for validating whether a LIKE was already done
+		if (checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), getCurrentUserId())) {
+			throw new BusinessException(CheckinLikeErrorCodeType.CHECKIN_ALREADY_LIKED);
+		}
+		checkinLikeDao.likeACheckin(request.getCheckinId(), getCurrentUserId());
 		return response;
 	}
 
