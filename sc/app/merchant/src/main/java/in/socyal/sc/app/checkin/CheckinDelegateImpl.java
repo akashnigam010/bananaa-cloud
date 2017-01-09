@@ -180,6 +180,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
 		} else if (checkin.getId() % 3 == 1) {
 			response.setCheckinStatus(CheckinStatusType.CANCELLED);
+			response.setCancelMessage("Your checkin has been cancelled by Merchant");
 		} else {
 			response.setCheckinStatus(CheckinStatusType.PENDING);
 			// FIXME : Need to keep the logic to fetch tagged users in cache
