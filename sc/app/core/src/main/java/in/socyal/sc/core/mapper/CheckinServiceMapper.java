@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
 import in.socyal.sc.api.checkin.response.Checkin;
-import in.socyal.sc.api.checkin.response.CheckinResponse;
+import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 
@@ -17,7 +17,7 @@ import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 public class CheckinServiceMapper {
 	public static final String SERVER = "https://s3.ap-south-1.amazonaws.com/bananaimages/";
 
-	public void map(List<CheckinResponseDto> from, CheckinResponse to, int page) {
+	public void map(List<CheckinResponseDto> from, FeedsResponse to, int page) {
 		List<Checkin> checkins = new ArrayList<>();
 		if (page == 1) {
 			Date currentDate = Calendar.getInstance().getTime();

@@ -7,22 +7,21 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 
 @Component
 public class UserMapper {
-	public void map(UserDto from, UserProfileResponse to, Integer userCheckinCount) {
+	public LoginUserDto map(UserDto from, Integer userCheckinCount) {
 		LoginUserDto user = new LoginUserDto();
 		user.setId(from.getId());
 		user.setFirstName(from.getFirstName());
 		user.setLastName(from.getLastName());
 		user.setImageUrl(from.getImageUrl());
 		user.setUserCheckins(userCheckinCount);
-		to.setUser(user);
+		return user;
 	}
 
-	public void map(List<UserDto> users, SearchFriendResponse response) {
+	public List<in.socyal.sc.api.login.dto.LoginUserDto> map(List<UserDto> users) {
 		List<in.socyal.sc.api.login.dto.LoginUserDto> friends = new ArrayList<>();
 		in.socyal.sc.api.login.dto.LoginUserDto user = null;
 		for (UserDto dto : users) {
@@ -31,9 +30,10 @@ public class UserMapper {
 			user.setFirstName(dto.getFirstName());
 			user.setLastName(dto.getLastName());
 			user.setImageUrl(dto.getImageUrl());
+			//FIXME : add lazy loading for user approved checkin count
+			user.setUserCheckins(10);
 			friends.add(user);
 		}
-
-		response.setUsers(friends);
+		return friends;
 	}
 }

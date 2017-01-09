@@ -2,7 +2,7 @@ package in.socyal.sc.api.checkin.request;
 
 import java.io.Serializable;
 
-public class MyCheckinsRequest implements Serializable {
+public class MyFeedsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer page;
 

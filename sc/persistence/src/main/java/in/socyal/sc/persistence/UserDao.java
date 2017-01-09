@@ -20,6 +20,7 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 public class UserDao {
 	private static final String FIRST_NAME = "firstName";
 	private static final String LAST_NAME = "lastName";
+	private static final int RESULTS_PER_PAGE = 15;
 	@Autowired SessionFactory sessionFactory;
 	@Autowired UserDaoMapper mapper;
 	
@@ -40,12 +41,28 @@ public class UserDao {
     	return dto;
     }
     
-    public List<UserDto> fetchUsers(String searchString) {
+    public List<UserDto> fetchUsersBySearchString(String searchString) {
     	List<UserDto> userDtos = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
     	Criterion firstNameCriteria = Restrictions.ilike(FIRST_NAME, searchString, MatchMode.ANYWHERE);
     	Criterion lastNameCriteria = Restrictions.ilike(LAST_NAME, searchString, MatchMode.ANYWHERE);
 		criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
+		@SuppressWarnings("unchecked")
+		List<UserEntity> users = (List<UserEntity>) criteria.list();
+		if (users != null && !users.isEmpty()) {
+			userDtos = new ArrayList<>();
+			mapper.map(users, userDtos);
+		}
+		
+		return userDtos;
+    }
+    
+    public List<UserDto> fetchUsersByPage(int page) {
+    	List<UserDto> userDtos = null;
+    	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+    	int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+    	criteria.setFirstResult(firstResult);
+    	criteria.setMaxResults(RESULTS_PER_PAGE);
 		@SuppressWarnings("unchecked")
 		List<UserEntity> users = (List<UserEntity>) criteria.list();
 		if (users != null && !users.isEmpty()) {

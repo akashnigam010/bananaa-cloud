@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
-import in.socyal.sc.api.checkin.request.AroundMeCheckinsRequest;
+import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
-import in.socyal.sc.api.checkin.request.MyCheckinsRequest;
+import in.socyal.sc.api.checkin.request.MyFeedsRequest;
+import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
-import in.socyal.sc.api.checkin.response.CheckinResponse;
+import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
@@ -35,8 +36,8 @@ public class CheckinService {
 	@Autowired CheckinValidator validator;
 
 	@RequestMapping(value = "/getMerchantCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
-	public CheckinResponse getMerchantCheckins(@RequestBody CheckinRequest request) {
-		CheckinResponse response = new CheckinResponse();
+	public FeedsResponse getMerchantCheckins(@RequestBody CheckinRequest request) {
+		FeedsResponse response = new FeedsResponse();
 		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(request.getId(), request.getPage());
 		mapper.map(checkins, response, request.getPage());
 		return responseHelper.success(response);
@@ -78,20 +79,43 @@ public class CheckinService {
 		}
 	}
 	
-	@RequestMapping(value = "/getAroundMeCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
-	public CheckinResponse getAroundMeCheckins(@RequestBody AroundMeCheckinsRequest request) {
-		CheckinResponse response = new CheckinResponse();
-		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
-		mapper.map(checkins, response, request.getPage());
-		return responseHelper.success(response);
+	@RequestMapping(value = "/getAroundMeFeeds", method = RequestMethod.POST, headers = "Accept=application/json")
+	public FeedsResponse getAroundMeCheckins(@RequestBody AroundMeFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		try {
+			validator.validateAroundMeFeedsRequest(request);
+			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
+			mapper.map(checkins, response, request.getPage());
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}		
 	}
 	
-	@RequestMapping(value = "/getMyCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
-	public CheckinResponse getMyCheckins(@RequestBody MyCheckinsRequest request) {
-		CheckinResponse response = new CheckinResponse();
-		List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
-		mapper.map(checkins, response, request.getPage());
-		return responseHelper.success(response);
+	@RequestMapping(value = "/getMyFeeds", method = RequestMethod.POST, headers = "Accept=application/json")
+	public FeedsResponse getMyCheckins(@RequestBody MyFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		try {
+			validator.validateMyFeedsRequest(request);
+			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
+			mapper.map(checkins, response, request.getPage());
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getProfileFeeds", method = RequestMethod.POST, headers = "Accept=application/json")
+	public FeedsResponse getProfileFeeds(@RequestBody ProfileFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		try {
+			validator.validateProfileFeedsRequest(request);
+			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
+			mapper.map(checkins, response, request.getPage());
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
 	}
 	
 	@RequestMapping(value = "/getCheckinStatus", method = RequestMethod.POST, headers = "Accept=application/json")
