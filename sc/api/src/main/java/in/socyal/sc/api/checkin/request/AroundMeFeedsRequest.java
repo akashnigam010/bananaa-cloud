@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import in.socyal.sc.api.merchant.request.LocationRequest;
 
-public class AroundMeCheckinsRequest implements Serializable {
+public class AroundMeFeedsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private LocationRequest location;
 	private Integer page;

@@ -7,10 +7,9 @@ import java.util.List;
 import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.response.GenericResponse;
 
-public class SearchFriendResponse extends GenericResponse implements Serializable {
+public class FriendResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<LoginUserDto> friends;
-	private List<LoginUserDto> people;
 
 	public List<LoginUserDto> getFriends() {
 		if (this.friends == null) {
@@ -21,17 +20,6 @@ public class SearchFriendResponse extends GenericResponse implements Serializabl
 
 	public void setFriends(List<LoginUserDto> friends) {
 		this.friends = friends;
-	}
-
-	public List<LoginUserDto> getPeople() {
-		if (this.people == null) {
-			this.people = new ArrayList<>();
-		}
-		return people;
-	}
-
-	public void setPeople(List<LoginUserDto> people) {
-		this.people = people;
 	}
 
 }

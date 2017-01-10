@@ -1,12 +1,16 @@
 package in.socyal.sc.core;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.user.request.GetMyFriendsRequest;
+import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
+import in.socyal.sc.api.user.response.FriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.core.validation.UserValidator;
@@ -17,6 +21,7 @@ import in.socyal.sc.user.UserDelegate;
 @RestController
 @RequestMapping(value = "/user")
 public class UserService {
+	private static final Logger LOG = Logger.getLogger(UserService.class);
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 
 	@Autowired
@@ -30,7 +35,21 @@ public class UserService {
 	public UserProfileResponse getProfile() {
 		UserProfileResponse response = new UserProfileResponse();
 		try {
+			LOG.info("Get my profile request");
 			response = userDelegate.getProfile();
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getPublicProfile", method = RequestMethod.POST, headers = "Accept=application/json")
+	public UserProfileResponse getPublicProfile(@RequestBody GetPublicProfileRequest request) {
+		UserProfileResponse response = new UserProfileResponse();
+		try {
+			validator.validateGetPublicProfileRequest(request);
+			LOG.info("Get public profile : UserId = " + request.getUserId());
+			response = userDelegate.getPublicProfile(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
@@ -41,10 +60,26 @@ public class UserService {
 	public SearchFriendResponse searchFriends(@RequestBody SearchFriendRequest request) {
 		SearchFriendResponse response = new SearchFriendResponse();
 		try {
-			validator.validateSearchUserRequest(request);
+			// this is a semi-authorized call. Validator doesn't check for logged in user.
+			// Service response wouldn't contain people whom user follows when not logged in
+			validator.validateSearchFriendRequest(request);
+			LOG.info("Search Friend Request : Search String = " + request.getSearchString());
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = userDelegate.searchFriends(request);
 			}
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getMyFriends", method = RequestMethod.POST, headers = "Accept=application/json")
+	public FriendResponse getMyFriends(@RequestBody GetMyFriendsRequest request) {
+		FriendResponse response = new FriendResponse();
+		try {
+			validator.validateGetMyFriendsRequest(request);
+			LOG.info("Get My Friends Request : Page = " + request.getPage());
+			response = userDelegate.getMyFriends(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

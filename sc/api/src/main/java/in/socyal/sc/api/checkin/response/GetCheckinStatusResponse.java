@@ -16,6 +16,7 @@ public class GetCheckinStatusResponse extends GenericResponse implements Seriali
 	private Integer previousCheckinCount;
 	private Integer newCheckinCount;
 	private CheckinStatusType checkinStatus;
+	private String cancelMessage;
 	private List<TaggedUserResponse> taggedUsers;
 
 	public Integer getCheckinId() {
@@ -83,5 +84,13 @@ public class GetCheckinStatusResponse extends GenericResponse implements Seriali
 
 	public void setMerchantId(Integer merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public String getCancelMessage() {
+		return cancelMessage;
+	}
+
+	public void setCancelMessage(String cancelMessage) {
+		this.cancelMessage = cancelMessage;
 	}
 }

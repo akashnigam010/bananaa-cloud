@@ -6,7 +6,7 @@ import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
 
-public class CheckinResponse extends GenericResponse implements Serializable {
+public class FeedsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Checkin> checkins;
 

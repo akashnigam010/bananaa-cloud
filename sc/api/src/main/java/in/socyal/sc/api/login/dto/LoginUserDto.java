@@ -6,6 +6,7 @@ public class LoginUserDto {
 	private String lastName;
 	private String imageUrl;
 	private Integer userCheckins;
+	private Boolean isFollow;
 
 	public Integer getId() {
 		return id;
@@ -45,5 +46,13 @@ public class LoginUserDto {
 
 	public void setUserCheckins(Integer userCheckins) {
 		this.userCheckins = userCheckins;
+	}
+
+	public Boolean getIsFollow() {
+		return isFollow;
+	}
+
+	public void setIsFollow(Boolean isFollow) {
+		this.isFollow = isFollow;
 	}
 }

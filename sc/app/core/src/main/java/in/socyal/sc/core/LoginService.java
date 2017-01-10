@@ -1,5 +1,6 @@
 package in.socyal.sc.core;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import in.socyal.sc.login.LoginDelegate;
 @RestController
 @RequestMapping(value = "/login")
 public class LoginService {
+	private static final Logger LOG = Logger.getLogger(LoginService.class);
 	@Autowired
 	LoginDelegate delegate;
 	@Autowired
@@ -28,6 +30,7 @@ public class LoginService {
 	public LoginResponse skipLogin() {
 		LoginResponse response = new LoginResponse();
 		try {
+			LOG.info("Skip login request");
 			response = delegate.skipLogin();
 			return helper.success(response);
 		} catch (BusinessException e) {
@@ -40,6 +43,7 @@ public class LoginService {
 		LoginResponse response = new LoginResponse();
 		try {
 			validator.validateFbLoginRequest(request);
+			LOG.info("FB login request : fbId = " + request.getFbId() + ", accessToken = " + request.getFbAccessToken());
 			response = delegate.fbLogin(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
