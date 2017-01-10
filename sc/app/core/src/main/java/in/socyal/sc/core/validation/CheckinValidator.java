@@ -21,11 +21,15 @@ public class CheckinValidator {
 	@Autowired
 	JwtTokenHelper jwtHelper;
 
-	public void validateValidateCheckinRequest(ValidateCheckinRequest request) {
-		RoleType role = RoleType.getRole(jwtHelper.getUserName());
-		if (role == RoleType.GUEST) {
-			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+	public void validateGetMerchantCheckinsRequest(CheckinRequest request) {
+		// public call - no authentication required
+		if (request.getId() == null || request.getPage() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
+	}
+	
+	public void validateValidateCheckinRequest(ValidateCheckinRequest request) {
+		validateIfLoggedInUser();
 		if (request.getLocation() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
@@ -36,6 +40,7 @@ public class CheckinValidator {
 	}
 
 	public void validateConfirmCheckinRequest(ConfirmCheckinRequest request) {
+		validateIfLoggedInUser();
 		if (request.getLocation() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
@@ -46,18 +51,21 @@ public class CheckinValidator {
 	}
 
 	public void validateCancelCheckinRequest(CancelCheckinRequest request) {
+		validateIfLoggedInUser();
 		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
 	public void validateCheckinRequest(CheckinRequest request) {
+		validateIfLoggedInUser();
 		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
 	public void validateAroundMeFeedsRequest(AroundMeFeedsRequest request) throws BusinessException {
+		// public call - no authentication required
 		if (request.getLocation() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
@@ -68,14 +76,27 @@ public class CheckinValidator {
 	}
 
 	public void validateMyFeedsRequest(MyFeedsRequest request) {
+		validateIfLoggedInUser();
 		if (request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
 	public void validateProfileFeedsRequest(ProfileFeedsRequest request) {
+		// public call - no authentication required
 		if (request.getUserId() == null || request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	/**
+	 * check if user is logged in or not.
+	 * Throws exception if user is not logged in
+	 */
+	private void validateIfLoggedInUser() {
+		RoleType role = RoleType.getRole(jwtHelper.getUserName());
+		if (role == RoleType.GUEST) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
 		}
 	}
 }

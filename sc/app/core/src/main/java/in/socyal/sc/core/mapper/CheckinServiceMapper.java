@@ -57,6 +57,8 @@ public class CheckinServiceMapper {
 			// 1
 			Checkin checkin1 = new Checkin();
 			checkin1.setId(1);
+			checkin1.setMerchantId(12345);
+			checkin1.setMerchantName("Skyhy");
 			checkin1.setLikeCount(2);
 			checkin1.setRating(3.9);
 			checkin1.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
@@ -67,9 +69,11 @@ public class CheckinServiceMapper {
 						// 11
 						Checkin checkin11 = new Checkin();
 						checkin11.setId(11);
+						checkin11.setMerchantId(12345);
+						checkin11.setMerchantName("Skyhy");
 						checkin11.setLikeCount(21);
 						checkin11.setRating(3.9);
-						checkin11.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						//checkin11.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
 						checkin11.setTaggedUsers(getTaggedUsersResponse(11));
 						checkin11.setTimestamp(minus2Minutes);
 						checkin11.setUser(getUserDetailsResponse(11));
@@ -77,9 +81,11 @@ public class CheckinServiceMapper {
 						// 12
 						Checkin checkin12 = new Checkin();
 						checkin12.setId(12);
-						checkin12.setLikeCount(21);
-						checkin12.setRating(3.9);
-						checkin12.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						checkin12.setMerchantId(12346);
+						checkin12.setMerchantName("Fusion 9");
+						checkin12.setLikeCount(0);
+						//checkin12.setRating(3.9);
+						checkin12.setRewardMessage("Won an exciting Goodie Bag");
 						checkin12.setTaggedUsers(getTaggedUsersResponse(12));
 						checkin12.setTimestamp(minus6Minutes);
 						checkin12.setUser(getUserDetailsResponse(12));
@@ -87,19 +93,23 @@ public class CheckinServiceMapper {
 						// 13
 						Checkin checkin13 = new Checkin();
 						checkin13.setId(13);
+						checkin13.setMerchantId(12346);
+						checkin13.setMerchantName("Fusion 9");
 						checkin13.setLikeCount(21);
 						checkin13.setRating(3.9);
-						checkin13.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
-						checkin13.setTaggedUsers(getTaggedUsersResponse(13));
+						checkin13.setRewardMessage("Won a discount worth Rs. 500");
+						//checkin13.setTaggedUsers(getTaggedUsersResponse(13));
 						checkin13.setTimestamp(minus20Minutes);
 						checkin13.setUser(getUserDetailsResponse(13));
 						
 						// 14
 						Checkin checkin14 = new Checkin();
 						checkin14.setId(14);
+						checkin14.setMerchantId(12345);
+						checkin14.setMerchantName("Skyhy");
 						checkin14.setLikeCount(24);
 						checkin14.setRating(3.9);
-						checkin14.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+						checkin14.setRewardMessage("Won a free buffet and an exciting Amazon gift card worth Rs. 100");
 						checkin14.setTaggedUsers(getTaggedUsersResponse(14));
 						checkin14.setTimestamp(minus59Minutes);
 						checkin14.setUser(getUserDetailsResponse(14));
@@ -107,16 +117,20 @@ public class CheckinServiceMapper {
 			// 2
 			Checkin checkin2 = new Checkin();
 			checkin2.setId(2);
-			checkin2.setLikeCount(21);
-			checkin2.setRating(3.9);
-			checkin2.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
-			checkin2.setTaggedUsers(getTaggedUsersResponse(2));
+			checkin2.setMerchantId(12345);
+			checkin2.setMerchantName("Skyhy");
+			checkin2.setLikeCount(0);
+			//checkin2.setRating(3.9);
+			//checkin2.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+			//checkin2.setTaggedUsers(getTaggedUsersResponse(2));
 			checkin2.setTimestamp(minus5Hours);
 			checkin2.setUser(getUserDetailsResponse(2));
 
 			// 3
 			Checkin checkin3 = new Checkin();
 			checkin3.setId(3);
+			checkin3.setMerchantId(12345);
+			checkin3.setMerchantName("Skyhy");
 			checkin3.setLikeCount(2);
 			checkin3.setRating(3.9);
 			checkin3.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
@@ -127,9 +141,11 @@ public class CheckinServiceMapper {
 			// 4
 			Checkin checkin4 = new Checkin();
 			checkin4.setId(4);
+			checkin4.setMerchantId(12345);
+			checkin4.setMerchantName("Skyhy");
 			checkin4.setLikeCount(2);
 			checkin4.setRating(3.9);
-			checkin4.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+			//checkin4.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
 			checkin4.setTaggedUsers(getTaggedUsersResponse(4));
 			checkin4.setTimestamp(minus1Day);
 			checkin4.setUser(getUserDetailsResponse(4));
@@ -137,6 +153,8 @@ public class CheckinServiceMapper {
 			// 5
 			Checkin checkin5 = new Checkin();
 			checkin5.setId(5);
+			checkin5.setMerchantId(12345);
+			checkin5.setMerchantName("Skyhy");
 			checkin5.setLikeCount(2);
 			checkin5.setRating(3.9);
 			checkin5.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
@@ -176,9 +194,11 @@ public class CheckinServiceMapper {
 			// 6
 			Checkin checkin6 = new Checkin();
 			checkin6.setId(6);
+			checkin6.setMerchantId(12347);
+			checkin6.setMerchantName("News Cafe");
 			checkin6.setLikeCount(25);
 			checkin6.setRating(3.9);
-			checkin6.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
+			//checkin6.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
 			checkin6.setTaggedUsers(getTaggedUsersResponse(6));
 			checkin6.setTimestamp(minus20Day);
 			checkin6.setUser(getUserDetailsResponse(6));
@@ -186,6 +206,8 @@ public class CheckinServiceMapper {
 			// 7
 			Checkin checkin7 = new Checkin();
 			checkin7.setId(7);
+			checkin7.setMerchantId(12347);
+			checkin7.setMerchantName("News Cafe");
 			checkin7.setLikeCount(2);
 			checkin7.setRating(3.9);
 			checkin7.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
@@ -196,6 +218,8 @@ public class CheckinServiceMapper {
 			// 8
 			Checkin checkin8 = new Checkin();
 			checkin8.setId(8);
+			checkin8.setMerchantId(12347);
+			checkin8.setMerchantName("News Cafe");
 			checkin8.setLikeCount(32);
 			checkin8.setRating(3.9);
 			checkin8.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");
@@ -206,6 +230,8 @@ public class CheckinServiceMapper {
 			// 9
 			Checkin checkin9 = new Checkin();
 			checkin9.setId(9);
+			checkin9.setMerchantId(12347);
+			checkin9.setMerchantName("News Cafe");
 			checkin9.setLikeCount(2);
 			checkin9.setRating(3.9);
 			checkin9.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");

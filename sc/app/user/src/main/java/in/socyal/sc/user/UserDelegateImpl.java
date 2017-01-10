@@ -17,6 +17,7 @@ import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.helper.type.GenericErrorCodeType;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
 import in.socyal.sc.user.mapper.UserMapper;
@@ -68,8 +69,10 @@ public class UserDelegateImpl implements UserDelegate {
 		// FIXME : adding temporary logic to return search friend response
 		List<UserDto> users = userDao.fetchUsersBySearchString(request.getSearchString());
 		if (users != null) {
-			response.setFriends(mapper.map(users));
 			response.setPeople(mapper.map(users));
+			if (validateIfLoggedInUser()) {
+				response.setFriends(mapper.map(users));
+			}
 		}
 		return response;
 	}
@@ -85,7 +88,23 @@ public class UserDelegateImpl implements UserDelegate {
 		}
 		return response;
 	}
+	
+	/**
+	 * check if user is logged in or not
+	 * FIXME : Move such logics to a common place
+	 */
+	private boolean validateIfLoggedInUser() {
+		RoleType role = RoleType.getRole(jwtHelper.getUserName());
+		if (role == RoleType.GUEST) {
+			return false;
+		}
+		return true;
+	}
 
+	/**
+	 * check if user is logged in or not
+	 * FIXME : Move such logics to a common place
+	 */
 	private void authorizeUser() throws BusinessException {
 		List<String> roles = jwtHelper.getRoles();
 		if (roles == null || roles.isEmpty()) {

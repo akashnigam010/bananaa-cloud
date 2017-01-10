@@ -1,5 +1,6 @@
 package in.socyal.sc.core;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import in.socyal.sc.user.UserDelegate;
 @RestController
 @RequestMapping(value = "/user")
 public class UserService {
+	private static final Logger LOG = Logger.getLogger(UserService.class);
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 
 	@Autowired
@@ -33,6 +35,7 @@ public class UserService {
 	public UserProfileResponse getProfile() {
 		UserProfileResponse response = new UserProfileResponse();
 		try {
+			LOG.info("Get my profile request");
 			response = userDelegate.getProfile();
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -45,6 +48,7 @@ public class UserService {
 		UserProfileResponse response = new UserProfileResponse();
 		try {
 			validator.validateGetPublicProfileRequest(request);
+			LOG.info("Get public profile : UserId = " + request.getUserId());
 			response = userDelegate.getPublicProfile(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -56,7 +60,10 @@ public class UserService {
 	public SearchFriendResponse searchFriends(@RequestBody SearchFriendRequest request) {
 		SearchFriendResponse response = new SearchFriendResponse();
 		try {
+			// this is a semi-authorized call. Validator doesn't check for logged in user.
+			// Service response wouldn't contain people whom user follows when not logged in
 			validator.validateSearchFriendRequest(request);
+			LOG.info("Search Friend Request : Search String = " + request.getSearchString());
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = userDelegate.searchFriends(request);
 			}
@@ -71,6 +78,7 @@ public class UserService {
 		FriendResponse response = new FriendResponse();
 		try {
 			validator.validateGetMyFriendsRequest(request);
+			LOG.info("Get My Friends Request : Page = " + request.getPage());
 			response = userDelegate.getMyFriends(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

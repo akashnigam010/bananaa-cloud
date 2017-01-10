@@ -8,6 +8,8 @@ import java.util.List;
 public class Checkin implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private Integer merchantId;
+	private String merchantName;
 	private UserDetailsResponse user;
 	private List<TaggedUserResponse> taggedUsers;
 	private String rewardMessage;
@@ -17,6 +19,22 @@ public class Checkin implements Serializable {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 
 	public void setId(Integer id) {
@@ -35,7 +53,7 @@ public class Checkin implements Serializable {
 		if (taggedUsers == null) {
 			return new ArrayList<>();
 		}
-		
+
 		return taggedUsers;
 	}
 
