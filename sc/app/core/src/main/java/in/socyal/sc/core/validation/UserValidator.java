@@ -36,6 +36,12 @@ public class UserValidator {
 		}
 	}
 	
+	public void validateSearchUserRequest(SearchFriendRequest request) {
+		if (StringUtils.isEmpty(request.getSearchString())) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
 	/**
 	 * check if user is logged in or not.
 	 * Throws exception if user is not logged in

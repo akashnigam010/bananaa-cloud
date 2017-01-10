@@ -14,10 +14,10 @@ import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.response.FriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
+import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
 import in.socyal.sc.user.mapper.UserMapper;
@@ -62,6 +62,17 @@ public class UserDelegateImpl implements UserDelegate {
 		return response;
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public SearchFriendToTagResponse searchFriendsToTag(SearchFriendRequest request) throws BusinessException {
+		SearchFriendToTagResponse response = new SearchFriendToTagResponse(); 
+		List<UserDto> users = userDao.fetchUsersBySearchString(request.getSearchString());
+		if (users != null) {
+			response.setUsers(mapper.map(users));
+		}
+		return response;
+	}
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchFriendResponse searchFriends(SearchFriendRequest request) throws BusinessException {

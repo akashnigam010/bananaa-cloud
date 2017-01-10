@@ -5,6 +5,7 @@ import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.response.FriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
+import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 
@@ -36,4 +37,11 @@ public interface UserDelegate {
 	 * @throws BusinessException
 	 */
 	public UserProfileResponse getPublicProfile(GetPublicProfileRequest request);
+
+	/**
+	 * Fetch list of friends to tag
+	 * @return
+	 * @throws BusinessException
+	 */
+	SearchFriendToTagResponse searchFriendsToTag(SearchFriendRequest request) throws BusinessException;
 }

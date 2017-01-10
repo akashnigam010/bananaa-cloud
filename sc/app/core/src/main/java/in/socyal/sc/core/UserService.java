@@ -12,6 +12,7 @@ import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.response.FriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
+import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.core.validation.UserValidator;
 import in.socyal.sc.helper.ResponseHelper;
@@ -50,6 +51,20 @@ public class UserService {
 			validator.validateGetPublicProfileRequest(request);
 			LOG.info("Get public profile : UserId = " + request.getUserId());
 			response = userDelegate.getPublicProfile(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/searchFriendsToTag", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SearchFriendToTagResponse searchFriendsToTag(@RequestBody SearchFriendRequest request) {
+		SearchFriendToTagResponse response = new SearchFriendToTagResponse();
+		try {
+			validator.validateSearchUserRequest(request);
+			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
+				response = userDelegate.searchFriendsToTag(request);
+			}
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
