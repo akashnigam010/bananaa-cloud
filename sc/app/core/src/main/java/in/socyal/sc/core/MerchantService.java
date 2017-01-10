@@ -16,6 +16,7 @@ import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.mapper.MerchantServiceMapper;
+import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
@@ -33,7 +34,8 @@ public class MerchantService {
 
 	@RequestMapping(value = "/getMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetMerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
-		logGetMerchantRequest(request);
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/getMerchants");
+		//logGetMerchantRequest(request);
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		try {
 			response = delegate.getMerchants(request);
@@ -46,6 +48,7 @@ public class MerchantService {
 
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/getMerchantDetails");
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		try {
 			response = delegate.getMerchantDetails(request);
@@ -57,7 +60,8 @@ public class MerchantService {
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
-		logSearchMerchantRequest(request);
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/searchMerchant");
+		//logSearchMerchantRequest(request);
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
@@ -72,6 +76,7 @@ public class MerchantService {
 	// Testing purpose
 	@RequestMapping(value = "/saveMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SaveMerchantDetailsResponse saveMerchantDetails(@RequestBody SaveMerchantDetailsRequest request) {
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/saveMerchantDetails");
 		SaveMerchantDetailsResponse response = new SaveMerchantDetailsResponse();
 		try {
 			delegate.saveMerchantDetails(request);
