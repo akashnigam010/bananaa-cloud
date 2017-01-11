@@ -196,6 +196,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
+		//FIXME: Fetch correct previousCheckinCount details
 		response.setPreviousCheckinCount(12);
 	}
 

@@ -41,14 +41,14 @@ public class CheckinEntity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private CheckinStatusType status;
 
-	@Column(name = "LIKE_COUNT")
-	private Integer likeCount;
+	/*@Column(name = "LIKE_COUNT")
+	private Integer likeCount;*/
 	
 	@Column(name = "QR_CODE")
 	private String qrCode;
 	
-	@Column(name = "PREVIOUS_CHECKIN_COUNT")
-	private Integer previousCheckinCount;
+	/*@Column(name = "PREVIOUS_CHECKIN_COUNT")
+	private Integer previousCheckinCount;*/
 	
 	@Column(name = "REWARD_MESSAGE")
 	private String rewardMessage;
@@ -65,7 +65,11 @@ public class CheckinEntity implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
 	private Set<CheckinTaggedUserEntity> taggedUsers;
-
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
+	private Set<CheckinUserLikeEntity> likes;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -98,13 +102,13 @@ public class CheckinEntity implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getLikeCount() {
+	/*public Integer getLikeCount() {
 		return likeCount;
 	}
 
 	public void setLikeCount(Integer likeCount) {
 		this.likeCount = likeCount;
-	}
+	}*/
 
 	public String getQrCode() {
 		return qrCode;
@@ -114,13 +118,13 @@ public class CheckinEntity implements Serializable {
 		this.qrCode = qrCode;
 	}
 
-	public Integer getPreviousCheckinCount() {
+	/*public Integer getPreviousCheckinCount() {
 		return previousCheckinCount;
 	}
 
 	public void setPreviousCheckinCount(Integer previousCheckinCount) {
 		this.previousCheckinCount = previousCheckinCount;
-	}
+	}*/
 
 	public String getRewardMessage() {
 		return rewardMessage;
@@ -160,5 +164,13 @@ public class CheckinEntity implements Serializable {
 
 	public void setTaggedUsers(Set<CheckinTaggedUserEntity> taggedUsers) {
 		this.taggedUsers = taggedUsers;
+	}
+
+	public Set<CheckinUserLikeEntity> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Set<CheckinUserLikeEntity> likes) {
+		this.likes = likes;
 	}
 }

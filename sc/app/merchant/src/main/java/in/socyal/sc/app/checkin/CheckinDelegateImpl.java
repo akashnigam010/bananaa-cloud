@@ -97,7 +97,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		response.setCheckinId(checkinId);
 		response.setMerchantId(merchant.getId());
 		response.setMerchantName(merchant.getName());
-		response.setPreviousCheckinCount(dto.getPreviousCheckinCount());
+		response.setPreviousCheckinCount(getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
 		response.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
 		if (taggedUserDetails != null) {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
@@ -122,8 +122,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
 		}
 
-		response.setPreviousCheckinCount(
-				checkinDao.getApprovedCheckinCount(getCurrentUserId(), qrMapping.getMerchant().getId()));
+		response.setPreviousCheckinCount(getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
 		response.setMerchantName(qrMapping.getMerchant().getName());
 		response.setShortAddress(qrMapping.getMerchant().getAddress().getLocality().getShortAddress());
 		return response;
@@ -176,7 +175,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		// purpose
 		if (checkin.getId() % 3 == 0) {
 			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setNewCheckinCount(checkin.getPreviousCheckinCount() + 1);
+			response.setNewCheckinCount(1);
 			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
 		} else if (checkin.getId() % 3 == 1) {
 			response.setCheckinStatus(CheckinStatusType.CANCELLED);

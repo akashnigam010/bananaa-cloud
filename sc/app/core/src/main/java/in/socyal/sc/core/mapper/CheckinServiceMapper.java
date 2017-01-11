@@ -59,6 +59,7 @@ public class CheckinServiceMapper {
 			checkin1.setId(1);
 			checkin1.setMerchantId(12345);
 			checkin1.setMerchantName("Skyhy");
+			//FIXME: Assign correct like count from DB
 			checkin1.setLikeCount(2);
 			checkin1.setRating(3.9);
 			checkin1.setRewardMessage("Won an Amazon Gift Card worth Rs. 100");

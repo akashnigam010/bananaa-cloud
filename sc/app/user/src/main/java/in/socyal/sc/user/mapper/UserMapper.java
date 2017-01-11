@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.api.user.response.UserProfileResponse;
 
 @Component
 public class UserMapper {

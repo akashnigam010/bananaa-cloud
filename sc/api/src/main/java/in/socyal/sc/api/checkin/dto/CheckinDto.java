@@ -12,14 +12,15 @@ public class CheckinDto {
 	private Integer userId;
 	private MerchantDto merchant;
 	private CheckinStatusType status;
-	private Integer likeCount;
+	/*private Integer likeCount;*/
 	private String qrCode;
-	private Integer previousCheckinCount;
+	/*private Integer previousCheckinCount;*/
 	private String rewardMessage;
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
 	private List<CheckinTaggedUserDto> taggedUsers;
+	private List<CheckinUserLikeDto> likes;
 
 	public Integer getId() {
 		return id;
@@ -53,13 +54,13 @@ public class CheckinDto {
 		this.status = status;
 	}
 
-	public Integer getLikeCount() {
+	/*public Integer getLikeCount() {
 		return likeCount;
 	}
 
 	public void setLikeCount(Integer likeCount) {
 		this.likeCount = likeCount;
-	}
+	}*/
 
 	public String getQrCode() {
 		return qrCode;
@@ -69,13 +70,13 @@ public class CheckinDto {
 		this.qrCode = qrCode;
 	}
 
-	public Integer getPreviousCheckinCount() {
+	/*public Integer getPreviousCheckinCount() {
 		return previousCheckinCount;
 	}
 
 	public void setPreviousCheckinCount(Integer previousCheckinCount) {
 		this.previousCheckinCount = previousCheckinCount;
-	}
+	}*/
 
 	public String getRewardMessage() {
 		return rewardMessage;
@@ -118,5 +119,13 @@ public class CheckinDto {
 
 	public void setTaggedUsers(List<CheckinTaggedUserDto> taggedUsers) {
 		this.taggedUsers = taggedUsers;
+	}
+
+	public List<CheckinUserLikeDto> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<CheckinUserLikeDto> likes) {
+		this.likes = likes;
 	}
 }
