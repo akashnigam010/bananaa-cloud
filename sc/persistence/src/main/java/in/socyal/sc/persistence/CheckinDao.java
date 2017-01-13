@@ -38,7 +38,7 @@ public class CheckinDao {
     
     public Integer getApprovedCheckinCount(Integer userId, Integer merchantId) {
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-    	criteria.add(Restrictions.eq("userId", userId));
+    	criteria.add(Restrictions.eq("user.id", userId));
     	criteria.add(Restrictions.eq("merchant.id", merchantId));
     	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
     	@SuppressWarnings("unchecked")
@@ -69,7 +69,7 @@ public class CheckinDao {
 	
 	public Integer getUserCheckinCount(Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-    	criteria.add(Restrictions.eq("userId", userId));
+    	criteria.add(Restrictions.eq("user.id", userId));
     	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
     	@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();

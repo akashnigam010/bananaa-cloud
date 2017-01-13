@@ -11,16 +11,19 @@ import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
 import in.socyal.sc.api.checkin.dto.CheckinUserLikeDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
 import in.socyal.sc.persistence.entity.CheckinUserLikeEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
+import in.socyal.sc.persistence.entity.UserEntity;
 
 @Component
 public class CheckinDaoMapper {
 	@Autowired MerchantDaoMapper mapper;
 	@Autowired CheckinTaggedUserMapper taggedUserMapper;
 	@Autowired CheckinUserLikeMapper likeMapper;
+	@Autowired UserDaoMapper userDaoMapper;
 	
 	public void map(CheckinDetailsDto from, CheckinEntity to) {
 		to.setCheckinDateTime(from.getCheckinDateTime());
@@ -30,7 +33,9 @@ public class CheckinDaoMapper {
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
 		to.setUpdatedDateTime(from.getUpdatedDateTime());
-		to.setUserId(from.getUserId());
+		UserEntity user = new UserEntity();
+		user.setId(from.getUserId());
+		to.setUser(user);
 	}
 	
 	public void map(CheckinEntity from, CheckinDto to) {
@@ -42,7 +47,9 @@ public class CheckinDaoMapper {
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
 		to.setUpdatedDateTime(from.getUpdatedDateTime());
-		to.setUserId(from.getUserId());
+		UserDto user = new UserDto();
+		userDaoMapper.map(from.getUser(), user);
+		to.setUser(user);
 		List<CheckinTaggedUserDto> taggedUsers = new ArrayList<>();
 		for (CheckinTaggedUserEntity taggedUser : from.getTaggedUsers()) {
 			CheckinTaggedUserDto taggedUserDto = new CheckinTaggedUserDto();

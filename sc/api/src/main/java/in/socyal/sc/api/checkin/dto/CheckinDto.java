@@ -6,10 +6,11 @@ import java.util.List;
 
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.user.dto.UserDto;
 
 public class CheckinDto {
 	private Integer id;
-	private Integer userId;
+	private UserDto user;
 	private MerchantDto merchant;
 	private CheckinStatusType status;
 	/*private Integer likeCount;*/
@@ -30,12 +31,12 @@ public class CheckinDto {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public UserDto getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(UserDto user) {
+		this.user = user;
 	}
 
 	public MerchantDto getMerchant() {

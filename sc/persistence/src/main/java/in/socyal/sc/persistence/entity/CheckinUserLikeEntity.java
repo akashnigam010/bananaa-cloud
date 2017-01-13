@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -23,9 +21,8 @@ public class CheckinUserLikeEntity implements Serializable {
 	@Column(name = "CHECKIN_ID")
 	private Integer checkinId;
 	
-	@OneToOne
-	@JoinColumn(name = "USER_ID")
-	private UserEntity user;
+	@Column(name = "USER_ID")
+	private Integer userId;
 
 	public Integer getId() {
 		return id;
@@ -43,11 +40,11 @@ public class CheckinUserLikeEntity implements Serializable {
 		this.checkinId = checkinId;
 	}
 
-	public UserEntity getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(UserEntity user) {
-		this.user = user;
+	public void setUserId(Integer user) {
+		this.userId = user;
 	}
 }
