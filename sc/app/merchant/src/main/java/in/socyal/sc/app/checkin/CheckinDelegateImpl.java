@@ -154,7 +154,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 
 		//Fetch previous checkin count through a DB call
-		Integer checkinCount = checkinDao.getApprovedCheckinCount(getCurrentUserId(), checkin.getMerchant().getId());
+		Integer checkinCount = checkinDao.getApprovedCheckinsForAMerchant(getCurrentUserId(), checkin.getMerchant().getId()).size();
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		response.setCheckinId(checkin.getId());
 		response.setMerchantId(checkin.getMerchant().getId());
@@ -208,7 +208,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		checkinDetails.setUserId(userId);
 		checkinDetails.setCheckinDateTime(Calendar.getInstance());
 		checkinDetails.setUpdatedDateTime(Calendar.getInstance());
-		checkinDetails.setPreviousCheckinCount(getPreviousCheckins(userId, merchant.getId()));
 		checkinDetails.setQrCode(request.getQrCode());
 		checkinDetails.setStatus(CheckinStatusType.PENDING);
 		return checkinDetails;
@@ -224,7 +223,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	private Integer getPreviousCheckins(Integer userId, Integer merchantId) {
-		return checkinDao.getApprovedCheckinCount(userId, merchantId);
+		return checkinDao.getApprovedCheckinsForAMerchant(userId, merchantId).size();
 	}
 
 	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {

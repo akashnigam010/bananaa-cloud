@@ -21,7 +21,8 @@ public class CheckinDto {
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
 	private List<CheckinTaggedUserDto> taggedUsers;
-	private List<CheckinUserLikeDto> likes;
+	private Integer likeCount;
+	private boolean liked;
 
 	public Integer getId() {
 		return id;
@@ -55,14 +56,6 @@ public class CheckinDto {
 		this.status = status;
 	}
 
-	/*public Integer getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
-	}*/
-
 	public String getQrCode() {
 		return qrCode;
 	}
@@ -70,14 +63,6 @@ public class CheckinDto {
 	public void setQrCode(String qrCode) {
 		this.qrCode = qrCode;
 	}
-
-	/*public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
-	}*/
 
 	public String getRewardMessage() {
 		return rewardMessage;
@@ -122,11 +107,19 @@ public class CheckinDto {
 		this.taggedUsers = taggedUsers;
 	}
 
-	public List<CheckinUserLikeDto> getLikes() {
-		return likes;
+	public Integer getLikeCount() {
+		return likeCount;
 	}
 
-	public void setLikes(List<CheckinUserLikeDto> likes) {
-		this.likes = likes;
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
 	}
 }

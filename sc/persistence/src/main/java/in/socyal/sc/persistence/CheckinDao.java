@@ -1,6 +1,8 @@
 package in.socyal.sc.persistence;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -36,14 +38,19 @@ public class CheckinDao {
     	return checkinId;
     }
     
-    public Integer getApprovedCheckinCount(Integer userId, Integer merchantId) {
+    public List<CheckinDto> getApprovedCheckinsForAMerchant(Integer userId, Integer merchantId) {
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
     	criteria.add(Restrictions.eq("user.id", userId));
     	criteria.add(Restrictions.eq("merchant.id", merchantId));
     	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
     	@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();
-    	return result.size();
+    	List<CheckinDto> response = Collections.emptyList();
+    	if (result.size() > 0) {
+    		response = new ArrayList<>();
+    		mapper.map(result,  response);
+    	}
+    	return response;
     }
     
     public void cancelCheckin(Integer checkinId) {

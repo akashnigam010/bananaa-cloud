@@ -42,15 +42,9 @@ public class CheckinEntity implements Serializable {
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.STRING)
 	private CheckinStatusType status;
-
-	/*@Column(name = "LIKE_COUNT")
-	private Integer likeCount;*/
 	
 	@Column(name = "QR_CODE")
 	private String qrCode;
-	
-	/*@Column(name = "PREVIOUS_CHECKIN_COUNT")
-	private Integer previousCheckinCount;*/
 	
 	@Column(name = "REWARD_MESSAGE")
 	private String rewardMessage;
@@ -104,14 +98,6 @@ public class CheckinEntity implements Serializable {
 		this.status = status;
 	}
 
-	/*public Integer getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
-	}*/
-
 	public String getQrCode() {
 		return qrCode;
 	}
@@ -119,14 +105,6 @@ public class CheckinEntity implements Serializable {
 	public void setQrCode(String qrCode) {
 		this.qrCode = qrCode;
 	}
-
-	/*public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
-	}*/
 
 	public String getRewardMessage() {
 		return rewardMessage;
