@@ -57,8 +57,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinResponseDto> getRestaurantCheckins(Integer restaurantId, Integer page) {
-		List<CheckinResponseDto> checkins = new ArrayList<>();
+	public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(merchantId, page);
 		return checkins;
 	}
 
@@ -154,7 +154,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 
 		//Fetch previous checkin count through a DB call
-		Integer checkinCount = checkinDao.getApprovedCheckinsForAMerchant(getCurrentUserId(), checkin.getMerchant().getId()).size();
+		Integer checkinCount = checkinDao.getCurrentUserCheckinsForAMerchant(getCurrentUserId(), checkin.getMerchant().getId()).size();
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		response.setCheckinId(checkin.getId());
 		response.setMerchantId(checkin.getMerchant().getId());
@@ -223,7 +223,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	private Integer getPreviousCheckins(Integer userId, Integer merchantId) {
-		return checkinDao.getApprovedCheckinsForAMerchant(userId, merchantId).size();
+		return checkinDao.getCurrentUserCheckinsForAMerchant(userId, merchantId).size();
 	}
 
 	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {

@@ -8,6 +8,7 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
 import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
@@ -22,7 +23,7 @@ public class CheckinValidator {
 	@Autowired
 	JwtTokenHelper jwtHelper;
 
-	public void validateGetMerchantCheckinsRequest(CheckinRequest request) {
+	public void validateGetMerchantCheckinsRequest(GetMerchantCheckinsRequest request) {
 		// public call - no authentication required
 		if (request.getId() == null || request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);

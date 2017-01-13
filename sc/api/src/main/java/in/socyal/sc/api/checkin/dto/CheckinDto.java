@@ -13,9 +13,7 @@ public class CheckinDto {
 	private UserDto user;
 	private MerchantDto merchant;
 	private CheckinStatusType status;
-	/*private Integer likeCount;*/
 	private String qrCode;
-	/*private Integer previousCheckinCount;*/
 	private String rewardMessage;
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
 @Repository
 public class CheckinDao {
 	private static final Logger LOG = Logger.getLogger(CheckinDao.class);
+	private static final Integer RESULTS_PER_PAGE = 10;
 	@Autowired SessionFactory sessionFactory;
 	@Autowired CheckinDaoMapper mapper;
  
@@ -38,7 +40,13 @@ public class CheckinDao {
     	return checkinId;
     }
     
-    public List<CheckinDto> getApprovedCheckinsForAMerchant(Integer userId, Integer merchantId) {
+    /**
+     * This method gets APPROVED checkins for a merchant for the current logged in USER
+     * @param userId
+     * @param merchantId
+     * @return
+     */
+    public List<CheckinDto> getCurrentUserCheckinsForAMerchant(Integer userId, Integer merchantId) {
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
     	criteria.add(Restrictions.eq("user.id", userId));
     	criteria.add(Restrictions.eq("merchant.id", merchantId));
@@ -46,6 +54,30 @@ public class CheckinDao {
     	@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();
     	List<CheckinDto> response = Collections.emptyList();
+    	if (result.size() > 0) {
+    		response = new ArrayList<>();
+    		mapper.map(result,  response);
+    	}
+    	return response;
+    }
+    
+    /**
+     * This method gets a particular MERCHANT checkins
+     * @param merchantId
+     * @param page
+     * @return
+     */
+    public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
+    	List<CheckinDto> response = Collections.emptyList();
+    	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+    	int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+    	criteria.add(Restrictions.eq("merchant.id", merchantId));
+    	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+    	criteria.addOrder(Order.desc("checkinDateTime"));
+    	criteria.setFirstResult(firstResult);
+    	criteria.setMaxResults(RESULTS_PER_PAGE);
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = (List<CheckinEntity>) criteria.list();
     	if (result.size() > 0) {
     		response = new ArrayList<>();
     		mapper.map(result,  response);

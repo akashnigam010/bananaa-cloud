@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
+import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
 import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
@@ -45,13 +46,12 @@ public class CheckinService {
 	CheckinValidator validator;
 
 	@RequestMapping(value = "/getMerchantCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
-	public FeedsResponse getMerchantCheckins(@RequestBody CheckinRequest request) {
+	public FeedsResponse getMerchantCheckins(@RequestBody GetMerchantCheckinsRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/checkin/getMerchantCheckins");
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateGetMerchantCheckinsRequest(request);
-			//LOG.info("Get Merchant Checkins request : ID = " + request.getId() + ", Page = " + request.getPage());
-			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(request.getId(), request.getPage());
+			List<CheckinDto> checkins = delegate.getMerchantCheckins(request.getId(), request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -112,7 +112,7 @@ public class CheckinService {
 			validator.validateAroundMeFeedsRequest(request);
 			/*LOG.info("Get Around Me Feeds request : Latitude = " + request.getLocation().getLatitude()
 					+ ", Longitude = " + request.getLocation().getLongitude() + ", Page = " + request.getPage());*/
-			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
+			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -127,7 +127,7 @@ public class CheckinService {
 		try {
 			validator.validateMyFeedsRequest(request);
 			//LOG.info("Get My Feeds request : Page = " + request.getPage());
-			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
+			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -142,7 +142,7 @@ public class CheckinService {
 		try {
 			validator.validateProfileFeedsRequest(request);
 			//LOG.info("Get Profile Feeds Request : ID = " + request.getUserId() + ", Page = " + request.getPage());
-			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
+			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
