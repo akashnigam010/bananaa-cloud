@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.login.request.LoginRequest;
@@ -45,19 +44,7 @@ public class LoginService {
 		LoginResponse response = new LoginResponse();
 		try {
 			validator.validateFbLoginRequest(request);
-			//LOG.info("FB login request : fbId = " + request.getFbId() + ", accessToken = " + request.getFbAccessToken());
 			response = delegate.fbLogin(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
-	
-	@RequestMapping(value = "/fbLoginWithCode", method = RequestMethod.GET, headers = "Accept=application/json")
-	public LoginResponse fbLoginWithCode(@RequestParam String code) {
-		LoginResponse response = new LoginResponse();
-		try {
-			response = delegate.fbLoginWithCode(code);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

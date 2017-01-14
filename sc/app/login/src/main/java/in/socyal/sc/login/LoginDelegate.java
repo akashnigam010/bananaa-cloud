@@ -19,12 +19,4 @@ public interface LoginDelegate {
 	 * @throws BusinessException
 	 */
 	public LoginResponse fbLogin(LoginRequest request) throws BusinessException;
-	
-	/**
-	 * TO be used to get access code and user details with manual logging in code from FB
-	 * @param code
-	 * @return
-	 * @throws BusinessException
-	 */
-	public LoginResponse fbLoginWithCode(String code) throws BusinessException;
 }

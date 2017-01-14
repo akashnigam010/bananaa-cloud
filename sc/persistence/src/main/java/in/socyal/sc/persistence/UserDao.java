@@ -11,6 +11,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.restfb.types.User;
+
 import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.UserEntity;
@@ -85,7 +87,7 @@ public class UserDao {
     	return dto;
     }
     
-    public UserDto saveUserDetails(FacebookUser user, String fbAccessToken) {
+    public UserDto saveUserDetails(User user, String fbAccessToken) {
     	UserEntity entity = new UserEntity();
     	UserDto dto = fetchUserByFbId(user.getId());
     	if (dto == null) {
