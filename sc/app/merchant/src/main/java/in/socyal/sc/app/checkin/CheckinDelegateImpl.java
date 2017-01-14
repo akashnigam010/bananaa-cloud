@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
-import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;

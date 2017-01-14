@@ -43,7 +43,10 @@ public class CheckinDaoMapper {
 		to.setId(from.getId());
 		to.setCheckinDateTime(from.getCheckinDateTime());
 		MerchantDto merchant = new MerchantDto();
-		mapper.map(from.getMerchant(), merchant);
+		//Mapping only merchant name and id in a checkin
+		//mapper.map(from.getMerchant(), merchant);
+		merchant.setId(from.getMerchant().getId());
+		merchant.setName(from.getMerchant().getName());
 		to.setMerchant(merchant);
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
@@ -58,15 +61,24 @@ public class CheckinDaoMapper {
 			taggedUsers.add(taggedUserDto);
 		}
 		to.setTaggedUsers(taggedUsers);
-		
-		for (CheckinUserLikeEntity likedUser : from.getLikes()) {
-			//Logic for checking whether user has liked this checkin or not
-			if (getCurrentUserId() == likedUser.getUserId()) {
-				to.setLiked(Boolean.TRUE);
-				break;
-			}
-		}
+		to.setLiked(hasLiked(from));
 		to.setLikeCount(from.getLikes().size());
+		
+// 		Removed linear search algo; will be too slow if number of likes increase.
+//		for (CheckinUserLikeEntity likedUser : from.getLikes().con) {
+//			//Logic for checking whether user has liked this checkin or not
+//			if (getCurrentUserId() == likedUser.getUserId()) {
+//				to.setLiked(Boolean.TRUE);
+//				break;
+//			}
+//		}
+		
+	}
+	
+	private boolean hasLiked(CheckinEntity from) {
+		CheckinUserLikeEntity loggedInUser = new CheckinUserLikeEntity();
+		loggedInUser.setUserId(getCurrentUserId());
+		return from.getLikes().contains(loggedInUser);
 	}
 
 	public void map(List<CheckinEntity> from, List<CheckinDto> to) {
