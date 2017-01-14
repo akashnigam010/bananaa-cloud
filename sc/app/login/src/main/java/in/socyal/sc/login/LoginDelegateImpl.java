@@ -49,8 +49,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 			if (!fbUser.getId().equals(request.getFbId())) {
 				throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 			}
-			// Validate if the user already exists in the DB
-			UserDto userDetails = userDao.saveUserDetails(fbUser, request.getFbAccessToken());
+			// Save or update user
+			UserDto userDetails = userDao.saveOrUpdate(fbUser, request.getFbAccessToken());
 			// Sets JWT access token
 			response.setAccessToken(
 					JwtHelper.createJsonWebToken(userDetails.getId().toString(), RoleType.USER.getRole(), 365L));

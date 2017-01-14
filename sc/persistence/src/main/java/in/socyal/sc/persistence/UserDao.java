@@ -3,6 +3,7 @@ package in.socyal.sc.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import com.restfb.types.User;
 
-import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
@@ -75,28 +75,21 @@ public class UserDao {
 		return userDtos;
     }
     
-    public UserDto fetchUserByFbId(String fbId) {
-    	UserDto dto = null;
+    public UserDto saveOrUpdate(User user, String fbAccessToken) {
+    	UserDto userDto = new UserDto();
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-    	criteria.add(Restrictions.eq("facebookId", fbId));
+    	criteria.add(Restrictions.eq("facebookId", user.getId()));
     	UserEntity entity = (UserEntity) criteria.uniqueResult();
-    	if (entity != null) {
-    		dto = new UserDto();
-    		mapper.map(entity, dto);
-    	}
-    	return dto;
-    }
-    
-    public UserDto saveUserDetails(User user, String fbAccessToken) {
-    	UserEntity entity = new UserEntity();
-    	UserDto dto = fetchUserByFbId(user.getId());
-    	if (dto == null) {
-    		dto = new UserDto();
+    	
+    	if (entity == null) {
+    		entity = new UserEntity();
     		mapper.map(user, entity, fbAccessToken);
     		sessionFactory.getCurrentSession().save(entity);
-    		mapper.map(entity, dto);
+    	} else if (StringUtils.equals(entity.getFacebookId(), fbAccessToken)) {
+    		entity.setFacebookId(fbAccessToken);
+    		sessionFactory.getCurrentSession().save(entity);
     	}
-    	
-    	return dto;
+    	mapper.map(entity, userDto);
+    	return userDto;
     }
 }
