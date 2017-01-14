@@ -8,10 +8,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.entity.CheckinUserLikeEntity;
-import in.socyal.sc.persistence.entity.UserEntity;
 
 @Repository
 public class CheckinUserLikeMappingDao {
@@ -27,15 +25,13 @@ public class CheckinUserLikeMappingDao {
 	public void likeACheckin(Integer checkinId, Integer userId) {
 			CheckinUserLikeEntity entity = new CheckinUserLikeEntity();
 			entity.setCheckinId(checkinId);
-			UserEntity user = new UserEntity();
-			user.setId(userId);
-			entity.setUser(user);
+			entity.setUserId(userId);
 			sessionFactory.getCurrentSession().save(entity);
 	}
 	
 	public Boolean isCurrentCheckinLiked(Integer checkinId, Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
-    	criteria.add(Restrictions.eq("user.id", userId));
+    	criteria.add(Restrictions.eq("userId", userId));
     	criteria.add(Restrictions.eq("checkinId", checkinId));
     	@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();

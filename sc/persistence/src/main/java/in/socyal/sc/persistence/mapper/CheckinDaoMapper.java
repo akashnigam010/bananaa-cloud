@@ -9,18 +9,22 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
-import in.socyal.sc.api.checkin.dto.CheckinUserLikeDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
 import in.socyal.sc.persistence.entity.CheckinUserLikeEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
+import in.socyal.sc.persistence.entity.UserEntity;
 
 @Component
 public class CheckinDaoMapper {
 	@Autowired MerchantDaoMapper mapper;
 	@Autowired CheckinTaggedUserMapper taggedUserMapper;
 	@Autowired CheckinUserLikeMapper likeMapper;
+	@Autowired UserDaoMapper userDaoMapper;
+	@Autowired JwtTokenHelper jwtHelper;
 	
 	public void map(CheckinDetailsDto from, CheckinEntity to) {
 		to.setCheckinDateTime(from.getCheckinDateTime());
@@ -30,7 +34,9 @@ public class CheckinDaoMapper {
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
 		to.setUpdatedDateTime(from.getUpdatedDateTime());
-		to.setUserId(from.getUserId());
+		UserEntity user = new UserEntity();
+		user.setId(from.getUserId());
+		to.setUser(user);
 	}
 	
 	public void map(CheckinEntity from, CheckinDto to) {
@@ -42,7 +48,9 @@ public class CheckinDaoMapper {
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
 		to.setUpdatedDateTime(from.getUpdatedDateTime());
-		to.setUserId(from.getUserId());
+		UserDto user = new UserDto();
+		userDaoMapper.map(from.getUser(), user);
+		to.setUser(user);
 		List<CheckinTaggedUserDto> taggedUsers = new ArrayList<>();
 		for (CheckinTaggedUserEntity taggedUser : from.getTaggedUsers()) {
 			CheckinTaggedUserDto taggedUserDto = new CheckinTaggedUserDto();
@@ -51,12 +59,25 @@ public class CheckinDaoMapper {
 		}
 		to.setTaggedUsers(taggedUsers);
 		
-		List<CheckinUserLikeDto> likes = new ArrayList<>();
-		for (CheckinUserLikeEntity taggedUser : from.getLikes()) {
-			CheckinUserLikeDto likeDto = new CheckinUserLikeDto();
-			likeMapper.map(taggedUser, likeDto);
-			likes.add(likeDto);
+		for (CheckinUserLikeEntity likedUser : from.getLikes()) {
+			//Logic for checking whether user has liked this checkin or not
+			if (getCurrentUserId() == likedUser.getUserId()) {
+				to.setLiked(Boolean.TRUE);
+				break;
+			}
 		}
-		to.setLikes(likes);
+		to.setLikeCount(from.getLikes().size());
+	}
+
+	public void map(List<CheckinEntity> from, List<CheckinDto> to) {
+		for (CheckinEntity entity : from) {
+			CheckinDto dto = new CheckinDto();
+			map(entity, dto);
+			to.add(dto);
+		}
+	}
+	
+	private Integer getCurrentUserId() {
+		return Integer.valueOf(jwtHelper.getUserName());
 	}
 }

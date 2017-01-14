@@ -2,13 +2,11 @@ package in.socyal.sc.api.checkin.dto;
 
 import java.io.Serializable;
 
-import in.socyal.sc.api.user.dto.UserDto;
-
 public class CheckinUserLikeDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private Integer checkinId;
-	private UserDto user;
+	private Integer userId;
 
 	public Integer getId() {
 		return id;
@@ -26,11 +24,11 @@ public class CheckinUserLikeDto implements Serializable {
 		this.checkinId = checkinId;
 	}
 
-	public UserDto getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(UserDto user) {
-		this.user = user;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }

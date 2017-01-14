@@ -6,21 +6,21 @@ import java.util.List;
 
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.user.dto.UserDto;
 
 public class CheckinDto {
 	private Integer id;
-	private Integer userId;
+	private UserDto user;
 	private MerchantDto merchant;
 	private CheckinStatusType status;
-	/*private Integer likeCount;*/
 	private String qrCode;
-	/*private Integer previousCheckinCount;*/
 	private String rewardMessage;
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
 	private List<CheckinTaggedUserDto> taggedUsers;
-	private List<CheckinUserLikeDto> likes;
+	private Integer likeCount;
+	private boolean liked;
 
 	public Integer getId() {
 		return id;
@@ -30,12 +30,12 @@ public class CheckinDto {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public UserDto getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(UserDto user) {
+		this.user = user;
 	}
 
 	public MerchantDto getMerchant() {
@@ -54,14 +54,6 @@ public class CheckinDto {
 		this.status = status;
 	}
 
-	/*public Integer getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
-	}*/
-
 	public String getQrCode() {
 		return qrCode;
 	}
@@ -69,14 +61,6 @@ public class CheckinDto {
 	public void setQrCode(String qrCode) {
 		this.qrCode = qrCode;
 	}
-
-	/*public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
-	}*/
 
 	public String getRewardMessage() {
 		return rewardMessage;
@@ -121,11 +105,19 @@ public class CheckinDto {
 		this.taggedUsers = taggedUsers;
 	}
 
-	public List<CheckinUserLikeDto> getLikes() {
-		return likes;
+	public Integer getLikeCount() {
+		return likeCount;
 	}
 
-	public void setLikes(List<CheckinUserLikeDto> likes) {
-		this.likes = likes;
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
 	}
 }

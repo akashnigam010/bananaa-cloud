@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import in.socyal.sc.api.type.CheckinStatusType;
@@ -30,8 +31,9 @@ public class CheckinEntity implements Serializable {
 	@Column(name = "ID")
 	private Integer id;
 	
-	@Column(name = "USER_ID")
-	private Integer userId;
+	@OneToOne
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+	private UserEntity user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MERCHANT_ID")
@@ -40,15 +42,9 @@ public class CheckinEntity implements Serializable {
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.STRING)
 	private CheckinStatusType status;
-
-	/*@Column(name = "LIKE_COUNT")
-	private Integer likeCount;*/
 	
 	@Column(name = "QR_CODE")
 	private String qrCode;
-	
-	/*@Column(name = "PREVIOUS_CHECKIN_COUNT")
-	private Integer previousCheckinCount;*/
 	
 	@Column(name = "REWARD_MESSAGE")
 	private String rewardMessage;
@@ -78,12 +74,12 @@ public class CheckinEntity implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public UserEntity getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setUser(UserEntity user) {
+		this.user = user;
 	}
 
 	public MerchantEntity getMerchant() {
@@ -102,14 +98,6 @@ public class CheckinEntity implements Serializable {
 		this.status = status;
 	}
 
-	/*public Integer getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
-	}*/
-
 	public String getQrCode() {
 		return qrCode;
 	}
@@ -117,14 +105,6 @@ public class CheckinEntity implements Serializable {
 	public void setQrCode(String qrCode) {
 		this.qrCode = qrCode;
 	}
-
-	/*public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
-	}*/
 
 	public String getRewardMessage() {
 		return rewardMessage;
