@@ -104,8 +104,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateAroundMeFeedsRequest(request);
-			/*LOG.info("Get Around Me Feeds request : Latitude = " + request.getLocation().getLatitude()
-					+ ", Longitude = " + request.getLocation().getLongitude() + ", Page = " + request.getPage());*/
 			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
@@ -120,7 +118,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateMyFeedsRequest(request);
-			//LOG.info("Get My Feeds request : Page = " + request.getPage());
 			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
@@ -135,7 +132,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateProfileFeedsRequest(request);
-			//LOG.info("Get Profile Feeds Request : ID = " + request.getUserId() + ", Page = " + request.getPage());
 			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
