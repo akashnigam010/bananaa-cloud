@@ -11,6 +11,12 @@ import java.net.URLConnection;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.Version;
+import com.restfb.exception.FacebookOAuthException;
+import com.restfb.types.FacebookType;
 
 import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.helper.exception.BusinessException;
@@ -46,6 +52,20 @@ public class OAuth2FbHelper {
 		return fbUser;
 	}
 
+	/**
+	 * Publishes a POST on Facebook Timeline<br><br>
+	 * <b>IMPORTANT</b> : Abide FB Policies, do not add extra text along with a POST
+	 * <code>https://developers.facebook.com/docs/apps/review/prefill</code>
+	 * @param accessToken
+	 * @param linkToPost
+	 * @throws FacebookOAuthException
+	 */
+	public void publishToTimeline(String accessToken, String linkToPost) throws FacebookOAuthException {
+		FacebookClient fbClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_8);
+		fbClient.publish("me/feed", FacebookType.class,
+				Parameter.with("message", "Testing FB Post"), Parameter.with("link", linkToPost));
+	}
+
 	private String getFbAccessToken(String code) throws IOException {
 		String outputString = "";
 		String line = null;
@@ -73,5 +93,17 @@ public class OAuth2FbHelper {
 	private URL getGraphApiUrl(String accessToken) throws MalformedURLException {
 		return new URL("https://graph.facebook.com/me?fields=id,first_name,last_name,link,email,"
 				+ "gender,picture&access_token=" + accessToken);
+	}
+
+	public static void main(String[] args) {
+		OAuth2FbHelper fbHelper = new OAuth2FbHelper();
+		try {
+			fbHelper.publishToTimeline(
+					"EAACEdEose0cBAKGdrXNwUbeg3C057KoYkKqJuB9HedTROtJm8tXg06b8UFUXouPsvfWiuiMIkQYG4dloamFLZCDfz5jwiPLNRoR0WrBqbhJAp8ZCiZCj29TD7yswYTdbodiibPa7WgqZCotVlF90P0pYwidCplwtkk3MOlzZAaAZDZD",
+					"https://www.zomato.com/chpt");
+		} catch (FacebookOAuthException e) {
+			System.out.println(e.getErrorMessage());
+		}
+		
 	}
 }

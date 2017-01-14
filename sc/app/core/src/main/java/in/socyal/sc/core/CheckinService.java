@@ -50,7 +50,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateGetMerchantCheckinsRequest(request);
-			//LOG.info("Get Merchant Checkins request : ID = " + request.getId() + ", Page = " + request.getPage());
 			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(request.getId(), request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
@@ -65,9 +64,6 @@ public class CheckinService {
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		try {
 			validator.validateConfirmCheckinRequest(request);
-			/*LOG.info("Confirm Checkins request : Latitude = " + request.getLocation().getLatitude() + ", Longitude = "
-					+ request.getLocation().getLongitude() + ", QR Code = " + request.getQrCode()
-					+ ", Share on FB Flag = " + request.getShareOnFb());*/
 			response = delegate.confirmCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -81,8 +77,6 @@ public class CheckinService {
 		ValidateCheckinResponse response = new ValidateCheckinResponse();
 		try {
 			validator.validateValidateCheckinRequest(request);
-			/*LOG.info("Validate Checkin request : Latitude = " + request.getLocation().getLatitude() + ", Longitude = "
-					+ request.getLocation().getLongitude() + ", QR Code = " + request.getQrCode());*/
 			response = delegate.validateCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -96,7 +90,6 @@ public class CheckinService {
 		CancelCheckinResponse response = new CancelCheckinResponse();
 		try {
 			validator.validateCancelCheckinRequest(request);
-			//LOG.info("Cancel Checkin request : ID = " + request.getId());
 			response = delegate.cancelCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -110,8 +103,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateAroundMeFeedsRequest(request);
-			/*LOG.info("Get Around Me Feeds request : Latitude = " + request.getLocation().getLatitude()
-					+ ", Longitude = " + request.getLocation().getLongitude() + ", Page = " + request.getPage());*/
 			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
@@ -126,7 +117,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateMyFeedsRequest(request);
-			//LOG.info("Get My Feeds request : Page = " + request.getPage());
 			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
@@ -141,7 +131,6 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateProfileFeedsRequest(request);
-			//LOG.info("Get Profile Feeds Request : ID = " + request.getUserId() + ", Page = " + request.getPage());
 			List<CheckinResponseDto> checkins = delegate.getRestaurantCheckins(123, request.getPage());
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
@@ -156,7 +145,6 @@ public class CheckinService {
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		try {
 			validator.validateCheckinRequest(request);
-			//LOG.info("Fetching checkin status request : ID = " + request.getId());
 			response = delegate.getCheckinStatus(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
