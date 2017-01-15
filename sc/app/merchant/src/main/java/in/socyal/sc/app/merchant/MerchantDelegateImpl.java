@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
+import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
@@ -21,7 +22,6 @@ import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
-import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
@@ -200,8 +200,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setPreviousCheckinCount(12);
 	}
 
-	private LocationResponse buildLocationResponse(AddressDto address) {
-		LocationResponse locationResponse = new LocationResponse();
+	private Location buildLocationResponse(AddressDto address) {
+		Location locationResponse = new Location();
 		locationResponse.setLatitude(address.getLatitude());
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;

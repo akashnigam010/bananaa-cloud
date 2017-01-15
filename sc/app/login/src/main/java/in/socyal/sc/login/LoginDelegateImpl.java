@@ -14,6 +14,7 @@ import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.type.LoginErrorCodeType;
 import in.socyal.sc.persistence.CheckinDao;

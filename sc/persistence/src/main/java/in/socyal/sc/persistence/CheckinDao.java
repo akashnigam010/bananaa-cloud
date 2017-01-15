@@ -23,78 +23,100 @@ import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
 public class CheckinDao {
 	private static final Logger LOG = Logger.getLogger(CheckinDao.class);
 	private static final Integer RESULTS_PER_PAGE = 10;
-	@Autowired SessionFactory sessionFactory;
-	@Autowired CheckinDaoMapper mapper;
- 
-    public CheckinDao() {
-    }
-     
-    public CheckinDao(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
- 
-    public Integer confirmCheckin(CheckinDetailsDto checkinDetails) {
-    	CheckinEntity entity = new CheckinEntity();
-    	mapper.map(checkinDetails, entity);
-    	Integer checkinId = (Integer) sessionFactory.getCurrentSession().save(entity);
-    	return checkinId;
-    }
-    
-    /**
-     * This method gets APPROVED checkins for a merchant for the current logged in USER
-     * @param userId
-     * @param merchantId
-     * @return
-     */
-    public List<CheckinDto> getCurrentUserCheckinsForAMerchant(Integer userId, Integer merchantId) {
-    	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-    	criteria.add(Restrictions.eq("user.id", userId));
-    	criteria.add(Restrictions.eq("merchant.id", merchantId));
-    	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
-    	@SuppressWarnings("unchecked")
+	@Autowired
+	SessionFactory sessionFactory;
+	@Autowired
+	CheckinDaoMapper mapper;
+
+	public CheckinDao() {
+	}
+
+	public CheckinDao(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+
+	public Integer confirmCheckin(CheckinDetailsDto checkinDetails) {
+		CheckinEntity entity = new CheckinEntity();
+		mapper.map(checkinDetails, entity);
+		return (Integer) sessionFactory.getCurrentSession().save(entity);
+	}
+
+	/**
+	 * Use method <link>getUserCheckinsCountForAMerchant</link> to get checkin counts<br>
+	 * This method gets APPROVED checkins for a merchant, mapped with all data fields
+	 * 
+	 * @param userId
+	 * @param merchantId
+	 * @return
+	 */
+	public List<CheckinDto> getUserCheckinsForAMerchant(Integer userId, Integer merchantId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+		@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();
-    	List<CheckinDto> response = Collections.emptyList();
-    	if (result.size() > 0) {
-    		response = new ArrayList<>();
-    		mapper.map(result,  response);
-    	}
-    	return response;
-    }
-    
-    /**
-     * This method gets a particular MERCHANT checkins
-     * @param merchantId
-     * @param page
-     * @return
-     */
-    public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
-    	List<CheckinDto> response = Collections.emptyList();
-    	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-    	int firstResult = ((page - 1) * RESULTS_PER_PAGE);
-    	criteria.add(Restrictions.eq("merchant.id", merchantId));
-    	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
-    	criteria.addOrder(Order.desc("checkinDateTime"));
-    	criteria.setFirstResult(firstResult);
-    	criteria.setMaxResults(RESULTS_PER_PAGE);
-    	@SuppressWarnings("unchecked")
+		List<CheckinDto> response = Collections.emptyList();
+		if (result.size() > 0) {
+			response = new ArrayList<>();
+			mapper.map(result, response);
+		}
+		return response;
+	}
+
+	/**
+	 * This method gets APPROVED checkins count for a merchant for the current
+	 * logged in USER
+	 * 
+	 * @param userId
+	 * @param merchantId
+	 * @return
+	 */
+	public Integer getUserCheckinsCountForAMerchant(Integer userId, Integer merchantId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+		@SuppressWarnings("unchecked")
+		List<CheckinEntity> checkins = criteria.list();
+		return checkins == null ? 0 : checkins.size();
+	}
+
+	/**
+	 * This method gets a particular MERCHANT checkins
+	 * 
+	 * @param merchantId
+	 * @param page
+	 * @return
+	 */
+	public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
+		List<CheckinDto> response = Collections.emptyList();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+		criteria.addOrder(Order.desc("checkinDateTime"));
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = (List<CheckinEntity>) criteria.list();
-    	if (result.size() > 0) {
-    		response = new ArrayList<>();
-    		mapper.map(result,  response);
-    	}
-    	return response;
-    }
-    
-    public void cancelCheckin(Integer checkinId) {
-    	CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
-    	if (checkin != null) {
-    		checkin.setStatus(CheckinStatusType.CANCELLED);
-    		checkin.setUpdatedDateTime(Calendar.getInstance());
-        	sessionFactory.getCurrentSession().update(checkin);
-    	} else {
-    		LOG.error("Checkin entity not found for checkinID:" + checkinId);
-    	}
-    }
+		if (result.size() > 0) {
+			response = new ArrayList<>();
+			mapper.map(result, response);
+		}
+		return response;
+	}
+
+	public void cancelCheckin(Integer checkinId) {
+		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
+		if (checkin != null) {
+			checkin.setStatus(CheckinStatusType.CANCELLED);
+			checkin.setUpdatedDateTime(Calendar.getInstance());
+			sessionFactory.getCurrentSession().update(checkin);
+		} else {
+			LOG.error("Checkin entity not found for checkinID:" + checkinId);
+		}
+	}
 
 	public CheckinDto getCheckin(Integer checkinId) {
 		CheckinDto checkinDto = null;
@@ -105,13 +127,13 @@ public class CheckinDao {
 		}
 		return checkinDto;
 	}
-	
+
 	public Integer getUserCheckinCount(Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-    	criteria.add(Restrictions.eq("user.id", userId));
-    	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
-    	@SuppressWarnings("unchecked")
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+		@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();
-    	return result.size();
+		return result.size();
 	}
 }

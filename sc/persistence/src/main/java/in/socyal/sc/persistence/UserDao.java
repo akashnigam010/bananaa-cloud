@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -101,6 +102,7 @@ public class UserDao {
 			sessionFactory.getCurrentSession().save(entity);
 		} else if (StringUtils.equals(entity.getFacebookId(), fbAccessToken)) {
 			entity.setFacebookId(fbAccessToken);
+			entity.setUpdatedDateTime(Calendar.getInstance());
 			sessionFactory.getCurrentSession().save(entity);
 		}
 		mapper.map(entity, userDto);
