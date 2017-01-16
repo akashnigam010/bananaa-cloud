@@ -13,6 +13,7 @@ import com.restfb.exception.FacebookOAuthException;
 
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
+import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
@@ -44,7 +45,6 @@ import in.socyal.sc.persistence.CheckinUserLikeMappingDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
-import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Service
@@ -150,30 +150,14 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		response.setMerchantId(checkin.getMerchant().getId());
 		response.setMerchantName(checkin.getMerchant().getName());
 		response.setShortAddress(checkin.getMerchant().getAddress().getLocality().getShortAddress());
-		// original logic - uncomment after business app integration
-		// response.setCheckinStatus(checkin.getStatus());
-		// if (checkin.getStatus() == CheckinStatusType.PENDING) {
-		// response.setPreviousCheckinCount(checkinCount);
-		// response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
-		// } else if (checkin.getStatus() == CheckinStatusType.APPROVED) {
-		// response.setPreviousCheckinCount(checkinCount - 1);
-		// response.setNewCheckinCount(checkinCount);
-		// response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
-
-		// FIXME : implements actual logic
-		// adding temporary logic to return different statuses for testing
-		// purpose
-		if (checkin.getId() % 3 == 0) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setNewCheckinCount(1);
-			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
-		} else if (checkin.getId() % 3 == 1) {
-			response.setCheckinStatus(CheckinStatusType.CANCELLED);
-			response.setCancelMessage("Your checkin has been cancelled by Merchant");
-		} else {
-			response.setCheckinStatus(CheckinStatusType.PENDING);
-			// FIXME : Need to keep the logic to fetch tagged users in cache
-			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
+		response.setCheckinStatus(checkin.getStatus());
+		if (checkin.getStatus() == CheckinStatusType.PENDING) {
+			response.setPreviousCheckinCount(checkinCount);
+			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
+		} else if (checkin.getStatus() == CheckinStatusType.APPROVED) {
+			response.setNewCheckinCount(checkinCount);
+			response.setPreviousCheckinCount(checkinCount - 1);
+			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
 		}
 		return response;
 	}
@@ -260,22 +244,12 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return taggedUserDetails;
 	}
 
-	// private List<TaggedUserResponse>
-	// getTaggedUsersInCheckin(List<CheckinTaggedUserDto> taggedUsers) {
-	// List<UserDto> users = new ArrayList<>();
-	// for (CheckinTaggedUserDto taggedUser : taggedUsers) {
-	// users.add(taggedUser.getUser());
-	// }
-	// return createTaggedUserResponse(users);
-	// }
-
-	private List<TaggedUserResponse> getTaggedUsersInCheckin(Integer checkinId) throws BusinessException {
-		List<CheckinTaggedUserEntity> taggedUserEntities = taggedUserDao.getTaggedUsers(checkinId);
-		List<Integer> taggedUserEntityIds = new ArrayList<>();
-		for (CheckinTaggedUserEntity entity : taggedUserEntities) {
-			taggedUserEntityIds.add(entity.getUser().getId());
+	private List<TaggedUserResponse> getTaggedUsersInCheckin(List<CheckinTaggedUserDto> taggedUsers) {
+		List<UserDto> users = new ArrayList<>();
+		for (CheckinTaggedUserDto taggedUser : taggedUsers) {
+			users.add(taggedUser.getUser());
 		}
-		return createTaggedUserResponse(getTaggedUserDetails(taggedUserEntityIds));
+		return createTaggedUserResponse(users);
 	}
 
 	private List<TaggedUserResponse> createTaggedUserResponse(List<UserDto> taggedUserDetails) {
