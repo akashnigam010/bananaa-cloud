@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
+import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
@@ -21,13 +22,13 @@ import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
-import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
@@ -39,6 +40,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Autowired MerchantDao dao;
 	@Autowired MerchantDelegateMapper mapper;
 	@Autowired DayUtil dayUtil;
+	@Autowired Clock clock;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -145,7 +147,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private Boolean isOpen(Set<TimingDto> timings) {
-		Calendar today = Calendar.getInstance();
+		Calendar today = clock.cal();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
 				String timeStr = dayUtil.formatDate(today, DateFormatType.DATE_FORMAT_24_HOUR);
@@ -160,7 +162,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private List<String> getOpeningHours(Set<TimingDto> timings) throws ParseException {
-		Calendar today = Calendar.getInstance();
+		Calendar today = clock.cal();
 		List<String> openingHours = new ArrayList<>();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
@@ -196,11 +198,12 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
+		//FIXME: Fetch correct previousCheckinCount details
 		response.setPreviousCheckinCount(12);
 	}
 
-	private LocationResponse buildLocationResponse(AddressDto address) {
-		LocationResponse locationResponse = new LocationResponse();
+	private Location buildLocationResponse(AddressDto address) {
+		Location locationResponse = new Location();
 		locationResponse.setLatitude(address.getLatitude());
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;

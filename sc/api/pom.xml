@@ -11,33 +11,12 @@
 	<artifactId>api</artifactId>
 	<name>Socyal API Module</name>
 	<packaging>jar</packaging>
-	
-	<!-- https://mvnrepository.com/artifact/org.jsonschema2pojo/jsonschema2pojo-core -->
-	<!-- <dependencies>
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.restfb/restfb -->
 		<dependency>
-		    <groupId>org.jsonschema2pojo</groupId>
-		    <artifactId>jsonschema2pojo-core</artifactId>
-		    <version>0.4.27</version>
+			<groupId>com.restfb</groupId>
+			<artifactId>restfb</artifactId>
+			<version>2.0.0-rc.1</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-	            <plugin>
-	                <groupId>org.jsonschema2pojo</groupId>
-	                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-	                <version>0.4.27</version>
-	                <configuration>
-	                    <sourceDirectory>${basedir}/src/main/resources/</sourceDirectory>
-	                    <targetPackage>com.example.types</targetPackage>
-	                </configuration>
-	                <executions>
-	                    <execution>
-	                        <goals>
-	                            <goal>generate</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	            </plugin>
-	    </plugins>
-    </build> -->
 </project>

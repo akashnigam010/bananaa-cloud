@@ -3,6 +3,7 @@ package in.socyal.sc.api.merchant.response;
 import java.io.Serializable;
 import java.util.List;
 
+import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class MerchantDetailsResponse extends GenericResponse implements Serializable {
@@ -20,7 +21,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private List<String> type;
 	private Double averageCost;
 	private String longAddress;
-	private LocationResponse location;
+	private Location location;
 	private Integer previousCheckinCount;
 
 	public Integer getId() {
@@ -119,11 +120,11 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.longAddress = longAddress;
 	}
 
-	public LocationResponse getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
-	public void setLocation(LocationResponse location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 

@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
-import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
@@ -97,7 +97,7 @@ public class MerchantServiceMapper {
 		to.setImageUrl(SERVER + "heartcupcafecoffee.png");
 		to.setIsOpen(Boolean.TRUE);
 		//to.setOpenTime(10.30);
-		LocationResponse location = new LocationResponse();
+		Location location = new Location();
 		location.setLatitude(76.234567);
 		location.setLongitude(78.398762);
 		to.setLocation(location);

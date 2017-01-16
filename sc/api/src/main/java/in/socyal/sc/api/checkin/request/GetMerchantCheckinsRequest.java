@@ -2,19 +2,17 @@ package in.socyal.sc.api.checkin.request;
 
 import java.io.Serializable;
 
-import in.socyal.sc.api.merchant.dto.Location;
-
-public class AroundMeFeedsRequest implements Serializable {
+public class GetMerchantCheckinsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Location location;
+	private Integer id;
 	private Integer page;
 
-	public Location getLocation() {
-		return location;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getPage() {
@@ -24,5 +22,4 @@ public class AroundMeFeedsRequest implements Serializable {
 	public void setPage(Integer page) {
 		this.page = page;
 	}
-
 }
