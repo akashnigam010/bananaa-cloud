@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:infinispan:config:7.1 http://www.infinispan.org/schemas/infinispan-config-7.1.xsd"
+	xmlns="urn:infinispan:config:7.1">
+	<cache-container default-cache="default">
+		<!-- Local cache mechanism is used for standalone applications -->
+		<local-cache name="menu-cache">
+			<eviction strategy="LIRS" max-entries="100" />
+			<expiration lifespan = "86400000"/>
+		</local-cache>
+		<!-- Distributed Cache Mechanism, this is helpful when there are various clusters where -->
+		<!-- cache keys are distributed on all these nodes  -->
+		<!-- Replicated Cache mechanism is used for having all the cache details replicated on all clusters -->
+	</cache-container>
+</infinispan>
