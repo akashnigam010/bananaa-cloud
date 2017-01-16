@@ -28,6 +28,7 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
@@ -39,6 +40,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Autowired MerchantDao dao;
 	@Autowired MerchantDelegateMapper mapper;
 	@Autowired DayUtil dayUtil;
+	@Autowired Clock clock;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -145,7 +147,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private Boolean isOpen(Set<TimingDto> timings) {
-		Calendar today = Calendar.getInstance();
+		Calendar today = clock.cal();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
 				String timeStr = dayUtil.formatDate(today, DateFormatType.DATE_FORMAT_24_HOUR);
@@ -160,7 +162,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private List<String> getOpeningHours(Set<TimingDto> timings) throws ParseException {
-		Calendar today = Calendar.getInstance();
+		Calendar today = clock.cal();
 		List<String> openingHours = new ArrayList<>();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {

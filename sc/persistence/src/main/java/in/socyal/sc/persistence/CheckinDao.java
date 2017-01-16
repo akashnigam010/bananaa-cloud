@@ -1,7 +1,6 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
 
@@ -27,6 +27,8 @@ public class CheckinDao {
 	SessionFactory sessionFactory;
 	@Autowired
 	CheckinDaoMapper mapper;
+	@Autowired
+	Clock clock;
 
 	public CheckinDao() {
 	}
@@ -111,7 +113,7 @@ public class CheckinDao {
 		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
 		if (checkin != null) {
 			checkin.setStatus(CheckinStatusType.CANCELLED);
-			checkin.setUpdatedDateTime(Calendar.getInstance());
+			checkin.setUpdatedDateTime(clock.cal());
 			sessionFactory.getCurrentSession().update(checkin);
 		} else {
 			LOG.error("Checkin entity not found for checkinID:" + checkinId);

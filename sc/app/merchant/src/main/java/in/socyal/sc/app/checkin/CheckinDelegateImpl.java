@@ -1,7 +1,6 @@
 package in.socyal.sc.app.checkin;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -33,6 +32,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.merchant.CheckinErrorCodeType;
 import in.socyal.sc.app.merchant.CheckinLikeErrorCodeType;
 import in.socyal.sc.app.merchant.MerchantQrMappingErrorCodeType;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
@@ -68,6 +68,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	JwtTokenHelper jwtHelper;
 	@Autowired
 	OAuth2FbHelper fbHelper;
+	@Autowired
+	Clock clock;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -237,8 +239,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		checkinDetails.setMerchantId(merchant.getId());
 		Integer userId = getCurrentUserId();
 		checkinDetails.setUserId(userId);
-		checkinDetails.setCheckinDateTime(Calendar.getInstance());
-		checkinDetails.setUpdatedDateTime(Calendar.getInstance());
+		checkinDetails.setCheckinDateTime(clock.cal());
+		checkinDetails.setUpdatedDateTime(clock.cal());
 		checkinDetails.setQrCode(request.getQrCode());
 		checkinDetails.setStatus(CheckinStatusType.PENDING);
 		return checkinDetails;

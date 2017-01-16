@@ -1,11 +1,11 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.restfb.types.User;
 
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
@@ -28,6 +29,8 @@ public class UserDao {
 	SessionFactory sessionFactory;
 	@Autowired
 	UserDaoMapper mapper;
+	@Autowired
+	Clock clock;
 
 	public UserDao() {
 	}
@@ -102,10 +105,18 @@ public class UserDao {
 			sessionFactory.getCurrentSession().save(entity);
 		} else if (StringUtils.equals(entity.getFacebookId(), fbAccessToken)) {
 			entity.setFacebookId(fbAccessToken);
-			entity.setUpdatedDateTime(Calendar.getInstance());
+			entity.setUpdatedDateTime(clock.cal());
 			sessionFactory.getCurrentSession().save(entity);
 		}
 		mapper.map(entity, userDto);
 		return userDto;
+	}
+	
+	public void saveRegistrationIdForUser(Integer userId, String registrationId) {
+		Session session = sessionFactory.getCurrentSession();
+		UserEntity user = (UserEntity) session.load(UserEntity.class, userId);
+		user.setUpdatedDateTime(clock.cal());
+		user.setRegistrationId(registrationId);
+		session.update(user);
 	}
 }

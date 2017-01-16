@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
+import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.response.FriendResponse;
+import in.socyal.sc.api.user.response.SaveRegistrationIdResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.core.validation.UserValidator;
@@ -84,6 +86,24 @@ public class UserService {
 			validator.validateGetMyFriendsRequest(request);
 			//LOG.info("Get My Friends Request : Page = " + request.getPage());
 			response = userDelegate.getMyFriends(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	/**
+	 * This method is used to save REGISTRATION_ID for logged in USER
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/saveRegistrationId", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SaveRegistrationIdResponse saveRegistrationId(@RequestBody SaveRegistrationIdRequest request) {
+		JsonHelper.logRequest(request, UserService.class, "/user/saveRegistrationId");
+		SaveRegistrationIdResponse response = new SaveRegistrationIdResponse();
+		try {
+			validator.validateRegistrationIdRequest(request);
+			response = userDelegate.saveRegistrationId(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

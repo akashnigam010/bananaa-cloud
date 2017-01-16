@@ -11,13 +11,14 @@ import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
+import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.response.FriendResponse;
+import in.socyal.sc.api.user.response.SaveRegistrationIdResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
 import in.socyal.sc.user.mapper.UserMapper;
@@ -116,5 +117,19 @@ public class UserDelegateImpl implements UserDelegate {
 				throw new BusinessException(UserErrorCodeType.LOGIN_REQUIRED);
 			}
 		}
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public SaveRegistrationIdResponse saveRegistrationId(SaveRegistrationIdRequest request) throws BusinessException {
+		SaveRegistrationIdResponse response = new SaveRegistrationIdResponse();
+		Integer userId = Integer.valueOf(jwtHelper.getUserName());
+		UserDto user = userDao.fetchUser(userId);
+		if (user == null) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_FOUND);
+		}
+		
+		userDao.saveRegistrationIdForUser(userId, request.getRegistrationId());
+		return response;
 	}
 }

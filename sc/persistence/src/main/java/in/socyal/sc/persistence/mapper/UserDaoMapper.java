@@ -1,18 +1,21 @@
 package in.socyal.sc.persistence.mapper;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.restfb.types.User;
 
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.UserEntity;
 
 @Component
 public class UserDaoMapper {
+	@Autowired Clock clock;
+
 	public void map(UserEntity from, UserDto to) {
 		if (StringUtils.isNotEmpty(from.getEmail())) {
 			to.setEmail(from.getEmail());
@@ -40,7 +43,7 @@ public class UserDaoMapper {
 		to.setGender(from.getGender());
 		to.setImageUrl(from.getPicture().getUrl());
 		to.setFacebookToken(fbAccessToken);
-		to.setCreatedDateTime(Calendar.getInstance());
+		to.setCreatedDateTime(clock.cal());
 	}
 
 	public void map(UserDto from, UserEntity to, String fbAccessToken) {

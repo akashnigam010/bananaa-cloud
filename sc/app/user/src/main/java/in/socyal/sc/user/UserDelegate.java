@@ -2,8 +2,10 @@ package in.socyal.sc.user;
 
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
+import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.response.FriendResponse;
+import in.socyal.sc.api.user.response.SaveRegistrationIdResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
@@ -36,4 +38,11 @@ public interface UserDelegate {
 	 * @throws BusinessException
 	 */
 	public UserProfileResponse getPublicProfile(GetPublicProfileRequest request);
+
+	/**
+	 * Save RegistrationId details for logged in USER
+	 * @return
+	 * @throws BusinessException
+	 */
+	public SaveRegistrationIdResponse saveRegistrationId(SaveRegistrationIdRequest request) throws BusinessException;
 }
