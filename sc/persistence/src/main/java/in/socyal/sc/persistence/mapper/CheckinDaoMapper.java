@@ -3,6 +3,7 @@ package in.socyal.sc.persistence.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +49,9 @@ public class CheckinDaoMapper {
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
 		to.setUpdatedDateTime(from.getUpdatedDateTime());
+		if (StringUtils.isNotEmpty(from.getRewardMessage())) {
+			to.setRewardMessage(from.getRewardMessage());
+		}		
 		UserDto user = new UserDto();
 		userDaoMapper.map(from.getUser(), user);
 		to.setUser(user);
