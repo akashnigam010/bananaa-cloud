@@ -104,7 +104,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateAroundMeFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
+			List<CheckinDto> checkins = delegate.getAroundMeFeeds(request);
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -118,7 +118,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateMyFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
+			List<CheckinDto> checkins = delegate.getMyFeeds(request);
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -132,7 +132,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateProfileFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getMerchantCheckins(123, request.getPage());
+			List<CheckinDto> checkins = delegate.getProfileFeeds(request);
 			mapper.map(checkins, response, request.getPage());
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

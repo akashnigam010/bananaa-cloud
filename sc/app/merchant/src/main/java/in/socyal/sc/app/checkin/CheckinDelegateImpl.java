@@ -14,10 +14,13 @@ import com.restfb.exception.FacebookOAuthException;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
+import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
+import in.socyal.sc.api.checkin.request.MyFeedsRequest;
+import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
@@ -75,6 +78,30 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
 		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(merchantId, page);
+		return checkins;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public List<CheckinDto> getMyFeeds(MyFeedsRequest request) {
+		//FIXME : Implement actual logic
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
+		return checkins;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public List<CheckinDto> getProfileFeeds(ProfileFeedsRequest request) {
+		//FIXME : Implement actual logic
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
+		return checkins;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public List<CheckinDto> getAroundMeFeeds(AroundMeFeedsRequest request) {
+		//FIXME : Implement actual logic
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
 		return checkins;
 	}
 
