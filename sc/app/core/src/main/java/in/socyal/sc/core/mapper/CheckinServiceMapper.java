@@ -298,7 +298,8 @@ public class CheckinServiceMapper {
 			merchantCheckin.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
 			merchantCheckin.setTimestamp(dto.getCheckinDateTime().getTime());
 			merchantCheckin.setUser(getUserDetailsResponse(dto.getUser()));
-			merchantCheckins.add(merchantCheckin);
+			merchantCheckin.setHasLiked(dto.isLiked());
+			merchantCheckins.add(merchantCheckin);			
 		}
 		to.setCheckins(merchantCheckins);
 	}
