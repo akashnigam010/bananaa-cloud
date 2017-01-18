@@ -82,7 +82,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
 		if (request.getShareOnFb()) {
-			checkForTokenValidity();
+			// FIXME : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
+			//checkForTokenValidity();
 		}
 		MerchantQrMappingDto qrMappingDetail = getQrDetails(request.getQrCode());
 		checkForQrScanningRange(request.getLocation(), qrMappingDetail);
@@ -183,7 +184,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		try {
 			isTokenValid = fbHelper.checkForTokenValidity(user.getFacebookToken());
 		} catch (FacebookOAuthException e) {
-			LOG.error("Error while inspecting user token from FB, UserId : " + user.getId() + "Error Message : "
+			LOG.error("Error while inspecting user token from FB, UserId : " + user.getId() + ", Error Message : "
 					+ e.getErrorMessage());
 		}
 		if (!isTokenValid) {
