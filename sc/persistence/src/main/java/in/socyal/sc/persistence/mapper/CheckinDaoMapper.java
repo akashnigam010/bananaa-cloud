@@ -11,8 +11,11 @@ import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.helper.type.GenericErrorCodeType;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
 import in.socyal.sc.persistence.entity.CheckinUserLikeEntity;
@@ -77,6 +80,9 @@ public class CheckinDaoMapper {
 	}
 	
 	private boolean hasLiked(CheckinEntity from) {
+		if (!isLoggedInUser()) {
+			return Boolean.FALSE;
+		}
 		CheckinUserLikeEntity loggedInUser = new CheckinUserLikeEntity();
 		loggedInUser.setUserId(getCurrentUserId());
 		return from.getLikes().contains(loggedInUser);
@@ -92,5 +98,17 @@ public class CheckinDaoMapper {
 	
 	private Integer getCurrentUserId() {
 		return Integer.valueOf(jwtHelper.getUserName());
+	}
+	
+	/**
+	 * check if user is logged in or not.
+	 * Throws exception if user is not logged in
+	 */
+	private boolean isLoggedInUser() {
+		RoleType role = RoleType.getRole(jwtHelper.getUserName());
+		if (role == RoleType.GUEST) {
+			return Boolean.FALSE;
+		} 
+		return Boolean.TRUE;
 	}
 }
