@@ -37,4 +37,12 @@ public class CheckinUserLikeMappingDao {
 		List<CheckinEntity> result = criteria.list();
     	return result.size() > 0 ? Boolean.TRUE : Boolean.FALSE;
 	}
+	
+	public Integer fetchLikeCount(Integer checkinId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
+    	criteria.add(Restrictions.eq("checkinId", checkinId));
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+    	return result.size();
+	}
 }
