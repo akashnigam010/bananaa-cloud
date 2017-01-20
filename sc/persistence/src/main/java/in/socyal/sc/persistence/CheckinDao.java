@@ -138,4 +138,13 @@ public class CheckinDao {
 		List<CheckinEntity> result = criteria.list();
 		return result.size();
 	}
+	
+	public Integer getLikeCountForACheckin(Integer checkinId) {
+		Integer likeCount = 0;
+		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
+		if (checkin != null) {
+			likeCount = checkin.getLikes().size(); 
+		}
+		return likeCount;
+	}
 }

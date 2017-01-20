@@ -62,7 +62,7 @@ public class CheckinEntity implements Serializable {
 	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
 	private Set<CheckinTaggedUserEntity> taggedUsers;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
 	private Set<CheckinUserLikeEntity> likes;
 	

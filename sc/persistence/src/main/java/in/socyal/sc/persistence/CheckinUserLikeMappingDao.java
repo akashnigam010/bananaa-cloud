@@ -23,10 +23,10 @@ public class CheckinUserLikeMappingDao {
 	}
 
 	public void likeACheckin(Integer checkinId, Integer userId) {
-			CheckinUserLikeEntity entity = new CheckinUserLikeEntity();
-			entity.setCheckinId(checkinId);
-			entity.setUserId(userId);
-			sessionFactory.getCurrentSession().save(entity);
+		CheckinUserLikeEntity entity = new CheckinUserLikeEntity();
+		entity.setCheckinId(checkinId);
+		entity.setUserId(userId);
+		sessionFactory.getCurrentSession().save(entity);
 	}
 	
 	public Boolean isCurrentCheckinLiked(Integer checkinId, Integer userId) {
@@ -44,5 +44,13 @@ public class CheckinUserLikeMappingDao {
     	@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();
     	return result.size();
+	}
+
+	public void unLikeACheckin(Integer checkinId, Integer userId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
+		criteria.add(Restrictions.eq("userId", userId));
+    	criteria.add(Restrictions.eq("checkinId", checkinId));
+    	CheckinUserLikeEntity entity = (CheckinUserLikeEntity) criteria.uniqueResult();
+    	sessionFactory.getCurrentSession().delete(entity);
 	}
 }
