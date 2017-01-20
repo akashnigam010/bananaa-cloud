@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
 
 @Entity
 @Table(name = "CHECKIN", schema = "Socyal")
@@ -49,6 +50,10 @@ public class CheckinEntity implements Serializable {
 	@Column(name = "REWARD_MESSAGE")
 	private String rewardMessage;
 	
+	@Column(name = "REWARD_STATUS")
+	@Enumerated(EnumType.STRING)
+	private RewardStatusType rewardStatus;
+	
 	@Column(name = "CHECKIN_DATETIME")
 	private Calendar checkinDateTime;
 	
@@ -65,6 +70,10 @@ public class CheckinEntity implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
 	private Set<CheckinUserLikeEntity> likes;
+	
+	@OneToOne
+	@JoinColumn(name = "FEEDBACK_ID", referencedColumnName = "ID")
+	private FeedbackEntity feedback;
 	
 	public Integer getId() {
 		return id;
@@ -112,6 +121,14 @@ public class CheckinEntity implements Serializable {
 
 	public void setRewardMessage(String rewardMessage) {
 		this.rewardMessage = rewardMessage;
+	}
+	
+	public RewardStatusType getRewardStatus() {
+		return rewardStatus;
+	}
+
+	public void setRewardStatus(RewardStatusType rewardStatus) {
+		this.rewardStatus = rewardStatus;
 	}
 
 	public Calendar getCheckinDateTime() {
