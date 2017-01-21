@@ -7,14 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.user.request.FollowRequest;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
+import in.socyal.sc.api.user.request.UnFollowRequest;
+import in.socyal.sc.api.user.response.FollowResponse;
 import in.socyal.sc.api.user.response.FriendResponse;
 import in.socyal.sc.api.user.response.SaveRegistrationIdResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
+import in.socyal.sc.api.user.response.UnFollowResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.core.validation.UserValidator;
 import in.socyal.sc.helper.JsonHelper;
@@ -119,6 +123,32 @@ public class UserService {
 		try {
 			validator.validateRegistrationIdRequest(request);
 			response = userDelegate.saveRegistrationId(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/follow", method = RequestMethod.POST, headers = "Accept=application/json")
+	public FollowResponse follow(@RequestBody FollowRequest request) {
+		JsonHelper.logRequest(request, UserService.class, "/user/follow");
+		FollowResponse response = new FollowResponse();
+		try {
+			validator.validateFollowRequest(request);
+			response = userDelegate.follow(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/unFollow", method = RequestMethod.POST, headers = "Accept=application/json")
+	public UnFollowResponse unFollow(@RequestBody UnFollowRequest request) {
+		JsonHelper.logRequest(request, UserService.class, "/user/unFollow");
+		UnFollowResponse response = new UnFollowResponse();
+		try {
+			validator.validateUnFollowRequest(request);
+			response = userDelegate.unFollow(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

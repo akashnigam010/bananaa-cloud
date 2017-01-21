@@ -194,12 +194,40 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
+		//validate whether checkin already exists
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
 		// Write logic for validating whether a LIKE was already done
 		if (checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), getCurrentUserId())) {
 			throw new BusinessException(CheckinLikeErrorCodeType.CHECKIN_ALREADY_LIKED);
 		}
 		checkinLikeDao.likeACheckin(request.getCheckinId(), getCurrentUserId());
+		response.setLikeCount(fetchLikeCount(request.getCheckinId()));
 		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException {
+		LikeCheckinResponse response = new LikeCheckinResponse();
+		//validate whether checkin already exists
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		// Write logic for validating whether a LIKE was done or not
+		if (!checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), getCurrentUserId())) {
+			throw new BusinessException(CheckinLikeErrorCodeType.CHECKIN_NOT_LIKED);
+		}
+		checkinLikeDao.unLikeACheckin(request.getCheckinId(), getCurrentUserId());
+		response.setLikeCount(fetchLikeCount(request.getCheckinId()));
+		return response;
+	}
+	
+	public Integer fetchLikeCount(Integer checkinId) {
+		return checkinLikeDao.fetchLikeCount(checkinId);
 	}
 
 	private void checkForTokenValidity() throws BusinessException {

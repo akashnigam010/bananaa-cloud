@@ -28,4 +28,5 @@ public interface CheckinDelegate {
 	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException;
 	public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request) throws BusinessException;
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException;
+	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException;
 }

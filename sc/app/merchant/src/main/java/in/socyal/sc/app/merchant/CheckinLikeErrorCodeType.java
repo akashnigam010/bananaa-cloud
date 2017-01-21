@@ -3,7 +3,8 @@ package in.socyal.sc.app.merchant;
 import in.socyal.sc.helper.BusinessErrorCode;
 
 public enum CheckinLikeErrorCodeType implements BusinessErrorCode {
-	CHECKIN_ALREADY_LIKED(10304);
+	CHECKIN_ALREADY_LIKED(10304),
+	CHECKIN_NOT_LIKED(10305);
 
 	private int value;
 

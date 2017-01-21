@@ -165,4 +165,17 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
+	
+	@RequestMapping(value = "/unLike", method = RequestMethod.POST, headers = "Accept=application/json")
+	public LikeCheckinResponse unLikeACheckin(@RequestBody LikeCheckinRequest request) {
+		JsonHelper.logRequest(request, CheckinService.class, "/checkin/unLike");
+		LikeCheckinResponse response = new LikeCheckinResponse();
+		try {
+			validator.validateLikeCheckinRequest(request);
+			response = delegate.unLikeACheckin(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
 }

@@ -9,19 +9,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.api.user.request.FollowRequest;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
+import in.socyal.sc.api.user.request.UnFollowRequest;
+import in.socyal.sc.api.user.response.FollowResponse;
 import in.socyal.sc.api.user.response.FriendResponse;
 import in.socyal.sc.api.user.response.SaveRegistrationIdResponse;
 import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
+import in.socyal.sc.api.user.response.UnFollowResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
+import in.socyal.sc.persistence.UserFollowerMappingDao;
 import in.socyal.sc.user.mapper.UserMapper;
 import in.socyal.sc.user.type.UserErrorCodeType;
 
@@ -35,6 +40,8 @@ public class UserDelegateImpl implements UserDelegate {
 	CheckinDao checkinDao;
 	@Autowired
 	UserMapper mapper;
+	@Autowired
+	UserFollowerMappingDao userFollowerDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -143,5 +150,46 @@ public class UserDelegateImpl implements UserDelegate {
 		
 		userDao.saveRegistrationIdForUser(userId, request.getRegistrationId());
 		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public FollowResponse follow(FollowRequest request) throws BusinessException {
+		FollowResponse response = new FollowResponse();
+		//Validate whether the user exists
+		UserDto user = userDao.fetchUser(request.getUserId());
+		if (user == null) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_FOUND);
+		}
+		
+		//Validate if same user is trying to follow himself!!
+		if (request.getUserId() == getCurrentUserId()) {
+			throw new BusinessException(UserErrorCodeType.USER_CANNOT_FOLLOW_HIMSELF);
+		}
+		
+		//Validate whether the user is already following or not
+		if (userFollowerDao.isAlreadyFollowing(request.getUserId(), getCurrentUserId())) {
+			throw new BusinessException(UserErrorCodeType.USER_ALREADY_FOLLOWING);
+		}
+		
+		userFollowerDao.follow(request.getUserId(), getCurrentUserId());
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public UnFollowResponse unFollow(UnFollowRequest request) throws BusinessException {
+		UnFollowResponse response = new UnFollowResponse();
+		//Validate whether the user is already following or not
+		if (!userFollowerDao.isAlreadyFollowing(request.getUserId(), getCurrentUserId())) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_FOLLOWING);
+		}
+		
+		userFollowerDao.unFollow(request.getUserId(), getCurrentUserId());
+		return response;
+	}
+	
+	private Integer getCurrentUserId() {
+		return Integer.valueOf(jwtHelper.getUserName());
 	}
 }
