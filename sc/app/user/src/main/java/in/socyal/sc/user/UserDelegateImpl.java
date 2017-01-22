@@ -102,7 +102,7 @@ public class UserDelegateImpl implements UserDelegate {
 	public FriendResponse getMyFriends(GetMyFriendsRequest request) throws BusinessException {
 		FriendResponse response = new FriendResponse();
 		//FIXME : add temporary logic to return my friends
-		List<UserDto> users = userDao.fetchUsersByPage(request.getPage());
+		List<UserDto> users = userFollowerDao.fetchMyFriendsByPage(request.getPage(), getCurrentUserId());
 		if (users != null) {
 			response.setFriends(mapper.map(users));
 		}

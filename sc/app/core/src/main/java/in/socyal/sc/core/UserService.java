@@ -103,7 +103,6 @@ public class UserService {
 		FriendResponse response = new FriendResponse();
 		try {
 			validator.validateGetMyFriendsRequest(request);
-			//LOG.info("Get My Friends Request : Page = " + request.getPage());
 			response = userDelegate.getMyFriends(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
