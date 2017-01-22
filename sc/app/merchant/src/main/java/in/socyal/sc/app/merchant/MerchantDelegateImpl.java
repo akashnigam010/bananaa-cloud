@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -200,6 +201,9 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setType(merchantDto.getTypes());
 		//FIXME: Fetch correct previousCheckinCount details
 		response.setPreviousCheckinCount(12);
+		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
+			response.setPhone(merchantDto.getContact().getPhone1());
+		}
 	}
 
 	private Location buildLocationResponse(AddressDto address) {

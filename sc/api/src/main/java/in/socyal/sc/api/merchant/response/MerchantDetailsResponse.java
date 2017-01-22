@@ -23,6 +23,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private String longAddress;
 	private Location location;
 	private Integer previousCheckinCount;
+	private String phone;
 
 	public Integer getId() {
 		return id;
@@ -142,5 +143,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 
 	public void setPreviousCheckinCount(Integer previousCheckinCount) {
 		this.previousCheckinCount = previousCheckinCount;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }
