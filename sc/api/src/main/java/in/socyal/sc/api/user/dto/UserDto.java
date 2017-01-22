@@ -108,4 +108,10 @@ public class UserDto implements Serializable {
 	public String getName() {
 		return this.firstName + " " + this.lastName;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		UserDto user = (UserDto) obj;
+        return (this.id == user.id);
+    }
 }
