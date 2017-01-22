@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -49,14 +48,15 @@ public class UserDao {
 		return dto;
 	}
 
-	public List<UserDto> fetchUsersBySearchString(String searchString) {
+	public List<UserDto> fetchUsersBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
 		List<UserDto> userDtos = null;
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		Criterion firstNameCriteria = Restrictions.ilike(FIRST_NAME, searchString, MatchMode.ANYWHERE);
-		Criterion lastNameCriteria = Restrictions.ilike(LAST_NAME, searchString, MatchMode.ANYWHERE);
-		criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(discoverNewUsersQuery());
+    	query.addEntity(UserEntity.class);
+    	query.setInteger("current_user_id", currentUserId);
+    	query.setString("search_string", "%"+searchString+"%");
+    	query.setMaxResults(resultsPerPage);
 		@SuppressWarnings("unchecked")
-		List<UserEntity> users = (List<UserEntity>) criteria.list();
+		List<UserEntity> users = (List<UserEntity>) query.list();
 		if (users != null && !users.isEmpty()) {
 			userDtos = new ArrayList<>();
 			mapper.map(users, userDtos);
@@ -119,4 +119,13 @@ public class UserDao {
 		user.setRegistrationId(registrationId);
 		session.update(user);
 	}
+	
+    private String discoverNewUsersQuery() {
+    	StringBuilder query = new StringBuilder();
+    	query.append("SELECT * FROM Socyal.USER ");
+    	query.append("where FIRST_NAME LIKE :search_string OR LAST_NAME LIKE :search_string ");
+    	query.append("AND ID NOT IN ");
+    	query.append("(SELECT USER_ID FROM Socyal.USER_FOLLOWER_MAPPING WHERE FOLLOWER_USER_ID = :current_user_id) ");
+    	return query.toString();
+    }
 }

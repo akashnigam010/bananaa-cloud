@@ -1,5 +1,6 @@
 package in.socyal.sc.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -8,14 +9,19 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.entity.UserFollowerMappingEntity;
+import in.socyal.sc.persistence.mapper.UserFollowerDaoMapper;
 
 @Repository
 public class UserFollowerMappingDao {
+	private static final int RESULTS_PER_PAGE = 15;
 	@Autowired
 	SessionFactory sessionFactory;
+	@Autowired
+	UserFollowerDaoMapper mapper;
 
 	public UserFollowerMappingDao() {
 	}
@@ -50,5 +56,40 @@ public class UserFollowerMappingDao {
     	criteria.add(Restrictions.eq("followerUser.id", followerUserId));
     	UserFollowerMappingEntity entity = (UserFollowerMappingEntity) criteria.uniqueResult();
     	sessionFactory.getCurrentSession().delete(entity);
+	}
+
+	public List<UserDto> fetchMyFriendsByPage(Integer page, Integer currentUserId) {
+		List<UserDto> userDtos = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
+		@SuppressWarnings("unchecked")
+		List<UserFollowerMappingEntity> users = (List<UserFollowerMappingEntity>) criteria.list();
+		if (users != null && !users.isEmpty()) {
+			userDtos = new ArrayList<>();
+			mapper.map(users, userDtos);
+		}
+
+		return userDtos;
+	}
+	
+	public List<UserDto> fetchMyFriendsBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
+		List<UserDto> userDtos = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+		criteria.setMaxResults(resultsPerPage);
+		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
+		//Criterion firstNameCriteria = Restrictions.ilike("user.firstName", searchString, MatchMode.ANYWHERE);
+		//Criterion lastNameCriteria = Restrictions.ilike("user.lastName", searchString, MatchMode.ANYWHERE);
+		//criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
+		@SuppressWarnings("unchecked")
+		List<UserFollowerMappingEntity> users = (List<UserFollowerMappingEntity>) criteria.list();
+		if (users != null && !users.isEmpty()) {
+			userDtos = new ArrayList<>();
+			mapper.map(users, userDtos);
+		}
+
+		return userDtos;
 	}
 }

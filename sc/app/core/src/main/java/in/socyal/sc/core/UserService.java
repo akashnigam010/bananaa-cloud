@@ -87,7 +87,6 @@ public class UserService {
 			// this is a semi-authorized call. Validator doesn't check for logged in user.
 			// Service response wouldn't contain people whom user follows when not logged in
 			validator.validateSearchFriendRequest(request);
-			//LOG.info("Search Friend Request : Search String = " + request.getSearchString());
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = userDelegate.searchFriends(request);
 			}
@@ -103,7 +102,6 @@ public class UserService {
 		FriendResponse response = new FriendResponse();
 		try {
 			validator.validateGetMyFriendsRequest(request);
-			//LOG.info("Get My Friends Request : Page = " + request.getPage());
 			response = userDelegate.getMyFriends(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

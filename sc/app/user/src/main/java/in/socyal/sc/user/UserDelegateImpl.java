@@ -75,7 +75,7 @@ public class UserDelegateImpl implements UserDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchFriendToTagResponse searchFriendsToTag(SearchFriendRequest request) throws BusinessException {
 		SearchFriendToTagResponse response = new SearchFriendToTagResponse(); 
-		List<UserDto> users = userDao.fetchUsersBySearchString(request.getSearchString());
+		List<UserDto> users = userFollowerDao.fetchMyFriendsBySearchString(getCurrentUserId(), request.getSearchString(), 3);
 		if (users != null) {
 			response.setUsers(mapper.map(users));
 		}
@@ -86,14 +86,12 @@ public class UserDelegateImpl implements UserDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchFriendResponse searchFriends(SearchFriendRequest request) throws BusinessException {
 		SearchFriendResponse response = new SearchFriendResponse();
-		// FIXME : adding temporary logic to return search friend response
-		List<UserDto> users = userDao.fetchUsersBySearchString(request.getSearchString());
-		if (users != null) {
-			response.setPeople(mapper.map(users));
-			if (validateIfLoggedInUser()) {
-				response.setFriends(mapper.map(users));
-			}
-		}
+		//Discovering users with matching string literals
+		List<UserDto> users = userDao.fetchUsersBySearchString(getCurrentUserId(), request.getSearchString(), 10);
+		//Fetching following friends list
+		List<UserDto> friends = userFollowerDao.fetchMyFriendsBySearchString(getCurrentUserId(), request.getSearchString(), 5);
+		response.setFriends(mapper.map(friends));
+		response.setPeople(mapper.map(users));
 		return response;
 	}
 
@@ -102,7 +100,7 @@ public class UserDelegateImpl implements UserDelegate {
 	public FriendResponse getMyFriends(GetMyFriendsRequest request) throws BusinessException {
 		FriendResponse response = new FriendResponse();
 		//FIXME : add temporary logic to return my friends
-		List<UserDto> users = userDao.fetchUsersByPage(request.getPage());
+		List<UserDto> users = userFollowerDao.fetchMyFriendsByPage(request.getPage(), getCurrentUserId());
 		if (users != null) {
 			response.setFriends(mapper.map(users));
 		}
@@ -114,11 +112,13 @@ public class UserDelegateImpl implements UserDelegate {
 	 * FIXME : Move such logics to a common place
 	 */
 	private boolean validateIfLoggedInUser() {
-		RoleType role = RoleType.getRole(jwtHelper.getUserName());
-		if (role == RoleType.GUEST) {
-			return false;
+		List<String> roles = jwtHelper.getRoles();
+		for (String role : roles) {
+			if (RoleType.USER == RoleType.getRole(role)) {
+				return true;
+			}
 		}
-		return true;
+		return false;
 	}
 
 	/**
