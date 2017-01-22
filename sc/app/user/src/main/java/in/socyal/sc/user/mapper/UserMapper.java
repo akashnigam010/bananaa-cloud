@@ -22,6 +22,9 @@ public class UserMapper {
 
 	public List<in.socyal.sc.api.login.dto.LoginUserDto> map(List<UserDto> users) {
 		List<in.socyal.sc.api.login.dto.LoginUserDto> friends = new ArrayList<>();
+		if (users == null) {
+			return friends;
+		}
 		in.socyal.sc.api.login.dto.LoginUserDto user = null;
 		for (UserDto dto : users) {
 			user = new in.socyal.sc.api.login.dto.LoginUserDto();

@@ -74,4 +74,22 @@ public class UserFollowerMappingDao {
 
 		return userDtos;
 	}
+	
+	public List<UserDto> fetchMyFriendsBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
+		List<UserDto> userDtos = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+		criteria.setMaxResults(resultsPerPage);
+		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
+		//Criterion firstNameCriteria = Restrictions.ilike("user.firstName", searchString, MatchMode.ANYWHERE);
+		//Criterion lastNameCriteria = Restrictions.ilike("user.lastName", searchString, MatchMode.ANYWHERE);
+		//criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
+		@SuppressWarnings("unchecked")
+		List<UserFollowerMappingEntity> users = (List<UserFollowerMappingEntity>) criteria.list();
+		if (users != null && !users.isEmpty()) {
+			userDtos = new ArrayList<>();
+			mapper.map(users, userDtos);
+		}
+
+		return userDtos;
+	}
 }
