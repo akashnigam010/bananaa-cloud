@@ -32,6 +32,7 @@ import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.merchant.CheckinErrorCodeType;
 import in.socyal.sc.app.merchant.CheckinLikeErrorCodeType;
@@ -194,6 +195,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
+		//validate whether current user is logged in or not
+		if (!validateIfLoggedInUser()) {
+			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
+		}
 		//validate whether checkin already exists
 		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
 		if (checkin == null) {
@@ -212,6 +217,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
+		//validate whether current user is logged in or not
+		if (!validateIfLoggedInUser()) {
+			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
+		}
 		//validate whether checkin already exists
 		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
 		if (checkin == null) {
@@ -321,5 +330,19 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 
 	private Integer getCurrentUserId() {
 		return Integer.valueOf(jwtHelper.getUserName());
+	}
+	
+	/**
+	 * check if user is logged in or not
+	 * FIXME : Move such logics to a common place
+	 */
+	private boolean validateIfLoggedInUser() {
+		List<String> roles = jwtHelper.getRoles();
+		for (String role : roles) {
+			if (RoleType.USER == RoleType.getRole(role)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
