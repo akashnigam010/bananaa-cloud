@@ -85,7 +85,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(request.getId(), request.getPage());
-		checkinMapper.map(checkins, response, request.getPage());
+		checkinMapper.map(checkins, response);
 		return response;
 	}
 	
@@ -94,7 +94,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		List<CheckinDto> checkins = checkinDao.getUserCheckins(getCurrentUserId(), request.getPage());
-		checkinMapper.map(checkins, response, request.getPage());
+		checkinMapper.map(checkins, response);
 		return response;
 	}
 	
@@ -103,16 +103,18 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		List<CheckinDto> checkins = checkinDao.getUserCheckins(request.getUserId(), request.getPage());
-		checkinMapper.map(checkins, response, request.getPage());
+		checkinMapper.map(checkins, response);
 		return response;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getAroundMeFeeds(AroundMeFeedsRequest request) {
-		//FIXME : Implement actual logic
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
-		return checkins;
+	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(request.getLocation().getLatitude(), 
+				request.getLocation().getLongitude(), request.getPage());
+		checkinMapper.map(checkins, response);
+		return response;
 	}
 
 	@Override

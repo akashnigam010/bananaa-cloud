@@ -15,23 +15,23 @@ import in.socyal.sc.api.user.dto.UserDto;
 
 @Component
 public class CheckinDelegateMapper {
-	public void map(List<CheckinDto> from, FeedsResponse to, int page) {
-		List<Checkin> merchantCheckins = new ArrayList<>();
+	public void map(List<CheckinDto> from, FeedsResponse to) {
+		List<Checkin> checkins = new ArrayList<>();
 		for (CheckinDto dto : from) {
-			Checkin merchantCheckin = new Checkin();
-			merchantCheckin.setId(dto.getId());
-			merchantCheckin.setLikeCount(dto.getLikeCount());
-			merchantCheckin.setMerchantId(dto.getMerchant().getId());
-			merchantCheckin.setMerchantName(dto.getMerchant().getName());
-			merchantCheckin.setRating(dto.getMerchant().getRating());
-			merchantCheckin.setRewardMessage(dto.getRewardMessage());
-			merchantCheckin.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
-			merchantCheckin.setTimestamp(dto.getCheckinDateTime().getTime());
-			merchantCheckin.setUser(getUserDetailsResponse(dto.getUser()));
-			merchantCheckin.setHasLiked(dto.isLiked());
-			merchantCheckins.add(merchantCheckin);			
+			Checkin checkinResponse = new Checkin();
+			checkinResponse.setId(dto.getId());
+			checkinResponse.setLikeCount(dto.getLikeCount());
+			checkinResponse.setMerchantId(dto.getMerchant().getId());
+			checkinResponse.setMerchantName(dto.getMerchant().getName());
+			checkinResponse.setRating(dto.getMerchant().getRating());
+			checkinResponse.setRewardMessage(dto.getRewardMessage());
+			checkinResponse.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
+			checkinResponse.setTimestamp(dto.getCheckinDateTime().getTime());
+			checkinResponse.setUser(getUserDetailsResponse(dto.getUser()));
+			checkinResponse.setHasLiked(dto.isLiked());
+			checkins.add(checkinResponse);			
 		}
-		to.setCheckins(merchantCheckins);
+		to.setCheckins(checkins);
 	}
 	
 	private List<TaggedUserResponse> getTaggedUserResponse(List<CheckinTaggedUserDto> list) {

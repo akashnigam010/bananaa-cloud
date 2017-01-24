@@ -1,8 +1,5 @@
 package in.socyal.sc.app.checkin;
 
-import java.util.List;
-
-import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
@@ -24,7 +21,7 @@ public interface CheckinDelegate {
 	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request);
 	public FeedsResponse getMyFeeds(MyFeedsRequest request);
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request);
-	public List<CheckinDto> getAroundMeFeeds(AroundMeFeedsRequest request);
+	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request);
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException;
 	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException;
 	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException;

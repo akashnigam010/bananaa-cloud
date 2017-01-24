@@ -1,7 +1,5 @@
 package in.socyal.sc.core;
 
-import java.util.List;
-
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
@@ -26,7 +23,6 @@ import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
-import in.socyal.sc.core.mapper.CheckinServiceMapper;
 import in.socyal.sc.core.validation.CheckinValidator;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
@@ -38,8 +34,6 @@ public class CheckinService {
 	private static final Logger LOG = Logger.getLogger(CheckinService.class);
 	@Autowired
 	CheckinDelegate delegate;
-	@Autowired
-	CheckinServiceMapper mapper;
 	@Autowired
 	ResponseHelper responseHelper;
 	@Autowired
@@ -103,8 +97,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateAroundMeFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getAroundMeFeeds(request);
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getAroundMeFeeds(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
