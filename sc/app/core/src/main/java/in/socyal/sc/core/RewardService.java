@@ -16,7 +16,7 @@ import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
-@RequestMapping(value = "/reward")
+@RequestMapping(value = "/socyal/reward")
 public class RewardService {
 	@Autowired
 	ResponseHelper helper;

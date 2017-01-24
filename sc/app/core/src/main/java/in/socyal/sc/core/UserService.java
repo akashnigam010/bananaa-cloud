@@ -27,7 +27,7 @@ import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.user.UserDelegate;
 
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/socyal/user")
 public class UserService {
 	private static final Logger LOG = Logger.getLogger(UserService.class);
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
@@ -57,7 +57,6 @@ public class UserService {
 		UserProfileResponse response = new UserProfileResponse();
 		try {
 			validator.validateGetPublicProfileRequest(request);
-			//LOG.info("Get public profile : UserId = " + request.getUserId());
 			response = userDelegate.getPublicProfile(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

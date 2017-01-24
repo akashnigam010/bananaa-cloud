@@ -15,27 +15,23 @@ import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
-import in.socyal.sc.core.mapper.MerchantServiceMapper;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
-@RequestMapping(value = "/merchant")
+@RequestMapping(value = "/socyal/merchant")
 public class MerchantService {
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 
 	@Autowired
 	MerchantDelegate delegate;
 	@Autowired
-	MerchantServiceMapper mapper;
-	@Autowired
 	ResponseHelper responseHelper;
 
 	@RequestMapping(value = "/getMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetMerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
 		JsonHelper.logRequest(request, MerchantService.class, "/merchant/getMerchants");
-		//logGetMerchantRequest(request);
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		try {
 			response = delegate.getMerchants(request);
@@ -61,7 +57,6 @@ public class MerchantService {
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchMerchantRequest request) {
 		JsonHelper.logRequest(request, MerchantService.class, "/merchant/searchMerchant");
-		//logSearchMerchantRequest(request);
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
@@ -85,19 +80,5 @@ public class MerchantService {
 			return responseHelper.failure(response, e);
 		}
 
-	}
-
-	private void logSearchMerchantRequest(SearchMerchantRequest request) {
-		System.out.println("========= SEARCH MERCHANT REQUEST START ============");
-		System.out.println("Search String : " + request.getSearchString());
-		System.out.println("========= SEARCH MERCHANT REQUEST END ============");
-	}
-
-	private void logGetMerchantRequest(GetMerchantListRequest request) {
-		System.out.println("========= GET MERCHANT REQUEST START ============");
-		System.out.println("Latitude : " + request.getLocation().getLatitude().toString());
-		System.out.println("Longitude : " + request.getLocation().getLongitude().toString());
-		System.out.println("Page No : " + request.getPage().toString());
-		System.out.println("========= GET MERCHANT REQUEST END ============");
 	}
 }

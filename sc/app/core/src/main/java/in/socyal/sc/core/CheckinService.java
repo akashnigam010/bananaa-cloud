@@ -1,7 +1,5 @@
 package in.socyal.sc.core;
 
-import java.util.List;
-
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
@@ -26,20 +23,17 @@ import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.app.checkin.CheckinDelegate;
-import in.socyal.sc.core.mapper.CheckinServiceMapper;
 import in.socyal.sc.core.validation.CheckinValidator;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
-@RequestMapping(value = "/checkin")
+@RequestMapping(value = "/socyal/checkin")
 public class CheckinService {
 	private static final Logger LOG = Logger.getLogger(CheckinService.class);
 	@Autowired
 	CheckinDelegate delegate;
-	@Autowired
-	CheckinServiceMapper mapper;
 	@Autowired
 	ResponseHelper responseHelper;
 	@Autowired
@@ -51,8 +45,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateGetMerchantCheckinsRequest(request);
-			List<CheckinDto> checkins = delegate.getMerchantCheckins(request.getId(), request.getPage());
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getMerchantCheckins(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
@@ -104,8 +97,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateAroundMeFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getAroundMeFeeds(request);
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getAroundMeFeeds(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
@@ -118,8 +110,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateMyFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getMyFeeds(request);
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getMyFeeds(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
@@ -132,8 +123,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateProfileFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getProfileFeeds(request);
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getProfileFeeds(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

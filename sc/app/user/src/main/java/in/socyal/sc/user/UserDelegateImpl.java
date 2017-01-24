@@ -2,6 +2,7 @@ package in.socyal.sc.user;
 
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,6 +33,9 @@ import in.socyal.sc.user.type.UserErrorCodeType;
 
 @Service
 public class UserDelegateImpl implements UserDelegate {
+	private static final Logger LOG = Logger.getLogger(UserDelegateImpl.class);
+	private static final int MAX_RESULTS_FOR_SEARCH_FRIENDS = 5;
+	private static final int MAX_RESULTS_FOR_SEARCH_USERS = 10;
 	@Autowired
 	JwtTokenHelper jwtHelper;
 	@Autowired
@@ -64,10 +68,17 @@ public class UserDelegateImpl implements UserDelegate {
 		Integer userId = request.getUserId();
 		// Fetch user details
 		UserDto user = userDao.fetchUser(userId);
+		if (user == null) {
+			LOG.error("Fetch User details failed, User not found wih id :" + userId);
+			throw new BusinessException(UserErrorCodeType.USER_NOT_FOUND);
+		}
 		// Fetch user checkin count
 		Integer userCheckinCount = checkinDao.getUserCheckinCount(userId);
 		response.setUser(mapper.map(user, userCheckinCount));
-		response.getUser().setIsFollow(Boolean.TRUE);
+		//Set isFollow flag
+		if (validateIfLoggedInUser()) {
+			response.getUser().setIsFollow(userFollowerDao.isAlreadyFollowing(request.getUserId(), getCurrentUserId()));
+		}
 		return response;
 	}
 
@@ -86,10 +97,19 @@ public class UserDelegateImpl implements UserDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchFriendResponse searchFriends(SearchFriendRequest request) throws BusinessException {
 		SearchFriendResponse response = new SearchFriendResponse();
-		//Discovering users with matching string literals
-		List<UserDto> users = userDao.fetchUsersBySearchString(getCurrentUserId(), request.getSearchString(), 10);
-		//Fetching following friends list
-		List<UserDto> friends = userFollowerDao.fetchMyFriendsBySearchString(getCurrentUserId(), request.getSearchString(), 5);
+		List<UserDto> friends = null;
+		List<UserDto> users = null;
+		//Fetching following friends and users list only if user is logged in
+		if (validateIfLoggedInUser()) {
+			friends = userFollowerDao.fetchMyFriendsBySearchString(getCurrentUserId(), 
+																   request.getSearchString(), 
+																   MAX_RESULTS_FOR_SEARCH_FRIENDS);
+			users = userDao.discoverOtherUsersBySearchString(getCurrentUserId(), 
+																   request.getSearchString(), 
+																   MAX_RESULTS_FOR_SEARCH_USERS);
+		} else {
+			users = userDao.fetchUsers(MAX_RESULTS_FOR_SEARCH_USERS);
+		}
 		response.setFriends(mapper.map(friends));
 		response.setPeople(mapper.map(users));
 		return response;
@@ -156,6 +176,10 @@ public class UserDelegateImpl implements UserDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FollowResponse follow(FollowRequest request) throws BusinessException {
 		FollowResponse response = new FollowResponse();
+		//validate whether current user is logged in or not
+		if (!validateIfLoggedInUser()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
 		//Validate whether the user exists
 		UserDto user = userDao.fetchUser(request.getUserId());
 		if (user == null) {
@@ -180,6 +204,10 @@ public class UserDelegateImpl implements UserDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public UnFollowResponse unFollow(UnFollowRequest request) throws BusinessException {
 		UnFollowResponse response = new UnFollowResponse();
+		//validate whether current user is logged in or not
+		if (!validateIfLoggedInUser()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
 		//Validate whether the user is already following or not
 		if (!userFollowerDao.isAlreadyFollowing(request.getUserId(), getCurrentUserId())) {
 			throw new BusinessException(UserErrorCodeType.USER_NOT_FOLLOWING);
@@ -190,6 +218,11 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 	
 	private Integer getCurrentUserId() {
+		List<String> roles = jwtHelper.getRoles();
+		if (roles.contains(RoleType.GUEST.getRole())) {
+			LOG.error("Error occured while fetching current userId using GUEST role");
+			throw new BusinessException(UserErrorCodeType.LOGIN_REQUIRED);
+		}
 		return Integer.valueOf(jwtHelper.getUserName());
 	}
 }

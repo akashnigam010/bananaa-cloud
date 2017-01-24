@@ -18,12 +18,14 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
 import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
+import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
@@ -32,10 +34,12 @@ import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.app.merchant.CheckinErrorCodeType;
-import in.socyal.sc.app.merchant.CheckinLikeErrorCodeType;
-import in.socyal.sc.app.merchant.MerchantQrMappingErrorCodeType;
+import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
+import in.socyal.sc.app.checkin.type.CheckinErrorCodeType;
+import in.socyal.sc.app.checkin.type.CheckinLikeErrorCodeType;
+import in.socyal.sc.app.merchant.type.MerchantQrMappingErrorCodeType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
@@ -73,36 +77,44 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	OAuth2FbHelper fbHelper;
 	@Autowired
 	Clock clock;
+	@Autowired
+	CheckinDelegateMapper checkinMapper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(merchantId, page);
-		return checkins;
+	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(request.getId(), request.getPage());
+		checkinMapper.map(checkins, response);
+		return response;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getMyFeeds(MyFeedsRequest request) {
-		//FIXME : Implement actual logic
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
-		return checkins;
+	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(getCurrentUserId(), request.getPage());
+		checkinMapper.map(checkins, response);
+		return response;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getProfileFeeds(ProfileFeedsRequest request) {
-		//FIXME : Implement actual logic
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
-		return checkins;
+	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(request.getUserId(), request.getPage());
+		checkinMapper.map(checkins, response);
+		return response;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getAroundMeFeeds(AroundMeFeedsRequest request) {
-		//FIXME : Implement actual logic
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
-		return checkins;
+	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(request.getLocation().getLatitude(), 
+				request.getLocation().getLongitude(), request.getPage());
+		checkinMapper.map(checkins, response);
+		return response;
 	}
 
 	@Override
@@ -194,6 +206,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
+		//validate whether current user is logged in or not
+		if (!validateIfLoggedInUser()) {
+			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
+		}
 		//validate whether checkin already exists
 		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
 		if (checkin == null) {
@@ -212,6 +228,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
+		//validate whether current user is logged in or not
+		if (!validateIfLoggedInUser()) {
+			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
+		}
 		//validate whether checkin already exists
 		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
 		if (checkin == null) {
@@ -321,5 +341,19 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 
 	private Integer getCurrentUserId() {
 		return Integer.valueOf(jwtHelper.getUserName());
+	}
+	
+	/**
+	 * check if user is logged in or not
+	 * FIXME : Move such logics to a common place
+	 */
+	private boolean validateIfLoggedInUser() {
+		List<String> roles = jwtHelper.getRoles();
+		for (String role : roles) {
+			if (RoleType.USER == RoleType.getRole(role)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
