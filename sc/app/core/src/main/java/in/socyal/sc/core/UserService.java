@@ -57,7 +57,6 @@ public class UserService {
 		UserProfileResponse response = new UserProfileResponse();
 		try {
 			validator.validateGetPublicProfileRequest(request);
-			//LOG.info("Get public profile : UserId = " + request.getUserId());
 			response = userDelegate.getPublicProfile(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

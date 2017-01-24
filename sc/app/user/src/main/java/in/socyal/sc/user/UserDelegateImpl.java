@@ -68,10 +68,17 @@ public class UserDelegateImpl implements UserDelegate {
 		Integer userId = request.getUserId();
 		// Fetch user details
 		UserDto user = userDao.fetchUser(userId);
+		if (user == null) {
+			LOG.error("Fetch User details failed, User not found wih id :" + userId);
+			throw new BusinessException(UserErrorCodeType.USER_NOT_FOUND);
+		}
 		// Fetch user checkin count
 		Integer userCheckinCount = checkinDao.getUserCheckinCount(userId);
 		response.setUser(mapper.map(user, userCheckinCount));
-		response.getUser().setIsFollow(Boolean.TRUE);
+		//Set isFollow flag
+		if (validateIfLoggedInUser()) {
+			response.getUser().setIsFollow(userFollowerDao.isAlreadyFollowing(request.getUserId(), getCurrentUserId()));
+		}
 		return response;
 	}
 
