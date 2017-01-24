@@ -51,8 +51,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateGetMerchantCheckinsRequest(request);
-			List<CheckinDto> checkins = delegate.getMerchantCheckins(request.getId(), request.getPage());
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getMerchantCheckins(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

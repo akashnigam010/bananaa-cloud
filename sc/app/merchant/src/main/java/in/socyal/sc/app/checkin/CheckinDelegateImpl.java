@@ -18,6 +18,7 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
 import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
@@ -81,9 +82,11 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getMerchantCheckins(Integer merchantId, Integer page) {
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(merchantId, page);
-		return checkins;
+	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(request.getId(), request.getPage());
+		checkinMapper.map(checkins, response, request.getPage());
+		return response;
 	}
 	
 	@Override

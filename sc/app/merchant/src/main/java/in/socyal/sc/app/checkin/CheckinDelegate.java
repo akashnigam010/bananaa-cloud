@@ -7,6 +7,7 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
 import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
@@ -20,7 +21,7 @@ import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.helper.exception.BusinessException;
 
 public interface CheckinDelegate {
-	public List<CheckinDto> getMerchantCheckins(Integer restaurantId, Integer page);
+	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request);
 	public FeedsResponse getMyFeeds(MyFeedsRequest request);
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request);
 	public List<CheckinDto> getAroundMeFeeds(AroundMeFeedsRequest request);
