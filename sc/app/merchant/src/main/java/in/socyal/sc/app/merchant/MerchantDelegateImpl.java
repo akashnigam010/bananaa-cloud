@@ -28,6 +28,7 @@ import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
+import in.socyal.sc.app.merchant.type.MerchantErrorCodeType;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;

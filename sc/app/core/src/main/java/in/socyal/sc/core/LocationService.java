@@ -13,7 +13,7 @@ import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.location.LocationDelegate;
 
 @RestController
-@RequestMapping(value = "/location")
+@RequestMapping(value = "/socyal/location")
 public class LocationService {
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 

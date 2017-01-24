@@ -47,8 +47,21 @@ public class UserDao {
 		}
 		return dto;
 	}
+	
+	public List<UserDto> fetchUsers(Integer resultsPerPage) {
+		List<UserDto> userDtos = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.setMaxResults(resultsPerPage);
+		@SuppressWarnings("unchecked")
+		List<UserEntity> users = criteria.list();
+		for (UserEntity user : users) {
+			UserDto dto = new UserDto();
+			mapper.map(user, dto);
+		}
+		return userDtos;
+	}
 
-	public List<UserDto> fetchUsersBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
+	public List<UserDto> discoverOtherUsersBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
 		List<UserDto> userDtos = null;
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(discoverNewUsersQuery());
     	query.addEntity(UserEntity.class);

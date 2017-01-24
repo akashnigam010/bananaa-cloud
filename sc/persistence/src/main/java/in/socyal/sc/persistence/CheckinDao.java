@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -129,6 +130,28 @@ public class CheckinDao {
 		}
 		return checkinDto;
 	}
+	
+	public List<CheckinDto> getUserCheckins(Integer userId, Integer page) {
+		List<CheckinDto> checkinDtos = Collections.emptyList();
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+		criteria.addOrder(Order.desc("checkinDateTime"));
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+		if (result.size() > 0) {
+			checkinDtos = new ArrayList<>();
+			for (CheckinEntity entity : result) {
+				CheckinDto dto = new CheckinDto();
+				mapper.map(entity, dto);
+				checkinDtos.add(dto);
+			}
+		}
+		return checkinDtos;
+	}
 
 	public Integer getUserCheckinCount(Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
@@ -147,4 +170,38 @@ public class CheckinDao {
 		}
 		return likeCount;
 	}
+	
+	public List<CheckinDto> getAroundMeFeedsDao(Double latitude, Double longitude, Integer page) {
+    	List<CheckinDto> checkinDtos = Collections.emptyList();
+    	SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sortAroundMeFeedsByDistanceQuery());
+    	query.addEntity(CheckinEntity.class);
+    	query.setDouble("latitude", latitude);
+    	query.setDouble("longitude", latitude);
+    	int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+    	query.setFirstResult(firstResult);
+    	query.setMaxResults(RESULTS_PER_PAGE);
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> checkins = (List<CheckinEntity>) query.list();
+    	if (checkins != null && !checkins.isEmpty()) {
+    		checkinDtos = new ArrayList<>();
+    		for (CheckinEntity checkin : checkins) {
+    			CheckinDto dto = new CheckinDto();
+    			mapper.map(checkin, dto);
+    			checkinDtos.add(dto);
+    		}
+		}
+    	return checkinDtos;
+    }
+	
+    private String sortAroundMeFeedsByDistanceQuery() {
+    	StringBuilder query = new StringBuilder();
+    	query.append("SELECT *");
+    	query.append("FROM Socyal.CHECKIN C ");
+    	query.append("INNER JOIN Socyal.MERCHANT M ON C.MERCHANT_ID = M.ID ");
+    	query.append("INNER JOIN Socyal.ADDRESS A ON M.ADDRESS_ID = A.ID ");
+    	query.append("WHERE C.STATUS = 'APPROVED' ");
+    	query.append("ORDER BY C.CHECKIN_DATETIME DESC, ");
+    	query.append("Socyal.DISTANCE(:latitude, :longitude, A.LATITUDE, A.LONGITUDE) ASC");
+    	return query.toString();
+    }
 }

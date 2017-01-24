@@ -19,7 +19,7 @@ import in.socyal.sc.login.LoginDelegate;
 import in.socyal.sc.login.NotificationDelegate;
 
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/socyal/login")
 public class LoginService {
 	private static final Logger LOG = Logger.getLogger(LoginService.class);
 	@Autowired

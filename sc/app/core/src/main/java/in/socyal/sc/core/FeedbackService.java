@@ -15,7 +15,7 @@ import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
-@RequestMapping(value = "/feedback")
+@RequestMapping(value = "/socyal/feedback")
 public class FeedbackService {
 	@Autowired
 	ResponseHelper helper;
