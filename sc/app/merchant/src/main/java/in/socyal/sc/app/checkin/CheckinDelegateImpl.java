@@ -88,10 +88,11 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getMyFeeds(MyFeedsRequest request) {
-		//FIXME : Implement actual logic
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
-		return checkins;
+	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(getCurrentUserId(), request.getPage());
+		checkinMapper.map(checkins, response, request.getPage());
+		return response;
 	}
 	
 	@Override

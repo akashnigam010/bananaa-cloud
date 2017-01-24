@@ -21,7 +21,7 @@ import in.socyal.sc.helper.exception.BusinessException;
 
 public interface CheckinDelegate {
 	public List<CheckinDto> getMerchantCheckins(Integer restaurantId, Integer page);
-	public List<CheckinDto> getMyFeeds(MyFeedsRequest request);
+	public FeedsResponse getMyFeeds(MyFeedsRequest request);
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request);
 	public List<CheckinDto> getAroundMeFeeds(AroundMeFeedsRequest request);
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException;
