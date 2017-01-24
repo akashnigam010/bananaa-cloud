@@ -16,7 +16,7 @@ import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.login.LoginDelegate;
 
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/socyal/login")
 public class LoginService {
 	private static final Logger LOG = Logger.getLogger(LoginService.class);
 	@Autowired

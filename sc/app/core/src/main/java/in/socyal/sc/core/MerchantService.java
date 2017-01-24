@@ -21,7 +21,7 @@ import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
-@RequestMapping(value = "/merchant")
+@RequestMapping(value = "/socyal/merchant")
 public class MerchantService {
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 

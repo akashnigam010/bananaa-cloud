@@ -33,7 +33,7 @@ import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
-@RequestMapping(value = "/checkin")
+@RequestMapping(value = "/socyal/checkin")
 public class CheckinService {
 	private static final Logger LOG = Logger.getLogger(CheckinService.class);
 	@Autowired
