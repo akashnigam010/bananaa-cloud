@@ -24,6 +24,7 @@ import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
+import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
@@ -34,9 +35,10 @@ import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.app.merchant.CheckinErrorCodeType;
-import in.socyal.sc.app.merchant.CheckinLikeErrorCodeType;
-import in.socyal.sc.app.merchant.MerchantQrMappingErrorCodeType;
+import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
+import in.socyal.sc.app.checkin.type.CheckinErrorCodeType;
+import in.socyal.sc.app.checkin.type.CheckinLikeErrorCodeType;
+import in.socyal.sc.app.merchant.type.MerchantQrMappingErrorCodeType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
@@ -74,6 +76,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	OAuth2FbHelper fbHelper;
 	@Autowired
 	Clock clock;
+	@Autowired
+	CheckinDelegateMapper checkinMapper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -92,10 +96,11 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinDto> getProfileFeeds(ProfileFeedsRequest request) {
-		//FIXME : Implement actual logic
-		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(12354, request.getPage());
-		return checkins;
+	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(request.getUserId(), request.getPage());
+		checkinMapper.map(checkins, response, request.getPage());
+		return response;
 	}
 	
 	@Override

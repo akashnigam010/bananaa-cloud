@@ -129,6 +129,28 @@ public class CheckinDao {
 		}
 		return checkinDto;
 	}
+	
+	public List<CheckinDto> getUserCheckins(Integer userId, Integer page) {
+		List<CheckinDto> checkinDtos = Collections.emptyList();
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+		criteria.addOrder(Order.desc("checkinDateTime"));
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+		if (result.size() > 0) {
+			checkinDtos = new ArrayList<>();
+			for (CheckinEntity entity : result) {
+				CheckinDto dto = new CheckinDto();
+				mapper.map(entity, dto);
+				checkinDtos.add(dto);
+			}
+		}
+		return checkinDtos;
+	}
 
 	public Integer getUserCheckinCount(Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);

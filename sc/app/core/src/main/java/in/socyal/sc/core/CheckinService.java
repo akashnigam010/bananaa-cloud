@@ -132,8 +132,7 @@ public class CheckinService {
 		FeedsResponse response = new FeedsResponse();
 		try {
 			validator.validateProfileFeedsRequest(request);
-			List<CheckinDto> checkins = delegate.getProfileFeeds(request);
-			mapper.map(checkins, response, request.getPage());
+			response = delegate.getProfileFeeds(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

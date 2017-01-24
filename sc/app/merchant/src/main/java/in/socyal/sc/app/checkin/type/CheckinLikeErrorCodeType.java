@@ -1,4 +1,4 @@
-package in.socyal.sc.app.merchant;
+package in.socyal.sc.app.checkin.type;
 
 import in.socyal.sc.helper.BusinessErrorCode;
 
