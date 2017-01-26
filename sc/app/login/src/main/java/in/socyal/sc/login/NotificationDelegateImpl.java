@@ -83,6 +83,7 @@ public class NotificationDelegateImpl implements NotificationDelegate {
 		// body.put("registration_ids", registration_ids);
 		body.put("to", request.getDeviceToken());
 		body.put("priority", "high");
+		body.put("time_to_live", 86400);
 		// body.put("dry_run", true);
 
 		// body.put("notification", createNotificationPayload(request));
