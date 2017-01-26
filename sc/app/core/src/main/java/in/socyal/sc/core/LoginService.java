@@ -62,7 +62,20 @@ public class LoginService {
 		SendTestNotificationResponse response = new SendTestNotificationResponse();
 		try {
 			validator.validateSendNotificationRequest(request);
-			response = notificationDelegate.sendTestNotification(request);
+			response = notificationDelegate.sendNotificationWithData(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/sendTestDataMessage", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SendTestNotificationResponse sendTestDataMessage(@RequestBody SendTestNotificationRequest request) {
+		JsonHelper.logRequest(request, LoginService.class, "/login/sendTestDataMessage");
+		SendTestNotificationResponse response = new SendTestNotificationResponse();
+		try {
+			validator.validateSendNotificationRequest(request);
+			response = notificationDelegate.sendDataMessage(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
