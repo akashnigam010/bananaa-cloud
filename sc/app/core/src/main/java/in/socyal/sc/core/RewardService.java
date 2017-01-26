@@ -43,7 +43,7 @@ public class RewardService {
 	 */
 	@RequestMapping(value = "/dismissReward", method = RequestMethod.POST, headers = "Accept=application/json")
 	public FeedbackStatusResponse dismissReward(@RequestBody RewardRequest request) {
-		JsonHelper.logRequest(request, RewardService.class, "/reward/getRewardStatus");
+		JsonHelper.logRequest(request, RewardService.class, "/reward/dismissReward");
 		FeedbackStatusResponse response = new FeedbackStatusResponse();
 		try {
 			validator.validateRewardRequest(request);
