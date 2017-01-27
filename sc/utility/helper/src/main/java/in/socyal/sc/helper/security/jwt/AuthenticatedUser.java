@@ -55,4 +55,10 @@ public class AuthenticatedUser implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "AuthenticatedUser [userId=" + userId + ", userName=" + userName + ", authorityList=" + authorityList
+				+ "]";
+	}
 }

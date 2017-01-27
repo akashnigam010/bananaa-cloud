@@ -1,0 +1,50 @@
+body {
+    font-family: _light;
+    font-size: medium;
+}
+
+
+@media (min-width: 300px) {
+    .logo {
+        background-image: url(../img/logo-xs.png);
+    }
+    .banner {
+        height:45vh;
+    }
+}
+
+@media (min-width: 500px) {
+    .logo {
+        background-image: url(../img/logo-sm.png);
+    }
+    .banner {
+        height:60vh;
+    }
+}
+
+@media (min-width: 1090px) {
+    .logo {
+        background-image: url(../img/logo-md.png);
+    }
+    .banner {
+        height:70vh;
+    }
+}
+
+.logo {
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+
+.banner {
+    background-color: #9932CC;
+    background-image: url("../img/banner_graphic.png");
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.icon-search {
+    background-image: url("../img/search_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
