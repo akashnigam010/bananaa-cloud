@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.request.SendTestNotificationRequest;
+import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.login.response.SendTestNotificationResponse;
 import in.socyal.sc.core.validation.LoginValidator;
@@ -37,6 +39,19 @@ public class LoginService {
 		try {
 			LOG.info("Skip login request");
 			response = delegate.skipLogin();
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/businessLogin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public BusinessLoginResponse businessLogin(@RequestBody BusinessLoginRequest request) {
+		BusinessLoginResponse response = new BusinessLoginResponse();
+		try {
+			LOG.info("Business login request");
+			validator.validateBusinessLoginRequest(request);
+			response = delegate.businessLogin();
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

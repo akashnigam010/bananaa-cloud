@@ -86,7 +86,7 @@ public class MerchantDao {
     	MerchantEntity entity = (MerchantEntity) sessionFactory.getCurrentSession().get(MerchantEntity.class, id);
     	if (entity != null) {
     		dto = new MerchantDto();
-    		mapper.map(entity, dto);
+    		mapper.map(entity, dto, true);
     	}
     	
     	return dto;

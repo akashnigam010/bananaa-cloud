@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -192,6 +193,28 @@ public class CheckinDao {
 		}
     	return checkinDtos;
     }
+	
+	public List<CheckinDto> getBusinessCheckins(Integer page, Calendar checkinDate, Integer merchantId) {
+		List<CheckinDto> checkinDtos = Collections.emptyList();
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.ge("checkinDateTime", checkinDate));
+		criteria.addOrder(Order.desc("checkinDateTime"));
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+		if (result.size() > 0) {
+			checkinDtos = new ArrayList<>();
+			for (CheckinEntity entity : result) {
+				CheckinDto dto = new CheckinDto();
+				mapper.map(entity, dto);
+				checkinDtos.add(dto);
+			}
+		}
+		return checkinDtos;
+	}
 	
     private String sortAroundMeFeedsByDistanceQuery() {
     	StringBuilder query = new StringBuilder();

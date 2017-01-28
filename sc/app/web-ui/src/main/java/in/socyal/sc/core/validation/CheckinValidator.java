@@ -8,6 +8,7 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
@@ -29,7 +30,7 @@ public class CheckinValidator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
-	
+
 	public void validateValidateCheckinRequest(ValidateCheckinRequest request) {
 		validateIfLoggedInUser();
 		if (request.getLocation() == null) {
@@ -46,8 +47,8 @@ public class CheckinValidator {
 		if (request.getLocation() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
-		if (request.getLocation().getLatitude() == null
-				|| request.getLocation().getLongitude() == null || StringUtils.isEmpty(request.getQrCode())) {
+		if (request.getLocation().getLatitude() == null || request.getLocation().getLongitude() == null
+				|| StringUtils.isEmpty(request.getQrCode())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
@@ -96,10 +97,17 @@ public class CheckinValidator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
-	
+
+	public void validateGetBusinessCheckinsRequest(GetBusinessCheckinsRequest request) {
+		if (request.getDateIdentifier() == null || request.getPage() == null || request.getDateIdentifier() < 0
+				|| request.getPage() <= 0) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+
 	/**
-	 * check if user is logged in or not.
-	 * Throws exception if user is not logged in
+	 * check if user is logged in or not. Throws exception if user is not logged
+	 * in
 	 */
 	private void validateIfLoggedInUser() {
 		RoleType role = RoleType.getRole(jwtHelper.getUserName());

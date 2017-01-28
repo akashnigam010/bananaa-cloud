@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.User;
 
+import in.socyal.sc.api.login.dto.BusinessLoginUserDto;
 import in.socyal.sc.api.login.request.LoginRequest;
+import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -61,6 +63,18 @@ public class LoginDelegateImpl implements LoginDelegate {
 			LOG.error("Error while fetching user details from FB " + e.getErrorMessage());
 			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
 		}
+		return response;
+	}
+
+	@Override
+	public BusinessLoginResponse businessLogin() {
+		BusinessLoginResponse response = new BusinessLoginResponse();
+		response.setAccessToken(JwtHelper.createJsonWebToken(RoleType.GUEST.getRole(), RoleType.GUEST.getRole(), 1L));
+		BusinessLoginUserDto user = new BusinessLoginUserDto();
+		user.setId(12345);
+		user.setName("Skyhy");
+		user.setShortAddress("Gachibowli, Hyderabad");
+		response.setUser(user);
 		return response;
 	}
 }

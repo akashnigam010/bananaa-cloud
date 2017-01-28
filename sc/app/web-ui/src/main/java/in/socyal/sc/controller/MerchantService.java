@@ -15,6 +15,7 @@ import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
+import in.socyal.sc.core.validation.MerchantValidator;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
@@ -28,12 +29,15 @@ public class MerchantService {
 	MerchantDelegate delegate;
 	@Autowired
 	ResponseHelper responseHelper;
+	@Autowired
+	MerchantValidator validator;
 
 	@RequestMapping(value = "/getMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetMerchantListResponse getMerchants(@RequestBody GetMerchantListRequest request) {
 		JsonHelper.logRequest(request, MerchantService.class, "/merchant/getMerchants");
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		try {
+			validator.validateGetMerchantRequest(request);
 			response = delegate.getMerchants(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
@@ -47,6 +51,7 @@ public class MerchantService {
 		JsonHelper.logRequest(request, MerchantService.class, "/merchant/getMerchantDetails");
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		try {
+			validator.validateGetMerchantDetailsRequest(request);
 			response = delegate.getMerchantDetails(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

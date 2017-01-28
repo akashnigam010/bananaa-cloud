@@ -88,10 +88,9 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString());
-		if (merchants == null) {
-			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
-		}
-		buildSearchMerchantsResponse(merchants, response);
+		if (merchants != null) {
+			buildSearchMerchantsResponse(merchants, response);
+		}		
 		return response;
 	}
 

@@ -25,32 +25,33 @@ public class MerchantDaoMapper {
 	public void map(List<MerchantEntity> from, List<MerchantDto> to) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
-			map(entity, dto);
+			map(entity, dto, false);
 			to.add(dto);
 		}
 	}
 
-	public void map(MerchantEntity entity, MerchantDto dto) {
+	public void map(MerchantEntity entity, MerchantDto dto, Boolean mapFullDetails) {
 		dto.setId(entity.getId());
 		dto.setImageUrl(entity.getImageUrl());
 		dto.setName(entity.getName());
-		dto.setTimings(mapTimingDtos(entity.getTimings()));
-		dto.setRating(entity.getRating());
-		dto.setAverageCost(entity.getAverageCost());
 		if (entity.getAddress() != null) {
 			AddressDto addressDto = new AddressDto();
 			map(entity.getAddress(), addressDto);
 			dto.setAddress(addressDto);
 		}
-
-		if (entity.getContact() != null) {
-			ContactDto contactDto = new ContactDto();
-			map(entity.getContact(), contactDto);
-			dto.setContact(contactDto);
-		}
-		dto.setCheckins(entity.getCheckins());
-		dto.setCuisines(parseToList(entity.getCuisine()));
-		dto.setTypes(parseToList(entity.getType()));
+		if (mapFullDetails) {
+			dto.setTimings(mapTimingDtos(entity.getTimings()));
+			dto.setRating(entity.getRating());
+			dto.setAverageCost(entity.getAverageCost());
+			if (entity.getContact() != null) {
+				ContactDto contactDto = new ContactDto();
+				map(entity.getContact(), contactDto);
+				dto.setContact(contactDto);
+			}
+			dto.setCheckins(entity.getCheckins());
+			dto.setCuisines(parseToList(entity.getCuisine()));
+			dto.setTypes(parseToList(entity.getType()));
+		}		
 	}
 
 	public Set<TimingDto> mapTimingDtos(Set<TimingEntity> entities) {

@@ -4,6 +4,7 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
@@ -12,6 +13,7 @@ import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.FeedsResponse;
+import in.socyal.sc.api.checkin.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
@@ -28,4 +30,5 @@ public interface CheckinDelegate {
 	public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request) throws BusinessException;
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException;
 	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException;
+	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request);
 }

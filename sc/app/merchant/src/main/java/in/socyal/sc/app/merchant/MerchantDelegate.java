@@ -1,7 +1,5 @@
 package in.socyal.sc.app.merchant;
 
-import java.text.ParseException;
-
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;

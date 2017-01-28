@@ -1,6 +1,7 @@
 package in.socyal.sc.app.checkin;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -18,6 +19,7 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
@@ -26,6 +28,7 @@ import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.FeedsResponse;
+import in.socyal.sc.api.checkin.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
@@ -40,7 +43,9 @@ import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
 import in.socyal.sc.app.checkin.type.CheckinErrorCodeType;
 import in.socyal.sc.app.checkin.type.CheckinLikeErrorCodeType;
 import in.socyal.sc.app.merchant.type.MerchantQrMappingErrorCodeType;
+import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
+import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
@@ -79,6 +84,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	Clock clock;
 	@Autowired
 	CheckinDelegateMapper checkinMapper;
+	@Autowired
+	DayUtil dayUtil;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -246,8 +253,29 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request) {
+		GetBusinessCheckinsResponse response = new GetBusinessCheckinsResponse();
+		Calendar date = getDateFromIdentifier(request.getDateIdentifier());
+		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), date, 12345);
+		
+		if (request.getPage() == 1) {
+			response.setDate(dayUtil.formatDate(date, DateFormatType.DATE_FORMAT_IND));
+			response.setCheckinCount(12);
+		}
+		checkinMapper.map(checkins, response);
+		return response;
+	}
+	
 	public Integer fetchLikeCount(Integer checkinId) {
 		return checkinLikeDao.fetchLikeCount(checkinId);
+	}
+	
+	private Calendar getDateFromIdentifier(Integer identifier) {
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DAY_OF_MONTH, (-1*(identifier)));
+		return date;
 	}
 
 	private void checkForTokenValidity() throws BusinessException {

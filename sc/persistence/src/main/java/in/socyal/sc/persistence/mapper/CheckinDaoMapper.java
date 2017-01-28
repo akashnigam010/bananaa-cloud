@@ -45,7 +45,7 @@ public class CheckinDaoMapper {
 		to.setId(from.getId());
 		to.setCheckinDateTime(from.getCheckinDateTime());
 		MerchantDto merchant = new MerchantDto();
-		mapper.map(from.getMerchant(), merchant);
+		mapper.map(from.getMerchant(), merchant, false);
 		to.setMerchant(merchant);
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());

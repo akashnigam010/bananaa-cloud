@@ -3,12 +3,15 @@ package in.socyal.sc.app.checkin.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
+import in.socyal.sc.api.checkin.response.BusinessCheckin;
 import in.socyal.sc.api.checkin.response.Checkin;
 import in.socyal.sc.api.checkin.response.FeedsResponse;
+import in.socyal.sc.api.checkin.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -29,11 +32,11 @@ public class CheckinDelegateMapper {
 			checkinResponse.setTimestamp(dto.getCheckinDateTime().getTime());
 			checkinResponse.setUser(getUserDetailsResponse(dto.getUser()));
 			checkinResponse.setHasLiked(dto.isLiked());
-			checkins.add(checkinResponse);			
+			checkins.add(checkinResponse);
 		}
 		to.setCheckins(checkins);
 	}
-	
+
 	private List<TaggedUserResponse> getTaggedUserResponse(List<CheckinTaggedUserDto> list) {
 		List<TaggedUserResponse> taggedUserResponse = new ArrayList<>();
 		for (CheckinTaggedUserDto taggedUserDto : list) {
@@ -44,14 +47,31 @@ public class CheckinDelegateMapper {
 		}
 		return taggedUserResponse;
 	}
-	
+
 	private UserDetailsResponse getUserDetailsResponse(UserDto userDto) {
 		UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
 		userDetailsResponse.setId(userDto.getId());
 		userDetailsResponse.setImageUrl(userDto.getImageUrl());
 		userDetailsResponse.setName(userDto.getName());
-		//FIXME:We need to fetch the user checkin count from DB
+		// FIXME:We need to fetch the user checkin count from DB
 		userDetailsResponse.setUserCheckins(2);
 		return userDetailsResponse;
+	}
+
+	public void map(List<CheckinDto> from, GetBusinessCheckinsResponse response) {
+		BusinessCheckin to = null;
+		for (CheckinDto dto : from) {
+			to = new BusinessCheckin();
+			to.setId(dto.getId());
+			to.setUser(getUserDetailsResponse(dto.getUser()));
+			to.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
+			if (StringUtils.isNotEmpty(dto.getRewardMessage())) {
+				to.setRewardMessage(dto.getRewardMessage());
+			}
+			to.setTimestamp(dto.getCheckinDateTime().getTime());
+			to.setCard("12");
+			to.setCheckinStatus(dto.getStatus());
+		}
+
 	}
 }
