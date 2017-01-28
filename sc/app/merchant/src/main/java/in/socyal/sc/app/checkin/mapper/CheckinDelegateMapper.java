@@ -71,6 +71,7 @@ public class CheckinDelegateMapper {
 			to.setTimestamp(dto.getCheckinDateTime().getTime());
 			to.setCard("12");
 			to.setCheckinStatus(dto.getStatus());
+			response.getCheckins().add(to);
 		}
 
 	}

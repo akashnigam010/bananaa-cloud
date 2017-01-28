@@ -199,7 +199,7 @@ public class CheckinDao {
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
-		criteria.add(Restrictions.ge("checkinDateTime", checkinDate));
+		//criteria.add(Restrictions.ge("checkinDateTime", checkinDate));
 		criteria.addOrder(Order.desc("checkinDateTime"));
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
