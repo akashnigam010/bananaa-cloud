@@ -1,8 +1,8 @@
 body {
     font-family: _light;
-    font-size: medium;
 }
 
+/* Media Queries CSS - START */
 
 @media (min-width: 300px) {
     .logo {
@@ -10,6 +10,10 @@ body {
     }
     .banner {
         height:45vh;
+    }
+    .app-info-div {
+        width: 100%;
+        float: left;
     }
 }
 
@@ -22,6 +26,18 @@ body {
     }
 }
 
+@media (max-width: 650px) {
+    .device-image {
+        display: none;
+    }
+}
+
+@media (min-width: 650px) {
+    .app-info-div {
+        width: 50%;
+    }
+}
+
 @media (min-width: 1090px) {
     .logo {
         background-image: url(../img/logo-md.png);
@@ -29,11 +45,26 @@ body {
     .banner {
         height:70vh;
     }
+    .app-info-div {
+        width: 50%;
+        float: left;
+    }
 }
+
+/* Media Queries CSS - END */
+
+/* Hero Banner CSS - START */
 
 .logo {
     background-repeat: no-repeat;
     background-position: top center;
+}
+
+.tagline {
+    font-family: _ultraLight;
+    text-align: center;
+    color: #FFFFFF;
+    font-size: x-large;
 }
 
 .banner {
@@ -48,3 +79,171 @@ body {
     background-repeat: no-repeat;
     background-position: center;
 }
+
+/* Hero Banner CSS - END */
+
+/* Feature Banner CSS - START */
+
+.feature {
+    padding-top: 100px;
+}
+
+.feature-details {
+    padding-top: 30px;
+}
+
+.feature-heading {
+    text-transform: uppercase;
+    font-family: _semiBold;
+}
+
+ .feature-description {
+    color: #808080;
+ }
+
+/* Feature Banner CSS - END */
+
+/* Word Cloud CSS - START */
+
+.word-cloud-wrapper {
+    padding-top: 50px;
+}
+
+.wc-custom-class-1 {
+    text-transform: uppercase;
+    font-family: _light !important;
+    padding: 10px !important;
+}
+
+.wc-custom-class-2 {
+    text-transform: uppercase;
+    font-family: _semiBold !important;
+    padding: 10px !important;
+}
+
+.wc-custom-class-3 {
+    text-transform: uppercase;
+    font-family: _ultraLight !important;
+    padding: 10px !important;
+}
+
+.extra-padding {
+    padding-top: 50px;
+}
+
+/* Word Cloud CSS - END */
+
+/* Trending CSS - START */
+
+.trending {
+    background: #E6E9EE;
+    padding-bottom: 5%;
+}
+
+.trending-heading {
+    padding: 5% 5% 0% 5%;
+    text-transform: uppercase;  
+}
+
+.trending-wrapper {
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.trending-item {
+    padding: 10%;
+}
+
+.trend-image {
+    display:inline-block;
+    width:100%;
+    height:180px;
+    overflow:hidden;
+    vertical-align:top;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.trending-item-desc {
+    background-color: #FFFFFF;
+    padding: 5%;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.desc-top {
+    font-family: _semiBold;
+    padding: 0px 5px 0px 5px;
+}
+
+.desc-bottom {
+    padding: 10px 5px 0px 5px;
+    color: #808080;
+}
+
+.rating-gear {
+    background-color: #9932CC;
+    color: #FFFFFF;
+    height: 25px;
+    width: 50px;
+    border-radius: 4px;
+}
+
+.checkins-gear {
+    height: 25px;
+    width: 50px;
+}
+
+.icon-rating {
+    height: 15px;
+    width: 15px;
+}
+
+.icon-bananaa {
+    height: 15px;
+    width: 20px;
+}
+
+.rating-value {
+    vertical-align: middle;
+    font-family: _light;
+}
+
+.checkin-value {
+    vertical-align: middle;
+    font-family: _ultraLight;
+}
+
+/* Trending CSS - END */
+
+/* App Info CSS - START */
+
+.app-info {
+    background-color: #FFFFFF;
+    padding: 10% 15% 10% 15%;
+}
+
+.download-heading {
+    padding : 20% 0% 5% 0%;
+    font-family: _bold;
+    font-size: 2.5em;
+    text-align: left;
+}
+
+.download-link-image {
+    padding-top: 5%;
+}
+
+/* App Info CSS - END */
+
+/* Footer CSS - START */
+
+.footer {
+    background-color: #333333;
+    height: 220px;
+    background-image: url("../img/footer-graphic.png");
+    background-repeat: no-repeat;
+    background-position: left bottom;
+}
+
+/* Footer CSS - END */
