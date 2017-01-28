@@ -157,11 +157,11 @@
                         <user-name>root</user-name>
                         <password>root</password>
                     </security>-->
-					<connection-url>jdbc:mysql://socyal-rds.cy9jzufg4lkb.ap-south-1.rds.amazonaws.com:3306/Socyal</connection-url>
+					<connection-url>jdbc:mysql://bananaa-db.cy9jzufg4lkb.ap-south-1.rds.amazonaws.com:3306/Socyal</connection-url>
                     <driver>mysql</driver>
                     <security>
-                        <user-name>socyaladmin</user-name>
-                        <password>Testadm!n01</password>
+                        <user-name>admin</user-name>
+                        <password>Bananaa123!</password>
                     </security>
                     <statement>
                         <prepared-statement-cache-size>100</prepared-statement-cache-size>

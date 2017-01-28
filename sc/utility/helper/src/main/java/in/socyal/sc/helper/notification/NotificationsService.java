@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class NotificationsService {
 
-    private static final String FIREBASE_SERVER_KEY = "AAAAKYXHSBU:APA91bFHeNgS8tGuMQC9WRh9Etp395BO_SxjOHw0UE1loTHE-9FKykbzP_BUqDSPLu1rWZa45m5AWDQF3UPCICcGxXq99G0rjpufgaUIaiceqEMUhoEgT9J7Nrc_afqpjaUyE-6nD9vi";
+    private static final String FIREBASE_SERVER_KEY = "AAAAa7LORrA:APA91bGjdxa3bBGMQh1Ubt8-hX14w6U1kOnBkur_PnJT7taFrV2Uc85GnYIhVnuOo1Uqk7yVYg-KQ6NyeDxxgFzvs_KeoY9TbrFTE6LTgEZiKjBgwSXJ7V7gdYfx_FXncMtwZobAl7r6";
 
     @Async
     public CompletableFuture<FirebaseResponse> send(HttpEntity<String> entity) {
