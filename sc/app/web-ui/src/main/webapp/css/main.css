@@ -9,7 +9,7 @@ body {
         background-image: url(../img/logo-xs.png);
     }
     .banner {
-        height:45vh;
+        height:60vh;
     }
     .app-info-div {
         width: 100%;
@@ -22,7 +22,7 @@ body {
         background-image: url(../img/logo-sm.png);
     }
     .banner {
-        height:60vh;
+        height:70vh;
     }
 }
 
