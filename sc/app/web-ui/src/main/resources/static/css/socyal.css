@@ -4,6 +4,11 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+@font-face {
+    font-family: bananaaFont;
+    src: url(../font/MONTSERRAT-BLACK.OTF);
+}
+
 .logo {
     height: "700px";
     max-height: "700px";

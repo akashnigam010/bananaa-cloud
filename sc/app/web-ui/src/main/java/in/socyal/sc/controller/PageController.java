@@ -47,4 +47,10 @@ public class PageController {
 		modelAndView.addObject("page", page);
 		return modelAndView;
 	}
+	
+	@RequestMapping(value = "/terms", method = RequestMethod.GET)
+	public ModelAndView terms() {
+		ModelAndView modelAndView = new ModelAndView("terms");
+		return modelAndView;
+	}
 }
