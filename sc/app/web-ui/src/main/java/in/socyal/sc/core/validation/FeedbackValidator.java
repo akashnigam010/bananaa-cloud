@@ -1,5 +1,6 @@
 package in.socyal.sc.core.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.feedback.request.FeedbackRequest;
@@ -16,8 +17,9 @@ public class FeedbackValidator {
 	}
 
 	public void validateSubmitFeedbackRequest(SubmitFeedbackRequest request) {
-		if (request.getCheckinId() == null || request.getFoodRating() == null || request.getServiceRating() == null
-				|| request.getAmbienceRating() == null) {
+		if (request.getCheckinId() == null || StringUtils.isEmpty(request.getFoodRating())
+				|| StringUtils.isEmpty(request.getServiceRating())
+				|| StringUtils.isEmpty(request.getAmbienceRating())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
