@@ -224,7 +224,7 @@ public class CheckinDao {
     	query.append("INNER JOIN Socyal.ADDRESS A ON M.ADDRESS_ID = A.ID ");
     	query.append("WHERE C.STATUS = 'APPROVED' ");
     	query.append("ORDER BY C.CHECKIN_DATETIME DESC, ");
-    	query.append("Socyal.DISTANCE(:latitude, :longitude, A.LATITUDE, A.LONGITUDE) ASC");
+    	query.append("Socyal.DISTANCE_BETWEEN_COORDINATES(:latitude, :longitude, A.LATITUDE, A.LONGITUDE) ASC");
     	return query.toString();
     }
 }

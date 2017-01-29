@@ -25,7 +25,7 @@ public class MerchantDaoMapper {
 	public void map(List<MerchantEntity> from, List<MerchantDto> to) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
-			map(entity, dto, false);
+			map(entity, dto, true);
 			to.add(dto);
 		}
 	}
