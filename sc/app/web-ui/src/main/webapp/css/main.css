@@ -57,7 +57,7 @@ body {
 
 .logo {
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: center;
 }
 
 .tagline {
@@ -68,7 +68,7 @@ body {
 }
 
 .banner {
-    background-color: #9932CC;
+    background-color: #9932CC; 
     background-image: url("../img/banner_graphic.png");
     background-repeat: no-repeat;
     background-position: bottom;
@@ -95,10 +95,12 @@ body {
 .feature-heading {
     text-transform: uppercase;
     font-family: _semiBold;
+    font-size: 20px;
 }
 
  .feature-description {
     color: #808080;
+    font-size: 16px;
  }
 
 /* Feature Banner CSS - END */
@@ -111,7 +113,7 @@ body {
 
 .wc-custom-class-1 {
     text-transform: uppercase;
-    font-family: _light !important;
+    font-family: _bold !important;
     padding: 10px !important;
 }
 
