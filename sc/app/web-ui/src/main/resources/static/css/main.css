@@ -277,3 +277,26 @@ a:hover {
 }
 
 /* Footer CSS - END */
+
+/* Modal CSS - START */
+
+#excitementModal {
+    height: 400px;
+    top: calc(50% - 200px) !important;
+}
+
+#appLaunchModal {
+    height: 400px;
+    top: calc(50% - 200px) !important;
+}
+
+.dismiss-btn {
+	color : white;
+	background: #9932CC; 
+}
+
+.align-center {
+	text-align: center;;
+}
+
+/* Modal CSS - END */
