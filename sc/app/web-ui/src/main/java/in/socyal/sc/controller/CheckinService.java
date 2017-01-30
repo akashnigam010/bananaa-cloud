@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
@@ -193,6 +195,19 @@ public class CheckinService {
 		try {
 			validator.validateGetBusinessCheckinDetailsRequest(request);
 			response = delegate.getBusinessCheckinDetails(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getBusinessCheckinHistory", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(@RequestBody GetBusinessCheckinHistoryRequest request) {
+		JsonHelper.logRequest(request, CheckinService.class, "/merchant/getBusinessCheckinHistory");
+		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
+		try {
+			validator.validateGetBusinessCheckinHistoryRequest(request);
+			response = delegate.getBusinessCheckinHistory(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

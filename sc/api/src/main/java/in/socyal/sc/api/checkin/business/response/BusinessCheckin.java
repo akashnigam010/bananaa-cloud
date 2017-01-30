@@ -7,6 +7,7 @@ import java.util.List;
 
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
+import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
 import in.socyal.sc.api.type.CheckinStatusType;
 
 public class BusinessCheckin implements Serializable {
@@ -19,6 +20,7 @@ public class BusinessCheckin implements Serializable {
 	private Date timestamp;
 	private String card;
 	private CheckinStatusType checkinStatus;
+	private FeedbackDetailsResponse feedbackDetails;
 
 	public Integer getId() {
 		return id;
@@ -85,5 +87,13 @@ public class BusinessCheckin implements Serializable {
 
 	public void setCheckinStatus(CheckinStatusType checkinStatus) {
 		this.checkinStatus = checkinStatus;
+	}
+
+	public FeedbackDetailsResponse getFeedbackDetails() {
+		return feedbackDetails;
+	}
+
+	public void setFeedbackDetails(FeedbackDetailsResponse feedbackDetails) {
+		this.feedbackDetails = feedbackDetails;
 	}
 }

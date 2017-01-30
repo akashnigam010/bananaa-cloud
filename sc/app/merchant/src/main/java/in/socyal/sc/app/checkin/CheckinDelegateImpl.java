@@ -2,6 +2,7 @@ package in.socyal.sc.app.checkin;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -13,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.restfb.exception.FacebookOAuthException;
 
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
@@ -455,6 +459,54 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			feedbackDetails.setServiceRating(3);
 			response.setFeedbackDetails(feedbackDetails);
 		}
+		return response;
+	}
+
+	@Override
+	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
+			throws BusinessException {
+		GetBusinessCheckinHistoryResponse response = getGetBusinessCheckinHistoryResponse(request);
+		return response;
+	}
+	
+	//FIXME : dummy response, replace with actual logic
+	private GetBusinessCheckinHistoryResponse getGetBusinessCheckinHistoryResponse(GetBusinessCheckinHistoryRequest request) {
+		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
+		List<BusinessCheckin> list = new ArrayList<>();
+		if (request.getPage() == 1) {
+			BusinessCheckin checkin = new BusinessCheckin();
+			checkin.setId(1);
+			checkin.setCard("15");
+			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(5);
+			feedbackDetails.setServiceRating(3);
+			checkin.setFeedbackDetails(feedbackDetails);
+			checkin.setRating(4.5);
+			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");
+			List<TaggedUserResponse> taggedUsers = new ArrayList<>();
+			TaggedUserResponse taggedUser = new TaggedUserResponse();
+			taggedUser.setId(1);
+			taggedUser.setName("Dharmasena");
+			taggedUsers.add(taggedUser);
+			checkin.setTaggedUsers(taggedUsers);
+			checkin.setTimestamp(clock.cal().getTime());
+			UserDetailsResponse userDetails = new UserDetailsResponse();
+			userDetails.setId(request.getUserId());
+			userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+			userDetails.setName("Akash Nigam");
+			userDetails.setUserCheckins(20);
+			checkin.setUser(userDetails);
+			list.add(checkin);
+			list.add(checkin);
+			list.add(checkin);
+			list.add(checkin);
+			list.add(checkin);
+		} else {
+			list = Collections.emptyList();
+		}
+		response.setCheckins(list);
 		return response;
 	}
 }
