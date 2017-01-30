@@ -2,8 +2,8 @@ package in.socyal.sc.api.type;
 
 public enum FeedbackStatusType {
 	ASKED("ASKED"),
-	DISMISSED("DISMISSED"),
-	SUBMITTED("SUBMITTED");
+	NOT_ASKED("NOTASKED"),
+	RECEIVED("RECEIVED");
 	
 	private String status;
 

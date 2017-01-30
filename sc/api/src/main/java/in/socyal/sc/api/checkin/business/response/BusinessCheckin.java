@@ -1,10 +1,12 @@
-package in.socyal.sc.api.checkin.response;
+package in.socyal.sc.api.checkin.business.response;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import in.socyal.sc.api.checkin.response.TaggedUserResponse;
+import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.type.CheckinStatusType;
 
 public class BusinessCheckin implements Serializable {

@@ -12,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.restfb.exception.FacebookOAuthException;
 
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
@@ -19,7 +23,6 @@ import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
-import in.socyal.sc.api.checkin.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
@@ -28,15 +31,18 @@ import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
 import in.socyal.sc.api.checkin.response.FeedsResponse;
-import in.socyal.sc.api.checkin.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
+import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
+import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
 import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.FeedbackStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
@@ -172,7 +178,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		if (checkin == null) {
 			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getId());
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		} else if (CheckinStatusType.CANCELLED == checkin.getStatus()) {
+		} else if (CheckinStatusType.USER_CANCELLED == checkin.getStatus()) {
 			LOG.error("Checkin is already cancelled for checkinID:" + request.getId());
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
 		}
@@ -383,5 +389,72 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
+			throws BusinessException {
+		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		response = buildGetBusinessCheckinDetailsResponse(request.getCheckinId());
+		return response;
+	}
+	
+	//FIXME : dummy response, replace with actual logic
+	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(Integer checkinId) {
+		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(1);
+		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+		userDetails.setName("Akash Nigam");
+		userDetails.setUserCheckins(20);
+		response.setUser(userDetails);
+		response.setCardNumber(10);
+		if (checkinId % 9 == 1) {
+			response.setCheckinStatus(CheckinStatusType.USER_CANCELLED);
+			response.setCancelMessage("Checkin was cancelled by user");
+		} else if (checkinId % 9 == 2) {
+			response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
+			response.setCancelMessage("Checkin was cancelled by merchant");
+		} else if (checkinId % 9 == 3) {
+			response.setCheckinStatus(CheckinStatusType.PENDING);
+		} else if (checkinId % 9 == 4) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.GIVEN);
+			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
+			response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		} else if (checkinId % 9 == 5) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		} else if (checkinId % 9 == 6) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.GIVEN);
+			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
+			response.setFeedbackStatus(FeedbackStatusType.ASKED);
+		} else if (checkinId % 9 == 7) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			response.setFeedbackStatus(FeedbackStatusType.ASKED);
+		} else if (checkinId % 9 == 8) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(5);
+			feedbackDetails.setServiceRating(3);
+			response.setFeedbackDetails(feedbackDetails);
+		} else if (checkinId % 9 == 0) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.GIVEN);
+			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
+			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(5);
+			feedbackDetails.setServiceRating(3);
+			response.setFeedbackDetails(feedbackDetails);
+		}
+		return response;
 	}
 }

@@ -4,11 +4,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
-import in.socyal.sc.api.checkin.request.GetBusinessCheckinsRequest;
 import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
 import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
@@ -113,6 +114,12 @@ public class CheckinValidator {
 		RoleType role = RoleType.getRole(jwtHelper.getUserName());
 		if (role == RoleType.GUEST) {
 			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+	}
+
+	public void validateGetBusinessCheckinDetailsRequest(GetBusinessCheckinDetailsRequest request) {
+		if (request.getCheckinId() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 }

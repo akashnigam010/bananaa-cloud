@@ -114,7 +114,7 @@ public class CheckinDao {
 	public void cancelCheckin(Integer checkinId) {
 		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
 		if (checkin != null) {
-			checkin.setStatus(CheckinStatusType.CANCELLED);
+			checkin.setStatus(CheckinStatusType.USER_CANCELLED);
 			checkin.setUpdatedDateTime(clock.cal());
 			sessionFactory.getCurrentSession().update(checkin);
 		} else {

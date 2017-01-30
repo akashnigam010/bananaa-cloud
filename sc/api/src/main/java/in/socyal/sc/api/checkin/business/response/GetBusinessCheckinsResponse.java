@@ -1,4 +1,4 @@
-package in.socyal.sc.api.checkin.response;
+package in.socyal.sc.api.checkin.business.response;
 
 import java.io.Serializable;
 import java.util.ArrayList;

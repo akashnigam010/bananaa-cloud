@@ -1,4 +1,4 @@
-package in.socyal.sc.api.checkin.request;
+package in.socyal.sc.api.checkin.business.request;
 
 import java.io.Serializable;
 

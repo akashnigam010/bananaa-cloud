@@ -6,12 +6,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
-import in.socyal.sc.api.checkin.response.BusinessCheckin;
 import in.socyal.sc.api.checkin.response.Checkin;
 import in.socyal.sc.api.checkin.response.FeedsResponse;
-import in.socyal.sc.api.checkin.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.user.dto.UserDto;
