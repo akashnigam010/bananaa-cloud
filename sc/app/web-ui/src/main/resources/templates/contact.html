@@ -7,7 +7,33 @@
 <body>
 	<div class="container-fluid">
 		<div th:replace="fragments/header :: header"></div>
-		Contact
+		
+		<!-- POLICY STARTS -->
+		<div class="row grey-background document-area">
+		    <div class="primary-heading">
+		        <h2>Contact Us</h2>
+		    </div>          
+		
+		    <div class="col-xs-12 white-background document-area">
+		        
+		        <address>
+		          <p>Email us at:</p>
+		          <a href="mailto:#" class="bold">contact@bananaa.in</a>
+		        </address>
+				<br />
+				<p>Or write us at :</p>
+		        <address>
+		          <span>Bananaa Internet Private Limited</span>
+		          <br />
+		          2-239 Vivek Khand, Gomtinagar<br />
+		          Lucknow, UP 226010<br />
+		        </address>                
+		
+		    </div>
+		</div>
+				
+		<!-- POLICY ENDSS -->
+		
 		<div lang="en" th:replace="fragments/footer :: footer"></div>
 	</div>
 </body>

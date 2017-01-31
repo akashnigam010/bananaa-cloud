@@ -3,6 +3,10 @@ body {
     color: #33373D;
 }
 
+.bold {
+	font-family: _bold;
+}
+
 .white-background {
     background-color: #ffffff;
 }
@@ -349,8 +353,11 @@ a:hover {
 .logo-header {
     position: absolute;
     background-repeat: no-repeat;
-    height: 5%;
+    height: 15%;
+    /* test */
     margin-left: 0%;
+    cursor: pointer;
+    display: block;
 }
 
 /* HEADER CSS - END */
