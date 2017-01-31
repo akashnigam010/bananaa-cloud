@@ -70,6 +70,7 @@ public class RewardService {
 	public GetBusinessRewardsResponse getBusinessRewards() {
 		GetBusinessRewardsResponse response = new GetBusinessRewardsResponse();
 		try {
+			//FIXME : Fetch merchantId from JWT Token
 			response = delegate.getRewardsList(12345);
 			return helper.success(response);
 		} catch (BusinessException e) {

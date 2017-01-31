@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.checkin.business.request.BusinessApproveCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCancelCheckinResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
@@ -208,6 +212,32 @@ public class CheckinService {
 		try {
 			validator.validateGetBusinessCheckinHistoryRequest(request);
 			response = delegate.getBusinessCheckinHistory(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/businessCancelCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public BusinessCancelCheckinResponse businessCancelCheckin(@RequestBody BusinessCancelCheckinRequest request) {
+		JsonHelper.logRequest(request, CheckinService.class, "/merchant/businessCancelCheckin");
+		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+		try {
+			validator.validateBusinessCancelCheckinRequest(request);
+			response = delegate.businessCancelCheckin(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/businessApproveCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public BusinessApproveCheckinResponse businessApproveCheckin(@RequestBody BusinessApproveCheckinRequest request) {
+		JsonHelper.logRequest(request, CheckinService.class, "/merchant/businessApproveCheckin");
+		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
+		try {
+			validator.validateBusinessApproveCheckinRequest(request);
+			response = delegate.businessApproveCheckin(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

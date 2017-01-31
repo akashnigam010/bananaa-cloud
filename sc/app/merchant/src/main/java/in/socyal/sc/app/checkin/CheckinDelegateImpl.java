@@ -13,9 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.restfb.exception.FacebookOAuthException;
 
+import in.socyal.sc.api.checkin.business.request.BusinessApproveCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCancelCheckinResponse;
 import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
@@ -278,6 +282,39 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
+			throws BusinessException {
+		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		response = buildGetBusinessCheckinDetailsResponse(request.getCheckinId());
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
+			throws BusinessException {
+		GetBusinessCheckinHistoryResponse response = getGetBusinessCheckinHistoryResponse(request);
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessCancelCheckinResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
+			throws BusinessException {
+		BusinessCancelCheckinResponse response = businessCancelCheckinResponse();
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
+			throws BusinessException {
+		BusinessApproveCheckinResponse response = businessApproveCheckinResponse();
+		return response;
+	}
+	
 	public Integer fetchLikeCount(Integer checkinId) {
 		return checkinLikeDao.fetchLikeCount(checkinId);
 	}
@@ -395,14 +432,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return false;
 	}
 
-	@Override
-	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
-			throws BusinessException {
-		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
-		response = buildGetBusinessCheckinDetailsResponse(request.getCheckinId());
-		return response;
-	}
-	
 	//FIXME : dummy response, replace with actual logic
 	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(Integer checkinId) {
 		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
@@ -462,13 +491,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 
-	@Override
-	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
-			throws BusinessException {
-		GetBusinessCheckinHistoryResponse response = getGetBusinessCheckinHistoryResponse(request);
-		return response;
-	}
-	
 	//FIXME : dummy response, replace with actual logic
 	private GetBusinessCheckinHistoryResponse getGetBusinessCheckinHistoryResponse(GetBusinessCheckinHistoryRequest request) {
 		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
@@ -507,6 +529,37 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			list = Collections.emptyList();
 		}
 		response.setCheckins(list);
+		return response;
+	}
+	
+	//FIXME : dummy response, replace with actual logic
+	private BusinessCancelCheckinResponse businessCancelCheckinResponse() {
+		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(7);
+		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+		userDetails.setName("Akash Nigam");
+		userDetails.setUserCheckins(33);
+		response.setUser(userDetails);
+		response.setCardNumber(10);
+		response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
+		response.setCancelMessage("Checkin was cancelled by merchant");
+		return response;
+	}
+	
+	//FIXME : dummy response, replace with actual logic
+	private BusinessApproveCheckinResponse businessApproveCheckinResponse() {
+		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(4);
+		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+		userDetails.setName("Akash Nigam");
+		userDetails.setUserCheckins(21);
+		response.setUser(userDetails);
+		response.setCardNumber(12);
+		response.setCheckinStatus(CheckinStatusType.APPROVED);
+		response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+		response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
 		return response;
 	}
 }

@@ -1,8 +1,12 @@
 package in.socyal.sc.app.checkin;
 
+import in.socyal.sc.api.checkin.business.request.BusinessApproveCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCancelCheckinResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
@@ -37,4 +41,6 @@ public interface CheckinDelegate {
 	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request);
 	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request) throws BusinessException;
 	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request) throws BusinessException;
+	public BusinessCancelCheckinResponse businessCancelCheckin(BusinessCancelCheckinRequest request) throws BusinessException;
+	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request) throws BusinessException;
 }
