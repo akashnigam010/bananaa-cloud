@@ -34,6 +34,7 @@ public class RewardService {
 		try {
 			validator.validateSubmitRewardsRequest(request);
 			// FIXME : Add actual logic to submit rewards for a checkin
+			response = delegate.submitRewards(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
