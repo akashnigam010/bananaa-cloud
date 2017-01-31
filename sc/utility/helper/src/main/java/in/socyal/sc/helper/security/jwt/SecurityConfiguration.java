@@ -52,17 +52,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
         	RestAuthenticationEntryPoint entryPoint = new RestAuthenticationEntryPoint();
             http
-            	.authorizeRequests().antMatchers("/", "/index.html", "/socyal/login/fbLogin", "/socyal/location/**", "/socyal/merchant/**",
+            	.authorizeRequests()
+            	      .antMatchers("/", "/index.html", "/socyal/login/fbLogin", "/socyal/location/**", "/socyal/merchant/**",
             			"/socyal/checkin/**", "/socyal/user/**", "/socyal/feedback/**", "/socyal/reward/**").permitAll()
-            	.and().authorizeRequests().antMatchers("/manage").hasAnyAuthority("ROLE_ADMIN")
-            	.and()
+            	      .and().authorizeRequests().antMatchers("/manage").hasAnyAuthority("ROLE_ADMIN").and()
             	.authorizeRequests()
-            		.antMatchers("/socyal/checkin/**").authenticated().and()
-            			.addFilterBefore(customJwtAuthenticationFilter("/socyal/checkin/**"), AbstractPreAuthenticatedProcessingFilter.class)
+            		  .antMatchers("/socyal/checkin/**").authenticated().and()
+            		  .addFilterBefore(customJwtAuthenticationFilter("/socyal/checkin/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .authorizeRequests()
+	          		  .antMatchers("/socyal/merchant/**").authenticated().and()
+	          		  .addFilterBefore(customJwtAuthenticationFilter("/socyal/merchant/**"), AbstractPreAuthenticatedProcessingFilter.class)
             	.authorizeRequests()
-                	.antMatchers("/socyal/user/**").authenticated().and()
-                			.addFilterBefore(customJwtAuthenticationFilter("/socyal/user/**"), AbstractPreAuthenticatedProcessingFilter.class)
-				.formLogin()
+                	  .antMatchers("/socyal/user/**").authenticated().and()
+                	  .addFilterBefore(customJwtAuthenticationFilter("/socyal/user/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .authorizeRequests()
+                      .antMatchers("/socyal/feedback/**").authenticated().and()
+                      .addFilterBefore(customJwtAuthenticationFilter("/socyal/feedback/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .authorizeRequests()
+                      .antMatchers("/socyal/reward/**").authenticated().and()
+                      .addFilterBefore(customJwtAuthenticationFilter("/socyal/reward/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .formLogin()
 					.loginPage("/manage/login").permitAll().and()
     			.csrf().disable();
         }
