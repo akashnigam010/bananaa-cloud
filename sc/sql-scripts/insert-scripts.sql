@@ -155,3 +155,21 @@ INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAM
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (4, 'Urmila', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Mamalla');
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (5, 'Kriti', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Konda');
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (6, 'Karthik', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Putta');
+
+--Rewrads (Temporary)
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (1, 12345, 'Amazon gift voucher worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (2, 12345, 'Flipkart gift voucher worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (3, 12346, 'Paytm cash worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (4, 12346, 'O2 spa gift coupon worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (5, 12347, 'Mobikwik cash coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (6, 12347, 'Freecharge gift coupon worth Rs. 150!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (7, 12348, 'Bookmyshow gift coupon worth Rs. 250!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (8, 12348, 'Westside gift coupon worth Rs. 500!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (9, 12349, 'Shoppers Stop gift voucher worth Rs. 500!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (10, 12349, 'Pantaloons cash coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (11, 12350, 'Archies gift coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (12, 12351, 'Free Buffet worth Rs. 700!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (13, 12352, 'Free appetizers worth Rs. 400!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (14, 12353, 'Free skewers worth Rs 250!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (15, 12354, 'flat 10% discount on bill!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (16, 12355, 'Amazon gift coupon worth Rs. 300!');

@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.feedback.response.FeedbackStatusResponse;
+import in.socyal.sc.api.reward.business.response.GetBusinessRewardsResponse;
 import in.socyal.sc.api.reward.request.RewardRequest;
 import in.socyal.sc.api.reward.request.SubmitRewardsRequest;
 import in.socyal.sc.api.reward.response.SubmitRewardsResponse;
+import in.socyal.sc.app.rewards.RewardsDelegate;
 import in.socyal.sc.core.validation.RewardsValidator;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
@@ -22,6 +24,8 @@ public class RewardService {
 	ResponseHelper helper;
 	@Autowired
 	RewardsValidator validator;
+	@Autowired
+	RewardsDelegate delegate;
 
 	@RequestMapping(value = "/submitRewards", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SubmitRewardsResponse submitRewards(@RequestBody SubmitRewardsRequest request) {
@@ -56,6 +60,17 @@ public class RewardService {
 				response.setMerchantName("Soda Bottle Opener Wala");
 				response.setShortAddress("Jubilee Hills, Hyderabad");
 			}
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getBusinessRewards", method = RequestMethod.GET, headers = "Accept=application/json")
+	public GetBusinessRewardsResponse getBusinessRewards() {
+		GetBusinessRewardsResponse response = new GetBusinessRewardsResponse();
+		try {
+			response = delegate.getRewardsList(12345);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
