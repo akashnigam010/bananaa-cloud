@@ -34,6 +34,7 @@ public class RewardService {
 		try {
 			validator.validateSubmitRewardsRequest(request);
 			// FIXME : Add actual logic to submit rewards for a checkin
+			response = delegate.submitRewards(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
@@ -70,6 +71,7 @@ public class RewardService {
 	public GetBusinessRewardsResponse getBusinessRewards() {
 		GetBusinessRewardsResponse response = new GetBusinessRewardsResponse();
 		try {
+			//FIXME : Fetch merchantId from JWT Token
 			response = delegate.getRewardsList(12345);
 			return helper.success(response);
 		} catch (BusinessException e) {

@@ -1,4 +1,4 @@
-package in.socyal.sc.api.reward.response;
+package in.socyal.sc.api.feedback.business.response;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 
-public class SubmitRewardsResponse extends GenericResponse implements Serializable {
+public class BusinessCancelFeedbackResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private UserDetailsResponse user;
 	private Integer cardNumber;
