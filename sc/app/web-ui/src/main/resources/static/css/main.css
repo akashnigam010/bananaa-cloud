@@ -1,5 +1,27 @@
 body {
     font-family: _light;
+    color: #33373D;
+}
+
+.white-background {
+    background-color: #ffffff;
+}
+
+.grey-background {
+    background-color: #f3f3f3;
+}
+
+.primary-heading {
+    padding-bottom: 3%;
+}
+
+.document-area {
+    padding: 3%;
+}
+
+.grey-text {
+    color: #89959B;
+    padding-bottom: 3%;
 }
 
 a {
@@ -15,7 +37,7 @@ a:hover {
 
 /* Media Queries CSS - START */
 
-@media (min-width: 300px) {
+@media (min-width: 100px) {
     .logo {
         background-image: url(../img/logo-xs.png);
     }
@@ -26,6 +48,13 @@ a:hover {
         width: 100%;
         float: left;
     }
+    .header {
+        height: 60px;
+        padding: 5%;
+    }
+    .logo-header {
+        background-image: url("../img/logo-xxxs.png");
+    }
 }
 
 @media (min-width: 500px) {
@@ -34,6 +63,13 @@ a:hover {
     }
     .banner {
         height:70vh;
+    }
+    .header {
+        height: 70px;
+        padding: 1%;
+    }
+    .logo-header {
+        background-image: url("../img/logo-xxs.png");
     }
 }
 
@@ -300,3 +336,21 @@ a:hover {
 }
 
 /* Modal CSS - END */
+
+/* HEADER CSS - START */
+
+.header {
+    background-color: #9932CC; 
+    background-image: url("../img/hero_banner_bg.png");
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.logo-header {
+    position: absolute;
+    background-repeat: no-repeat;
+    height: 5%;
+    margin-left: 0%;
+}
+
+/* HEADER CSS - END */
