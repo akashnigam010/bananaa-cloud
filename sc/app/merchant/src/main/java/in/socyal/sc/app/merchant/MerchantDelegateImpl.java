@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
+import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.Location;
@@ -36,6 +38,7 @@ import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.persistence.MerchantDao;
+import in.socyal.sc.persistence.MerchantLoginDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
@@ -43,6 +46,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Autowired MerchantDelegateMapper mapper;
 	@Autowired DayUtil dayUtil;
 	@Autowired Clock clock;
+	@Autowired MerchantLoginDao merchantLoginDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -100,6 +104,21 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		MerchantDto merchantDto = new MerchantDto();
 		mapper.map(request, merchantDto);
 		dao.saveMerchantDetails(merchantDto);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
+			throws BusinessException {
+		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
+		//FIXME : fetch merchantid from token
+		MerchantDto merchant = dao.getMerchantDetails(12345);
+		if (merchant == null) {
+			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
+		}
+		//FIXME : fetch merchantId and logged in userId from token
+		merchantLoginDao.saveRegistrationIdForMerchant(12345, "manager", request.getRegistrationId());
+		return response;
 	}
 
 	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
