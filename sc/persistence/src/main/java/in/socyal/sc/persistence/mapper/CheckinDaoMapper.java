@@ -103,10 +103,13 @@ public class CheckinDaoMapper {
 	 * Throws exception if user is not logged in
 	 */
 	private boolean isLoggedInUser() {
-		RoleType role = RoleType.getRole(jwtHelper.getUserName());
-		if (role == RoleType.GUEST) {
-			return Boolean.FALSE;
-		} 
+		for (String role : jwtHelper.getRoles()) {
+			RoleType roleType = RoleType.getRole(role);
+			if (RoleType.GUEST == roleType) {
+				return Boolean.FALSE;
+			} 
+		}
+		
 		return Boolean.TRUE;
 	}
 }

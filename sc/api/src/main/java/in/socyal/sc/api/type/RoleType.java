@@ -2,7 +2,8 @@ package in.socyal.sc.api.type;
 
 public enum RoleType {
 	USER(1, "USER"), 
-	GUEST(2, "GUEST");
+	GUEST(2, "GUEST"),
+	MERCHANT(3, "MERCHANT");
 
 	private Integer id;
 	private String role;

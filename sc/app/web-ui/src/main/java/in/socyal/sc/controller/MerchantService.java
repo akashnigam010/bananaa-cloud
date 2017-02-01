@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
+import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
@@ -84,6 +86,24 @@ public class MerchantService {
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		}
-
 	}
+	
+	/**
+	 * This method is used to save REGISTRATION_ID for a respective merchant logged in device
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/saveBusinessRegistrationId", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(@RequestBody SaveBusinessRegistrationIdRequest request) {
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/saveBusinessRegistrationId");
+		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
+		try {
+			validator.validateSaveBusinessRegistrationIdRequest(request);
+			response = delegate.saveBusinessRegistrationId(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
 }

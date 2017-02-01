@@ -50,9 +50,11 @@ public class UserValidator {
 	 * Throws exception if user is not logged in
 	 */
 	private void validateIfLoggedInUser() {
-		RoleType role = RoleType.getRole(jwtHelper.getUserName());
-		if (role == RoleType.GUEST) {
-			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		for (String role : jwtHelper.getRoles()) {
+			RoleType roleType = RoleType.getRole(role);
+			if (RoleType.GUEST == roleType) {
+				throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+			} 
 		}
 	}
 

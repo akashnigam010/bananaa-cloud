@@ -8,14 +8,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class AuthenticatedUser implements UserDetails {
 	String userId;
+	String deviceId;
+	String merchantId;
 	String userName;
 	String token;
 	List<GrantedAuthority> authorityList;
 
 	private static final long serialVersionUID = 1L;
 
-	public AuthenticatedUser(String userId, String userName, String token, List<GrantedAuthority> authorityList) {
+	public AuthenticatedUser(String userId, 
+							 String deviceId, 
+							 String merchantId, 
+							 String userName, 
+							 String token, 
+							 List<GrantedAuthority> authorityList) {
 		this.userId = userId;
+		this.deviceId = deviceId;
+		this.merchantId = merchantId;
 		this.userName = userName;
 		this.token = token;
 		this.authorityList = authorityList;
@@ -54,6 +63,14 @@ public class AuthenticatedUser implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public String getMerchantId() {
+		return merchantId;
 	}
 
 	@Override

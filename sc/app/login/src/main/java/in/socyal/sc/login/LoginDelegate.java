@@ -1,5 +1,6 @@
 package in.socyal.sc.login;
 
+import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
@@ -23,7 +24,8 @@ public interface LoginDelegate {
 
 	/**
 	 * Business login
+	 * @param request 
 	 * @return
 	 */
-	public BusinessLoginResponse businessLogin();
+	public BusinessLoginResponse businessLogin(BusinessLoginRequest request) throws BusinessException;
 }
