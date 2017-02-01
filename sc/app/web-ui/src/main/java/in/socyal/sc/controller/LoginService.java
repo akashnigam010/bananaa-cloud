@@ -51,7 +51,7 @@ public class LoginService {
 		try {
 			LOG.info("Business login request");
 			validator.validateBusinessLoginRequest(request);
-			response = delegate.businessLogin();
+			response = delegate.businessLogin(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

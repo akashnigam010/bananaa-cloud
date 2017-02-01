@@ -1,6 +1,5 @@
 package in.socyal.sc.login;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,16 +10,22 @@ import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.User;
 
 import in.socyal.sc.api.login.dto.BusinessLoginUserDto;
+import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.merchant.business.dto.MerchantLoginDto;
+import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.login.type.LoginErrorCodeType;
 import in.socyal.sc.persistence.CheckinDao;
+import in.socyal.sc.persistence.MerchantDao;
+import in.socyal.sc.persistence.MerchantLoginDao;
 import in.socyal.sc.persistence.UserDao;
 
 @Service
@@ -34,6 +39,10 @@ public class LoginDelegateImpl implements LoginDelegate {
 	LoginMapper mapper;
 	@Autowired
 	OAuth2FbHelper fbHelper;
+	@Autowired
+	MerchantLoginDao merchantLoginDao;
+	@Autowired
+	MerchantDao merchantDao;
 
 	@Override
 	public LoginResponse skipLogin() {
@@ -68,14 +77,24 @@ public class LoginDelegateImpl implements LoginDelegate {
 	}
 
 	@Override
-	public BusinessLoginResponse businessLogin() {
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessLoginResponse businessLogin(BusinessLoginRequest request) {
 		BusinessLoginResponse response = new BusinessLoginResponse();
-		response.setAccessToken(JwtHelper.createJsonWebToken(RoleType.GUEST.getRole(), RoleType.GUEST.getRole(), 1L));
-		BusinessLoginUserDto user = new BusinessLoginUserDto();
-		user.setId(12345);
-		user.setName("Skyhy");
-		user.setShortAddress("Gachibowli, Hyderabad");
-		response.setUser(user);
+		MerchantLoginDto merchantLoginDto = merchantLoginDao.validateBusinessUser(request.getUsername(), request.getPassword());
+		if (merchantLoginDto == null) {
+			throw new BusinessException(LoginErrorCodeType.BUSINESS_CREDENTIALS_INVALID);
+		}
+		response.setAccessToken(JwtHelper.createJsonWebTokenForMerchant(merchantLoginDto.getDeviceId().toString(),
+														merchantLoginDto.getMerchant().getId().toString(),
+														RoleType.MERCHANT.getRole(), 
+														365L));
+		
+		BusinessLoginUserDto loggedInUser = new BusinessLoginUserDto();
+		MerchantDto merchant = merchantLoginDto.getMerchant();
+		loggedInUser.setId(merchant.getId());
+		loggedInUser.setName(merchant.getName());
+		loggedInUser.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
+		response.setUser(loggedInUser);
 		return response;
 	}
 }

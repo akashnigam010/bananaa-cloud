@@ -26,14 +26,17 @@ public class MerchantLoginEntity implements Serializable {
 	@JoinColumn(name = "MERCHANT_ID")
 	private MerchantEntity merchant;
 
-	@Column(name = "USER_ID")
-	private String userId;
+	@Column(name = "USERNAME")
+	private String username;
 
 	@Column(name = "PASSWORD")
 	private String password;
 
 	@Column(name = "REGISTRATION_ID")
 	private String registrationId;
+	
+	@Column(name = "DEVICE_ID")
+	private Integer deviceId;
 	
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
@@ -54,12 +57,12 @@ public class MerchantLoginEntity implements Serializable {
 		this.merchant = merchant;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -84,5 +87,13 @@ public class MerchantLoginEntity implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public Integer getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(Integer deviceId) {
+		this.deviceId = deviceId;
 	}
 }

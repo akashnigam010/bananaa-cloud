@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.merchant.business.dto.MerchantLoginDto;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.MerchantLoginEntity;
 import in.socyal.sc.persistence.mapper.MerchantLoginDaoMapper;
@@ -24,11 +25,25 @@ public class MerchantLoginDao {
         this.sessionFactory = sessionFactory;
     }
  
-	public void saveRegistrationIdForMerchant(Integer merchantId, String userId, String registrationId) {
+    public MerchantLoginDto validateBusinessUser(String username, String password) {
+    	MerchantLoginDto merchantLoginDto = null;
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(MerchantLoginEntity.class);
+		criteria.add(Restrictions.eq("username", username));
+		criteria.add(Restrictions.eq("password", password));
+		MerchantLoginEntity merchantLoginEntity = (MerchantLoginEntity) criteria.uniqueResult();
+		if (merchantLoginEntity != null) {
+			merchantLoginDto = new MerchantLoginDto();
+			mapper.map(merchantLoginEntity, merchantLoginDto);
+		}
+		return merchantLoginDto;
+	}
+    
+	public void saveRegistrationIdForMerchant(Integer merchantId, String username, String registrationId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(MerchantLoginEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
-		criteria.add(Restrictions.eq("userId", userId));
+		criteria.add(Restrictions.eq("username", username));
 		MerchantLoginEntity merchantLogin = (MerchantLoginEntity) criteria.uniqueResult();
 		merchantLogin.setRegistrationId(registrationId);
 		merchantLogin.setUpdatedDateTime(clock.cal());
