@@ -1,5 +1,6 @@
 package in.socyal.sc.login;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	public LoginResponse skipLogin() {
 		LoginResponse response = new LoginResponse();
 		// Sets JWT access token
-		response.setAccessToken(JwtHelper.createJsonWebToken(RoleType.GUEST.getRole(), RoleType.GUEST.getRole(), 1L));
+		response.setAccessToken(JwtHelper.createJsonWebTokenForGuest(RoleType.GUEST.getRole(), 1L));
 		response.setUser(mapper.mapGuestUser());
 		return response;
 	}

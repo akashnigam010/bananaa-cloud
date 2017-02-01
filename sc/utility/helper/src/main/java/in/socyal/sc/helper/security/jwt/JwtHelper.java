@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 
+import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.type.GenericErrorCodeType;
 import net.oauth.jsontoken.JsonToken;
@@ -69,6 +70,64 @@ public class JwtHelper {
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
 	}
+	
+	public static String createJsonWebTokenForGuest(String role, Long durationInDays) {
+		// Current time and signing algorithm
+		Calendar cal = Calendar.getInstance();
+		HmacSHA256Signer signer;
+		try {
+			signer = new HmacSHA256Signer(ISSUER, null, SIGNING_KEY.getBytes());
+		} catch (InvalidKeyException e) {
+			LOG.error("Exception occured while creating JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		// Configure JSON token
+		JsonToken token = new net.oauth.jsontoken.JsonToken(signer);
+		token.setAudience(AUDIENCE);
+		token.setIssuedAt(new org.joda.time.Instant(cal.getTimeInMillis()));
+		token.setExpiration(new org.joda.time.Instant(cal.getTimeInMillis() + 1000L * 60L * 60L * 24L * durationInDays));
+		// Configure request object, which provides information of the item
+		JsonObject request = new JsonObject();
+		request.addProperty("role", role);
+		JsonObject payload = token.getPayloadAsJsonObject();
+		payload.add("info", request);
+		try {
+			return token.serializeAndSign();
+		} catch (SignatureException e) {
+			LOG.error("Exception occured while serializing and signing JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+	}
+	
+	public static String createJsonWebTokenForMerchant(String deviceId, String merchantId, String role, Long durationInDays) {
+		// Current time and signing algorithm
+		Calendar cal = Calendar.getInstance();
+		HmacSHA256Signer signer;
+		try {
+			signer = new HmacSHA256Signer(ISSUER, null, SIGNING_KEY.getBytes());
+		} catch (InvalidKeyException e) {
+			LOG.error("Exception occured while creating JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		// Configure JSON token
+		JsonToken token = new net.oauth.jsontoken.JsonToken(signer);
+		token.setAudience(AUDIENCE);
+		token.setIssuedAt(new org.joda.time.Instant(cal.getTimeInMillis()));
+		token.setExpiration(new org.joda.time.Instant(cal.getTimeInMillis() + 1000L * 60L * 60L * 24L * durationInDays));
+		// Configure request object, which provides information of the item
+		JsonObject request = new JsonObject();
+		request.addProperty("deviceId", deviceId);
+		request.addProperty("merchantId", merchantId);
+		request.addProperty("role", role);
+		JsonObject payload = token.getPayloadAsJsonObject();
+		payload.add("info", request);
+		try {
+			return token.serializeAndSign();
+		} catch (SignatureException e) {
+			LOG.error("Exception occured while serializing and signing JWT token ", e);
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+	}
 
 	/**
 	 * Verifies a JSON Web Token's validity and extracts the userId and other
@@ -107,14 +166,31 @@ public class JwtHelper {
 			JsonObject payload = jt.getPayloadAsJsonObject();
 			TokenInfo tokenInfo = new TokenInfo();
 			String issuer = payload.getAsJsonPrimitive("iss").getAsString();
-			String userIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("userId").getAsString();
 			String roleString = payload.getAsJsonObject("info").getAsJsonPrimitive("role").getAsString();
-			if (issuer.equals(ISSUER) && StringUtils.isNotBlank(userIdString) && StringUtils.isNotBlank(roleString)) {
-				tokenInfo.setUserId(userIdString);
-				tokenInfo.setRole(roleString);
-				tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
-				tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
-				return tokenInfo;
+			if (issuer.equals(ISSUER) && StringUtils.isNotBlank(roleString)) {
+				if (RoleType.USER == RoleType.getRole(roleString)) {
+					String userIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("userId").getAsString();
+					tokenInfo.setUserId(userIdString);
+					tokenInfo.setRole(roleString);
+					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
+					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
+					return tokenInfo;
+				} else if (RoleType.GUEST == RoleType.getRole(roleString)) {
+					tokenInfo.setRole(roleString);
+					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
+					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
+					return tokenInfo;
+				//this condition is for setting deviceId and merchantId in JWT token
+				} else {
+					String deviceIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("deviceId").getAsString();
+					String merchantIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("merchantId").getAsString();
+					tokenInfo.setDeviceId(deviceIdString);
+					tokenInfo.setMerchantId(merchantIdString);
+					tokenInfo.setRole(roleString);
+					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
+					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
+					return tokenInfo;
+				}
 			}
 			return null;
 		} catch (InvalidKeyException e) {
@@ -124,7 +200,7 @@ public class JwtHelper {
 	}
 	
 	public static void main(String args[]) {
-		System.out.println(createJsonWebToken("yogi", "ADMIN", 0L));
+		System.out.println(createJsonWebTokenForMerchant("12", "12345", "MERCHANT", 365L));
 	}
 	
 	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis) {

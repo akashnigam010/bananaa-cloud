@@ -8,6 +8,8 @@ public class TokenInfo {
 	private DateTime expires;
 	private String features;
 	private String role;
+	private String deviceId;
+	private String merchantId;
 
 	public String getUserId() {
 		return userId;
@@ -55,6 +57,22 @@ public class TokenInfo {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
+	public String getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	@Override
