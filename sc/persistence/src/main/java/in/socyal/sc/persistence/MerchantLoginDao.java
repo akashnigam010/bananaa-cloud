@@ -39,14 +39,23 @@ public class MerchantLoginDao {
 		return merchantLoginDto;
 	}
     
-	public void saveRegistrationIdForMerchant(Integer merchantId, String username, String registrationId) {
+	public void saveRegistrationIdForMerchant(Integer merchantId, Integer deviceId, String registrationId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(MerchantLoginEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
-		criteria.add(Restrictions.eq("username", username));
+		criteria.add(Restrictions.eq("deviceId", deviceId));
 		MerchantLoginEntity merchantLogin = (MerchantLoginEntity) criteria.uniqueResult();
 		merchantLogin.setRegistrationId(registrationId);
 		merchantLogin.setUpdatedDateTime(clock.cal());
 		session.update(merchantLogin);
+	}
+	
+	public Boolean isMerchantLoginDetailsPresent(Integer merchantId, Integer deviceId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(MerchantLoginEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.eq("deviceId", deviceId));
+		MerchantLoginEntity merchantLogin = (MerchantLoginEntity) criteria.uniqueResult();
+		return (merchantLogin != null) ? Boolean.TRUE : Boolean.FALSE;
 	}
 }

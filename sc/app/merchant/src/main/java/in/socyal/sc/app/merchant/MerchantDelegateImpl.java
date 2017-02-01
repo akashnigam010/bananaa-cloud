@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,22 +32,26 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.app.merchant.type.MerchantErrorCodeType;
+import in.socyal.sc.app.merchant.type.MerchantLoginErrorCodeType;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
 import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantLoginDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
+	private static final Logger LOG = Logger.getLogger(MerchantDelegateImpl.class);
 	@Autowired MerchantDao dao;
 	@Autowired MerchantDelegateMapper mapper;
 	@Autowired DayUtil dayUtil;
 	@Autowired Clock clock;
 	@Autowired MerchantLoginDao merchantLoginDao;
+	@Autowired JwtTokenHelper jwtHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -111,13 +116,19 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
 			throws BusinessException {
 		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
-		//FIXME : fetch merchantid from token
-		MerchantDto merchant = dao.getMerchantDetails(12345);
+		MerchantDto merchant = dao.getMerchantDetails(getCurrentMerchantId());
 		if (merchant == null) {
+			LOG.error("Exception occured: merchant details not found for merchantId:" + getCurrentMerchantId());
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}
-		//FIXME : fetch merchantId and logged in userId from token
-		merchantLoginDao.saveRegistrationIdForMerchant(12345, "manager", request.getRegistrationId());
+		if (!merchantLoginDao.isMerchantLoginDetailsPresent(getCurrentMerchantId(), getCurrentDeviceId())) {
+			LOG.error("Exception occured: business device details not found for merchantId:" + getCurrentMerchantId()
+					+ " and deviceId:" + getCurrentDeviceId());
+			throw new BusinessException(MerchantLoginErrorCodeType.MERCHANT_DEVICE_DETAILS_FOUND);
+		}
+		merchantLoginDao.saveRegistrationIdForMerchant(getCurrentMerchantId(), 
+													   getCurrentDeviceId(), 
+													   request.getRegistrationId());
 		return response;
 	}
 
@@ -230,5 +241,13 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		locationResponse.setLatitude(address.getLatitude());
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;
+	}
+	
+	private Integer getCurrentMerchantId() {
+		return Integer.valueOf(jwtHelper.getMerchantId());
+	}
+	
+	private Integer getCurrentDeviceId() {
+		return Integer.valueOf(jwtHelper.getDeviceId());
 	}
 }
