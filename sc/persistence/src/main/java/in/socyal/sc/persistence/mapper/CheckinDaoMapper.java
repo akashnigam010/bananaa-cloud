@@ -63,7 +63,9 @@ public class CheckinDaoMapper {
 			taggedUsers.add(taggedUserDto);
 		}
 		to.setTaggedUsers(taggedUsers);
-		to.setLiked(hasLiked(from));
+		//FIXME : setting default value because it fails when called from business app
+		//to.setLiked(hasLiked(from));
+		to.setLiked(Boolean.TRUE);
 		to.setLikeCount(from.getLikes().size());
 		
 // 		Removed linear search algo; will be too slow if number of likes increase.
