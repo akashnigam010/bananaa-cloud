@@ -1,7 +1,6 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -81,6 +80,7 @@ public class UserFollowerMappingDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
 		criteria.setMaxResults(resultsPerPage);
 		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
+		//FIXME
 		//Criterion firstNameCriteria = Restrictions.ilike("user.firstName", searchString, MatchMode.ANYWHERE);
 		//Criterion lastNameCriteria = Restrictions.ilike("user.lastName", searchString, MatchMode.ANYWHERE);
 		//criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));

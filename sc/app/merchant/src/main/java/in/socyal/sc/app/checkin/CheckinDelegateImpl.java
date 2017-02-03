@@ -137,8 +137,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(request.getLocation().getLatitude(), 
-				request.getLocation().getLongitude(), request.getPage());
+		//FIXME: Fix this condition for fetching data only in a particular city based on location
+		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(getCurrentUserId(), request.getPage());
 		checkinMapper.map(checkins, response);
 		return response;
 	}
