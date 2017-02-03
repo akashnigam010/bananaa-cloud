@@ -132,11 +132,17 @@ public class CheckinDao {
 		return checkinDto;
 	}
 	
-	public List<CheckinDto> getUserCheckins(Integer userId, Integer page) {
+	/**
+	 * This method is used to fetch current user checkins along with the following users' checkins
+	 * @param userId
+	 * @param page
+	 * @return
+	 */
+	public List<CheckinDto> getUserCheckins(List<Integer> userIds, Integer page) {
 		List<CheckinDto> checkinDtos = Collections.emptyList();
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.in("user.id", userIds));
 		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
 		criteria.addOrder(Order.desc("checkinDateTime"));
 		criteria.setFirstResult(firstResult);

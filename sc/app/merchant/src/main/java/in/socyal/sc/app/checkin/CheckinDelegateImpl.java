@@ -71,6 +71,7 @@ import in.socyal.sc.persistence.CheckinUserLikeMappingDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
+import in.socyal.sc.persistence.UserFollowerMappingDao;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Service
@@ -100,6 +101,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	CheckinDelegateMapper checkinMapper;
 	@Autowired
 	DayUtil dayUtil;
+	@Autowired
+	UserFollowerMappingDao userFollowerDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -114,7 +117,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		List<CheckinDto> checkins = checkinDao.getUserCheckins(getCurrentUserId(), request.getPage());
+		//Fetching user id list whom the current user is following
+		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(getCurrentUserId());
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(userIds, request.getPage());
 		checkinMapper.map(checkins, response);
 		return response;
 	}
@@ -123,7 +128,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		List<CheckinDto> checkins = checkinDao.getUserCheckins(request.getUserId(), request.getPage());
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(Collections.singletonList(request.getUserId()), request.getPage());
 		checkinMapper.map(checkins, response);
 		return response;
 	}

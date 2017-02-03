@@ -102,7 +102,7 @@ public class CheckinService {
 	}
 
 	@RequestMapping(value = "/getAroundMeFeeds", method = RequestMethod.POST, headers = "Accept=application/json")
-	public FeedsResponse getAroundMeCheckins(@RequestBody AroundMeFeedsRequest request) {
+	public FeedsResponse getAroundMeFeeds(@RequestBody AroundMeFeedsRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/checkin/getAroundMeFeeds");
 		FeedsResponse response = new FeedsResponse();
 		try {
@@ -115,7 +115,7 @@ public class CheckinService {
 	}
 
 	@RequestMapping(value = "/getMyFeeds", method = RequestMethod.POST, headers = "Accept=application/json")
-	public FeedsResponse getMyCheckins(@RequestBody MyFeedsRequest request) {
+	public FeedsResponse getMyFeeds(@RequestBody MyFeedsRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/checkin/getMyFeeds");
 		FeedsResponse response = new FeedsResponse();
 		try {
