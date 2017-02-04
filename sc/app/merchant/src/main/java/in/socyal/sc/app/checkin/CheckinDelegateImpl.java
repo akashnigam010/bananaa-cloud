@@ -387,17 +387,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {
-		List<UserDto> taggedUserDetails = new ArrayList<>();
-		for (Integer userId : taggedUserIds) {
-			// FIXME : Instead of single user per DB call, pass list of user ids
-			// and get back list of users
-			UserDto user = userDao.fetchUser(userId);
-			if (user == null) {
-				throw new BusinessException(CheckinErrorCodeType.USER_NOT_FOUND);
-			}
-			taggedUserDetails.add(user);
-		}
-		return taggedUserDetails;
+		return userDao.fetchUsersByIds(taggedUserIds);
 	}
 
 	private List<TaggedUserResponse> getTaggedUsersInCheckin(List<CheckinTaggedUserDto> taggedUsers) {
