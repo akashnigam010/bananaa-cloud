@@ -4,31 +4,31 @@ import java.io.Serializable;
 
 public class FeedbackDetailsResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Integer foodRating;
-	private Integer ambienceRating;
-	private Integer serviceRating;
+	private String foodRating;
+	private String ambienceRating;
+	private String serviceRating;
 
-	public Integer getFoodRating() {
+	public String getFoodRating() {
 		return foodRating;
 	}
 
-	public void setFoodRating(Integer foodRating) {
+	public void setFoodRating(String foodRating) {
 		this.foodRating = foodRating;
 	}
 
-	public Integer getAmbienceRating() {
+	public String getAmbienceRating() {
 		return ambienceRating;
 	}
 
-	public void setAmbienceRating(Integer ambienceRating) {
+	public void setAmbienceRating(String ambienceRating) {
 		this.ambienceRating = ambienceRating;
 	}
 
-	public Integer getServiceRating() {
+	public String getServiceRating() {
 		return serviceRating;
 	}
 
-	public void setServiceRating(Integer serviceRating) {
+	public void setServiceRating(String serviceRating) {
 		this.serviceRating = serviceRating;
 	}
 }
