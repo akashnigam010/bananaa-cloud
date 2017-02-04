@@ -478,9 +478,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
 			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating(4);
-			feedbackDetails.setAmbienceRating(5);
-			feedbackDetails.setServiceRating(3);
+			feedbackDetails.setFoodRating("1");
+			feedbackDetails.setAmbienceRating("1.0");
+			feedbackDetails.setServiceRating("2");
 			response.setFeedbackDetails(feedbackDetails);
 		} else if (checkinId % 9 == 0) {
 			response.setCheckinStatus(CheckinStatusType.APPROVED);
@@ -488,9 +488,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
 			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating(4);
-			feedbackDetails.setAmbienceRating(5);
-			feedbackDetails.setServiceRating(3);
+			feedbackDetails.setFoodRating("3");
+			feedbackDetails.setAmbienceRating("1.0");
+			feedbackDetails.setServiceRating("3.0");
 			response.setFeedbackDetails(feedbackDetails);
 		}
 		return response;
@@ -506,9 +506,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			checkin.setCard("15");
 			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating(4);
-			feedbackDetails.setAmbienceRating(5);
-			feedbackDetails.setServiceRating(3);
+			feedbackDetails.setFoodRating("4.5");
+			feedbackDetails.setAmbienceRating("3.5");
+			feedbackDetails.setServiceRating("1.5");
 			checkin.setFeedbackDetails(feedbackDetails);
 			checkin.setRating(4.5);
 			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");
