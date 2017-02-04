@@ -1,5 +1,7 @@
 package in.socyal.sc.login;
 
+import java.util.ResourceBundle;
+
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,6 @@ import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
-import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.login.type.LoginErrorCodeType;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.MerchantDao;
@@ -31,6 +32,9 @@ import in.socyal.sc.persistence.UserDao;
 @Service
 public class LoginDelegateImpl implements LoginDelegate {
 	private static final Logger LOG = Logger.getLogger(LoginDelegateImpl.class);
+	private static final String BANANAA_SUPPORT = "bananaa.contact.support";
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	
 	@Autowired
 	UserDao userDao;
 	@Autowired
@@ -95,6 +99,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 		loggedInUser.setName(merchant.getName());
 		loggedInUser.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
 		response.setUser(loggedInUser);
+		response.setSupportNumber(resource.getString(BANANAA_SUPPORT));
 		return response;
 	}
 }

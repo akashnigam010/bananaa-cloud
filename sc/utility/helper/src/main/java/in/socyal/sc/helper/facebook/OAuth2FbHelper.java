@@ -1,5 +1,7 @@
 package in.socyal.sc.helper.facebook;
 
+import java.util.ResourceBundle;
+
 import org.springframework.stereotype.Service;
 
 import com.restfb.DefaultFacebookClient;
@@ -13,7 +15,8 @@ import com.restfb.types.User;
 
 @Service
 public class OAuth2FbHelper {
-	private static final String BANANAA_APP_TOKEN = "1631840747117125|3Fbgtq9TiCC-3n2xrRXca4ChWR8";
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String BANANAA_APP_TOKEN = "bananaa.fb.app.token";
 
 	/**
 	 * Gets following user details from FB for the access token<br>
@@ -73,7 +76,7 @@ public class OAuth2FbHelper {
 	 * @return Is token valid
 	 */
 	public boolean checkForTokenValidity(String accessToken) throws FacebookOAuthException {
-		FacebookClient fbClient = new DefaultFacebookClient(BANANAA_APP_TOKEN, Version.VERSION_2_8);
+		FacebookClient fbClient = new DefaultFacebookClient(resource.getString(BANANAA_APP_TOKEN), Version.VERSION_2_8);
 		DebugTokenInfo tokenInfo = fbClient.debugToken(accessToken);
 		return tokenInfo.isValid();
 	}
