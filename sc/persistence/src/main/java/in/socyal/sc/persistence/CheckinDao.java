@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -113,7 +114,7 @@ public class CheckinDao {
 	public void cancelCheckin(Integer checkinId) {
 		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
 		if (checkin != null) {
-			checkin.setStatus(CheckinStatusType.CANCELLED);
+			checkin.setStatus(CheckinStatusType.USER_CANCELLED);
 			checkin.setUpdatedDateTime(clock.cal());
 			sessionFactory.getCurrentSession().update(checkin);
 		} else {
@@ -131,11 +132,17 @@ public class CheckinDao {
 		return checkinDto;
 	}
 	
-	public List<CheckinDto> getUserCheckins(Integer userId, Integer page) {
+	/**
+	 * This method is used to fetch current user checkins along with the following users' checkins
+	 * @param userId
+	 * @param page
+	 * @return
+	 */
+	public List<CheckinDto> getUserCheckins(List<Integer> userIds, Integer page) {
 		List<CheckinDto> checkinDtos = Collections.emptyList();
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
-		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.in("user.id", userIds));
 		criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
 		criteria.addOrder(Order.desc("checkinDateTime"));
 		criteria.setFirstResult(firstResult);
@@ -171,17 +178,22 @@ public class CheckinDao {
 		return likeCount;
 	}
 	
-	public List<CheckinDto> getAroundMeFeedsDao(Double latitude, Double longitude, Integer page) {
+	/**
+	 * This method gets all the latest checkins happening around 
+	 * @param page
+	 * @return
+	 */
+	public List<CheckinDto> getAroundMeFeedsDao(Integer userId, Integer page) {
     	List<CheckinDto> checkinDtos = Collections.emptyList();
-    	SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sortAroundMeFeedsByDistanceQuery());
-    	query.addEntity(CheckinEntity.class);
-    	query.setDouble("latitude", latitude);
-    	query.setDouble("longitude", latitude);
+    	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+    	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
+    	criteria.add(Restrictions.not(Restrictions.eq("user.id", userId)));
     	int firstResult = ((page - 1) * RESULTS_PER_PAGE);
-    	query.setFirstResult(firstResult);
-    	query.setMaxResults(RESULTS_PER_PAGE);
+    	criteria.setFirstResult(firstResult);
+    	criteria.setMaxResults(RESULTS_PER_PAGE);
+    	criteria.addOrder(Order.desc("checkinDateTime"));
     	@SuppressWarnings("unchecked")
-		List<CheckinEntity> checkins = (List<CheckinEntity>) query.list();
+		List<CheckinEntity> checkins = (List<CheckinEntity>) criteria.list();
     	if (checkins != null && !checkins.isEmpty()) {
     		checkinDtos = new ArrayList<>();
     		for (CheckinEntity checkin : checkins) {
@@ -193,6 +205,28 @@ public class CheckinDao {
     	return checkinDtos;
     }
 	
+	public List<CheckinDto> getBusinessCheckins(Integer page, Calendar checkinDate, Integer merchantId) {
+		List<CheckinDto> checkinDtos = Collections.emptyList();
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		//criteria.add(Restrictions.ge("checkinDateTime", checkinDate));
+		criteria.addOrder(Order.desc("checkinDateTime"));
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+		if (result.size() > 0) {
+			checkinDtos = new ArrayList<>();
+			for (CheckinEntity entity : result) {
+				CheckinDto dto = new CheckinDto();
+				mapper.map(entity, dto);
+				checkinDtos.add(dto);
+			}
+		}
+		return checkinDtos;
+	}
+	
     private String sortAroundMeFeedsByDistanceQuery() {
     	StringBuilder query = new StringBuilder();
     	query.append("SELECT *");
@@ -201,7 +235,7 @@ public class CheckinDao {
     	query.append("INNER JOIN Socyal.ADDRESS A ON M.ADDRESS_ID = A.ID ");
     	query.append("WHERE C.STATUS = 'APPROVED' ");
     	query.append("ORDER BY C.CHECKIN_DATETIME DESC, ");
-    	query.append("Socyal.DISTANCE(:latitude, :longitude, A.LATITUDE, A.LONGITUDE) ASC");
+    	query.append("Socyal.DISTANCE_BETWEEN_COORDINATES(:latitude, :longitude, A.LATITUDE, A.LONGITUDE) ASC");
     	return query.toString();
     }
 }

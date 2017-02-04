@@ -1,73 +1,86 @@
 package in.socyal.sc.helper.security.jwt;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
+	@Configuration
+    @Order(2)
+    public static class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+		@Override
+		protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+			auth.inMemoryAuthentication().withUser("user").password("password").roles("ADMIN");
+		}
+		
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+				.antMatchers("/", "/index.html","/login/skipLogin", "/login/fbLogin").permitAll()
+				.antMatchers("/manage/login").permitAll()
+				.antMatchers("/manage/**").hasAnyRole("ADMIN")
+				.and()
+					.formLogin()
+						.loginPage("/manage/login").permitAll()
+				.and()
+					.csrf().disable();
+		};
+    }
+	
+	@Configuration
+    @Order(1)
+    public static class ApiConfigurationAdapter extends WebSecurityConfigurerAdapter {
+		@Autowired JwtAuthenticationProvider jwtAuthenticationProvider;
+		@Autowired JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
+		@Override
+		protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+			auth.inMemoryAuthentication().withUser("user").password("password").roles("ADMIN");
+			auth.authenticationProvider(jwtAuthenticationProvider);
+		}
 
-	@Override
-	protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(customAuthenticationProvider());
-		super.configure(auth);
-	}
-
-	@Bean
-	public JwtAuthenticationFilter customJwtAuthenticationFilter() throws Exception {
-		JwtAuthenticationFilter customUsernamePasswordAuthenticationFilter = new JwtAuthenticationFilter();
-		customUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
-		customUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(customSuccessHandler());
-		return customUsernamePasswordAuthenticationFilter;
-	}
-
-	@Bean
-	public JwtAuthenticationSuccessHandler customSuccessHandler() {
-		JwtAuthenticationSuccessHandler customSuccessHandler = new JwtAuthenticationSuccessHandler();
-		return customSuccessHandler;
-	}
-
-	@Bean
-	public JwtAuthenticationProvider customAuthenticationProvider() {
-		JwtAuthenticationProvider customAuthenticationProvider = new JwtAuthenticationProvider();
-		return customAuthenticationProvider;
-	}
-
-	@Bean(name = "authenticationManager123")
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		List<AuthenticationProvider> authenticationProviderList = new ArrayList<AuthenticationProvider>();
-		authenticationProviderList.add(customAuthenticationProvider());
-		AuthenticationManager authenticationManager = new ProviderManager(authenticationProviderList);
-		return authenticationManager;
-	}
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		RestAuthenticationEntryPoint entryPoint = new RestAuthenticationEntryPoint();
-		http.authorizeRequests().antMatchers("/socyal/login/**", "/socyal/location/**").permitAll().anyRequest().authenticated().and()
-				// .formLogin().loginPage("/login").permitAll().and()
-				.exceptionHandling().authenticationEntryPoint(entryPoint).and().httpBasic()
-				.authenticationEntryPoint(entryPoint).and().logout().permitAll().and().csrf().disable()
-				.addFilterBefore(customJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-	};
-
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/socyal/login/**", "/socyal/location/**"); // #3
-	}
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+        	RestAuthenticationEntryPoint entryPoint = new RestAuthenticationEntryPoint();
+            http
+            	.authorizeRequests()
+            	      .antMatchers("/", "/index.html", "/socyal/login/fbLogin", "/socyal/location/**", "/socyal/merchant/**",
+            			"/socyal/checkin/**", "/socyal/user/**", "/socyal/feedback/**", "/socyal/reward/**").permitAll()
+            	      .and().authorizeRequests().antMatchers("/manage").hasAnyAuthority("ROLE_ADMIN").and()
+            	.authorizeRequests()
+            		  .antMatchers("/socyal/checkin/**").authenticated().and()
+            		  .addFilterBefore(customJwtAuthenticationFilter("/socyal/checkin/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .authorizeRequests()
+	          		  .antMatchers("/socyal/merchant/**").authenticated().and()
+	          		  .addFilterBefore(customJwtAuthenticationFilter("/socyal/merchant/**"), AbstractPreAuthenticatedProcessingFilter.class)
+            	.authorizeRequests()
+                	  .antMatchers("/socyal/user/**").authenticated().and()
+                	  .addFilterBefore(customJwtAuthenticationFilter("/socyal/user/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .authorizeRequests()
+                      .antMatchers("/socyal/feedback/**").authenticated().and()
+                      .addFilterBefore(customJwtAuthenticationFilter("/socyal/feedback/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .authorizeRequests()
+                      .antMatchers("/socyal/reward/**").authenticated().and()
+                      .addFilterBefore(customJwtAuthenticationFilter("/socyal/reward/**"), AbstractPreAuthenticatedProcessingFilter.class)
+                .formLogin()
+					.loginPage("/manage/login").permitAll().and()
+    			.csrf().disable();
+        }
+        
+        public JwtAuthenticationFilter customJwtAuthenticationFilter(String defaultProcessingUrl) throws Exception {
+    		JwtAuthenticationFilter customUsernamePasswordAuthenticationFilter = new JwtAuthenticationFilter(defaultProcessingUrl);
+    		customUsernamePasswordAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
+    		customUsernamePasswordAuthenticationFilter.setAuthenticationSuccessHandler(jwtAuthenticationSuccessHandler);
+    		return customUsernamePasswordAuthenticationFilter;
+    	}
+    }
 }

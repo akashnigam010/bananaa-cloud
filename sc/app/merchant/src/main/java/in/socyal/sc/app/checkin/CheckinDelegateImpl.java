@@ -1,6 +1,8 @@
 package in.socyal.sc.app.checkin;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -11,6 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.restfb.exception.FacebookOAuthException;
 
+import in.socyal.sc.api.checkin.business.request.BusinessApproveCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCancelCheckinResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
@@ -29,18 +42,24 @@ import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
+import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
+import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
 import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.FeedbackStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
 import in.socyal.sc.app.checkin.type.CheckinErrorCodeType;
 import in.socyal.sc.app.checkin.type.CheckinLikeErrorCodeType;
 import in.socyal.sc.app.merchant.type.MerchantQrMappingErrorCodeType;
+import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
+import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
@@ -52,6 +71,7 @@ import in.socyal.sc.persistence.CheckinUserLikeMappingDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
+import in.socyal.sc.persistence.UserFollowerMappingDao;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Service
@@ -79,6 +99,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	Clock clock;
 	@Autowired
 	CheckinDelegateMapper checkinMapper;
+	@Autowired
+	DayUtil dayUtil;
+	@Autowired
+	UserFollowerMappingDao userFollowerDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -93,7 +117,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		List<CheckinDto> checkins = checkinDao.getUserCheckins(getCurrentUserId(), request.getPage());
+		//Fetching user id list whom the current user is following
+		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(getCurrentUserId());
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(userIds, request.getPage());
 		checkinMapper.map(checkins, response);
 		return response;
 	}
@@ -102,7 +128,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		List<CheckinDto> checkins = checkinDao.getUserCheckins(request.getUserId(), request.getPage());
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(Collections.singletonList(request.getUserId()), request.getPage());
 		checkinMapper.map(checkins, response);
 		return response;
 	}
@@ -111,8 +137,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(request.getLocation().getLatitude(), 
-				request.getLocation().getLongitude(), request.getPage());
+		//FIXME: Fix this condition for fetching data only in a particular city based on location
+		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(getCurrentUserId(), request.getPage());
 		checkinMapper.map(checkins, response);
 		return response;
 	}
@@ -165,7 +191,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		if (checkin == null) {
 			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getId());
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		} else if (CheckinStatusType.CANCELLED == checkin.getStatus()) {
+		} else if (CheckinStatusType.USER_CANCELLED == checkin.getStatus()) {
 			LOG.error("Checkin is already cancelled for checkinID:" + request.getId());
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
 		}
@@ -246,8 +272,62 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request) {
+		GetBusinessCheckinsResponse response = new GetBusinessCheckinsResponse();
+		Calendar date = getDateFromIdentifier(request.getDateIdentifier());
+		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), date, 12345);
+		
+		if (request.getPage() == 1) {
+			response.setDate(dayUtil.formatDate(date, DateFormatType.DATE_FORMAT_IND));
+			response.setCheckinCount(12);
+		}
+		checkinMapper.map(checkins, response);
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
+			throws BusinessException {
+		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		response = buildGetBusinessCheckinDetailsResponse(request.getCheckinId());
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
+			throws BusinessException {
+		GetBusinessCheckinHistoryResponse response = getGetBusinessCheckinHistoryResponse(request);
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessCancelCheckinResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
+			throws BusinessException {
+		BusinessCancelCheckinResponse response = businessCancelCheckinResponse();
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
+			throws BusinessException {
+		BusinessApproveCheckinResponse response = businessApproveCheckinResponse();
+		return response;
+	}
+	
 	public Integer fetchLikeCount(Integer checkinId) {
 		return checkinLikeDao.fetchLikeCount(checkinId);
+	}
+	
+	private Calendar getDateFromIdentifier(Integer identifier) {
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DAY_OF_MONTH, (-1*(identifier)));
+		return date;
 	}
 
 	private void checkForTokenValidity() throws BusinessException {
@@ -355,5 +435,136 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			}
 		}
 		return false;
+	}
+
+	//FIXME : dummy response, replace with actual logic
+	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(Integer checkinId) {
+		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(1);
+		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+		userDetails.setName("Akash Nigam");
+		userDetails.setUserCheckins(20);
+		response.setUser(userDetails);
+		response.setCardNumber(10);
+		if (checkinId % 9 == 1) {
+			response.setCheckinStatus(CheckinStatusType.USER_CANCELLED);
+			response.setCancelMessage("Checkin was cancelled by user");
+		} else if (checkinId % 9 == 2) {
+			response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
+			response.setCancelMessage("Checkin was cancelled by merchant");
+		} else if (checkinId % 9 == 3) {
+			response.setCheckinStatus(CheckinStatusType.PENDING);
+		} else if (checkinId % 9 == 4) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.GIVEN);
+			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
+			response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		} else if (checkinId % 9 == 5) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		} else if (checkinId % 9 == 6) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.GIVEN);
+			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
+			response.setFeedbackStatus(FeedbackStatusType.ASKED);
+		} else if (checkinId % 9 == 7) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			response.setFeedbackStatus(FeedbackStatusType.ASKED);
+		} else if (checkinId % 9 == 8) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(5);
+			feedbackDetails.setServiceRating(3);
+			response.setFeedbackDetails(feedbackDetails);
+		} else if (checkinId % 9 == 0) {
+			response.setCheckinStatus(CheckinStatusType.APPROVED);
+			response.setRewardStatus(RewardStatusType.GIVEN);
+			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
+			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(5);
+			feedbackDetails.setServiceRating(3);
+			response.setFeedbackDetails(feedbackDetails);
+		}
+		return response;
+	}
+
+	//FIXME : dummy response, replace with actual logic
+	private GetBusinessCheckinHistoryResponse getGetBusinessCheckinHistoryResponse(GetBusinessCheckinHistoryRequest request) {
+		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
+		List<BusinessCheckin> list = new ArrayList<>();
+		if (request.getPage() == 1) {
+			BusinessCheckin checkin = new BusinessCheckin();
+			checkin.setId(1);
+			checkin.setCard("15");
+			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(5);
+			feedbackDetails.setServiceRating(3);
+			checkin.setFeedbackDetails(feedbackDetails);
+			checkin.setRating(4.5);
+			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");
+			List<TaggedUserResponse> taggedUsers = new ArrayList<>();
+			TaggedUserResponse taggedUser = new TaggedUserResponse();
+			taggedUser.setId(1);
+			taggedUser.setName("Dharmasena");
+			taggedUsers.add(taggedUser);
+			checkin.setTaggedUsers(taggedUsers);
+			checkin.setTimestamp(clock.cal().getTime());
+			UserDetailsResponse userDetails = new UserDetailsResponse();
+			userDetails.setId(request.getUserId());
+			userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+			userDetails.setName("Akash Nigam");
+			userDetails.setUserCheckins(20);
+			checkin.setUser(userDetails);
+			list.add(checkin);
+			list.add(checkin);
+			list.add(checkin);
+			list.add(checkin);
+			list.add(checkin);
+		} else {
+			list = Collections.emptyList();
+		}
+		response.setCheckins(list);
+		return response;
+	}
+	
+	//FIXME : dummy response, replace with actual logic
+	private BusinessCancelCheckinResponse businessCancelCheckinResponse() {
+		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(7);
+		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+		userDetails.setName("Akash Nigam");
+		userDetails.setUserCheckins(33);
+		response.setUser(userDetails);
+		response.setCardNumber(10);
+		response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
+		response.setCancelMessage("Checkin was cancelled by merchant");
+		return response;
+	}
+	
+	//FIXME : dummy response, replace with actual logic
+	private BusinessApproveCheckinResponse businessApproveCheckinResponse() {
+		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(4);
+		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
+		userDetails.setName("Akash Nigam");
+		userDetails.setUserCheckins(21);
+		response.setUser(userDetails);
+		response.setCardNumber(12);
+		response.setCheckinStatus(CheckinStatusType.APPROVED);
+		response.setRewardStatus(RewardStatusType.NOT_GIVEN);
+		response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		return response;
 	}
 }

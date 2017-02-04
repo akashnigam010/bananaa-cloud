@@ -155,3 +155,34 @@ INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAM
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (4, 'Urmila', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Mamalla');
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (5, 'Kriti', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Konda');
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (6, 'Karthik', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Putta');
+
+--Rewrads (Temporary)
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (1, 12345, 'Amazon gift voucher worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (2, 12345, 'Flipkart gift voucher worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (3, 12346, 'Paytm cash worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (4, 12346, 'O2 spa gift coupon worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (5, 12347, 'Mobikwik cash coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (6, 12347, 'Freecharge gift coupon worth Rs. 150!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (7, 12348, 'Bookmyshow gift coupon worth Rs. 250!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (8, 12348, 'Westside gift coupon worth Rs. 500!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (9, 12349, 'Shoppers Stop gift voucher worth Rs. 500!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (10, 12349, 'Pantaloons cash coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (11, 12350, 'Archies gift coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (12, 12351, 'Free Buffet worth Rs. 700!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (13, 12352, 'Free appetizers worth Rs. 400!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (14, 12353, 'Free skewers worth Rs 250!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (15, 12354, 'flat 10% discount on bill!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (16, 12355, 'Amazon gift coupon worth Rs. 300!');
+
+--Merchant_Login (temporary)
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (1, 12345, '12345', 'password', 1);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (2, 12346, '12346', 'password', 2);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (3, 12347, '12347', 'password', 6);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (4, 12348, '12348', 'password', 4);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (5, 12349, '12349', 'password', 2);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (6, 12350, '12350', 'password', 4);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (7, 12351, '12351', 'password', 8);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (8, 12352, '12352', 'password', 4);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (9, 12353, '12353', 'password', 3);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (10, 12354, '12354', 'password', 2);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (11, 12355, '12355', 'password', 7);

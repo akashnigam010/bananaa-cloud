@@ -21,8 +21,6 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Repository
 public class UserDao {
-	private static final String FIRST_NAME = "firstName";
-	private static final String LAST_NAME = "lastName";
 	private static final int RESULTS_PER_PAGE = 15;
 	@Autowired
 	SessionFactory sessionFactory;

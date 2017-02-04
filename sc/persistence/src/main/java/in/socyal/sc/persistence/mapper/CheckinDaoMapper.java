@@ -45,7 +45,7 @@ public class CheckinDaoMapper {
 		to.setId(from.getId());
 		to.setCheckinDateTime(from.getCheckinDateTime());
 		MerchantDto merchant = new MerchantDto();
-		mapper.map(from.getMerchant(), merchant);
+		mapper.map(from.getMerchant(), merchant, false);
 		to.setMerchant(merchant);
 		to.setQrCode(from.getQrCode());
 		to.setStatus(from.getStatus());
@@ -63,7 +63,9 @@ public class CheckinDaoMapper {
 			taggedUsers.add(taggedUserDto);
 		}
 		to.setTaggedUsers(taggedUsers);
-		to.setLiked(hasLiked(from));
+		//FIXME : setting default value because it fails when called from business app
+		//to.setLiked(hasLiked(from));
+		to.setLiked(Boolean.TRUE);
 		to.setLikeCount(from.getLikes().size());
 		
 // 		Removed linear search algo; will be too slow if number of likes increase.
@@ -103,10 +105,13 @@ public class CheckinDaoMapper {
 	 * Throws exception if user is not logged in
 	 */
 	private boolean isLoggedInUser() {
-		RoleType role = RoleType.getRole(jwtHelper.getUserName());
-		if (role == RoleType.GUEST) {
-			return Boolean.FALSE;
-		} 
+		for (String role : jwtHelper.getRoles()) {
+			RoleType roleType = RoleType.getRole(role);
+			if (RoleType.GUEST == roleType) {
+				return Boolean.FALSE;
+			} 
+		}
+		
 		return Boolean.TRUE;
 	}
 }

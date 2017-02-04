@@ -80,6 +80,7 @@ public class UserFollowerMappingDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
 		criteria.setMaxResults(resultsPerPage);
 		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
+		//FIXME
 		//Criterion firstNameCriteria = Restrictions.ilike("user.firstName", searchString, MatchMode.ANYWHERE);
 		//Criterion lastNameCriteria = Restrictions.ilike("user.lastName", searchString, MatchMode.ANYWHERE);
 		//criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
@@ -91,5 +92,21 @@ public class UserFollowerMappingDao {
 		}
 
 		return userDtos;
+	}
+	
+	public List<Integer> fetchMyFriendsIds(Integer currentUserId) {
+		List<Integer> followerIds = new ArrayList<>();
+		followerIds.add(currentUserId);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
+		@SuppressWarnings("unchecked")
+		List<UserFollowerMappingEntity> users = (List<UserFollowerMappingEntity>) criteria.list();
+		if (users != null && !users.isEmpty()) {
+			for (UserFollowerMappingEntity user : users) {
+				followerIds.add(user.getUser().getId());
+			}
+		}
+
+		return followerIds;
 	}
 }

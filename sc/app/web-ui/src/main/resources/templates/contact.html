@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head(pageTitle = 'Contact | Bananaa')"></head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="fragments/header :: header"></div>
+		
+		<!-- POLICY STARTS -->
+		<div class="row grey-background document-area">
+		    <div class="primary-heading">
+		        <h2>Contact Us</h2>
+		    </div>          
+		
+		    <div class="col-xs-12 white-background document-area">
+		        
+		        <address>
+		          <p>Email us at:</p>
+		          <a href="mailto:#" class="bold">contact@bananaa.in</a>
+		        </address>
+				<br />
+				<p>Or write us at :</p>
+		        <address>
+		          <span>Bananaa Internet Private Limited</span>
+		          <br />
+		          2-239 Vivek Khand, Gomtinagar<br />
+		          Lucknow, UP 226010<br />
+		        </address>                
+		
+		    </div>
+		</div>
+				
+		<!-- POLICY ENDSS -->
+		
+		<div lang="en" th:replace="fragments/footer :: footer"></div>
+	</div>
+</body>
+</html>

@@ -86,7 +86,7 @@ public class MerchantDao {
     	MerchantEntity entity = (MerchantEntity) sessionFactory.getCurrentSession().get(MerchantEntity.class, id);
     	if (entity != null) {
     		dto = new MerchantDto();
-    		mapper.map(entity, dto);
+    		mapper.map(entity, dto, true);
     	}
     	
     	return dto;
@@ -111,7 +111,7 @@ public class MerchantDao {
     	query.append("SELECT * ");
     	query.append("FROM Socyal.MERCHANT m INNER JOIN Socyal.ADDRESS a ");
     	query.append("ON m.ADDRESS_ID = a.ID ");
-    	query.append("ORDER BY DISTANCE(:latitude, :longitude, a.LATITUDE, a.LONGITUDE) ASC");
+    	query.append("ORDER BY Socyal.DISTANCE_BETWEEN_COORDINATES(:latitude, :longitude, a.LATITUDE, a.LONGITUDE) ASC");
     	return query.toString();
     }
     

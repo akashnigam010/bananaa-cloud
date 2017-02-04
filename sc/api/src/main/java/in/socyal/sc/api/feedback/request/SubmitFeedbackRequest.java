@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class SubmitFeedbackRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer checkinId;
-	private Integer foodRating;
-	private Integer serviceRating;
-	private Integer ambienceRating;
+	private String foodRating;
+	private String serviceRating;
+	private String ambienceRating;
 
 	public Integer getCheckinId() {
 		return checkinId;
@@ -17,27 +17,27 @@ public class SubmitFeedbackRequest implements Serializable {
 		this.checkinId = checkinId;
 	}
 
-	public Integer getFoodRating() {
+	public String getFoodRating() {
 		return foodRating;
 	}
 
-	public void setFoodRating(Integer foodRating) {
+	public void setFoodRating(String foodRating) {
 		this.foodRating = foodRating;
 	}
 
-	public Integer getServiceRating() {
+	public String getServiceRating() {
 		return serviceRating;
 	}
 
-	public void setServiceRating(Integer serviceRating) {
+	public void setServiceRating(String serviceRating) {
 		this.serviceRating = serviceRating;
 	}
 
-	public Integer getAmbienceRating() {
+	public String getAmbienceRating() {
 		return ambienceRating;
 	}
 
-	public void setAmbienceRating(Integer ambienceRating) {
+	public void setAmbienceRating(String ambienceRating) {
 		this.ambienceRating = ambienceRating;
 	}
 }

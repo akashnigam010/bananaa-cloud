@@ -71,10 +71,6 @@ public class CheckinEntity implements Serializable {
 	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
 	private Set<CheckinUserLikeEntity> likes;
 	
-	@OneToOne
-	@JoinColumn(name = "FEEDBACK_ID", referencedColumnName = "ID")
-	private FeedbackEntity feedback;
-	
 	public Integer getId() {
 		return id;
 	}

@@ -8,11 +8,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
+import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.Location;
@@ -29,20 +32,26 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.app.merchant.type.MerchantErrorCodeType;
+import in.socyal.sc.app.merchant.type.MerchantLoginErrorCodeType;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
 import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
+import in.socyal.sc.persistence.MerchantLoginDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
+	private static final Logger LOG = Logger.getLogger(MerchantDelegateImpl.class);
 	@Autowired MerchantDao dao;
 	@Autowired MerchantDelegateMapper mapper;
 	@Autowired DayUtil dayUtil;
 	@Autowired Clock clock;
+	@Autowired MerchantLoginDao merchantLoginDao;
+	@Autowired JwtTokenHelper jwtHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -88,10 +97,9 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString());
-		if (merchants == null) {
-			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
-		}
-		buildSearchMerchantsResponse(merchants, response);
+		if (merchants != null) {
+			buildSearchMerchantsResponse(merchants, response);
+		}		
 		return response;
 	}
 
@@ -101,6 +109,27 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		MerchantDto merchantDto = new MerchantDto();
 		mapper.map(request, merchantDto);
 		dao.saveMerchantDetails(merchantDto);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
+			throws BusinessException {
+		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
+		MerchantDto merchant = dao.getMerchantDetails(getCurrentMerchantId());
+		if (merchant == null) {
+			LOG.error("Exception occured: merchant details not found for merchantId:" + getCurrentMerchantId());
+			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
+		}
+		if (!merchantLoginDao.isMerchantLoginDetailsPresent(getCurrentMerchantId(), getCurrentDeviceId())) {
+			LOG.error("Exception occured: business device details not found for merchantId:" + getCurrentMerchantId()
+					+ " and deviceId:" + getCurrentDeviceId());
+			throw new BusinessException(MerchantLoginErrorCodeType.MERCHANT_DEVICE_DETAILS_FOUND);
+		}
+		merchantLoginDao.saveRegistrationIdForMerchant(getCurrentMerchantId(), 
+													   getCurrentDeviceId(), 
+													   request.getRegistrationId());
+		return response;
 	}
 
 	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
@@ -212,5 +241,13 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		locationResponse.setLatitude(address.getLatitude());
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;
+	}
+	
+	private Integer getCurrentMerchantId() {
+		return Integer.valueOf(jwtHelper.getMerchantId());
+	}
+	
+	private Integer getCurrentDeviceId() {
+		return Integer.valueOf(jwtHelper.getDeviceId());
 	}
 }
