@@ -69,7 +69,7 @@ public class CheckinDelegateMapper {
 				to.setRewardMessage(dto.getRewardMessage());
 			}
 			to.setTimestamp(dto.getCheckinDateTime().getTime());
-			to.setCard("12");
+			to.setCard("T12");
 			to.setCheckinStatus(dto.getStatus());
 			response.getCheckins().add(to);
 		}
