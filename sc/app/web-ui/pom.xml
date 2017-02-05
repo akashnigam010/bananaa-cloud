@@ -66,5 +66,10 @@
 			<artifactId>user</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>notification</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

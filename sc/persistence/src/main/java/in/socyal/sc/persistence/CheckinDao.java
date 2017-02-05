@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
@@ -227,6 +228,22 @@ public class CheckinDao {
 			}
 		}
 		return checkinDtos;
+	}
+	
+	public CheckinDto businessApproveCheckin(Integer checkinId) {
+		Session session = sessionFactory.getCurrentSession();
+		CheckinDto checkinDto = null;
+		CheckinEntity entity = (CheckinEntity) session.get(CheckinEntity.class, checkinId);
+		if (entity != null) {
+			checkinDto = new CheckinDto();
+			entity.setStatus(CheckinStatusType.APPROVED);
+			entity.setApprovedDateTime(clock.cal());
+			entity.setRewardStatus(RewardStatusType.NOT_GIVEN);
+			entity.setUpdatedDateTime(clock.cal());
+			session.saveOrUpdate(entity);
+			mapper.map(entity, checkinDto);
+		}
+		return checkinDto;
 	}
 	
     private String sortAroundMeFeedsByDistanceQuery() {

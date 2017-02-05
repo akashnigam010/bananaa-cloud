@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             http
             	.authorizeRequests()
             	      .antMatchers("/", "/index.html", "/socyal/login/fbLogin", "/socyal/location/**", "/socyal/merchant/**",
-            			"/socyal/checkin/**", "/socyal/user/**", "/socyal/feedback/**", "/socyal/reward/**").permitAll()
+            			"/socyal/checkin/**", "/socyal/user/**", "/socyal/feedback/**", "/socyal/reward/**, /socyal/notification/**").permitAll()
             	      .and().authorizeRequests().antMatchers("/manage").hasAnyAuthority("ROLE_ADMIN").and()
             	.authorizeRequests()
             		  .antMatchers("/socyal/checkin/**").authenticated().and()

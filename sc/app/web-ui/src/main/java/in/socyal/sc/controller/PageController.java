@@ -105,6 +105,7 @@ public class PageController {
 		response.setPreviousCheckinCount(12);
 		response.setPhone("0409123832600");
 		modelAndView.addObject("detail", response);
+		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xtf1/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94&__gda__=1494177432_f41563ece4c33e49b8f49c211513aefe");
 		return modelAndView;
 	}
 }

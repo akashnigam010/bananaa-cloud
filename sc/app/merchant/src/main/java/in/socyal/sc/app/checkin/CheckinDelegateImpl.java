@@ -44,7 +44,9 @@ import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
+import in.socyal.sc.api.feedback.dto.FeedbackDto;
 import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
+import in.socyal.sc.api.login.request.SendTestNotificationRequest;
 import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
@@ -65,9 +67,11 @@ import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.helper.type.GenericErrorCodeType;
+import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.CheckinTaggedUserMappingDao;
 import in.socyal.sc.persistence.CheckinUserLikeMappingDao;
+import in.socyal.sc.persistence.FeedbackDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
@@ -77,32 +81,21 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
 	private static final Logger LOG = Logger.getLogger(CheckinDelegateImpl.class);
-	@Autowired
-	CheckinDao checkinDao;
-	@Autowired
-	MerchantQrMappingDao qrMappingDao;
-	@Autowired
-	MerchantDao merchantDao;
-	@Autowired
-	CheckinTaggedUserMappingDao taggedUserDao;
-	@Autowired
-	UserDao userDao;
-	@Autowired
-	CheckinUserLikeMappingDao checkinLikeDao;
-	@Autowired
-	UserDaoMapper userMapper;
-	@Autowired
-	JwtTokenHelper jwtHelper;
-	@Autowired
-	OAuth2FbHelper fbHelper;
-	@Autowired
-	Clock clock;
-	@Autowired
-	CheckinDelegateMapper checkinMapper;
-	@Autowired
-	DayUtil dayUtil;
-	@Autowired
-	UserFollowerMappingDao userFollowerDao;
+	@Autowired CheckinDao checkinDao;
+	@Autowired MerchantQrMappingDao qrMappingDao;
+	@Autowired MerchantDao merchantDao;
+	@Autowired CheckinTaggedUserMappingDao taggedUserDao;
+	@Autowired UserDao userDao;
+	@Autowired CheckinUserLikeMappingDao checkinLikeDao;
+	@Autowired UserDaoMapper userMapper;
+	@Autowired JwtTokenHelper jwtHelper;
+	@Autowired OAuth2FbHelper fbHelper;
+	@Autowired Clock clock;
+	@Autowired CheckinDelegateMapper checkinMapper;
+	@Autowired DayUtil dayUtil;
+	@Autowired UserFollowerMappingDao userFollowerDao;
+	@Autowired FeedbackDao feedbackDao;
+	@Autowired NotificationDelegate notificationDelegate;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -321,12 +314,33 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
 			throws BusinessException {
-		BusinessApproveCheckinResponse response = businessApproveCheckinResponse();
-		return response;
+		//1. CheckinStatus update to APPROVED
+		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId());
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		//2. Create feedback record in FEEDBACK table
+		FeedbackDto feedbackDto = new FeedbackDto();
+		feedbackDto.setCheckinId(checkin.getId());
+		feedbackDto.setMerchantId(checkin.getMerchant().getId());
+		feedbackDto.setStatus(FeedbackStatusType.NOT_ASKED);
+		feedbackDto.setUserId(checkin.getUser().getId());
+		feedbackDto = feedbackDao.createFeedback(feedbackDto);
+		//3. Increase merchant checkin count in merchant table
+		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchant().getId());
+		//4. send notification to the user
+		//sendNotification(checkin.getUser().getRegistrationId());
+		return businessApproveCheckinResponse(checkin, feedbackDto);
 	}
 	
 	public Integer fetchLikeCount(Integer checkinId) {
 		return checkinLikeDao.fetchLikeCount(checkinId);
+	}
+	
+	private void sendNotification(String deviceToken) {
+		SendTestNotificationRequest request = new SendTestNotificationRequest();
+		request.setDeviceToken(deviceToken);
+		notificationDelegate.sendDataMessage(request);
 	}
 	
 	private Calendar getDateFromIdentifier(Integer identifier) {
@@ -548,18 +562,21 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 	
 	//FIXME : dummy response, replace with actual logic
-	private BusinessApproveCheckinResponse businessApproveCheckinResponse() {
+	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto) {
 		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
-		userDetails.setId(4);
-		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
-		userDetails.setName("Akash Nigam");
+		UserDto user = checkin.getUser();
+		userDetails.setId(user.getId());
+		userDetails.setImageUrl(user.getImageUrl());
+		userDetails.setName(user.getName());
+		//FIXME
 		userDetails.setUserCheckins(21);
 		response.setUser(userDetails);
-		response.setCardNumber(12);
-		response.setCheckinStatus(CheckinStatusType.APPROVED);
-		response.setRewardStatus(RewardStatusType.NOT_GIVEN);
-		response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		//FIXME
+		response.setCardNumber("T12");
+		response.setCheckinStatus(checkin.getStatus());
+		response.setRewardStatus(checkin.getRewardStatus());
+		response.setFeedbackStatus(feedbackDto.getStatus());
 		return response;
 	}
 }

@@ -1,4 +1,4 @@
-package in.socyal.sc.login;
+package in.socyal.sc.notification;
 
 import in.socyal.sc.api.login.request.SendTestNotificationRequest;
 import in.socyal.sc.api.login.response.SendTestNotificationResponse;
