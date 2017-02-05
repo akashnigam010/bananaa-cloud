@@ -1,24 +1,24 @@
 -- Locality
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Gachibowli', 'Hyderabad', '34.34', '16.34');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Madhapur', 'Hyderabad', '36.34', '16.35');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('3', 'Hitech City', 'Hyderabad', '32.56', '16.36');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Jubilee Hils', 'Hyderabad', '33.37', '16.37');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Banjaraa Hills', 'Hyderabad', '31.56', '16.38');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Panjagutta', 'Hyderabad', '39.45', '16.39');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Gachibowli', 'Hyderabad', '17.445118', '78.351962');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Madhapur', 'Hyderabad', '17.441312', '78.390101');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('3', 'Hitech City', 'Hyderabad', '17.446566', '78.377506');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Jubilee Hils', 'Hyderabad', '17.432503', '78.407282');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Banjaraa Hills', 'Hyderabad', '17.416324', '78.438591');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Panjagutta', 'Hyderabad', '17.426436', '78.450858');
 
 
 -- Address
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Tower 24, Near Gachibowli Flyover, Indiranagar', '1', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Tower 24, Near Gachibowli Flyover, Indiranagar', '1', 'Hyderabad', 'Telangana', 'India', '500098', '17.435560', '78.368031');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Above KTM Showroom', '2', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Above KTM Showroom', '2', 'Hyderabad', 'Telangana', 'India', '500098', '17.447865', '78.379048');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('3', '5th Floor, Inorbit Mall', '3', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('3', '5th Floor, Inorbit Mall', '3', 'Hyderabad', 'Telangana', 'India', '500098', '17.414696', '78.450604');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Near Jubilee Checkpost', '4', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Near Jubilee Checkpost', '4', 'Hyderabad', 'Telangana', 'India', '500098', '17.428556', '78.412894');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Aptech Grand, 5th Floor, Opposite Mercedes Showroom', '5', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Aptech Grand, 5th Floor, Opposite Mercedes Showroom', '5', 'Hyderabad', 'Telangana', 'India', '500098', '17.422653', '78.410963');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Dinar Showcase, 7th Floor', '6', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Dinar Showcase, 7th Floor', '6', 'Hyderabad', 'Telangana', 'India', '500098', '17.432842', '78.446630');
 
 -- Contact
 INSERT INTO `Socyal`.`CONTACT` (`ID`, `PHONE1`) VALUES ('1', '0407656548767');

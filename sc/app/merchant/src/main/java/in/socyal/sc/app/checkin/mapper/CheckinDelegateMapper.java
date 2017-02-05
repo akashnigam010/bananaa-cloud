@@ -69,6 +69,7 @@ public class CheckinDelegateMapper {
 				to.setRewardMessage(dto.getRewardMessage());
 			}
 			to.setTimestamp(dto.getCheckinDateTime().getTime());
+			//FIXME: actual card number
 			to.setCard("T12");
 			to.setCheckinStatus(dto.getStatus());
 			response.getCheckins().add(to);
