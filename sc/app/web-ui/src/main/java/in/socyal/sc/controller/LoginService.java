@@ -9,16 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
-import in.socyal.sc.api.login.request.SendTestNotificationRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
-import in.socyal.sc.api.login.response.SendTestNotificationResponse;
 import in.socyal.sc.core.validation.LoginValidator;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.login.LoginDelegate;
-import in.socyal.sc.login.NotificationDelegate;
 
 @RestController
 @RequestMapping(value = "/socyal/login")
@@ -30,8 +27,6 @@ public class LoginService {
 	ResponseHelper helper;
 	@Autowired
 	LoginValidator validator;
-	@Autowired
-	NotificationDelegate notificationDelegate;
 
 	@RequestMapping(value = "/skipLogin", method = RequestMethod.GET, headers = "Accept=application/json")
 	public LoginResponse skipLogin() {
@@ -65,32 +60,6 @@ public class LoginService {
 		try {
 			validator.validateFbLoginRequest(request);
 			response = delegate.fbLogin(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
-	
-	@RequestMapping(value = "/sendTestNotification", method = RequestMethod.POST, headers = "Accept=application/json")
-	public SendTestNotificationResponse sendTestNotification(@RequestBody SendTestNotificationRequest request) {
-		JsonHelper.logRequest(request, LoginService.class, "/login/sendNotification");
-		SendTestNotificationResponse response = new SendTestNotificationResponse();
-		try {
-			validator.validateSendNotificationRequest(request);
-			response = notificationDelegate.sendNotificationWithData(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
-	
-	@RequestMapping(value = "/sendTestDataMessage", method = RequestMethod.POST, headers = "Accept=application/json")
-	public SendTestNotificationResponse sendTestDataMessage(@RequestBody SendTestNotificationRequest request) {
-		JsonHelper.logRequest(request, LoginService.class, "/login/sendTestDataMessage");
-		SendTestNotificationResponse response = new SendTestNotificationResponse();
-		try {
-			validator.validateSendNotificationRequest(request);
-			response = notificationDelegate.sendDataMessage(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

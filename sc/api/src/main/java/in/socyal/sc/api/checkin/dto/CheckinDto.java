@@ -6,6 +6,7 @@ import java.util.List;
 
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.api.user.dto.UserDto;
 
 public class CheckinDto {
@@ -15,6 +16,7 @@ public class CheckinDto {
 	private CheckinStatusType status;
 	private String qrCode;
 	private String rewardMessage;
+	private RewardStatusType rewardStatus;
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
@@ -119,5 +121,13 @@ public class CheckinDto {
 
 	public void setLiked(boolean liked) {
 		this.liked = liked;
+	}
+
+	public RewardStatusType getRewardStatus() {
+		return rewardStatus;
+	}
+
+	public void setRewardStatus(RewardStatusType rewardStatus) {
+		this.rewardStatus = rewardStatus;
 	}
 }

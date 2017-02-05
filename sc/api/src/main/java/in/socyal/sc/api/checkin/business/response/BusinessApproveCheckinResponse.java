@@ -12,7 +12,7 @@ import in.socyal.sc.api.type.RewardStatusType;
 public class BusinessApproveCheckinResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private UserDetailsResponse user;
-	private Integer cardNumber;
+	private String cardNumber;
 	private CheckinStatusType checkinStatus;
 	private String cancelMessage;
 	private RewardStatusType rewardStatus;
@@ -28,11 +28,11 @@ public class BusinessApproveCheckinResponse extends GenericResponse implements S
 		this.user = user;
 	}
 
-	public Integer getCardNumber() {
+	public String getCardNumber() {
 		return cardNumber;
 	}
 
-	public void setCardNumber(Integer cardNumber) {
+	public void setCardNumber(String cardNumber) {
 		this.cardNumber = cardNumber;
 	}
 
