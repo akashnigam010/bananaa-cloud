@@ -18,7 +18,6 @@ import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.merchant.business.dto.MerchantLoginDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
-import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
@@ -52,7 +51,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	public LoginResponse skipLogin() {
 		LoginResponse response = new LoginResponse();
 		// Sets JWT access token
-		response.setAccessToken(JwtHelper.createJsonWebTokenForGuest(RoleType.GUEST.getRole(), 1L));
+		response.setAccessToken(JwtHelper.createJsonWebTokenForGuest());
 		response.setUser(mapper.mapGuestUser());
 		return response;
 	}
@@ -69,8 +68,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 			// Save or update user
 			UserDto userDetails = userDao.saveOrUpdate(fbUser, request.getFbAccessToken());
 			// Sets JWT access token
-			response.setAccessToken(
-					JwtHelper.createJsonWebToken(userDetails.getId().toString(), RoleType.USER.getRole(), 365L));
+			response.setAccessToken(JwtHelper.createJsonWebTokenForUser(String.valueOf(userDetails.getId())));
 			Integer userCheckinCount = checkinDao.getUserCheckinCount(userDetails.getId());
 			response.setUser(mapper.mapFbUserToUserDto(userDetails, userCheckinCount));
 		} catch (FacebookOAuthException e) {
@@ -88,10 +86,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 		if (merchantLoginDto == null) {
 			throw new BusinessException(LoginErrorCodeType.BUSINESS_CREDENTIALS_INVALID);
 		}
-		response.setAccessToken(JwtHelper.createJsonWebTokenForMerchant(merchantLoginDto.getDeviceId().toString(),
-														merchantLoginDto.getMerchant().getId().toString(),
-														RoleType.MERCHANT.getRole(), 
-														365L));
+		response.setAccessToken(JwtHelper.createJsonWebTokenForMerchant(String.valueOf(merchantLoginDto.getDeviceId()),
+																		String.valueOf(merchantLoginDto.getMerchant().getId())));
 		
 		BusinessLoginUserDto loggedInUser = new BusinessLoginUserDto();
 		MerchantDto merchant = merchantLoginDto.getMerchant();
