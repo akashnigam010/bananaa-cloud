@@ -187,7 +187,9 @@ public class CheckinDao {
     	List<CheckinDto> checkinDtos = Collections.emptyList();
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
     	criteria.add(Restrictions.eq("status", CheckinStatusType.APPROVED));
-    	criteria.add(Restrictions.not(Restrictions.eq("user.id", userId)));
+    	if (userId != null) {
+    		criteria.add(Restrictions.not(Restrictions.eq("user.id", userId)));
+    	}
     	int firstResult = ((page - 1) * RESULTS_PER_PAGE);
     	criteria.setFirstResult(firstResult);
     	criteria.setMaxResults(RESULTS_PER_PAGE);

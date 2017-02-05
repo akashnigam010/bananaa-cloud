@@ -117,7 +117,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		//Fetching user id list whom the current user is following
+		//Fetching user id list whom the current user is following including current user
 		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(getCurrentUserId());
 		List<CheckinDto> checkins = checkinDao.getUserCheckins(userIds, request.getPage());
 		checkinMapper.map(checkins, response);
@@ -138,7 +138,12 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		//FIXME: Fix this condition for fetching data only in a particular city based on location
-		List<CheckinDto> checkins = checkinDao.getAroundMeFeedsDao(getCurrentUserId(), request.getPage());
+		List<CheckinDto> checkins = null;
+		if (validateIfLoggedInUser()) {
+		checkins = checkinDao.getAroundMeFeedsDao(getCurrentUserId(), request.getPage());
+		} else {
+			checkins = checkinDao.getAroundMeFeedsDao(null, request.getPage());
+		}
 		checkinMapper.map(checkins, response);
 		return response;
 	}
