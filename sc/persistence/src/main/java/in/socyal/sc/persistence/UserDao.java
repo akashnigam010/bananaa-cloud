@@ -21,13 +21,9 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Repository
 public class UserDao {
-	private static final int RESULTS_PER_PAGE = 15;
-	@Autowired
-	SessionFactory sessionFactory;
-	@Autowired
-	UserDaoMapper mapper;
-	@Autowired
-	Clock clock;
+	@Autowired SessionFactory sessionFactory;
+	@Autowired UserDaoMapper mapper;
+	@Autowired Clock clock;
 
 	public UserDao() {
 	}
@@ -36,6 +32,11 @@ public class UserDao {
 		this.sessionFactory = sessionFactory;
 	}
 
+	/**
+	 * This method takes userId as request and responds back with UserDto object
+	 * @param userId
+	 * @return
+	 */
 	public UserDto fetchUser(Integer userId) {
 		UserDto dto = null;
 		UserEntity entity = (UserEntity) sessionFactory.getCurrentSession().get(UserEntity.class, userId);
@@ -46,8 +47,32 @@ public class UserDao {
 		return dto;
 	}
 	
+	/**
+	 * This method takes list of userIds as request to give Collection of UserDtos as response
+	 * @param userIds
+	 * @return
+	 */
+	public List<UserDto> fetchUsersByIds(List<Integer> userIds) {
+		List<UserDto> userDtos = new ArrayList<>();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.in("id", userIds));
+		@SuppressWarnings("unchecked")
+		List<UserEntity> users = criteria.list();
+		for (UserEntity user : users) {
+			UserDto dto = new UserDto();
+			mapper.map(user, dto);
+			userDtos.add(dto);
+		}
+		return userDtos;
+	}
+	
+	/**
+	 * This method takes resultsPerPageRequest to respond back with those many user dto objects
+	 * @param resultsPerPage
+	 * @return
+	 */
 	public List<UserDto> fetchUsers(Integer resultsPerPage) {
-		List<UserDto> userDtos = null;
+		List<UserDto> userDtos = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
 		criteria.setMaxResults(resultsPerPage);
 		@SuppressWarnings("unchecked")
@@ -55,10 +80,18 @@ public class UserDao {
 		for (UserEntity user : users) {
 			UserDto dto = new UserDto();
 			mapper.map(user, dto);
+			userDtos.add(dto);
 		}
 		return userDtos;
 	}
 
+	/**
+	 * This method is used to search users based on a search string
+	 * @param currentUserId
+	 * @param searchString
+	 * @param resultsPerPage
+	 * @return
+	 */
 	public List<UserDto> discoverOtherUsersBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
 		List<UserDto> userDtos = null;
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(discoverNewUsersQuery());
@@ -68,22 +101,6 @@ public class UserDao {
     	query.setMaxResults(resultsPerPage);
 		@SuppressWarnings("unchecked")
 		List<UserEntity> users = (List<UserEntity>) query.list();
-		if (users != null && !users.isEmpty()) {
-			userDtos = new ArrayList<>();
-			mapper.map(users, userDtos);
-		}
-
-		return userDtos;
-	}
-
-	public List<UserDto> fetchUsersByPage(int page) {
-		List<UserDto> userDtos = null;
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
-		criteria.setFirstResult(firstResult);
-		criteria.setMaxResults(RESULTS_PER_PAGE);
-		@SuppressWarnings("unchecked")
-		List<UserEntity> users = (List<UserEntity>) criteria.list();
 		if (users != null && !users.isEmpty()) {
 			userDtos = new ArrayList<>();
 			mapper.map(users, userDtos);
@@ -123,6 +140,11 @@ public class UserDao {
 		return userDto;
 	}
 	
+	/**
+	 * This method is used to save registrationId for a user
+	 * @param userId
+	 * @param registrationId
+	 */
 	public void saveRegistrationIdForUser(Integer userId, String registrationId) {
 		Session session = sessionFactory.getCurrentSession();
 		UserEntity user = (UserEntity) session.load(UserEntity.class, userId);
@@ -131,6 +153,10 @@ public class UserDao {
 		session.update(user);
 	}
 	
+	/**
+	 * Method for forming SQL query for discovering new users
+	 * @return
+	 */
     private String discoverNewUsersQuery() {
     	StringBuilder query = new StringBuilder();
     	query.append("SELECT * FROM Socyal.USER ");

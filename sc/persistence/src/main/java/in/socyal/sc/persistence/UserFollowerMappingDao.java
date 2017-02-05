@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -78,12 +80,13 @@ public class UserFollowerMappingDao {
 	public List<UserDto> fetchMyFriendsBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
 		List<UserDto> userDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+		criteria.createAlias("user", "u");
+		criteria.createAlias("followerUser", "f");
+		criteria.add(Restrictions.eq("f.id", currentUserId));
+		Criterion firstNameCriteria = Restrictions.ilike("u.firstName", searchString, MatchMode.ANYWHERE);
+		Criterion lastNameCriteria = Restrictions.ilike("u.lastName", searchString, MatchMode.ANYWHERE);
+		criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
 		criteria.setMaxResults(resultsPerPage);
-		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
-		//FIXME
-		//Criterion firstNameCriteria = Restrictions.ilike("user.firstName", searchString, MatchMode.ANYWHERE);
-		//Criterion lastNameCriteria = Restrictions.ilike("user.lastName", searchString, MatchMode.ANYWHERE);
-		//criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
 		@SuppressWarnings("unchecked")
 		List<UserFollowerMappingEntity> users = (List<UserFollowerMappingEntity>) criteria.list();
 		if (users != null && !users.isEmpty()) {
