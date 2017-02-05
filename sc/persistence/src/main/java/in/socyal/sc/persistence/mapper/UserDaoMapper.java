@@ -24,6 +24,7 @@ public class UserDaoMapper {
 		to.setLastName(from.getLastName());
 		to.setId(from.getId());
 		to.setImageUrl(from.getImageUrl());
+		to.setRegistrationId(from.getRegistrationId());
 	}
 
 	public void map(User from, UserEntity to, String fbAccessToken) {

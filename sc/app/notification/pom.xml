@@ -6,24 +6,19 @@
 		<artifactId>app</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>merchant</artifactId>
-	<name>Socyal Merchant Module</name>
+	<artifactId>notification</artifactId>
+	<name>Socyal Notification Module</name>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
-		<finalName>merchant</finalName>
+		<finalName>notification</finalName>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>sc</groupId>
 			<artifactId>persistence</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>sc</groupId>
-			<artifactId>notification</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

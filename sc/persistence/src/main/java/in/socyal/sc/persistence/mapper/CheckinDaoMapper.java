@@ -67,6 +67,7 @@ public class CheckinDaoMapper {
 		//to.setLiked(hasLiked(from));
 		to.setLiked(Boolean.TRUE);
 		to.setLikeCount(from.getLikes().size());
+		to.setRewardStatus(from.getRewardStatus());
 		
 // 		Removed linear search algo; will be too slow if number of likes increase.
 //		for (CheckinUserLikeEntity likedUser : from.getLikes().con) {
