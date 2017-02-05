@@ -14,6 +14,10 @@
     	width: 60px;
     	height: 60px;
     }
+    .user-icon {
+    	width: 50px;
+    	height: 50px;
+    }
     .merchant-name, .merchant-icon-text {
 		font-size: 1.2em;
 	}
@@ -24,6 +28,12 @@
 	.rating-gear-dynamic {
 		height: 40px;
 		width: 80px;
+	}
+	.sub-heading-flexi {
+		font-size: 130%;
+	}
+	.flexi-font {
+		font-size: 90%;
 	}
 }
 
@@ -41,6 +51,10 @@
     	width: 90px;
     	height: 90px;
     }
+    .user-icon {
+    	width: 65px;
+    	height: 65px;
+    }
     .merchant-name, .merchant-icon-text {
 		font-size: 1.8em;
 	}
@@ -51,6 +65,12 @@
 	.rating-gear-dynamic {
 		height: 45px;
 		width: 90px;
+	}
+	.sub-heading-flexi {
+		font-size: 150%;
+	}
+	.flexi-font {
+		font-size: 100%;
 	}
 }
 
@@ -68,6 +88,10 @@
     	width: 120px;
     	height: 120px;
     }
+    .user-icon {
+    	width: 80px;
+    	height: 80px;
+    }
     .merchant-name, .merchant-icon-text {
 		font-size: 2.5em;
 	}
@@ -81,6 +105,12 @@
 	.rating-gear-dynamic {
 		height: 50px;
 		width: 100px;
+	}
+	.sub-heading-flexi {
+		font-size: 150%;
+	}
+	.flexi-font {
+		font-size: 100%;
 	}
 
 }
@@ -116,10 +146,6 @@
 	background: #E6E9EE;
 }
 
-.merchant-detail-main {
-	height: 500px;
-}
-
 .merchant-icon {
 	background: #E6E9EE;
 	border-radius: 50%;
@@ -135,14 +161,20 @@
 	float: left;
 }
 
-.merchant-name-wrapper {
+.name-wrapper {
 	padding-left: 5%;
 	width: 80%;
 }
 
-.sub-heading {
+.under-heading {
 	font-family: _light;
 	color: #909090;
+}
+
+.sub-heading-flexi {
+	padding: 5% 5% 0% 5%; 
+	font-family: _light;
+	color: #9932CC;
 }
 
 .rating-gear-dynamic {
@@ -152,5 +184,51 @@
 }
 
 .icon-rating-dynamic {
-    content:url("/img/rating-icon.png");
+    content:url("../img/rating-icon.png");
+}
+
+.detail-type-1 {
+	font-family: _light;
+	color: #9932CC;
+}
+
+.detail-type-2 {
+	font-family: _regular;
+}
+
+.detail-type-padding {
+	padding: 5%;
+}
+
+.checkin-item {
+	padding: 5% 5% 0% 5%;
+	font-family: _light;
+	color: #909090;
+}
+
+.user-icon {
+	border-radius: 50%;
+	text-align: center;
+	background-position: center;
+	background-repeat: no-repeat;
+	object-fit: cover;
+}
+
+.user-name-wrapper {
+	padding-left: 5%;
+	width: 70%;
+}
+
+.user-name {
+	color: #33373D; 
+	font-family: _regular;
+}
+
+.tagged-users {
+	padding: 5% 0% 5% 10%;
+}
+
+.reward-message {
+	padding: 0% 0% 5% 10%;
+	color: #e3a717;
 }
