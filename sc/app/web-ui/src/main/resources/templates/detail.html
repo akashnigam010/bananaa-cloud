@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head(pageTitle = ${detail.name})"></head>
+<head>
+	<link href="/css/detail.css" rel="stylesheet"></link>
+</head>
+
+<body>
+    <div class="container-fluid">
+		<!-- <p th:text="${detail.name}">random</p> -->
+        <!-- Image Banner STARTS -->
+        
+        
+        <div class="row merchant-image-banner">
+            <img class="top-image center-block" th:alt="${detail.name}" th:src="${detail.imageUrl}" />
+        </div>
+
+        <div class="row merchant-detail-background">
+            <div class="col-xs-10 col-xs-offset-1 merchant-detail-main">
+                <div class="row white-background details-wrapper">
+                    <div class="col-xs-12" style="padding: 3%;">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="merchant-icon float-left">
+                                            <p class="merchant-icon-text vertical-align-center" th:text="${detail.name[0]}">P</p>
+                                        </div>
+                                        <div class="row merchant-name-wrapper float-left">
+                                            <div style="height: 10px"></div>
+                                            <div class="col-xs-12 merchant-name" th:text="${detail.name}">
+                                                
+                                            </div>
+                                             <div class="col-xs-12 sub-heading" th:text="${detail.shortAddress}">
+                                                
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="row" style="padding: 5%;">
+                                    <div class="col-xs-12">
+                                        <div class="row">                                            
+                                            <div class="col-xs-6" align="center">                                            
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <span class="merchant-name" style="font-family: _regular" th:text="${detail.checkins}">
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <span class="sub-heading">TOTAL CHECKINS</span>
+                                                    </div>
+                                                </div>                                            
+                                            </div>
+                                            <div class="col-xs-6" align="center">
+                                                <div class="row">
+                                                    <div class="col-xs-12" style="padding-top: 2%;">
+                                                        <div class="rating-gear-dynamic">
+                                                            <div class="vertical-align-center">
+                                                                <img class="icon-rating-dynamic" />
+                                                                <span class="rating-value rating-value-dynamic" th:text="${detail.rating}">
+                                                                </span>    
+                                                            </div>                                            
+                                                        </div>
+                                                    </div>
+                                                </div>                                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>                                              
+                    </div>   
+                </div>
+                <div class="row white-background details-wrapper" style="margin-top: 20px;">
+                    <div style="padding-top: 3%; padding-left: 3%">
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="merchant-icon">
+                                <p class="merchant-icon-text">F</p>
+                            </div>
+                            <div class="merchant-name">
+                                Fusion 9
+                            </div>        
+                        </div>
+                        <div class="col-xs-12 col-sm-4">
+                            Ratings
+                        </div>
+                    </div>   
+                </div>
+            </div>
+        </div>
+
+        <div lang="en" th:replace="fragments/footer :: footer"></div>
+
+    </div>
+
+</body>
+
+</html>

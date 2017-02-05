@@ -1,0 +1,156 @@
+/* Media Queries CSS - START */
+
+@media (min-width: 100px) {
+    .merchant-image-banner {
+        height:25vh;
+    }
+    .merchant-detail-main {
+    	top: -5vh;
+    }
+    .merchant-detail-background {
+    	margin-bottom: -5vh;
+    }
+    .merchant-icon {
+    	width: 60px;
+    	height: 60px;
+    }
+    .merchant-name, .merchant-icon-text {
+		font-size: 1.2em;
+	}
+	.icon-rating-dynamic {
+		height: 20px;
+    	width: 20px;
+	}
+	.rating-gear-dynamic {
+		height: 40px;
+		width: 80px;
+	}
+}
+
+@media (min-width: 500px) {
+    .merchant-image-banner {
+        height:40vh;
+    }
+    .merchant-detail-main {
+    	top: -8vh;
+    }
+    .merchant-detail-background {
+    	margin-bottom: -8vh;
+    }
+    .merchant-icon {
+    	width: 90px;
+    	height: 90px;
+    }
+    .merchant-name, .merchant-icon-text {
+		font-size: 1.8em;
+	}
+	.icon-rating-dynamic {
+		height: 20px;
+    	width: 20px;
+	}
+	.rating-gear-dynamic {
+		height: 45px;
+		width: 90px;
+	}
+}
+
+@media (min-width: 1090px) {
+    .merchant-image-banner {
+        height:60vh;
+    }
+    .merchant-detail-main {
+    	top: -12vh;
+    }
+    .merchant-detail-background {
+    	margin-bottom: -12vh;
+    }
+    .merchant-icon {
+    	width: 120px;
+    	height: 120px;
+    }
+    .merchant-name, .merchant-icon-text {
+		font-size: 2.5em;
+	}
+	.rating-value-dynamic {
+		font-size: 1.5em;	
+	}
+	.icon-rating-dynamic {
+		height: 30px;
+    	width: 30px;
+	}
+	.rating-gear-dynamic {
+		height: 50px;
+		width: 100px;
+	}
+
+}
+
+@media (max-width: 1090px) {
+	.hidden-till-1090 {
+		display: none;
+	}
+}
+
+/* Media Queries CSS - END */
+
+.vertical-align-center {
+	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
+}
+
+.top-image {
+	display:inline-block;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    vertical-align:top;
+    object-fit: cover;
+}
+
+.details-wrapper {
+	border-radius: 6px;
+}
+
+.merchant-detail-background {
+	background: #E6E9EE;
+}
+
+.merchant-detail-main {
+	height: 500px;
+}
+
+.merchant-icon {
+	background: #E6E9EE;
+	border-radius: 50%;
+	text-align: center;
+}
+
+.merchant-icon-text {
+  	font-family: _light;
+  	color: #9ba8ba;
+}
+
+.float-left {
+	float: left;
+}
+
+.merchant-name-wrapper {
+	padding-left: 5%;
+	width: 80%;
+}
+
+.sub-heading {
+	font-family: _light;
+	color: #909090;
+}
+
+.rating-gear-dynamic {
+    background-color: #9932CC;
+    color: #FFFFFF;
+    border-radius: 4px;
+}
+
+.icon-rating-dynamic {
+    content:url("/img/rating-icon.png");
+}
