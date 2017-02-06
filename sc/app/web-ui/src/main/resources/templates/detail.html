@@ -9,9 +9,13 @@
 
 <body>
     <div class="container-fluid">
-		<!-- <p th:text="${detail.name}">random</p> -->
-        <!-- Image Banner STARTS -->
-        
+		
+		<div class="row">            
+           <div class="row col-xs-12 logo-header" style="margin: 2% 0% 0% 7%;" onclick="location.href='http://www.bananaa.in';">
+            </div>
+        </div>
+		
+        <!-- Image Banner STARTS -->        
         
         <div class="row merchant-image-banner">
             <img class="top-image center-block" th:alt="${detail.name}" th:src="${detail.imageUrl}" />
@@ -82,23 +86,35 @@
                             <div class="row flexi-font">
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
                                     <div class="detail-type-1">Opening Hours</div>
-                                    <div class="detail-type-2">10:30 AM - 12:00 PM</div>
+                                    <div class="detail-type-2">
+                                    	<span th:each="openingHour, iterStat : ${detail.openingHours}" th:text="!${iterStat.last} ? ${openingHour} + ', ' : ${openingHour}"></span>
+                                    </div>
                                 </div>
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
-                                    <div class="detail-type-1">Cuisines</div>
-                                    <div class="detail-type-2">American, Asian, Thai, Mediterranian, American, Asian, Thai, Mediterranian</div>
+                                    <div class="detail-type-1">Phone Number</div>
+                                    <div class="detail-type-2" th:text="${detail.phone}"></div>
+                                </div>
+                                <div class="clearfix visible-xs-block"></div>
+                                <div class="col-xs-6 col-sm-12 detail-type-padding">
+                                    <div class="detail-type-1">Average Cost</div>
+                                    <div class="detail-type-2" th:text="'Rs. ' + ${detail.averageCost} + ' for 2 (approx.)'"></div>
                                 </div>
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
                                     <div class="detail-type-1">Type</div>
-                                    <div class="detail-type-2">Casual Dining</div>
+                                    <div class="detail-type-2">
+                                    	<span th:each="type, iterStat : ${detail.type}" th:text="!${iterStat.last} ? ${type} + ', ' : ${type}"></span>
+                                    </div>
                                 </div>
+                                <div class="clearfix visible-xs-block"></div>
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
-                                    <div class="detail-type-1">Average Cost</div>
-                                    <div class="detail-type-2">Rs. 1200 for 2 (approx)</div>
-                                </div>
+                                    <div class="detail-type-1">Cuisines</div>
+                                    <div class="detail-type-2">
+                                    	<span th:each="cuisine, iterStat : ${detail.cuisines}" th:text="!${iterStat.last} ? ${cuisine} + ', ' : ${cuisine}"></span>
+                                    </div>
+                                </div>                                                                
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
                                     <div class="detail-type-1">Address</div>
-                                    <div class="detail-type-2">5th Floor, Inorbit Mall, Hitech City, Hyderabad 500085</div>
+                                    <div class="detail-type-2" th:text="${detail.longAddress}"></div>
                                 </div>
                             </div>    
                         </div>                        
@@ -113,7 +129,7 @@
 	                            </div>
 	                            <div class="row">
 	                                <div class="col-xs-12" style="padding: 5%; font-family: _light; color: #909090;">
-	                                    Fusion 9 - International Delecacies.
+	                                    <p th:text="${detail.name}"></p>
 	                                </div>
 	                            </div>
 	                            <div class="row">
@@ -126,12 +142,12 @@
 	                                    <div class="row">
 	                                        <div class="col-xs-10">
 	                                            <div class="float-left" style="object-fit: cover;">
-	                                                <img class="user-icon" src="https://s3.ap-south-1.amazonaws.com/bananaimages/sanjeevven_sec.png" />
+	                                                <img class="user-icon" th:src="${userImage}" />
 	                                            </div>
 	                                            <div class="row float-left user-name-wrapper">
 	                                                <div style="height: 10px"></div>
 	                                                <div class="col-xs-12 user-name flexi-font">
-	                                                    Akash Nigam
+	                                                    Kunal Kapoor
 	                                                </div>
 	                                                 <div class="col-xs-12 flexi-font">
 	                                                    22 CHECKINS
@@ -176,12 +192,12 @@
 	                                    <div class="row">
 	                                        <div class="col-xs-10">
 	                                            <div class="float-left" style="object-fit: cover;">
-	                                                <img class="user-icon" src="https://s3.ap-south-1.amazonaws.com/bananaimages/vaibhavgup_sec.png" />
+	                                                <img class="user-icon" th:src="${userImage}" />
 	                                            </div>
 	                                            <div class="row float-left user-name-wrapper">
 	                                                <div style="height: 10px"></div>
 	                                                <div class="col-xs-12 user-name">
-	                                                    Akash Nigam
+	                                                    Kunal Kapoor
 	                                                </div>
 	                                                 <div class="col-xs-12" style="font-size: 90%;">
 	                                                    22 CHECKINS
