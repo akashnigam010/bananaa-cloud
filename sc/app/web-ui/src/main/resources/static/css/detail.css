@@ -121,6 +121,12 @@
 	}
 }
 
+@media (min-width: 768px) {
+	.detail-about > .col-sm-8 {
+	    width: 65.666667%;
+	}
+}
+
 /* Media Queries CSS - END */
 
 .vertical-align-center {
