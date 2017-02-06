@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import in.socyal.sc.api.merchant.dto.Location;
-import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
+import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
-import in.socyal.sc.api.merchant.response.MerchantResponse;
-import in.socyal.sc.api.org.Organization;
-import in.socyal.sc.api.org.OrganizationPage;
+import in.socyal.sc.app.merchant.MerchantDelegate;
+import in.socyal.sc.helper.security.jwt.JwtHelper;
 
 @Controller
 public class PageController {
+	@Autowired MerchantDelegate merchantDelegate;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
@@ -27,30 +27,9 @@ public class PageController {
 	
 	@RequestMapping(value = "/hyderabad", method = RequestMethod.GET)
 	public ModelAndView city() {
-		GetMerchantListRequest request = new GetMerchantListRequest();
-		Location location = new Location();
-		location.setLatitude(17.470325);
-		location.setLongitude(78.368113);
-		request.setLocation(location);
-		request.setPage(1);
 		ModelAndView modelAndView = new ModelAndView("index");
-		MerchantResponse merchant = new MerchantResponse();
-		merchant.setName("Sandeep");
-		merchant.setShortAddress("Madhapur");
-		
-		Organization org = new Organization();
-		org.setName("Bananaa");
-		org.setTagline("Loreium ipsum dolor sit amet");
-		org.setAddressLine1("ORG.ADDRESSLINE1");
-		org.setAddressLine2("Madhapur, Hyderabad");
-		org.setAddressLine3("123.456.7890");
-		org.setWebsite("www.bananaa.in");
-		OrganizationPage page = new OrganizationPage();
-		page.setTitle("Home | Bananaa.in");
-		
-		modelAndView.addObject("merchants", Collections.singletonList(merchant));
-		modelAndView.addObject("org", org);
-		modelAndView.addObject("page", page);
+		modelAndView.addObject("accessToken", JwtHelper.createJsonWebTokenForGuest());
+		modelAndView.addObject("city", "hyderabad");
 		return modelAndView;
 	}
 	
@@ -80,32 +59,13 @@ public class PageController {
 	
 	@RequestMapping(value = "/hyderabad/{id}", method = RequestMethod.GET)
 	public ModelAndView details(@PathVariable String id) {
+		MerchantDetailsRequest request = new MerchantDetailsRequest();
+		request.setId(Integer.parseInt(id));
+		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
+		
 		ModelAndView modelAndView = new ModelAndView("detail");
-		List<String> cusines = new ArrayList<>();
-		cusines.add("Mexican");
-		cusines.add("Asian");
-		cusines.add("Italian");
-		List<String> type = new ArrayList<>();
-		type.add("Open Bar");
-		type.add("Roof Top");
-		type.add("Dance Floor");		
-		MerchantDetailsResponse response = new MerchantDetailsResponse();
-		response.setId(12345);
-		response.setName("Free Flow");
-		response.setShortAddress("Jubilee Hils, Hyderabad");
-		response.setCheckins(193);
-		response.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/12351.png");
-		response.setRating(4.5);
-		response.setIsOpen(true);
-		response.setOpeningHours(Collections.singletonList("10:00 AM to 09:00 PM"));
-		response.setCuisines(cusines);
-		response.setType(type);
-		response.setAverageCost(1400.00);
-		response.setLongAddress("Near Jubilee Checkpost, Hyderabad, 500098");
-		response.setPreviousCheckinCount(12);
-		response.setPhone("0409123832600");
 		modelAndView.addObject("detail", response);
-		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xtf1/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94&__gda__=1494177432_f41563ece4c33e49b8f49c211513aefe");
+		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xfl1/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE&__gda__=1494528018_4c3d954c3fe507b4d4aa581df02de6e7");
 		return modelAndView;
 	}
 }

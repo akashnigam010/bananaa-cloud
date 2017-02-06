@@ -59,6 +59,9 @@ a:hover {
     .logo-header {
         background-image: url("../img/logo-xxxs.png");
     }
+    .flexi-font {
+		font-size: 90%;
+	}
 }
 
 @media (min-width: 500px) {
@@ -75,6 +78,9 @@ a:hover {
     .logo-header {
         background-image: url("../img/logo-xxs.png");
     }
+	.flexi-font {
+		font-size: 100%;
+	}    
 }
 
 @media (max-width: 650px) {
@@ -100,6 +106,9 @@ a:hover {
         width: 50%;
         float: left;
     }
+	.flexi-font {
+		font-size: 100%;
+	}
 }
 
 /* Media Queries CSS - END */
@@ -129,6 +138,28 @@ a:hover {
     background-image: url("../img/search_icon.png");
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.search-box-suggestion {
+    z-index: 1; 
+    position: absolute; 
+    background: white; 
+    color: grey; 
+    width: 100%; 
+    border-radius: 5px;
+    -webkit-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+    -moz-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+    box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+}
+
+.suggestion-wrapper {
+	height: 70px;
+}
+
+.suggestion {
+	padding: 2% 2% 0% 2%;
+	font-family: _ultraLight;
+    font-size: 80%;
 }
 
 /* Hero Banner CSS - END */
