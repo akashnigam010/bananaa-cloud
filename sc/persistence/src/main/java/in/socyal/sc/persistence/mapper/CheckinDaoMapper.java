@@ -63,8 +63,7 @@ public class CheckinDaoMapper {
 			taggedUsers.add(taggedUserDto);
 		}
 		to.setTaggedUsers(taggedUsers);
-		//FIXME : setting default value because it fails when called from business app
-		//to.setLiked(hasLiked(from));
+		to.setLiked(hasLiked(from));
 		to.setLiked(Boolean.TRUE);
 		to.setLikeCount(from.getLikes().size());
 		to.setRewardStatus(from.getRewardStatus());
@@ -81,7 +80,7 @@ public class CheckinDaoMapper {
 	}
 	
 	private boolean hasLiked(CheckinEntity from) {
-		if (!isLoggedInUser()) {
+		if (!isUserLoggedIn()) {
 			return Boolean.FALSE;
 		}
 		CheckinUserLikeEntity loggedInUser = new CheckinUserLikeEntity();
@@ -105,14 +104,14 @@ public class CheckinDaoMapper {
 	 * check if user is logged in or not.
 	 * Throws exception if user is not logged in
 	 */
-	private boolean isLoggedInUser() {
+	private boolean isUserLoggedIn() {
 		for (String role : jwtHelper.getRoles()) {
 			RoleType roleType = RoleType.getRole(role);
-			if (RoleType.GUEST == roleType) {
-				return Boolean.FALSE;
+			if (RoleType.USER == roleType) {
+				return Boolean.TRUE;
 			} 
 		}
 		
-		return Boolean.TRUE;
+		return Boolean.FALSE;
 	}
 }
