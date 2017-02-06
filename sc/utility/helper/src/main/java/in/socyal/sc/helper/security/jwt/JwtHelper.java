@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
@@ -194,7 +195,7 @@ public class JwtHelper {
 				jt = parser.verifyAndDeserialize(token);
 			} catch (SignatureException e) {
 				LOG.error("Exception occured while verifying and deserializing JWT token ", e);
-				throw new BusinessException(GenericErrorCodeType.JWT_TOKEN_EXPIRED);
+				throw new AuthenticationCredentialsNotFoundException("Token expired! Kindly login again");
 			}
 			JsonObject payload = jt.getPayloadAsJsonObject();
 			TokenInfo tokenInfo = new TokenInfo();
@@ -233,7 +234,7 @@ public class JwtHelper {
 	}
 	
 	public static void main(String args[]) {
-		System.out.println(createJsonWebTokenForMerchant("12", "12345"));
+		System.out.println(createJsonWebTokenForUser("5"));
 	}
 	
 	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis) {
