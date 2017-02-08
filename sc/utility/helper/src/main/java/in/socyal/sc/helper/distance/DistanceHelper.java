@@ -4,9 +4,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DistanceHelper {
-	public static Boolean isNearBy(double lat1, double lon1, double lat2, double lon2) {
+	public static Boolean isCoordinateInRange(double lat1, double lon1, double lat2, double lon2) {
 		Boolean flag = Boolean.FALSE;
-		//FIXME : Logic for calculating distance
+		//TODO : Logic for calculating distance
 		flag = Boolean.TRUE;
 		return flag;
 	}
