@@ -9,7 +9,7 @@ public class MerchantQrMappingDto implements Serializable {
 	private Integer id;
 	private String qrCode;
 	private MerchantDto merchant;
-	private Integer cardId;
+	private String cardId;
 	private Boolean status;
 
 	public Integer getId() {
@@ -36,11 +36,11 @@ public class MerchantQrMappingDto implements Serializable {
 		this.merchant = merchant;
 	}
 
-	public Integer getCardId() {
+	public String getCardId() {
 		return cardId;
 	}
 
-	public void setCardId(Integer cardId) {
+	public void setCardId(String cardId) {
 		this.cardId = cardId;
 	}
 

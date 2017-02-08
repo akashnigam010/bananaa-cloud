@@ -48,7 +48,6 @@ import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
 import in.socyal.sc.api.feedback.dto.FeedbackDto;
 import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
-import in.socyal.sc.api.login.request.SendTestNotificationRequest;
 import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
@@ -104,7 +103,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		FeedsResponse response = new FeedsResponse();
 		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(request.getId(), request.getPage());
 		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
-		//FIXME : rather than hitting DB frequently fetch checkin count at once
+		//TODO : rather than hitting DB frequently fetch checkin count at once
 		for (CheckinDto checkin : checkins) {
 			Integer userId = checkin.getUser().getId();
 			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
@@ -121,7 +120,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(jwtDetailsHelper.getCurrentUserId());
 		List<CheckinDto> checkins = checkinDao.getUserCheckins(userIds, request.getPage());
 		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
-		//FIXME : rather than hitting DB frequently fetch checkin count at once
+		//TODO : rather than hitting DB frequently fetch checkin count at once
 		for (Integer userId : userIds) {
 			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
 		}
@@ -144,7 +143,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
-		//FIXME: Fix this condition for fetching data only in a particular city based on location
+		//TODO: Fix this condition for fetching data only in a particular city based on location
 		List<CheckinDto> checkins = null;
 		if (jwtDetailsHelper.isUserLoggedIn()) {
 		checkins = checkinDao.getAroundMeFeedsDao(jwtDetailsHelper.getCurrentUserId(), request.getPage());
@@ -152,7 +151,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			checkins = checkinDao.getAroundMeFeedsDao(null, request.getPage());
 		}
 		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
-		//FIXME : rather than hitting DB frequently fetch checkin count at once
+		//TODO : rather than hitting DB frequently fetch checkin count at once
 		for (CheckinDto checkin : checkins) {
 			Integer userId = checkin.getUser().getId();
 			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
@@ -165,22 +164,22 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
 		if (request.getShareOnFb()) {
-			//FIXME : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
+			//TODO : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
 			//checkForTokenValidity();
 		}
-		MerchantQrMappingDto qrMappingDetail = getQrDetails(request.getQrCode());
-		checkForQrScanningRange(request.getLocation(), qrMappingDetail);
-		CheckinDetailsDto dto = prepareCheckinDetails(request, qrMappingDetail.getMerchant());
+		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
+		checkForQrScanningRange(request.getLocation(), qrMappingDetails);
+		CheckinDetailsDto dto = prepareCheckinDetails(request, qrMappingDetails.getMerchant());
 		Integer checkinId = checkinDao.confirmCheckin(dto);
 		List<UserDto> taggedUserDetails = tagUsers(request, checkinId);
 
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		response.setCheckinId(checkinId);
-		response.setMerchantId(qrMappingDetail.getMerchant().getId());
-		response.setMerchantName(qrMappingDetail.getMerchant().getName());
-		response.setPreviousCheckinCount(
-				checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(), qrMappingDetail.getMerchant().getId()));
-		response.setShortAddress(qrMappingDetail.getMerchant().getAddress().getLocality().getShortAddress());
+		response.setMerchantId(qrMappingDetails.getMerchant().getId());
+		response.setMerchantName(qrMappingDetails.getMerchant().getName());
+		response.setPreviousCheckinCount(checkinDao.getUserCheckinsCountForAMerchant(
+				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
+		response.setShortAddress(qrMappingDetails.getMerchant().getAddress().getLocality().getShortAddress());
 		if (taggedUserDetails != null) {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
 		}
@@ -194,8 +193,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		ValidateCheckinResponse response = new ValidateCheckinResponse();
 		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
 		checkForQrScanningRange(request.getLocation(), qrMappingDetails);
-		response.setPreviousCheckinCount(
-				checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
+		response.setPreviousCheckinCount(checkinDao.getUserCheckinsCountForAMerchant(
+				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
 		response.setMerchantName(qrMappingDetails.getMerchant().getName());
 		response.setShortAddress(qrMappingDetails.getMerchant().getAddress().getLocality().getShortAddress());
 		return response;
@@ -358,19 +357,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		feedbackDto = feedbackDao.createFeedback(feedbackDto);
 		//3. Increase merchant checkin count in merchant table
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchant().getId());
+		//FIXME
 		//4. send notification to the user
-		//sendNotification(checkin.getUser().getRegistrationId());
 		return businessApproveCheckinResponse(checkin, feedbackDto);
 	}
 	
 	public Integer fetchLikeCount(Integer checkinId) {
 		return checkinLikeDao.fetchLikeCount(checkinId);
-	}
-	
-	private void sendNotification(String deviceToken) {
-		SendTestNotificationRequest request = new SendTestNotificationRequest();
-		request.setDeviceToken(deviceToken);
-		notificationDelegate.sendDataMessage(request);
 	}
 	
 	private Calendar getDateFromIdentifier(Integer identifier) {
@@ -404,11 +397,11 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return qrMappingDetails;
 	}
 
-	private void checkForQrScanningRange(Location location, MerchantQrMappingDto qrMappingDetail) {
-		Boolean isNearBy = DistanceHelper.isNearBy(location.getLatitude(), location.getLongitude(),
-				qrMappingDetail.getMerchant().getAddress().getLatitude(),
-				qrMappingDetail.getMerchant().getAddress().getLongitude());
-		if (!isNearBy) {
+	private void checkForQrScanningRange(Location location, MerchantQrMappingDto qrMappingDetails) {
+		Boolean isQrCodeInRange = DistanceHelper.isCoordinateInRange(location.getLatitude(), location.getLongitude(),
+				qrMappingDetails.getMerchant().getAddress().getLatitude(),
+				qrMappingDetails.getMerchant().getAddress().getLongitude());
+		if (!isQrCodeInRange) {
 			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
 		}
 	}
@@ -456,7 +449,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 		return list;
 	}
-
 
 	//FIXME : dummy response, replace with actual logic
 	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(Integer checkinId) {
