@@ -2,6 +2,7 @@ package in.socyal.sc.app.checkin.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 
 @Component
 public class CheckinDelegateMapper {
-	public void map(List<CheckinDto> from, FeedsResponse to) {
+	public void map(List<CheckinDto> from, FeedsResponse to, Map<Integer, Integer> userCheckinMap) {
 		List<Checkin> checkins = new ArrayList<>();
 		for (CheckinDto dto : from) {
 			Checkin checkinResponse = new Checkin();
@@ -30,7 +31,7 @@ public class CheckinDelegateMapper {
 			checkinResponse.setRewardMessage(dto.getRewardMessage());
 			checkinResponse.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
 			checkinResponse.setTimestamp(dto.getCheckinDateTime().getTime());
-			checkinResponse.setUser(getUserDetailsResponse(dto.getUser()));
+			checkinResponse.setUser(getUserDetailsResponse(dto.getUser(), userCheckinMap));
 			checkinResponse.setHasLiked(dto.isLiked());
 			checkins.add(checkinResponse);
 		}
@@ -48,22 +49,22 @@ public class CheckinDelegateMapper {
 		return taggedUserResponse;
 	}
 
-	private UserDetailsResponse getUserDetailsResponse(UserDto userDto) {
+	private UserDetailsResponse getUserDetailsResponse(UserDto userDto, Map<Integer, Integer> userCheckinMap) {
 		UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
-		userDetailsResponse.setId(userDto.getId());
+		Integer userId = userDto.getId();
+		userDetailsResponse.setId(userId);
 		userDetailsResponse.setImageUrl(userDto.getImageUrl());
 		userDetailsResponse.setName(userDto.getName());
-		// FIXME:We need to fetch the user checkin count from DB
-		userDetailsResponse.setUserCheckins(2);
+		userDetailsResponse.setUserCheckins(userCheckinMap.get(userId));
 		return userDetailsResponse;
 	}
 
-	public void map(List<CheckinDto> from, GetBusinessCheckinsResponse response) {
+	public void map(List<CheckinDto> from, GetBusinessCheckinsResponse response, Map<Integer, Integer> userCheckinMap) {
 		BusinessCheckin to = null;
 		for (CheckinDto dto : from) {
 			to = new BusinessCheckin();
 			to.setId(dto.getId());
-			to.setUser(getUserDetailsResponse(dto.getUser()));
+			to.setUser(getUserDetailsResponse(dto.getUser(), userCheckinMap));
 			to.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
 			if (StringUtils.isNotEmpty(dto.getRewardMessage())) {
 				to.setRewardMessage(dto.getRewardMessage());

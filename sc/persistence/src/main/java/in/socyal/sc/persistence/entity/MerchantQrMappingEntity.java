@@ -30,7 +30,7 @@ public class MerchantQrMappingEntity implements Serializable {
 	private MerchantEntity merchant;
 	
 	@Column(name = "CARD_ID")
-	private Integer cardId;
+	private String cardId;
 	
 	@Column(name = "STATUS")
 	private Boolean status;
@@ -59,11 +59,11 @@ public class MerchantQrMappingEntity implements Serializable {
 		this.merchant = merchant;
 	}
 
-	public Integer getCardId() {
+	public String getCardId() {
 		return cardId;
 	}
 
-	public void setCardId(Integer cardId) {
+	public void setCardId(String cardId) {
 		this.cardId = cardId;
 	}
 
