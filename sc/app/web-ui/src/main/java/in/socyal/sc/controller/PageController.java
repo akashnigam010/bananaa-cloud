@@ -1,8 +1,6 @@
 package in.socyal.sc.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +16,14 @@ import in.socyal.sc.helper.security.jwt.JwtHelper;
 
 @Controller
 public class PageController {
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String HOME_URL = "home.url";
+	private static final String HOME_TITLE = "home.title";
+	private static final String HOME_DESCRIPTION = "home.description";
+	private static final String DETAIL_DESCRIPTION_1 = "detail.description.1";
+	private static final String DETAIL_DESCRIPTION_2 = "detail.description.2";
+	private static final String DETAIL_TITLE_END = "detail.title.end";
+	
 	@Autowired MerchantDelegate merchantDelegate;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -30,6 +36,10 @@ public class PageController {
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("accessToken", JwtHelper.createJsonWebTokenForGuest());
 		modelAndView.addObject("city", "hyderabad");
+		modelAndView.addObject("description", resource.getString(HOME_DESCRIPTION));
+		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
+		modelAndView.addObject("title", resource.getString(HOME_TITLE));
+		modelAndView.addObject("url", resource.getString(HOME_URL));
 		return modelAndView;
 	}
 	
@@ -59,13 +69,39 @@ public class PageController {
 	
 	@RequestMapping(value = "/hyderabad/{id}", method = RequestMethod.GET)
 	public ModelAndView details(@PathVariable String id) {
+		String city = "hyderabad";
 		MerchantDetailsRequest request = new MerchantDetailsRequest();
 		request.setId(Integer.parseInt(id));
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
 		
 		ModelAndView modelAndView = new ModelAndView("detail");
 		modelAndView.addObject("detail", response);
+		modelAndView.addObject("description", getDetailMetaDescription(response));
+		modelAndView.addObject("fbDescription", getDetailMetaDescription(response));
+		modelAndView.addObject("title", getDetailMetaTitle(response));
+		modelAndView.addObject("url", getDetailMetaUrl(response, city));
 		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xfl1/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE&__gda__=1494528018_4c3d954c3fe507b4d4aa581df02de6e7");
 		return modelAndView;
+	}
+	
+	private String getDetailMetaDescription(MerchantDetailsResponse response) {
+		String description = response.getName() + "; ";
+		description += response.getName() + ", " + response.getShortAddress() + "; ";
+		description += resource.getString(DETAIL_DESCRIPTION_1);
+		description += " " + response.getName() + " ";
+		description += resource.getString(DETAIL_DESCRIPTION_2);
+		return description;
+	}
+	
+	private String getDetailMetaTitle(MerchantDetailsResponse response) {
+		String title = response.getName() + ", " + response.getShortAddress() + " ";
+		title += resource.getString(DETAIL_TITLE_END);
+		return title;
+	}
+	
+	private String getDetailMetaUrl(MerchantDetailsResponse response, String city) {
+		String url = resource.getString(HOME_URL);
+		url += "/" + city + "/" + response.getId();
+		return url;
 	}
 }
