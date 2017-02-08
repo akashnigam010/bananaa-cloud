@@ -63,10 +63,10 @@ public class UserFollowerMappingDao {
 	public List<UserDto> fetchMyFriendsByPage(Integer page, Integer currentUserId) {
 		List<UserDto> userDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
-		criteria.add(Restrictions.eq("followerUser.id", currentUserId));
 		@SuppressWarnings("unchecked")
 		List<UserFollowerMappingEntity> users = (List<UserFollowerMappingEntity>) criteria.list();
 		if (users != null && !users.isEmpty()) {

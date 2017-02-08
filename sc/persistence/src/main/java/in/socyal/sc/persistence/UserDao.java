@@ -8,6 +8,8 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -71,9 +73,12 @@ public class UserDao {
 	 * @param resultsPerPage
 	 * @return
 	 */
-	public List<UserDto> fetchUsers(Integer resultsPerPage) {
+	public List<UserDto> fetchUsers(String searchString, Integer resultsPerPage) {
 		List<UserDto> userDtos = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		Criterion firstNameCriteria = Restrictions.ilike("firstName", searchString, MatchMode.ANYWHERE);
+		Criterion lastNameCriteria = Restrictions.ilike("lastName", searchString, MatchMode.ANYWHERE);
+		criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
 		criteria.setMaxResults(resultsPerPage);
 		@SuppressWarnings("unchecked")
 		List<UserEntity> users = criteria.list();
