@@ -3,7 +3,9 @@ package in.socyal.sc.app.checkin;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +55,6 @@ import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
-import in.socyal.sc.api.type.RoleType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
 import in.socyal.sc.app.checkin.type.CheckinErrorCodeType;
@@ -62,10 +63,10 @@ import in.socyal.sc.app.merchant.type.MerchantQrMappingErrorCodeType;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
+import in.socyal.sc.helper.JwtTokenDetailsHelper;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
-import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.helper.type.GenericErrorCodeType;
 import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
@@ -88,7 +89,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Autowired UserDao userDao;
 	@Autowired CheckinUserLikeMappingDao checkinLikeDao;
 	@Autowired UserDaoMapper userMapper;
-	@Autowired JwtTokenHelper jwtHelper;
 	@Autowired OAuth2FbHelper fbHelper;
 	@Autowired Clock clock;
 	@Autowired CheckinDelegateMapper checkinMapper;
@@ -96,13 +96,20 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Autowired UserFollowerMappingDao userFollowerDao;
 	@Autowired FeedbackDao feedbackDao;
 	@Autowired NotificationDelegate notificationDelegate;
+	@Autowired JwtTokenDetailsHelper jwtDetailsHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(request.getId(), request.getPage());
-		checkinMapper.map(checkins, response);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		//FIXME : rather than hitting DB frequently fetch checkin count at once
+		for (CheckinDto checkin : checkins) {
+			Integer userId = checkin.getUser().getId();
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
 	}
 	
@@ -111,9 +118,14 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		//Fetching user id list whom the current user is following including current user
-		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(getCurrentUserId());
+		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(jwtDetailsHelper.getCurrentUserId());
 		List<CheckinDto> checkins = checkinDao.getUserCheckins(userIds, request.getPage());
-		checkinMapper.map(checkins, response);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		//FIXME : rather than hitting DB frequently fetch checkin count at once
+		for (Integer userId : userIds) {
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
 	}
 	
@@ -122,7 +134,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		List<CheckinDto> checkins = checkinDao.getUserCheckins(Collections.singletonList(request.getUserId()), request.getPage());
-		checkinMapper.map(checkins, response);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		userApprovedCheckins.put(request.getUserId(), checkinDao.getUserCheckinCount(request.getUserId()));
+		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
 	}
 	
@@ -132,12 +146,18 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		FeedsResponse response = new FeedsResponse();
 		//FIXME: Fix this condition for fetching data only in a particular city based on location
 		List<CheckinDto> checkins = null;
-		if (validateIfLoggedInUser()) {
-		checkins = checkinDao.getAroundMeFeedsDao(getCurrentUserId(), request.getPage());
+		if (jwtDetailsHelper.isUserLoggedIn()) {
+		checkins = checkinDao.getAroundMeFeedsDao(jwtDetailsHelper.getCurrentUserId(), request.getPage());
 		} else {
 			checkins = checkinDao.getAroundMeFeedsDao(null, request.getPage());
 		}
-		checkinMapper.map(checkins, response);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		//FIXME : rather than hitting DB frequently fetch checkin count at once
+		for (CheckinDto checkin : checkins) {
+			Integer userId = checkin.getUser().getId();
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
 	}
 
@@ -145,7 +165,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
 		if (request.getShareOnFb()) {
-			// FIXME : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
+			//FIXME : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
 			//checkForTokenValidity();
 		}
 		MerchantQrMappingDto qrMappingDetail = getQrDetails(request.getQrCode());
@@ -159,7 +179,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		response.setMerchantId(qrMappingDetail.getMerchant().getId());
 		response.setMerchantName(qrMappingDetail.getMerchant().getName());
 		response.setPreviousCheckinCount(
-				checkinDao.getUserCheckinsCountForAMerchant(getCurrentUserId(), qrMappingDetail.getMerchant().getId()));
+				checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(), qrMappingDetail.getMerchant().getId()));
 		response.setShortAddress(qrMappingDetail.getMerchant().getAddress().getLocality().getShortAddress());
 		if (taggedUserDetails != null) {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
@@ -175,7 +195,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
 		checkForQrScanningRange(request.getLocation(), qrMappingDetails);
 		response.setPreviousCheckinCount(
-				checkinDao.getUserCheckinsCountForAMerchant(getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
+				checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
 		response.setMerchantName(qrMappingDetails.getMerchant().getName());
 		response.setShortAddress(qrMappingDetails.getMerchant().getAddress().getLocality().getShortAddress());
 		return response;
@@ -207,7 +227,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 
 		// Fetch previous checkin count
-		Integer checkinCount = checkinDao.getUserCheckinsCountForAMerchant(getCurrentUserId(),
+		Integer checkinCount = checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
 				checkin.getMerchant().getId());
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		response.setCheckinId(checkin.getId());
@@ -231,7 +251,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
 		//validate whether current user is logged in or not
-		if (!validateIfLoggedInUser()) {
+		if (!jwtDetailsHelper.isUserLoggedIn()) {
 			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
 		}
 		//validate whether checkin already exists
@@ -240,10 +260,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		// Write logic for validating whether a LIKE was already done
-		if (checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), getCurrentUserId())) {
+		if (checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), jwtDetailsHelper.getCurrentUserId())) {
 			throw new BusinessException(CheckinLikeErrorCodeType.CHECKIN_ALREADY_LIKED);
 		}
-		checkinLikeDao.likeACheckin(request.getCheckinId(), getCurrentUserId());
+		checkinLikeDao.likeACheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentUserId());
 		response.setLikeCount(fetchLikeCount(request.getCheckinId()));
 		return response;
 	}
@@ -253,7 +273,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
 		//validate whether current user is logged in or not
-		if (!validateIfLoggedInUser()) {
+		if (!jwtDetailsHelper.isUserLoggedIn()) {
 			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
 		}
 		//validate whether checkin already exists
@@ -262,10 +282,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		// Write logic for validating whether a LIKE was done or not
-		if (!checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), getCurrentUserId())) {
+		if (!checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(), jwtDetailsHelper.getCurrentUserId())) {
 			throw new BusinessException(CheckinLikeErrorCodeType.CHECKIN_NOT_LIKED);
 		}
-		checkinLikeDao.unLikeACheckin(request.getCheckinId(), getCurrentUserId());
+		checkinLikeDao.unLikeACheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentUserId());
 		response.setLikeCount(fetchLikeCount(request.getCheckinId()));
 		return response;
 	}
@@ -274,14 +294,24 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request) {
 		GetBusinessCheckinsResponse response = new GetBusinessCheckinsResponse();
-		Calendar date = getDateFromIdentifier(request.getDateIdentifier());
-		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), date, 12345);
+		Calendar checkinDate = getDateFromIdentifier(request.getDateIdentifier());
+		//FIXME : write logic for fetching checkin details for provided date range
+		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), 
+																   checkinDate, 
+																   jwtDetailsHelper.getCurrentMerchantId());
 		
 		if (request.getPage() == 1) {
-			response.setDate(dayUtil.formatDate(date, DateFormatType.DATE_FORMAT_IND));
-			response.setCheckinCount(12);
+			response.setDate(dayUtil.formatDate(checkinDate, DateFormatType.DATE_FORMAT_IND));
+			response.setCheckinCount(checkinDao.getBusinessCheckinsCountPerDay(request.getPage(), 
+																			   checkinDate, 
+																			   jwtDetailsHelper.getCurrentMerchantId()));
 		}
-		checkinMapper.map(checkins, response);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		for (CheckinDto checkin : checkins) {
+			Integer userId = checkin.getUser().getId();
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
 	}
 	
@@ -345,13 +375,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	private Calendar getDateFromIdentifier(Integer identifier) {
 		Calendar date = Calendar.getInstance();
-		date.add(Calendar.DAY_OF_MONTH, (-1*(identifier)));
+		date.add(Calendar.DAY_OF_MONTH, (-1 * (identifier)));
 		return date;
 	}
 
 	private void checkForTokenValidity() throws BusinessException {
 		boolean isTokenValid = false;
-		UserDto user = userDao.fetchUser(getCurrentUserId());
+		UserDto user = userDao.fetchUser(jwtDetailsHelper.getCurrentUserId());
 		if (user == null) {
 			throw new BusinessException(CheckinErrorCodeType.USER_NOT_FOUND);
 		}
@@ -396,8 +426,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throws BusinessException {
 		CheckinDetailsDto checkinDetails = new CheckinDetailsDto();
 		checkinDetails.setMerchantId(merchant.getId());
-		Integer userId = getCurrentUserId();
-		checkinDetails.setUserId(userId);
+		checkinDetails.setUserId(jwtDetailsHelper.getCurrentUserId());
 		checkinDetails.setCheckinDateTime(clock.cal());
 		checkinDetails.setUpdatedDateTime(clock.cal());
 		checkinDetails.setQrCode(request.getQrCode());
@@ -428,23 +457,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return list;
 	}
 
-	private Integer getCurrentUserId() {
-		return Integer.valueOf(jwtHelper.getUserName());
-	}
-	
-	/**
-	 * check if user is logged in or not
-	 * FIXME : Move such logics to a common place
-	 */
-	private boolean validateIfLoggedInUser() {
-		List<String> roles = jwtHelper.getRoles();
-		for (String role : roles) {
-			if (RoleType.USER == RoleType.getRole(role)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	//FIXME : dummy response, replace with actual logic
 	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(Integer checkinId) {
@@ -561,7 +573,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
-	//FIXME : dummy response, replace with actual logic
 	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto) {
 		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
