@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 
@@ -39,7 +40,7 @@ public class PageController {
 		modelAndView.addObject("description", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("title", resource.getString(HOME_TITLE));
-		modelAndView.addObject("url", resource.getString(HOME_URL));
+		modelAndView.addObject("url", resource.getString(HOME_URL) + "/" + CityType.HYDERABAD.getName());
 		return modelAndView;
 	}
 	
@@ -69,7 +70,6 @@ public class PageController {
 	
 	@RequestMapping(value = "/hyderabad/{id}", method = RequestMethod.GET)
 	public ModelAndView details(@PathVariable String id) {
-		String city = "hyderabad";
 		MerchantDetailsRequest request = new MerchantDetailsRequest();
 		request.setId(Integer.parseInt(id));
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
@@ -79,7 +79,7 @@ public class PageController {
 		modelAndView.addObject("description", getDetailMetaDescription(response));
 		modelAndView.addObject("fbDescription", getDetailMetaDescription(response));
 		modelAndView.addObject("title", getDetailMetaTitle(response));
-		modelAndView.addObject("url", getDetailMetaUrl(response, city));
+		modelAndView.addObject("url", getDetailMetaUrl(response, CityType.HYDERABAD.getName()));
 		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xfl1/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE&__gda__=1494528018_4c3d954c3fe507b4d4aa581df02de6e7");
 		return modelAndView;
 	}
