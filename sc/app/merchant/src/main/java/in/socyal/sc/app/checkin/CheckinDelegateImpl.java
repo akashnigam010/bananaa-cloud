@@ -294,17 +294,12 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request) {
 		GetBusinessCheckinsResponse response = new GetBusinessCheckinsResponse();
 		Calendar checkinDate = getDateFromIdentifier(request.getDateIdentifier());
-		//FIXME : write logic for fetching checkin details for provided date range
-		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), 
-																   checkinDate, 
-																   jwtDetailsHelper.getCurrentMerchantId());
-		
-		if (request.getPage() == 1) {
-			response.setDate(dayUtil.formatDate(checkinDate, DateFormatType.DATE_FORMAT_IND));
-			response.setCheckinCount(checkinDao.getBusinessCheckinsCountPerDay(request.getPage(), 
-																			   checkinDate, 
-																			   jwtDetailsHelper.getCurrentMerchantId()));
-		}
+		Calendar checkinNextDate = getImmediateNextDateFromIdentifier(request.getDateIdentifier());
+		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), checkinDate, checkinNextDate,
+				jwtDetailsHelper.getCurrentMerchantId());
+		response.setDate(dayUtil.formatDate(checkinDate, DateFormatType.DATE_FORMAT_DD_MM_YYYY));
+		response.setCheckinCount(checkinDao.getBusinessCheckinsCountPerDay(request.getPage(), checkinDate, checkinNextDate,
+				jwtDetailsHelper.getCurrentMerchantId()));
 		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
 		for (CheckinDto checkin : checkins) {
 			Integer userId = checkin.getUser().getId();
@@ -367,8 +362,14 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 	
 	private Calendar getDateFromIdentifier(Integer identifier) {
-		Calendar date = Calendar.getInstance();
+		Calendar date = clock.cal();
 		date.add(Calendar.DAY_OF_MONTH, (-1 * (identifier)));
+		return date;
+	}
+	
+	private Calendar getImmediateNextDateFromIdentifier(Integer identifier) {
+		Calendar date = clock.cal();
+		date.add(Calendar.DAY_OF_MONTH, ((-1 * (identifier)) + 1));
 		return date;
 	}
 

@@ -19,6 +19,7 @@ import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.date.util.Clock;
+import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
 
@@ -208,13 +209,15 @@ public class CheckinDao {
     	return checkinDtos;
     }
 	
-	public List<CheckinDto> getBusinessCheckins(Integer page, Calendar checkinDate, Integer merchantId) {
+	public List<CheckinDto> getBusinessCheckins(Integer page, Calendar checkinDate, Calendar checkinNextDate,
+			Integer merchantId) {
 		List<CheckinDto> checkinDtos = Collections.emptyList();
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.between("checkinDateTime", DayUtil.initialTimeOfDate(checkinDate),
+				DayUtil.initialTimeOfDate(checkinNextDate)));
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		criteria.addOrder(Order.desc("checkinDateTime"));
-		//FIXME: criteria for fetching business checkins on that day
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
 		@SuppressWarnings("unchecked")
@@ -230,12 +233,13 @@ public class CheckinDao {
 		return checkinDtos;
 	}
 	
-	public Integer getBusinessCheckinsCountPerDay(Integer page, Calendar checkinDate, Integer merchantId) {
-		List<CheckinDto> checkinDtos = Collections.emptyList();
+	public Integer getBusinessCheckinsCountPerDay(Integer page, Calendar checkinDate, Calendar checkinNextDate,
+			Integer merchantId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.between("checkinDateTime", DayUtil.initialTimeOfDate(checkinDate),
+				DayUtil.initialTimeOfDate(checkinNextDate)));
 		criteria.addOrder(Order.desc("checkinDateTime"));
-		//FIXME: criteria for fetching business checkins on that day
 		return criteria.list().size();
 	}
 	
