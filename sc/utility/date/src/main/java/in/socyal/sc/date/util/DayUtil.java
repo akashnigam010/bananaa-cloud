@@ -118,4 +118,17 @@ public class DayUtil {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format.getValue());
 		return dateFormat.parse(dateStr);
 	}
+	
+	/**
+	 * This method formats calendar instance to set HH:MM:SS as 00:00:00
+	 * @param cal
+	 * @return
+	 */
+	public static Calendar initialTimeOfDate(Calendar cal) {
+        cal.set(Calendar.HOUR_OF_DAY, 00);
+        cal.set(Calendar.MINUTE, 00);
+        cal.set(Calendar.SECOND, 00);
+        cal.set(Calendar.MILLISECOND, 00);
+        return cal;
+    }
 }

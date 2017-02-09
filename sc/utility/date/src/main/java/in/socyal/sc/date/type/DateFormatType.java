@@ -3,7 +3,7 @@ package in.socyal.sc.date.type;
 public enum DateFormatType {
 	DATE_FORMAT_24_HOUR("HHmm"),
 	TIME_FORMAT_AM_PM("hh:mm a"),
-	DATE_FORMAT_IND("dd-MM-yyyy"),
+	DATE_FORMAT_DD_MM_YYYY("dd-MM-yyyy"),
 	ISO_DATE_FORMAT("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
 	private String value;
