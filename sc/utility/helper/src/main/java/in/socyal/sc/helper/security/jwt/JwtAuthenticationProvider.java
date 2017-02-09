@@ -39,6 +39,11 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 
 		List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(tokenInfo.getRole());
 
-		return new AuthenticatedUser(tokenInfo.getUserId(), tokenInfo.getUserId(), token, authorityList);
+		return new AuthenticatedUser(tokenInfo.getUserId(), 
+				                     tokenInfo.getDeviceId(),
+				                     tokenInfo.getMerchantId(),
+				                     tokenInfo.getUserId(), 
+				                     token, 
+				                     authorityList);
 	}
 }

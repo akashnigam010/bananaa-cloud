@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.location.request.SearchLocationRequest;
 import in.socyal.sc.api.location.response.GetLocalitiesResponse;
+import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.location.LocationDelegate;
 
 @RestController
-@RequestMapping(value = "/location")
+@RequestMapping(value = "/socyal/location")
 public class LocationService {
 	public static final Integer MINIMUM_SEARCH_STRING_LENGTH = 2;
 
@@ -29,6 +30,7 @@ public class LocationService {
 
 	@RequestMapping(value = "/searchLocality", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetLocalitiesResponse searchLocality(@RequestBody SearchLocationRequest request) {
+		JsonHelper.logRequest(request, LocationService.class, "/location/searchLocality");
 		GetLocalitiesResponse response = new GetLocalitiesResponse();
 		if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 			response = delegate.searchLocalities(request);

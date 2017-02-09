@@ -49,6 +49,9 @@ public class UserEntity implements Serializable {
 	
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
+	
+	@Column(name = "REGISTRATION_ID")
+	private String registrationId;
 
 	public Integer getId() {
 		return id;
@@ -136,5 +139,13 @@ public class UserEntity implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public String getRegistrationId() {
+		return registrationId;
+	}
+
+	public void setRegistrationId(String registrationId) {
+		this.registrationId = registrationId;
 	}
 }

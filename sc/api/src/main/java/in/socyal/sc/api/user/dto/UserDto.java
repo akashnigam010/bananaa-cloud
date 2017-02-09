@@ -16,6 +16,7 @@ public class UserDto implements Serializable {
 	private String gender;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
+	private String registrationId;
 
 	public Integer getId() {
 		return id;
@@ -108,4 +109,18 @@ public class UserDto implements Serializable {
 	public String getName() {
 		return this.firstName + " " + this.lastName;
 	}
+	
+	public String getRegistrationId() {
+		return registrationId;
+	}
+
+	public void setRegistrationId(String registrationId) {
+		this.registrationId = registrationId;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		UserDto user = (UserDto) obj;
+        return (this.id == user.id);
+    }
 }

@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.type.RoleType;
+import in.socyal.sc.api.user.request.FollowRequest;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
+import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
+import in.socyal.sc.api.user.request.UnFollowRequest;
 import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.helper.type.GenericErrorCodeType;
@@ -50,6 +53,24 @@ public class UserValidator {
 		RoleType role = RoleType.getRole(jwtHelper.getUserName());
 		if (role == RoleType.GUEST) {
 			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+	}
+
+	public void validateRegistrationIdRequest(SaveRegistrationIdRequest request) {
+		if (StringUtils.isBlank(request.getRegistrationId())) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+
+	public void validateFollowRequest(FollowRequest request) {
+		if (request.getUserId() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+
+	public void validateUnFollowRequest(UnFollowRequest request) {
+		if (request.getUserId() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 }

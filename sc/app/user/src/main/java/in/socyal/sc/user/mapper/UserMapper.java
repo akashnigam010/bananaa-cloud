@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.api.user.response.UserProfileResponse;
 
 @Component
 public class UserMapper {
@@ -21,17 +20,18 @@ public class UserMapper {
 		return user;
 	}
 
-	public List<in.socyal.sc.api.login.dto.LoginUserDto> map(List<UserDto> users) {
-		List<in.socyal.sc.api.login.dto.LoginUserDto> friends = new ArrayList<>();
-		in.socyal.sc.api.login.dto.LoginUserDto user = null;
+	public List<LoginUserDto> map(List<UserDto> users) {
+		List<LoginUserDto> friends = new ArrayList<>();
+		if (users == null) {
+			return friends;
+		}
+		LoginUserDto user = null;
 		for (UserDto dto : users) {
-			user = new in.socyal.sc.api.login.dto.LoginUserDto();
+			user = new LoginUserDto();
 			user.setId(dto.getId());
 			user.setFirstName(dto.getFirstName());
 			user.setLastName(dto.getLastName());
 			user.setImageUrl(dto.getImageUrl());
-			//FIXME : add lazy loading for user approved checkin count
-			user.setUserCheckins(10);
 			friends.add(user);
 		}
 		return friends;

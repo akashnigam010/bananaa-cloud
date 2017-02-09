@@ -16,6 +16,7 @@ public class Checkin implements Serializable {
 	private Double rating;
 	private Date timestamp;
 	private Integer likeCount;
+	private Boolean hasLiked;
 
 	public Integer getId() {
 		return id;
@@ -91,5 +92,13 @@ public class Checkin implements Serializable {
 
 	public void setLikeCount(Integer likeCount) {
 		this.likeCount = likeCount;
+	}
+
+	public Boolean getHasLiked() {
+		return hasLiked;
+	}
+
+	public void setHasLiked(Boolean hasLiked) {
+		this.hasLiked = hasLiked;
 	}
 }

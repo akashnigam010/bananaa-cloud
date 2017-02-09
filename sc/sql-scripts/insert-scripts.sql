@@ -1,24 +1,24 @@
 -- Locality
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Gachibowli', 'Hyderabad', '34.34', '16.34');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Madhapur', 'Hyderabad', '36.34', '16.35');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('3', 'Hitech City', 'Hyderabad', '32.56', '16.36');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Jubilee Hils', 'Hyderabad', '33.37', '16.37');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Banjaraa Hills', 'Hyderabad', '31.56', '16.38');
-INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Panjagutta', 'Hyderabad', '39.45', '16.39');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Gachibowli', 'Hyderabad', '17.445118', '78.351962');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Madhapur', 'Hyderabad', '17.441312', '78.390101');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('3', 'Hitech City', 'Hyderabad', '17.446566', '78.377506');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Jubilee Hils', 'Hyderabad', '17.432503', '78.407282');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Banjaraa Hills', 'Hyderabad', '17.416324', '78.438591');
+INSERT INTO `Socyal`.`LOCALITY` (`ID`, `NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Panjagutta', 'Hyderabad', '17.426436', '78.450858');
 
 
 -- Address
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Tower 24, Near Gachibowli Flyover, Indiranagar', '1', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('1', 'Tower 24, Near Gachibowli Flyover, Indiranagar', '1', 'Hyderabad', 'Telangana', 'India', '500098', '17.435560', '78.368031');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Above KTM Showroom', '2', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('2', 'Above KTM Showroom', '2', 'Hyderabad', 'Telangana', 'India', '500098', '17.447865', '78.379048');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('3', '5th Floor, Inorbit Mall', '3', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('3', '5th Floor, Inorbit Mall', '3', 'Hyderabad', 'Telangana', 'India', '500098', '17.414696', '78.450604');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Near Jubilee Checkpost', '4', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('4', 'Near Jubilee Checkpost', '4', 'Hyderabad', 'Telangana', 'India', '500098', '17.428556', '78.412894');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Aptech Grand, 5th Floor, Opposite Mercedes Showroom', '5', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('5', 'Aptech Grand, 5th Floor, Opposite Mercedes Showroom', '5', 'Hyderabad', 'Telangana', 'India', '500098', '17.422653', '78.410963');
 
-INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Dinar Showcase, 7th Floor', '6', 'Hyderabad', 'Telangana', 'India', '500098', '17.23', '34.34');
+INSERT INTO `Socyal`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`, `CITY`, `STATE`, `COUNTRY`, `ZIP`, `LATITUDE`, `LONGITUDE`) VALUES ('6', 'Dinar Showcase, 7th Floor', '6', 'Hyderabad', 'Telangana', 'India', '500098', '17.432842', '78.446630');
 
 -- Contact
 INSERT INTO `Socyal`.`CONTACT` (`ID`, `PHONE1`) VALUES ('1', '0407656548767');
@@ -136,17 +136,17 @@ INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALU
 INSERT INTO `Socyal`.`TIMING` (`ID`, `MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES ('78', '12355', 'SUNDAY', '1000', '2100');
 
 --Merchant_QR_Mapping
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (1, 'SkyhyTab1', 12345, 2, TRUE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (2, 'Fusion9TAB1', 12346, 4, TRUE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (3, 'NewsCafeTAB1', 12347, 3, FALSE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (4, 'ViaMilanoTAB1', 12348, 3, TRUE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (5, 'URBASIATAB1', 12349, 6,TRUE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (6, 'FreeFlowTAB1', 12350, 7, FALSE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (7, 'PunjabGrillTAB1', 12351, 8, TRUE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (8, 'RayalRuchuluTAB1', 12352, 2, TRUE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (9, 'HashtagTAB1', 12353, 1, FALSE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (10, 'TickiShackTAB1', 12354, 2, FALSE);
-INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (111, 'SBOWTAB1', 12355, 3, TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (1, 'SkyhyTab1', 12345, 'T2', TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (2, 'Fusion9TAB1', 12346, 'T4', TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (3, 'NewsCafeTAB1', 12347, 'T3', FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (4, 'ViaMilanoTAB1', 12348, 'T3', TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (5, 'URBASIATAB1', 12349, 'T6',TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (6, 'FreeFlowTAB1', 12350, 'T7', FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (7, 'PunjabGrillTAB1', 12351, 'T8', TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (8, 'RayalRuchuluTAB1', 12352, 'T2', TRUE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (9, 'HashtagTAB1', 12353, 'T1', FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (10, 'TickiShackTAB1', 12354, 'T2', FALSE);
+INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`ID`, `QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES (111, 'SBOWTAB1', 12355, 'T3', TRUE);
 
 --Users (Temporary)
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (1, 'Yogesh', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Sadula');
@@ -155,3 +155,34 @@ INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAM
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (4, 'Urmila', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Mamalla');
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (5, 'Kriti', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Konda');
 INSERT INTO `Socyal`.`USER` (`ID`, `FIRST_NAME`, `IMAGE_URL`, `EMAIL`, `LAST_NAME`) VALUES (6, 'Karthik', 'https://s3.ap-south-1.amazonaws.com/bananaimages/vikarmchau_sec.png', 'sample@email.com', 'Putta');
+
+--Rewrads (Temporary)
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (1, 12345, 'Amazon gift voucher worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (2, 12345, 'Flipkart gift voucher worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (3, 12346, 'Paytm cash worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (4, 12346, 'O2 spa gift coupon worth Rs. 100!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (5, 12347, 'Mobikwik cash coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (6, 12347, 'Freecharge gift coupon worth Rs. 150!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (7, 12348, 'Bookmyshow gift coupon worth Rs. 250!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (8, 12348, 'Westside gift coupon worth Rs. 500!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (9, 12349, 'Shoppers Stop gift voucher worth Rs. 500!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (10, 12349, 'Pantaloons cash coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (11, 12350, 'Archies gift coupon worth Rs. 200!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (12, 12351, 'Free Buffet worth Rs. 700!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (13, 12352, 'Free appetizers worth Rs. 400!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (14, 12353, 'Free skewers worth Rs 250!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (15, 12354, 'flat 10% discount on bill!');
+INSERT INTO `Socyal`.`REWARDS` (`ID`, `MERCHANT_ID`, `REWARD`) VALUES (16, 12355, 'Amazon gift coupon worth Rs. 300!');
+
+--Merchant_Login (temporary)
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (1, 12345, '12345', 'password', 1);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (2, 12346, '12346', 'password', 2);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (3, 12347, '12347', 'password', 6);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (4, 12348, '12348', 'password', 4);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (5, 12349, '12349', 'password', 2);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (6, 12350, '12350', 'password', 4);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (7, 12351, '12351', 'password', 8);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (8, 12352, '12352', 'password', 4);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (9, 12353, '12353', 'password', 3);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (10, 12354, '12354', 'password', 2);
+INSERT INTO `Socyal`.`MERCHANT_LOGIN` (`ID`, `MERCHANT_ID`, `USERNAME`, `PASSWORD`, `DEVICE_ID`) VALUES (11, 12355, '12355', 'password', 7);

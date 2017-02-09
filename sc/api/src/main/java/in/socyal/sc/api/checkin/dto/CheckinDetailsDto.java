@@ -12,7 +12,6 @@ public class CheckinDetailsDto {
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
-	private Integer previousCheckinCount;
 	private String rewardMessage;
 	private Integer likeCount;
 
@@ -70,14 +69,6 @@ public class CheckinDetailsDto {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
-	}
-
-	public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
 	}
 
 	public String getRewardMessage() {

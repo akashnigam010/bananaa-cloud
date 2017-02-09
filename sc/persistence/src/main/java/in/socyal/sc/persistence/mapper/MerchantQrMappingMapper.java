@@ -15,7 +15,7 @@ public class MerchantQrMappingMapper {
 		dto.setCardId(entity.getCardId());
 		dto.setId(entity.getId());
 		MerchantDto merchant = new MerchantDto();
-		merchantMapper.map(entity.getMerchant(), merchant);
+		merchantMapper.map(entity.getMerchant(), merchant, false);
 		dto.setMerchant(merchant);
 		dto.setQrCode(entity.getQrCode());
 		dto.setStatus(entity.getStatus());

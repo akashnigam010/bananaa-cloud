@@ -3,7 +3,12 @@ package in.socyal.sc.user.type;
 import in.socyal.sc.helper.BusinessErrorCode;
 
 public enum UserErrorCodeType implements BusinessErrorCode {
-	LOGIN_REQUIRED(10005);
+	USER_NOT_FOUND(10001),
+	LOGIN_REQUIRED(10005),
+	USER_CANNOT_FOLLOW_HIMSELF(10006), 
+	USER_ALREADY_FOLLOWING(10007), 
+	USER_NOT_FOLLOWING(10008),
+	USER_NOT_LOGGED_IN(10009);
 
 	private int value;
 
