@@ -64,7 +64,6 @@ public class CheckinDaoMapper {
 		}
 		to.setTaggedUsers(taggedUsers);
 		to.setLiked(hasLiked(from));
-		to.setLiked(Boolean.TRUE);
 		to.setLikeCount(from.getLikes().size());
 		to.setRewardStatus(from.getRewardStatus());
 		
