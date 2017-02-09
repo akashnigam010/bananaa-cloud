@@ -392,3 +392,20 @@ a:hover {
 }
 
 /* HEADER CSS - END */
+
+/* ERROR PAGE CSS - START*/
+
+.error-message-primary {
+	padding: 5% 0% 3% 0%; 
+	font-family: _regular; 
+	color: #9932CC;
+}
+
+.error-message-secondary {
+	padding-bottom: 3%;
+}
+
+.back-home-button {
+	color: #ffffff;
+	background-color: #9932CC;
+}
