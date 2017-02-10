@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>persistence</artifactId>
-	<name>Socyal Persistence Module</name>
+	<name>Bananaa Persistence Module</name>
 	
 	<properties>
         <hibernate.version>4.3.6.Final</hibernate.version>

@@ -9,7 +9,7 @@
 	</parent>
 	
 	<artifactId>app</artifactId>
-	<name>Socyal Applications Module</name>
+	<name>Bananaa Applications Module</name>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

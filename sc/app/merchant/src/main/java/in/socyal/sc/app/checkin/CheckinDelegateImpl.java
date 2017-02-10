@@ -81,6 +81,9 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
 	private static final Logger LOG = Logger.getLogger(CheckinDelegateImpl.class);
+	private static final String CHECKIN_CANCELLED_BY_USER = "Checkin cancelled by USER";
+	private static final String CHECKIN_CANCELLED_BY_MERCHANT = "Checkin cancelled by MERCHANT";
+	
 	@Autowired CheckinDao checkinDao;
 	@Autowired MerchantQrMappingDao qrMappingDao;
 	@Autowired MerchantDao merchantDao;
@@ -163,16 +166,15 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
-		if (request.getShareOnFb()) {
-			//TODO : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
-			//checkForTokenValidity();
-		}
+		//TODO : Temporarily commenting Share on FB logic until Bananaa App is registered with FB
+		/*if (request.getShareOnFb()) {
+			checkForTokenValidity();
+		}*/
 		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
-		checkForQrScanningRange(request.getLocation(), qrMappingDetails);
+		validateQrCodeStatusAndCheckinLocation(request.getLocation(), qrMappingDetails);
 		CheckinDetailsDto dto = prepareCheckinDetails(request, qrMappingDetails.getMerchant());
 		Integer checkinId = checkinDao.confirmCheckin(dto);
 		List<UserDto> taggedUserDetails = tagUsers(request, checkinId);
-
 		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
 		response.setCheckinId(checkinId);
 		response.setMerchantId(qrMappingDetails.getMerchant().getId());
@@ -184,6 +186,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
 		}
 
+		//FIXME
+		//send notification to the MERCHANT
 		return response;
 	}
 
@@ -192,7 +196,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
 		ValidateCheckinResponse response = new ValidateCheckinResponse();
 		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
-		checkForQrScanningRange(request.getLocation(), qrMappingDetails);
+		validateQrCodeStatusAndCheckinLocation(request.getLocation(), qrMappingDetails);
 		response.setPreviousCheckinCount(checkinDao.getUserCheckinsCountForAMerchant(
 				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
 		response.setMerchantName(qrMappingDetails.getMerchant().getName());
@@ -213,6 +217,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
 		}
 		checkinDao.cancelCheckin(request.getId());
+		//FIXME
+		//send notification to MERCHANT
 		return response;
 	}
 
@@ -303,7 +309,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
 		for (CheckinDto checkin : checkins) {
 			Integer userId = checkin.getUser().getId();
-			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinsCountForAMerchant(userId, checkin.getMerchant().getId()));
 		}
 		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
@@ -313,8 +319,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
 			throws BusinessException {
-		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
-		response = buildGetBusinessCheckinDetailsResponse(request.getCheckinId());
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchant().getId());
+		GetBusinessCheckinDetailsResponse response = buildGetBusinessCheckinDetailsResponse(checkin, userCheckinCount);
 		return response;
 	}
 	
@@ -330,7 +341,15 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public BusinessCancelCheckinResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
 			throws BusinessException {
-		BusinessCancelCheckinResponse response = businessCancelCheckinResponse();
+		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId());
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchant().getId());
+		//FIXME
+		//send notification to the user
+		BusinessCancelCheckinResponse response = businessCancelCheckinResponse(checkin, userCheckinCount);
 		return response;
 	}
 	
@@ -338,23 +357,18 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
 			throws BusinessException {
-		//1. CheckinStatus update to APPROVED
-		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId());
+		//1. Updating CheckinStatus to APPROVED
+		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentMerchantId());
 		if (checkin == null) {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
-		//2. Create feedback record in FEEDBACK table
-		FeedbackDto feedbackDto = new FeedbackDto();
-		feedbackDto.setCheckinId(checkin.getId());
-		feedbackDto.setMerchantId(checkin.getMerchant().getId());
-		feedbackDto.setStatus(FeedbackStatusType.NOT_ASKED);
-		feedbackDto.setUserId(checkin.getUser().getId());
-		feedbackDto = feedbackDao.createFeedback(feedbackDto);
-		//3. Increase merchant checkin count in merchant table
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchant().getId());
+		//2. Increase merchant checkin count in merchant table
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchant().getId());
 		//FIXME
-		//4. send notification to the user
-		return businessApproveCheckinResponse(checkin, feedbackDto);
+		//3. send notification to the user
+		return businessApproveCheckinResponse(checkin, checkin.getFeedback(), userCheckinCount);
 	}
 	
 	public Integer fetchLikeCount(Integer checkinId) {
@@ -373,6 +387,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return date;
 	}
 
+	@SuppressWarnings("unused")
 	private void checkForTokenValidity() throws BusinessException {
 		boolean isTokenValid = false;
 		UserDto user = userDao.fetchUser(jwtDetailsHelper.getCurrentUserId());
@@ -398,7 +413,10 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return qrMappingDetails;
 	}
 
-	private void checkForQrScanningRange(Location location, MerchantQrMappingDto qrMappingDetails) {
+	private void validateQrCodeStatusAndCheckinLocation(Location location, MerchantQrMappingDto qrMappingDetails) {
+		if (!qrMappingDetails.getStatus()) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_DISABLED);
+		}
 		Boolean isQrCodeInRange = DistanceHelper.isCoordinateInRange(location.getLatitude(), location.getLongitude(),
 				qrMappingDetails.getMerchant().getAddress().getLatitude(),
 				qrMappingDetails.getMerchant().getAddress().getLongitude());
@@ -425,6 +443,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		checkinDetails.setUpdatedDateTime(clock.cal());
 		checkinDetails.setQrCode(request.getQrCode());
 		checkinDetails.setStatus(CheckinStatusType.PENDING);
+		checkinDetails.setRewardStatus(RewardStatusType.NOT_GIVEN);
 		return checkinDetails;
 	}
 
@@ -451,60 +470,32 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return list;
 	}
 
-	//FIXME : dummy response, replace with actual logic
-	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(Integer checkinId) {
+	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(CheckinDto checkin,
+			Integer userCheckinCount) {
 		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		UserDto user = checkin.getUser();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
-		userDetails.setId(1);
-		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
-		userDetails.setName("Akash Nigam");
-		userDetails.setUserCheckins(20);
+		userDetails.setId(user.getId());
+		userDetails.setImageUrl(user.getImageUrl());
+		userDetails.setName(user.getName());
+		userDetails.setUserCheckins(userCheckinCount);
 		response.setUser(userDetails);
-		response.setCardNumber(10);
-		if (checkinId % 9 == 1) {
-			response.setCheckinStatus(CheckinStatusType.USER_CANCELLED);
-			response.setCancelMessage("Checkin was cancelled by user");
-		} else if (checkinId % 9 == 2) {
-			response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
-			response.setCancelMessage("Checkin was cancelled by merchant");
-		} else if (checkinId % 9 == 3) {
-			response.setCheckinStatus(CheckinStatusType.PENDING);
-		} else if (checkinId % 9 == 4) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setRewardStatus(RewardStatusType.GIVEN);
-			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
-			response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
-		} else if (checkinId % 9 == 5) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
-			response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
-		} else if (checkinId % 9 == 6) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setRewardStatus(RewardStatusType.GIVEN);
-			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
-			response.setFeedbackStatus(FeedbackStatusType.ASKED);
-		} else if (checkinId % 9 == 7) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
-			response.setFeedbackStatus(FeedbackStatusType.ASKED);
-		} else if (checkinId % 9 == 8) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setRewardStatus(RewardStatusType.NOT_GIVEN);
-			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
+		response.setCardNumber(checkin.getMerchantQrMapping().getCardId());
+		response.setCheckinStatus(checkin.getStatus());
+		if (CheckinStatusType.USER_CANCELLED == checkin.getStatus()) {
+			response.setCancelMessage(CHECKIN_CANCELLED_BY_USER);
+		} else if (CheckinStatusType.MERCHANT_CANCELLED == checkin.getStatus()) {
+			response.setCancelMessage(CHECKIN_CANCELLED_BY_MERCHANT);
+		}
+		response.setRewardStatus(checkin.getRewardStatus());
+		response.setRewardMessage(checkin.getRewardMessage());
+		FeedbackDto feedback = checkin.getFeedback();
+		response.setFeedbackStatus(feedback.getStatus());
+		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating("1");
-			feedbackDetails.setAmbienceRating("1.0");
-			feedbackDetails.setServiceRating("2");
-			response.setFeedbackDetails(feedbackDetails);
-		} else if (checkinId % 9 == 0) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setRewardStatus(RewardStatusType.GIVEN);
-			response.setRewardMessage("Won amazon gift coupon worth RS. 100!");
-			response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
-			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating("3");
-			feedbackDetails.setAmbienceRating("1.0");
-			feedbackDetails.setServiceRating("3.0");
+			feedbackDetails.setFoodRating(feedback.getFoodRating());
+			feedbackDetails.setAmbienceRating(feedback.getAmbienceRating());
+			feedbackDetails.setServiceRating(feedback.getServiceRating());
 			response.setFeedbackDetails(feedbackDetails);
 		}
 		return response;
@@ -520,9 +511,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			checkin.setCard("15");
 			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating("4.5");
-			feedbackDetails.setAmbienceRating("3.5");
-			feedbackDetails.setServiceRating("1.5");
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(3);
+			feedbackDetails.setServiceRating(1);
 			checkin.setFeedbackDetails(feedbackDetails);
 			checkin.setRating(4.5);
 			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");
@@ -551,33 +542,32 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
-	//FIXME : dummy response, replace with actual logic
-	private BusinessCancelCheckinResponse businessCancelCheckinResponse() {
+	private BusinessCancelCheckinResponse businessCancelCheckinResponse(CheckinDto checkin, Integer userCheckinCount) {
 		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+		UserDto user = checkin.getUser();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
-		userDetails.setId(7);
-		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
-		userDetails.setName("Akash Nigam");
-		userDetails.setUserCheckins(33);
+		userDetails.setId(user.getId());
+		userDetails.setImageUrl(user.getImageUrl());
+		userDetails.setName(user.getName());
+		userDetails.setUserCheckins(userCheckinCount);
 		response.setUser(userDetails);
-		response.setCardNumber(10);
-		response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
-		response.setCancelMessage("Checkin was cancelled by merchant");
+		response.setCardNumber(checkin.getMerchantQrMapping().getCardId());
+		response.setCheckinStatus(checkin.getStatus());
+		response.setCancelMessage(CHECKIN_CANCELLED_BY_MERCHANT);
 		return response;
 	}
 	
-	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto) {
+	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto,
+			Integer userCheckinCount) {
 		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
 		UserDto user = checkin.getUser();
 		userDetails.setId(user.getId());
 		userDetails.setImageUrl(user.getImageUrl());
 		userDetails.setName(user.getName());
-		//FIXME
-		userDetails.setUserCheckins(21);
+		userDetails.setUserCheckins(userCheckinCount);
 		response.setUser(userDetails);
-		//FIXME
-		response.setCardNumber("T12");
+		response.setCardNumber(checkin.getMerchantQrMapping().getCardId());
 		response.setCheckinStatus(checkin.getStatus());
 		response.setRewardStatus(checkin.getRewardStatus());
 		response.setFeedbackStatus(feedbackDto.getStatus());
