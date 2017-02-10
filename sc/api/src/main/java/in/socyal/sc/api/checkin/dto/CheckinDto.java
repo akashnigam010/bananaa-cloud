@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import in.socyal.sc.api.feedback.dto.FeedbackDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
@@ -24,6 +25,7 @@ public class CheckinDto {
 	private List<CheckinTaggedUserDto> taggedUsers;
 	private Integer likeCount;
 	private boolean liked;
+	private FeedbackDto feedback;
 
 	public Integer getId() {
 		return id;
@@ -130,5 +132,13 @@ public class CheckinDto {
 
 	public void setRewardStatus(RewardStatusType rewardStatus) {
 		this.rewardStatus = rewardStatus;
+	}
+
+	public FeedbackDto getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(FeedbackDto feedback) {
+		this.feedback = feedback;
 	}
 }

@@ -64,6 +64,10 @@ public class CheckinEntity implements Serializable {
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
 	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "FEEDBACK_ID")
+	private FeedbackEntity feedback;
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "CHECKIN_ID", referencedColumnName = "ID")
 	private Set<CheckinTaggedUserEntity> taggedUsers;
@@ -166,5 +170,13 @@ public class CheckinEntity implements Serializable {
 
 	public void setLikes(Set<CheckinUserLikeEntity> likes) {
 		this.likes = likes;
+	}
+
+	public FeedbackEntity getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(FeedbackEntity feedback) {
+		this.feedback = feedback;
 	}
 }

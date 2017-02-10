@@ -364,18 +364,11 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchant().getId());
-		//2. Create feedback record in FEEDBACK table
-		FeedbackDto feedbackDto = new FeedbackDto();
-		feedbackDto.setCheckinId(checkin.getId());
-		feedbackDto.setMerchantId(checkin.getMerchant().getId());
-		feedbackDto.setStatus(FeedbackStatusType.NOT_ASKED);
-		feedbackDto.setUserId(checkin.getUser().getId());
-		feedbackDto = feedbackDao.createFeedback(feedbackDto);
-		//3. Increase merchant checkin count in merchant table
+		//2. Increase merchant checkin count in merchant table
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchant().getId());
 		//FIXME
-		//4. send notification to the user
-		return businessApproveCheckinResponse(checkin, feedbackDto, userCheckinCount);
+		//3. send notification to the user
+		return businessApproveCheckinResponse(checkin, checkin.getFeedback(), userCheckinCount);
 	}
 	
 	public Integer fetchLikeCount(Integer checkinId) {
@@ -496,13 +489,15 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 		response.setRewardStatus(checkin.getRewardStatus());
 		response.setRewardMessage(checkin.getRewardMessage());
-		//FIXME
-		response.setFeedbackStatus(FeedbackStatusType.RECEIVED);
-		FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-		feedbackDetails.setFoodRating("3");
-		feedbackDetails.setAmbienceRating("1.0");
-		feedbackDetails.setServiceRating("3.0");
-		response.setFeedbackDetails(feedbackDetails);
+		FeedbackDto feedback = checkin.getFeedback();
+		response.setFeedbackStatus(feedback.getStatus());
+		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
+			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(feedback.getFoodRating());
+			feedbackDetails.setAmbienceRating(feedback.getAmbienceRating());
+			feedbackDetails.setServiceRating(feedback.getServiceRating());
+			response.setFeedbackDetails(feedbackDetails);
+		}
 		return response;
 	}
 
@@ -516,9 +511,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			checkin.setCard("15");
 			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating("4.5");
-			feedbackDetails.setAmbienceRating("3.5");
-			feedbackDetails.setServiceRating("1.5");
+			feedbackDetails.setFoodRating(4);
+			feedbackDetails.setAmbienceRating(3);
+			feedbackDetails.setServiceRating(1);
 			checkin.setFeedbackDetails(feedbackDetails);
 			checkin.setRating(4.5);
 			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");

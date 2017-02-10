@@ -7,7 +7,6 @@ import in.socyal.sc.api.type.FeedbackStatusType;
 public class FeedbackDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Integer checkinId;
 	private Integer userId;
 	private Integer merchantId;
 	private FeedbackStatusType status;
@@ -21,14 +20,6 @@ public class FeedbackDto implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getCheckinId() {
-		return checkinId;
-	}
-
-	public void setCheckinId(Integer checkinId) {
-		this.checkinId = checkinId;
 	}
 
 	public Integer getUserId() {

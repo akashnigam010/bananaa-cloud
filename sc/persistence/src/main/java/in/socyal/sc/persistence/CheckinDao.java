@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
@@ -254,6 +255,7 @@ public class CheckinDao {
 			entity.setApprovedDateTime(clock.cal());
 			entity.setRewardStatus(RewardStatusType.NOT_GIVEN);
 			entity.setUpdatedDateTime(clock.cal());
+			entity.getFeedback().setStatus(FeedbackStatusType.NOT_ASKED);
 			session.saveOrUpdate(entity);
 			mapper.map(entity, checkinDto);
 		}

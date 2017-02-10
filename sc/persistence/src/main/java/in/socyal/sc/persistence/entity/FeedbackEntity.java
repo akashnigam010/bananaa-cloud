@@ -23,9 +23,6 @@ public class FeedbackEntity implements Serializable {
 	@Column(name = "ID")
 	private Integer id;
 	
-	@Column(name = "CHECKIN_ID")
-	private Integer checkinId;
-	
 	@Column(name = "USER_ID")
 	private Integer userId;
 	
@@ -51,14 +48,6 @@ public class FeedbackEntity implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getCheckinId() {
-		return checkinId;
-	}
-
-	public void setCheckinId(Integer checkinId) {
-		this.checkinId = checkinId;
 	}
 
 	public Integer getUserId() {
