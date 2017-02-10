@@ -186,6 +186,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
 		}
 
+		//FIXME
+		//send notification to the MERCHANT
 		return response;
 	}
 
@@ -215,6 +217,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
 		}
 		checkinDao.cancelCheckin(request.getId());
+		//FIXME
+		//send notification to MERCHANT
 		return response;
 	}
 
@@ -305,7 +309,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
 		for (CheckinDto checkin : checkins) {
 			Integer userId = checkin.getUser().getId();
-			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinsCountForAMerchant(userId, checkin.getMerchant().getId()));
 		}
 		checkinMapper.map(checkins, response, userApprovedCheckins);
 		return response;
@@ -319,7 +323,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		if (checkin == null) {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
-		Integer userCheckinCount = checkinDao.getUserCheckinCount(checkin.getUser().getId());
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchant().getId());
 		GetBusinessCheckinDetailsResponse response = buildGetBusinessCheckinDetailsResponse(checkin, userCheckinCount);
 		return response;
 	}
@@ -336,7 +341,15 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public BusinessCancelCheckinResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
 			throws BusinessException {
-		BusinessCancelCheckinResponse response = businessCancelCheckinResponse();
+		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId());
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchant().getId());
+		//FIXME
+		//send notification to the user
+		BusinessCancelCheckinResponse response = businessCancelCheckinResponse(checkin, userCheckinCount);
 		return response;
 	}
 	
@@ -344,11 +357,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
 			throws BusinessException {
-		//1. CheckinStatus update to APPROVED
-		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId());
+		//1. Updating CheckinStatus to APPROVED
+		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentMerchantId());
 		if (checkin == null) {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchant().getId());
 		//2. Create feedback record in FEEDBACK table
 		FeedbackDto feedbackDto = new FeedbackDto();
 		feedbackDto.setCheckinId(checkin.getId());
@@ -360,7 +375,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchant().getId());
 		//FIXME
 		//4. send notification to the user
-		return businessApproveCheckinResponse(checkin, feedbackDto);
+		return businessApproveCheckinResponse(checkin, feedbackDto, userCheckinCount);
 	}
 	
 	public Integer fetchLikeCount(Integer checkinId) {
@@ -532,33 +547,32 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
-	//FIXME : dummy response, replace with actual logic
-	private BusinessCancelCheckinResponse businessCancelCheckinResponse() {
+	private BusinessCancelCheckinResponse businessCancelCheckinResponse(CheckinDto checkin, Integer userCheckinCount) {
 		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+		UserDto user = checkin.getUser();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
-		userDetails.setId(7);
-		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
-		userDetails.setName("Akash Nigam");
-		userDetails.setUserCheckins(33);
+		userDetails.setId(user.getId());
+		userDetails.setImageUrl(user.getImageUrl());
+		userDetails.setName(user.getName());
+		userDetails.setUserCheckins(userCheckinCount);
 		response.setUser(userDetails);
-		response.setCardNumber(10);
-		response.setCheckinStatus(CheckinStatusType.MERCHANT_CANCELLED);
-		response.setCancelMessage("Checkin was cancelled by merchant");
+		response.setCardNumber(checkin.getMerchantQrMapping().getCardId());
+		response.setCheckinStatus(checkin.getStatus());
+		response.setCancelMessage(CHECKIN_CANCELLED_BY_MERCHANT);
 		return response;
 	}
 	
-	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto) {
+	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto,
+			Integer userCheckinCount) {
 		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
 		UserDto user = checkin.getUser();
 		userDetails.setId(user.getId());
 		userDetails.setImageUrl(user.getImageUrl());
 		userDetails.setName(user.getName());
-		//FIXME
-		userDetails.setUserCheckins(21);
+		userDetails.setUserCheckins(userCheckinCount);
 		response.setUser(userDetails);
-		//FIXME
-		response.setCardNumber("T12");
+		response.setCardNumber(checkin.getMerchantQrMapping().getCardId());
 		response.setCheckinStatus(checkin.getStatus());
 		response.setRewardStatus(checkin.getRewardStatus());
 		response.setFeedbackStatus(feedbackDto.getStatus());
