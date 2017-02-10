@@ -44,8 +44,9 @@ public class CheckinEntity implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private CheckinStatusType status;
 	
-	@Column(name = "QR_CODE")
-	private String qrCode;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "QR_CODE")
+	private MerchantQrMappingEntity merchantQrMapping;
 	
 	@Column(name = "REWARD_MESSAGE")
 	private String rewardMessage;
@@ -103,12 +104,12 @@ public class CheckinEntity implements Serializable {
 		this.status = status;
 	}
 
-	public String getQrCode() {
-		return qrCode;
+	public MerchantQrMappingEntity getMerchantQrMapping() {
+		return merchantQrMapping;
 	}
 
-	public void setQrCode(String qrCode) {
-		this.qrCode = qrCode;
+	public void setMerchantQrMapping(MerchantQrMappingEntity merchantQrMapping) {
+		this.merchantQrMapping = merchantQrMapping;
 	}
 
 	public String getRewardMessage() {

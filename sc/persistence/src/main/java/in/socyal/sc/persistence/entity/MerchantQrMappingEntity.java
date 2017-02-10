@@ -18,12 +18,12 @@ public class MerchantQrMappingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "QR_CODE")
 	private String qrCode;
+	
+	@Column(name = "ID")
+	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MERCHANT_ID")
