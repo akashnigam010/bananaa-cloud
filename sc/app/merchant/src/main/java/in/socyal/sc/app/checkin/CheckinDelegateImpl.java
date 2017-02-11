@@ -491,9 +491,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		response.setFeedbackStatus(feedback.getStatus());
 		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating(feedback.getFoodRating());
-			feedbackDetails.setAmbienceRating(feedback.getAmbienceRating());
-			feedbackDetails.setServiceRating(feedback.getServiceRating());
+			feedbackDetails.setFoodRating(feedback.getFoodRating().toString());
+			feedbackDetails.setAmbienceRating(feedback.getAmbienceRating().toString());
+			feedbackDetails.setServiceRating(feedback.getServiceRating().toString());
 			response.setFeedbackDetails(feedbackDetails);
 		}
 		return response;
@@ -509,9 +509,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			checkin.setCard("15");
 			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
 			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating(4);
-			feedbackDetails.setAmbienceRating(3);
-			feedbackDetails.setServiceRating(1);
+			feedbackDetails.setFoodRating("4.5");
+			feedbackDetails.setAmbienceRating("3.0");
+			feedbackDetails.setServiceRating("2.5");
 			checkin.setFeedbackDetails(feedbackDetails);
 			checkin.setRating(4.5);
 			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");
