@@ -8,8 +8,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Socyal Cloud</name>
-	<description>Cloud application for Socyal</description>
+	<name>Bananaa Cloud</name>
+	<description>Cloud application - Bananaa</description>
 	
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -86,7 +86,7 @@
 	<!-- Plugins -->
 	<build>
 		<!-- Final name is the name of the jar/war file -->
-		<finalName>socyal</finalName>
+		<finalName>bna-cloud</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.wildfly.plugins</groupId>
@@ -156,7 +156,7 @@
 	</modules>
 
 	<organization>
-		<name>Socyal</name>
-		<url>http://www.socyalapp.in</url>
+		<name>Bananaa</name>
+		<url>http://www.bananaa.in</url>
 	</organization>
 </project>

@@ -3,11 +3,13 @@ package in.socyal.sc.api.checkin.dto;
 import java.util.Calendar;
 
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
 
 public class CheckinDetailsDto {
 	private Integer userId;
 	private Integer merchantId;
 	private CheckinStatusType status;
+	private RewardStatusType rewardStatus;
 	private String qrCode;
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
@@ -85,5 +87,13 @@ public class CheckinDetailsDto {
 
 	public void setLikeCount(Integer likeCount) {
 		this.likeCount = likeCount;
+	}
+
+	public RewardStatusType getRewardStatus() {
+		return rewardStatus;
+	}
+
+	public void setRewardStatus(RewardStatusType rewardStatus) {
+		this.rewardStatus = rewardStatus;
 	}
 }

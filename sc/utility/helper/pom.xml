@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>helper</artifactId>
-	<name>Socyal Helper Module</name>
+	<name>Bananaa Helper Module</name>
 
 	<dependencies>
 		<dependency>

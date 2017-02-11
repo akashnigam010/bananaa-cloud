@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
@@ -27,12 +28,9 @@ import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
 public class CheckinDao {
 	private static final Logger LOG = Logger.getLogger(CheckinDao.class);
 	private static final Integer RESULTS_PER_PAGE = 10;
-	@Autowired
-	SessionFactory sessionFactory;
-	@Autowired
-	CheckinDaoMapper mapper;
-	@Autowired
-	Clock clock;
+	@Autowired SessionFactory sessionFactory;
+	@Autowired CheckinDaoMapper mapper;
+	@Autowired Clock clock;
 
 	public CheckinDao() {
 	}
@@ -243,23 +241,43 @@ public class CheckinDao {
 		return criteria.list().size();
 	}
 	
-	public CheckinDto businessApproveCheckin(Integer checkinId) {
+	public CheckinDto businessApproveCheckin(Integer checkinId, Integer merchantId) {
 		Session session = sessionFactory.getCurrentSession();
 		CheckinDto checkinDto = null;
-		CheckinEntity entity = (CheckinEntity) session.get(CheckinEntity.class, checkinId);
+		Criteria criteria = session.createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.eq("id", checkinId));
+		criteria.add(Restrictions.eq("status", CheckinStatusType.PENDING));
+		CheckinEntity entity = (CheckinEntity) criteria.uniqueResult();
 		if (entity != null) {
 			checkinDto = new CheckinDto();
 			entity.setStatus(CheckinStatusType.APPROVED);
 			entity.setApprovedDateTime(clock.cal());
 			entity.setRewardStatus(RewardStatusType.NOT_GIVEN);
 			entity.setUpdatedDateTime(clock.cal());
+			entity.getFeedback().setStatus(FeedbackStatusType.NOT_ASKED);
 			session.saveOrUpdate(entity);
 			mapper.map(entity, checkinDto);
 		}
 		return checkinDto;
 	}
 	
-    private String sortAroundMeFeedsByDistanceQuery() {
+	public CheckinDto businessCancelCheckin(Integer checkinId) {
+		Session session = sessionFactory.getCurrentSession();
+		CheckinDto checkinDto = null;
+		CheckinEntity entity = (CheckinEntity) session.get(CheckinEntity.class, checkinId);
+		if (entity != null) {
+			entity.setStatus(CheckinStatusType.MERCHANT_CANCELLED);
+			entity.setUpdatedDateTime(clock.cal());
+			session.saveOrUpdate(entity);
+			checkinDto = new CheckinDto();
+			mapper.map(entity, checkinDto);
+		}
+		return checkinDto;
+	}
+	
+    @SuppressWarnings("unused")
+	private String sortAroundMeFeedsByDistanceQuery() {
     	StringBuilder query = new StringBuilder();
     	query.append("SELECT *");
     	query.append("FROM Socyal.CHECKIN C ");

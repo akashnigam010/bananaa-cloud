@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import in.socyal.sc.api.feedback.dto.FeedbackDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -14,7 +16,7 @@ public class CheckinDto {
 	private UserDto user;
 	private MerchantDto merchant;
 	private CheckinStatusType status;
-	private String qrCode;
+	private MerchantQrMappingDto merchantQrMapping;
 	private String rewardMessage;
 	private RewardStatusType rewardStatus;
 	private Calendar checkinDateTime;
@@ -23,6 +25,7 @@ public class CheckinDto {
 	private List<CheckinTaggedUserDto> taggedUsers;
 	private Integer likeCount;
 	private boolean liked;
+	private FeedbackDto feedback;
 
 	public Integer getId() {
 		return id;
@@ -56,12 +59,12 @@ public class CheckinDto {
 		this.status = status;
 	}
 
-	public String getQrCode() {
-		return qrCode;
+	public MerchantQrMappingDto getMerchantQrMapping() {
+		return merchantQrMapping;
 	}
 
-	public void setQrCode(String qrCode) {
-		this.qrCode = qrCode;
+	public void setMerchantQrMapping(MerchantQrMappingDto merchantQrMapping) {
+		this.merchantQrMapping = merchantQrMapping;
 	}
 
 	public String getRewardMessage() {
@@ -129,5 +132,13 @@ public class CheckinDto {
 
 	public void setRewardStatus(RewardStatusType rewardStatus) {
 		this.rewardStatus = rewardStatus;
+	}
+
+	public FeedbackDto getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(FeedbackDto feedback) {
+		this.feedback = feedback;
 	}
 }

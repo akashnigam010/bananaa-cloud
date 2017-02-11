@@ -15,6 +15,7 @@ import in.socyal.sc.api.checkin.response.Checkin;
 import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
+import in.socyal.sc.api.feedback.dto.FeedbackDto;
 import in.socyal.sc.api.user.dto.UserDto;
 
 @Component
@@ -27,7 +28,8 @@ public class CheckinDelegateMapper {
 			checkinResponse.setLikeCount(dto.getLikeCount());
 			checkinResponse.setMerchantId(dto.getMerchant().getId());
 			checkinResponse.setMerchantName(dto.getMerchant().getName());
-			checkinResponse.setRating(dto.getMerchant().getRating());
+			//Set Rating given by customer
+			checkinResponse.setRating(calculateRatingFromFeedback(dto.getFeedback()));
 			checkinResponse.setRewardMessage(dto.getRewardMessage());
 			checkinResponse.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
 			checkinResponse.setTimestamp(dto.getCheckinDateTime().getTime());
@@ -70,11 +72,21 @@ public class CheckinDelegateMapper {
 				to.setRewardMessage(dto.getRewardMessage());
 			}
 			to.setTimestamp(dto.getCheckinDateTime().getTime());
-			//FIXME: actual card number
-			to.setCard("T12");
+			to.setCard(dto.getMerchantQrMapping().getCardId());
 			to.setCheckinStatus(dto.getStatus());
 			response.getCheckins().add(to);
 		}
-
+	}
+	
+	private Double calculateRatingFromFeedback(FeedbackDto feedback) {
+		if (feedback.getAmbienceRating() != null && feedback.getServiceRating() != null && feedback.getFoodRating() != null) {
+			Integer foodRating = feedback.getFoodRating();
+			Integer ambiencerating = feedback.getAmbienceRating();
+			Integer serviceRating = feedback.getServiceRating();
+			
+			return (double) ((foodRating + ambiencerating + serviceRating) / 3);
+		}
+		
+		return null;
 	}
 }

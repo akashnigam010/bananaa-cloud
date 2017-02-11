@@ -9,7 +9,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>api</artifactId>
-	<name>Socyal API Module</name>
+	<name>Bananaa API Module</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.restfb/restfb -->
