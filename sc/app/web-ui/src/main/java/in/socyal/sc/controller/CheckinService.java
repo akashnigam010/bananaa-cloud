@@ -12,9 +12,7 @@ import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
-import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
-import in.socyal.sc.api.checkin.business.response.BusinessCancelCheckinResponse;
-import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
@@ -193,9 +191,9 @@ public class CheckinService {
 	}
 	
 	@RequestMapping(value = "/getBusinessCheckinDetails", method = RequestMethod.POST, headers = "Accept=application/json")
-	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(@RequestBody GetBusinessCheckinDetailsRequest request) {
+	public BusinessCheckinDetailsResponse getBusinessCheckinDetails(@RequestBody GetBusinessCheckinDetailsRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/getBusinessCheckinDetails");
-		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
 			validator.validateGetBusinessCheckinDetailsRequest(request);
 			response = delegate.getBusinessCheckinDetails(request);
@@ -219,9 +217,9 @@ public class CheckinService {
 	}
 	
 	@RequestMapping(value = "/businessCancelCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessCancelCheckinResponse businessCancelCheckin(@RequestBody BusinessCancelCheckinRequest request) {
+	public BusinessCheckinDetailsResponse businessCancelCheckin(@RequestBody BusinessCancelCheckinRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/businessCancelCheckin");
-		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
 			validator.validateBusinessCancelCheckinRequest(request);
 			response = delegate.businessCancelCheckin(request);
@@ -232,9 +230,9 @@ public class CheckinService {
 	}
 	
 	@RequestMapping(value = "/businessApproveCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessApproveCheckinResponse businessApproveCheckin(@RequestBody BusinessApproveCheckinRequest request) {
+	public BusinessCheckinDetailsResponse businessApproveCheckin(@RequestBody BusinessApproveCheckinRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/businessApproveCheckin");
-		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
 			validator.validateBusinessApproveCheckinRequest(request);
 			response = delegate.businessApproveCheckin(request);

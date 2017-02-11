@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
 import in.socyal.sc.api.feedback.response.FeedbackStatusResponse;
 import in.socyal.sc.api.reward.business.response.GetBusinessRewardsResponse;
 import in.socyal.sc.api.reward.request.RewardRequest;
 import in.socyal.sc.api.reward.request.SubmitRewardsRequest;
-import in.socyal.sc.api.reward.response.SubmitRewardsResponse;
 import in.socyal.sc.app.rewards.RewardsDelegate;
 import in.socyal.sc.core.validation.RewardsValidator;
 import in.socyal.sc.helper.JsonHelper;
@@ -28,9 +28,9 @@ public class RewardService {
 	RewardsDelegate delegate;
 
 	@RequestMapping(value = "/submitRewards", method = RequestMethod.POST, headers = "Accept=application/json")
-	public SubmitRewardsResponse submitRewards(@RequestBody SubmitRewardsRequest request) {
+	public BusinessCheckinDetailsResponse submitRewards(@RequestBody SubmitRewardsRequest request) {
 		JsonHelper.logRequest(request, RewardService.class, "/reward/submitRewards");
-		SubmitRewardsResponse response = new SubmitRewardsResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
 			validator.validateSubmitRewardsRequest(request);
 			// FIXME : Add actual logic to submit rewards for a checkin

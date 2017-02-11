@@ -20,10 +20,8 @@ import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
 import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
-import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
-import in.socyal.sc.api.checkin.business.response.BusinessCancelCheckinResponse;
 import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
-import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
@@ -317,7 +315,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public GetBusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
+	public BusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
 			throws BusinessException {
 		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId());
 		if (checkin == null) {
@@ -325,7 +323,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		}
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchant().getId());
-		GetBusinessCheckinDetailsResponse response = buildGetBusinessCheckinDetailsResponse(checkin, userCheckinCount);
+		BusinessCheckinDetailsResponse response = buildGetBusinessCheckinDetailsResponse(checkin, userCheckinCount);
 		return response;
 	}
 	
@@ -339,7 +337,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public BusinessCancelCheckinResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
+	public BusinessCheckinDetailsResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
 			throws BusinessException {
 		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId());
 		if (checkin == null) {
@@ -349,13 +347,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 				checkin.getMerchant().getId());
 		//FIXME
 		//send notification to the user
-		BusinessCancelCheckinResponse response = businessCancelCheckinResponse(checkin, userCheckinCount);
+		BusinessCheckinDetailsResponse response = businessCancelCheckinResponse(checkin, userCheckinCount);
 		return response;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public BusinessApproveCheckinResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
+	public BusinessCheckinDetailsResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
 			throws BusinessException {
 		//1. Updating CheckinStatus to APPROVED
 		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentMerchantId());
@@ -470,9 +468,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return list;
 	}
 
-	private GetBusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(CheckinDto checkin,
+	private BusinessCheckinDetailsResponse buildGetBusinessCheckinDetailsResponse(CheckinDto checkin,
 			Integer userCheckinCount) {
-		GetBusinessCheckinDetailsResponse response = new GetBusinessCheckinDetailsResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		UserDto user = checkin.getUser();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
 		userDetails.setId(user.getId());
@@ -542,8 +540,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
-	private BusinessCancelCheckinResponse businessCancelCheckinResponse(CheckinDto checkin, Integer userCheckinCount) {
-		BusinessCancelCheckinResponse response = new BusinessCancelCheckinResponse();
+	private BusinessCheckinDetailsResponse businessCancelCheckinResponse(CheckinDto checkin, Integer userCheckinCount) {
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		UserDto user = checkin.getUser();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
 		userDetails.setId(user.getId());
@@ -557,9 +555,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return response;
 	}
 	
-	private BusinessApproveCheckinResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto,
+	private BusinessCheckinDetailsResponse businessApproveCheckinResponse(CheckinDto checkin, FeedbackDto feedbackDto,
 			Integer userCheckinCount) {
-		BusinessApproveCheckinResponse response = new BusinessApproveCheckinResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		UserDetailsResponse userDetails = new UserDetailsResponse();
 		UserDto user = checkin.getUser();
 		userDetails.setId(user.getId());
