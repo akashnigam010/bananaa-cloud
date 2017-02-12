@@ -1,8 +1,8 @@
-package in.socyal.sc.helper;
+package in.socyal.sc.api.helper;
 
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.helper.exception.ErrorCodesGettable;
+import in.socyal.sc.api.helper.exception.ErrorCodesGettable;
 
 @Component
 public interface ResponseHelper {

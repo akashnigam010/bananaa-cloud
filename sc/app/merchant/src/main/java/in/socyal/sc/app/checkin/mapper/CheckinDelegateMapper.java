@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
 import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
@@ -16,18 +18,50 @@ import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.UserDetailsResponse;
 import in.socyal.sc.api.feedback.dto.FeedbackDto;
+import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
+import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.user.dto.UserDto;
 
 @Component
 public class CheckinDelegateMapper {
+	private static final String CHECKIN_CANCELLED_BY_USER = "This checkin has been cancelled by the customer";
+	private static final String CHECKIN_CANCELLED_BY_MERCHANT = "This checkin has been cancelled by the restaurant";
+	
+	public BusinessCheckinDetailsResponse mapBusinessCheckinDetails(CheckinDto checkin, Integer userCheckinCount) {
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
+		UserDto user = checkin.getUser();
+		UserDetailsResponse userDetails = new UserDetailsResponse();
+		userDetails.setId(user.getId());
+		userDetails.setImageUrl(user.getImageUrl());
+		userDetails.setName(user.getName());
+		userDetails.setUserCheckins(userCheckinCount);
+		response.setUser(userDetails);
+		response.setCardNumber(checkin.getMerchantQrMapping().getCardId());
+		response.setCheckinStatus(checkin.getStatus());
+		if (CheckinStatusType.USER_CANCELLED == checkin.getStatus()) {
+			response.setCancelMessage(CHECKIN_CANCELLED_BY_USER);
+		} else if (CheckinStatusType.MERCHANT_CANCELLED == checkin.getStatus()) {
+			response.setCancelMessage(CHECKIN_CANCELLED_BY_MERCHANT);
+		}
+		response.setRewardStatus(checkin.getRewardStatus());
+		response.setRewardMessage(checkin.getRewardMessage());
+		FeedbackDto feedback = checkin.getFeedback();
+		response.setFeedbackStatus(feedback.getStatus());
+		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
+			response.setFeedbackDetails(mapFeedbackResponse(feedback));
+		}
+		return response;
+	}
+	
 	public void map(List<CheckinDto> from, FeedsResponse to, Map<Integer, Integer> userCheckinMap) {
 		List<Checkin> checkins = new ArrayList<>();
 		for (CheckinDto dto : from) {
 			Checkin checkinResponse = new Checkin();
 			checkinResponse.setId(dto.getId());
 			checkinResponse.setLikeCount(dto.getLikeCount());
-			checkinResponse.setMerchantId(dto.getMerchant().getId());
-			checkinResponse.setMerchantName(dto.getMerchant().getName());
+			checkinResponse.setMerchantId(dto.getMerchantId());
+			checkinResponse.setMerchantName(dto.getMerchantQrMapping().getMerchant().getName());
 			//Set Rating given by customer
 			checkinResponse.setRating(calculateRatingFromFeedback(dto.getFeedback()));
 			checkinResponse.setRewardMessage(dto.getRewardMessage());
@@ -57,7 +91,10 @@ public class CheckinDelegateMapper {
 		userDetailsResponse.setId(userId);
 		userDetailsResponse.setImageUrl(userDto.getImageUrl());
 		userDetailsResponse.setName(userDto.getName());
-		userDetailsResponse.setUserCheckins(userCheckinMap.get(userId));
+		if (userCheckinMap != null) {
+			userDetailsResponse.setUserCheckins(userCheckinMap.get(userId));
+		}
+		
 		return userDetailsResponse;
 	}
 
@@ -78,15 +115,38 @@ public class CheckinDelegateMapper {
 		}
 	}
 	
+	public void map(List<CheckinDto> from, GetBusinessCheckinHistoryResponse response) {
+		List<BusinessCheckin> checkins = new ArrayList<>();
+		BusinessCheckin bCheckin = null;
+		for (CheckinDto dto : from) {
+			bCheckin = new BusinessCheckin();
+			bCheckin.setId(dto.getId());
+			bCheckin.setCheckinStatus(dto.getStatus());
+			bCheckin.setCard(dto.getMerchantQrMapping().getCardId());
+			bCheckin.setFeedbackDetails(mapFeedbackResponse(dto.getFeedback()));
+			bCheckin.setRewardMessage(dto.getRewardMessage());
+			bCheckin.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
+			bCheckin.setTimestamp(dto.getCheckinDateTime().getTime());
+			bCheckin.setUser(getUserDetailsResponse(dto.getUser(), null));
+			checkins.add(bCheckin);
+		}
+		response.setCheckins(checkins);
+		
+	}
+	
 	private Double calculateRatingFromFeedback(FeedbackDto feedback) {
 		if (feedback.getAmbienceRating() != null && feedback.getServiceRating() != null && feedback.getFoodRating() != null) {
-			Integer foodRating = feedback.getFoodRating();
-			Integer ambiencerating = feedback.getAmbienceRating();
-			Integer serviceRating = feedback.getServiceRating();
-			
-			return (double) ((foodRating + ambiencerating + serviceRating) / 3);
+			return ((feedback.getFoodRating() + feedback.getAmbienceRating() + feedback.getServiceRating()) / 3);
 		}
 		
 		return null;
+	}
+
+	public FeedbackDetailsResponse mapFeedbackResponse(FeedbackDto feedback) {
+		FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+		feedbackDetails.setFoodRating(feedback.getFoodRating() != null ? feedback.getFoodRating().toString() : "0");
+		feedbackDetails.setAmbienceRating(feedback.getAmbienceRating() != null ? feedback.getAmbienceRating().toString() : "0");
+		feedbackDetails.setServiceRating(feedback.getServiceRating() != null ? feedback.getServiceRating().toString() : "0");
+		return feedbackDetails;
 	}
 }

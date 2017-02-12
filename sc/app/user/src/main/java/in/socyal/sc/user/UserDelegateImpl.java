@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.RoleType;
+import in.socyal.sc.api.type.error.UserErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.api.user.request.FollowRequest;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
@@ -24,12 +26,10 @@ import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
 import in.socyal.sc.api.user.response.UnFollowResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
 import in.socyal.sc.helper.JwtTokenDetailsHelper;
-import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.UserDao;
 import in.socyal.sc.persistence.UserFollowerMappingDao;
 import in.socyal.sc.user.mapper.UserMapper;
-import in.socyal.sc.user.type.UserErrorCodeType;
 
 @Service
 public class UserDelegateImpl implements UserDelegate {
@@ -160,10 +160,11 @@ public class UserDelegateImpl implements UserDelegate {
 			throw new BusinessException(UserErrorCodeType.USER_CANNOT_FOLLOW_HIMSELF);
 		}
 		
+		// not required - instead just ignore adding a new row if user is already following a user
 		//Validate whether the user is already following or not
-		if (userFollowerDao.isAlreadyFollowing(request.getUserId(), jwtDetailsHelper.getCurrentUserId())) {
-			throw new BusinessException(UserErrorCodeType.USER_ALREADY_FOLLOWING);
-		}
+		//if (userFollowerDao.isAlreadyFollowing(request.getUserId(), jwtDetailsHelper.getCurrentUserId())) {
+		//	throw new BusinessException(UserErrorCodeType.USER_ALREADY_FOLLOWING);
+		//}
 		
 		userFollowerDao.follow(request.getUserId(), jwtDetailsHelper.getCurrentUserId());
 		return response;
@@ -177,10 +178,12 @@ public class UserDelegateImpl implements UserDelegate {
 		if (!jwtDetailsHelper.isUserLoggedIn()) {
 			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
 		}
+		
+		// not required - instead just ignore adding a new row if user is already following a user
 		//Validate whether the user is already following or not
-		if (!userFollowerDao.isAlreadyFollowing(request.getUserId(), jwtDetailsHelper.getCurrentUserId())) {
-			throw new BusinessException(UserErrorCodeType.USER_NOT_FOLLOWING);
-		}
+		//if (!userFollowerDao.isAlreadyFollowing(request.getUserId(), jwtDetailsHelper.getCurrentUserId())) {
+		//	throw new BusinessException(UserErrorCodeType.USER_NOT_FOLLOWING);
+		//}
 		
 		userFollowerDao.unFollow(request.getUserId(), jwtDetailsHelper.getCurrentUserId());
 		return response;

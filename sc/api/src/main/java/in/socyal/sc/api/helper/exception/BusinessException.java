@@ -1,4 +1,4 @@
-package in.socyal.sc.helper.exception;
+package in.socyal.sc.api.helper.exception;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import in.socyal.sc.helper.BusinessErrorCode;
+import in.socyal.sc.api.helper.BusinessErrorCode;
 /**
  * BusinessException extends RuntimeException because
  * springframework.Transactional is rolledback only for unchecked exceptions

@@ -2,7 +2,8 @@ package in.socyal.sc.api.type;
 
 public enum RewardStatusType {
 	GIVEN("GIVEN"),
-	NOT_GIVEN("NOTGIVEN");
+	NOT_GIVEN("NOTGIVEN"),
+	SEEN("SEEN"),;
 	
 	private String status;
 

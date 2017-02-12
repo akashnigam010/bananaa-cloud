@@ -10,9 +10,9 @@ public class FeedbackDto implements Serializable {
 	private Integer userId;
 	private Integer merchantId;
 	private FeedbackStatusType status;
-	private Integer foodRating;
-	private Integer serviceRating;
-	private Integer ambienceRating;
+	private Double foodRating;
+	private Double serviceRating;
+	private Double ambienceRating;
 
 	public Integer getId() {
 		return id;
@@ -46,27 +46,27 @@ public class FeedbackDto implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getFoodRating() {
+	public Double getFoodRating() {
 		return foodRating;
 	}
 
-	public void setFoodRating(Integer foodRating) {
+	public void setFoodRating(Double foodRating) {
 		this.foodRating = foodRating;
 	}
 
-	public Integer getServiceRating() {
+	public Double getServiceRating() {
 		return serviceRating;
 	}
 
-	public void setServiceRating(Integer serviceRating) {
+	public void setServiceRating(Double serviceRating) {
 		this.serviceRating = serviceRating;
 	}
 
-	public Integer getAmbienceRating() {
+	public Double getAmbienceRating() {
 		return ambienceRating;
 	}
 
-	public void setAmbienceRating(Integer ambienceRating) {
+	public void setAmbienceRating(Double ambienceRating) {
 		this.ambienceRating = ambienceRating;
 	}
 }

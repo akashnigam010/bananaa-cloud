@@ -34,13 +34,13 @@ public class FeedbackEntity implements Serializable {
 	private FeedbackStatusType status;
 	
 	@Column(name = "FOOD_RATING")
-	private Integer foodRating;
+	private Double foodRating;
 	
 	@Column(name = "SERVICE_RATING")
-	private Integer serviceRating;
+	private Double serviceRating;
 	
 	@Column(name = "AMBIENCE_RATING")
-	private Integer ambienceRating;
+	private Double ambienceRating;
 
 	public Integer getId() {
 		return id;
@@ -74,27 +74,27 @@ public class FeedbackEntity implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getFoodRating() {
+	public Double getFoodRating() {
 		return foodRating;
 	}
 
-	public void setFoodRating(Integer foodRating) {
+	public void setFoodRating(Double foodRating) {
 		this.foodRating = foodRating;
 	}
 
-	public Integer getServiceRating() {
+	public Double getServiceRating() {
 		return serviceRating;
 	}
 
-	public void setServiceRating(Integer serviceRating) {
+	public void setServiceRating(Double serviceRating) {
 		this.serviceRating = serviceRating;
 	}
 
-	public Integer getAmbienceRating() {
+	public Double getAmbienceRating() {
 		return ambienceRating;
 	}
 
-	public void setAmbienceRating(Integer ambienceRating) {
+	public void setAmbienceRating(Double ambienceRating) {
 		this.ambienceRating = ambienceRating;
 	}
 }

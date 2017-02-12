@@ -23,7 +23,7 @@ import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
 import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
-import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.api.helper.exception.BusinessException;
 
 public interface CheckinDelegate {
 	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request);

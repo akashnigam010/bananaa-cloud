@@ -5,8 +5,8 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.feedback.request.FeedbackRequest;
 import in.socyal.sc.api.feedback.request.SubmitFeedbackRequest;
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
+import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
 public class FeedbackValidator {

@@ -1,6 +1,6 @@
-package in.socyal.sc.location.type;
+package in.socyal.sc.api.type.error;
 
-import in.socyal.sc.helper.BusinessErrorCode;
+import in.socyal.sc.api.helper.BusinessErrorCode;
 
 public enum LocationErrorCodeType implements BusinessErrorCode {
 	SEARCH_STRING_NOT_FOUND(10001);

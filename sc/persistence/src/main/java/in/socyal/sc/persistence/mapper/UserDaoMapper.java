@@ -17,9 +17,7 @@ public class UserDaoMapper {
 	@Autowired Clock clock;
 
 	public void map(UserEntity from, UserDto to) {
-		if (StringUtils.isNotEmpty(from.getEmail())) {
-			to.setEmail(from.getEmail());
-		}
+		to.setEmail(from.getEmail());
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
 		to.setId(from.getId());

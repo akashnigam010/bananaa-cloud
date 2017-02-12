@@ -1,6 +1,6 @@
-package in.socyal.sc.login.type;
+package in.socyal.sc.api.type.error;
 
-import in.socyal.sc.helper.BusinessErrorCode;
+import in.socyal.sc.api.helper.BusinessErrorCode;
 
 public enum LoginErrorCodeType implements BusinessErrorCode {
 	USER_ID_NOT_FOUND(10001), 

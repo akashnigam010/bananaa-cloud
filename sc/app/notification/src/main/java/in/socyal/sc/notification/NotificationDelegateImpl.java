@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.Data;
 import in.socyal.sc.api.login.request.SendTestNotificationRequest;
 import in.socyal.sc.api.login.response.SendTestNotificationResponse;
-import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.helper.notification.FirebaseResponse;
 import in.socyal.sc.helper.notification.NotificationsService;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
 
 @Service
 public class NotificationDelegateImpl implements NotificationDelegate {

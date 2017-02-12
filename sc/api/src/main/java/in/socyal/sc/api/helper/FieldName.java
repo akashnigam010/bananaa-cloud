@@ -1,4 +1,4 @@
-package in.socyal.sc.helper;
+package in.socyal.sc.api.helper;
 
 public enum FieldName {
 	RESULT("result"), STATUS_CODES("statusCodes"), STATUS_CODE("statusCode"), CODE("code"), DESCRIPTION("description");

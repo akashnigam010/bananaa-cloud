@@ -1,6 +1,6 @@
-package in.socyal.sc.helper.type;
+package in.socyal.sc.api.type.error;
 
-import in.socyal.sc.helper.BusinessErrorCode;
+import in.socyal.sc.api.helper.BusinessErrorCode;
 
 public enum GenericErrorCodeType implements BusinessErrorCode {
 	UNKNOWN_HOST_ERROR(90001), 

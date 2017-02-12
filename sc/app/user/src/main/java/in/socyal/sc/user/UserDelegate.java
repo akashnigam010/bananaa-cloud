@@ -1,5 +1,6 @@
 package in.socyal.sc.user;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.user.request.FollowRequest;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
@@ -13,7 +14,6 @@ import in.socyal.sc.api.user.response.SearchFriendResponse;
 import in.socyal.sc.api.user.response.SearchFriendToTagResponse;
 import in.socyal.sc.api.user.response.UnFollowResponse;
 import in.socyal.sc.api.user.response.UserProfileResponse;
-import in.socyal.sc.helper.exception.BusinessException;
 
 public interface UserDelegate {
 	/**

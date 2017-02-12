@@ -2,11 +2,11 @@ package in.socyal.sc.core.validation;
 
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
 public class MerchantValidator {
