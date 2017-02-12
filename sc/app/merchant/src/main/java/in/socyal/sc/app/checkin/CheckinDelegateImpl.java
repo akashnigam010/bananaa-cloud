@@ -80,6 +80,7 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
 	private static final Logger LOG = Logger.getLogger(CheckinDelegateImpl.class);
+	private static final String CHECKIN_CANCELLED_BY_MERCHANT = "Your has been cancelled by the restaurant";
 
 	@Autowired
 	CheckinDao checkinDao;
@@ -310,6 +311,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
 		} else if (checkin.getStatus() == CheckinStatusType.MERCHANT_CANCELLED) {
 			response.setCheckinStatus(CheckinStatusType.CANCELLED);
+			response.setCancelMessage(CHECKIN_CANCELLED_BY_MERCHANT);
 		}
 
 		return response;
