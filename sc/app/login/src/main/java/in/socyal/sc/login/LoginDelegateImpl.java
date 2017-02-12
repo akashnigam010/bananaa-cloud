@@ -12,7 +12,6 @@ import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.User;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.login.dto.AdditionalDetailsDto;
 import in.socyal.sc.api.login.dto.BusinessLoginUserDto;
 import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
@@ -58,7 +57,6 @@ public class LoginDelegateImpl implements LoginDelegate {
 		// Sets JWT access token
 		response.setAccessToken(JwtHelper.createJsonWebTokenForGuest());
 		response.setUser(mapper.mapGuestUser());
-		response.setAdditionalDetails(getAdditonalDetails());
 		return response;
 	}
 
@@ -77,7 +75,6 @@ public class LoginDelegateImpl implements LoginDelegate {
 			response.setAccessToken(JwtHelper.createJsonWebTokenForUser(String.valueOf(userDetails.getId())));
 			Integer userCheckinCount = checkinDao.getUserCheckinCount(userDetails.getId());
 			response.setUser(mapper.mapFbUserToUserDto(userDetails, userCheckinCount));
-			response.setAdditionalDetails(getAdditonalDetails());
 		} catch (FacebookOAuthException e) {
 			LOG.error("Error while fetching user details from FB " + e.getErrorMessage());
 			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
@@ -104,13 +101,5 @@ public class LoginDelegateImpl implements LoginDelegate {
 		response.setUser(loggedInUser);
 		response.setSupportNumber(resource.getString(BANANAA_SUPPORT));
 		return response;
-	}
-	
-	private AdditionalDetailsDto getAdditonalDetails() {
-		AdditionalDetailsDto additionalDetails = new AdditionalDetailsDto();
-		additionalDetails.setAboutUsLink(resource.getString(BANANAA_ABOUT_US_LINK));
-		additionalDetails.setContactUsMail(resource.getString(BANANAA_CONTACT_US_MAIL));
-		additionalDetails.setRateUsLink(resource.getString(BANANAA_RATE_US_LINK));
-		return additionalDetails;
 	}
 }
