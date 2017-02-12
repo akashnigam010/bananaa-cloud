@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.checkin.dto.CheckinDto;
-import in.socyal.sc.api.checkin.dto.CheckinFilterCriteria;
 import in.socyal.sc.api.login.request.Data;
 import in.socyal.sc.api.login.request.NotificationRequest;
+import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.MerchantLoginDao;
 import in.socyal.sc.persistence.UserDao;
@@ -35,22 +33,21 @@ public class NotificationCreator {
 	@Autowired
 	CheckinDao checkinDao;
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public NotificationRequest createCheckinNotificationToMerchant(Integer checkinId) {
+	public NotificationRequest createCheckinNotificationToMerchant(Integer checkinId, Integer userId,
+			Integer merchantId) {
 		NotificationRequest notificationRequest = new NotificationRequest();
-		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, true, false);
-		CheckinDto checkin = checkinDao.getCheckin(checkinId, filter);
-		notificationRequest.setTitle(checkin.getUser().getName() + " has checked in");
+		UserDto user = userDao.fetchUser(userId);
+		notificationRequest.setTitle(user.getName() + " has checked in");
 		notificationRequest.setBody("Tap to see the details and confirm the checkin");
-		Data checkinData = new Data(ID, checkin.getId().toString());
+		Data checkinData = new Data(ID, checkinId.toString());
 		Data redirectData = new Data(REDIRECT_TO, BUSINESS_DETAIL_SCREEN);
 		notificationRequest.getData().add(checkinData);
 		notificationRequest.getData().add(redirectData);
-		List<String> registrationIds = merchantLoginDao.getRegistrationIdsForMerchant(checkin.getMerchantId());
+		List<String> registrationIds = merchantLoginDao.getRegistrationIdsForMerchant(merchantId);
 		notificationRequest.setDeviceTokens(registrationIds);
 		return notificationRequest;
 	}
-	
+
 	public NotificationRequest createSubmitFeedbackNotificationToMerchant(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle(checkin.getUser().getName() + " has provided feedback");

@@ -207,8 +207,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
 		}
 		// FIXME send notification to the MERCHANT - asynchronously
-		notificationDelegate
-				.sendDataNotification(notificationCreator.createCheckinNotificationToMerchant(response.getCheckinId()));
+		notificationDelegate.sendDataNotification(notificationCreator.createCheckinNotificationToMerchant(checkinId,
+				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
 		return response;
 	}
 
