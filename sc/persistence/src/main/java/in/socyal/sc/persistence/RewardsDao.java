@@ -20,6 +20,7 @@ import in.socyal.sc.api.rewards.dto.RewardsDto;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.api.type.error.CheckinErrorCodeType;
 import in.socyal.sc.api.type.error.RewardErrorCodeType;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.CheckinEntity;
 import in.socyal.sc.persistence.entity.RewardsEntity;
 import in.socyal.sc.persistence.mapper.CheckinDaoMapper;
@@ -33,6 +34,8 @@ public class RewardsDao {
 	RewardsDaoMapper mapper;
 	@Autowired
 	CheckinDaoMapper checkinMapper;
+	@Autowired
+	Clock clock;
 
 	public RewardsDao() {
 	}
@@ -47,6 +50,9 @@ public class RewardsDao {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		checkinEntity.setRewardStatus(newStatus);
+		checkinEntity.setCheckinDateTime(checkinEntity.getCheckinDateTime());
+		checkinEntity.setApprovedDateTime(checkinEntity.getApprovedDateTime());
+		checkinEntity.setUpdatedDateTime(clock.cal());
 		getSession().save(checkinEntity);
 		CheckinDto checkinDto = new CheckinDto();
 		checkinMapper.mapToCheckinDto(checkinEntity, checkinDto, filter);
@@ -62,6 +68,9 @@ public class RewardsDao {
 		checkRewardStatus(checkinEntity);
 		checkinEntity.setRewardStatus(RewardStatusType.GIVEN);
 		checkinEntity.setRewardMessage(createRewardMessage(request));
+		checkinEntity.setCheckinDateTime(checkinEntity.getCheckinDateTime());
+		checkinEntity.setApprovedDateTime(checkinEntity.getApprovedDateTime());
+		checkinEntity.setUpdatedDateTime(clock.cal());
 		getSession().save(checkinEntity);
 		CheckinDto checkinDto = new CheckinDto();
 		checkinMapper.mapToCheckinDto(checkinEntity, checkinDto, filter);
@@ -130,7 +139,7 @@ public class RewardsDao {
 			Criteria criteria = getSession().createCriteria(RewardsEntity.class);
 			criteria.add(Restrictions.in("id", getRewardIdCollection(rewardDtos)));
 			entities = criteria.list();
-		}		
+		}
 		return entities;
 	}
 
