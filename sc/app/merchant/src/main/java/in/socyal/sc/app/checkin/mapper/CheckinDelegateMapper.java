@@ -1,5 +1,6 @@
 package in.socyal.sc.app.checkin.mapper;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -135,11 +136,14 @@ public class CheckinDelegateMapper {
 	}
 	
 	private Double calculateRatingFromFeedback(FeedbackDto feedback) {
+		Double rating = null;
 		if (feedback.getAmbienceRating() != null && feedback.getServiceRating() != null && feedback.getFoodRating() != null) {
-			return ((feedback.getFoodRating() + feedback.getAmbienceRating() + feedback.getServiceRating()) / 3);
+			rating = ((feedback.getFoodRating() + feedback.getAmbienceRating() + feedback.getServiceRating()) / 3);
+			DecimalFormat format = new DecimalFormat("0.0");
+		    return Double.valueOf(format.format(rating));
 		}
 		
-		return null;
+		return rating;
 	}
 
 	public FeedbackDetailsResponse mapFeedbackResponse(FeedbackDto feedback) {
