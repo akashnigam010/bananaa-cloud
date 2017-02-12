@@ -125,9 +125,13 @@ public class RewardsDao {
 
 	@SuppressWarnings("unchecked")
 	private List<RewardsEntity> fetchRewardEntites(List<Reward> rewardDtos) {
-		Criteria criteria = getSession().createCriteria(RewardsEntity.class);
-		criteria.add(Restrictions.in("id", getRewardIdCollection(rewardDtos)));
-		return criteria.list();
+		List<RewardsEntity> entities = new ArrayList<>();
+		if (rewardDtos.size() > 0) {
+			Criteria criteria = getSession().createCriteria(RewardsEntity.class);
+			criteria.add(Restrictions.in("id", getRewardIdCollection(rewardDtos)));
+			entities = criteria.list();
+		}		
+		return entities;
 	}
 
 	private List<Integer> getRewardIdCollection(List<Reward> rewardDtos) {
