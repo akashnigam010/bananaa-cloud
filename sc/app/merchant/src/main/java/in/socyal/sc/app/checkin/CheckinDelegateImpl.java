@@ -63,6 +63,7 @@ import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.JwtTokenDetailsHelper;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
+import in.socyal.sc.notification.NotificationCreator;
 import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.CheckinTaggedUserMappingDao;
@@ -106,9 +107,11 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Autowired
 	FeedbackDao feedbackDao;
 	@Autowired
+	JwtTokenDetailsHelper jwtDetailsHelper;
+	@Autowired
 	NotificationDelegate notificationDelegate;
 	@Autowired
-	JwtTokenDetailsHelper jwtDetailsHelper;
+	NotificationCreator notificationCreator;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -203,9 +206,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		if (taggedUserDetails != null) {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
 		}
-
-		// FIXME
-		// send notification to the MERCHANT
+		// FIXME send notification to the MERCHANT - asynchronously
+		notificationDelegate
+				.sendDataNotification(notificationCreator.createCheckinNotificationToMerchant(response.getCheckinId()));
 		return response;
 	}
 
@@ -429,6 +432,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
 		// FIXME notify user asynchronously
+		notificationDelegate
+				.sendDataNotification(notificationCreator.createCancelCheckinNotificationToCustomer(checkin));
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
 	}
@@ -450,6 +455,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		userCheckinCount++;
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchantId());
 		// FIXME notify user asynchronously
+		notificationDelegate
+				.sendDataNotification(notificationCreator.createApproveCheckinNotificationToCustomer(checkin));
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
 	}

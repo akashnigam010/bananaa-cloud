@@ -1,5 +1,8 @@
 package in.socyal.sc.persistence.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,5 +22,13 @@ public class MerchantLoginDaoMapper {
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(false, true);
 		merchantDaoMapper.map(from.getMerchant(), merchantDto, filter);
 		to.setMerchant(merchantDto);
+	}
+	
+	public List<String> mapMerchantRegistrationIds(List<MerchantLoginEntity> entities) {
+		List<String> registrationIds = new ArrayList<>();
+		for (MerchantLoginEntity entity : entities) {
+			registrationIds.add(entity.getRegistrationId());
+		}
+		return registrationIds;
 	}
 }

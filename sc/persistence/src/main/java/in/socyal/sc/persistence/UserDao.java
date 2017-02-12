@@ -158,6 +158,13 @@ public class UserDao {
 		session.update(user);
 	}
 	
+	public String getRegistrationIdForUser(Integer userId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", userId));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		return entity.getRegistrationId();
+	}
+	
 	/**
 	 * Method for forming SQL query for discovering new users
 	 * @return

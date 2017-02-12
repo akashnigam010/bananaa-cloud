@@ -16,6 +16,8 @@ import in.socyal.sc.api.reward.response.RewardStatusResponse;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
+import in.socyal.sc.notification.NotificationCreator;
+import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.FeedbackDao;
 
@@ -29,6 +31,10 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	CheckinDelegateMapper mapper;
 	@Autowired
 	CheckinDao checkinDao;
+	@Autowired
+	NotificationDelegate notificationDelegate;
+	@Autowired
+	NotificationCreator notificationCreator;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -37,7 +43,7 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
 		CheckinDto checkin = dao.saveFeedbackStatus(request.getCheckinId(), FeedbackStatusType.RECEIVED, filter);
 		checkAndSetRewardDetails(checkin, response);
-		//TODO : notify merchant asynchronously - See if required
+		// TODO : notify merchant asynchronously - See if required
 		return response;
 	}
 
@@ -45,10 +51,11 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public RewardStatusResponse submitFeedback(SubmitFeedbackRequest request) throws BusinessException {
 		RewardStatusResponse response = new RewardStatusResponse();
-		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, true, false);
 		CheckinDto checkin = dao.saveFeedback(request.getCheckinId(), request, filter);
 		checkAndSetRewardDetails(checkin, response);
-		//TODO : notify merchant asynchronously
+		// TODO : notify merchant asynchronously
+		notificationDelegate.sendDataNotification(notificationCreator.createSubmitFeedbackNotificationToMerchant(checkin));
 		return response;
 	}
 
@@ -57,9 +64,10 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	public BusinessCheckinDetailsResponse businessAskFeedback(FeedbackRequest request) {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
 		CheckinDto checkin = dao.saveFeedbackStatus(request.getCheckinId(), FeedbackStatusType.ASKED, filter);
-		// FIXME : Notify customer asynchronously
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
+		// FIXME : Notify customer asynchronously
+		notificationDelegate.sendDataNotification(notificationCreator.createAskFeedbackNotificationToCustomer(checkin));
 		return mapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 	}
 
@@ -72,7 +80,7 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 				checkin.getMerchantId());
 		return mapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 	}
-	
+
 	private void checkAndSetRewardDetails(CheckinDto checkin, RewardStatusResponse response) {
 		if (checkin.getRewardStatus() == RewardStatusType.GIVEN) {
 			response.setCheckinId(checkin.getId());

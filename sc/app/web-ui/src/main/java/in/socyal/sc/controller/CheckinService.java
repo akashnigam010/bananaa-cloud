@@ -163,7 +163,7 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/unLike", method = RequestMethod.POST, headers = "Accept=application/json")
 	public LikeCheckinResponse unLikeACheckin(@RequestBody LikeCheckinRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/checkin/unLike");
@@ -176,7 +176,7 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getBusinessCheckins", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetBusinessCheckinsResponse getBusinessCheckins(@RequestBody GetBusinessCheckinsRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/getBusinessCheckins");
@@ -189,9 +189,10 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getBusinessCheckinDetails", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessCheckinDetailsResponse getBusinessCheckinDetails(@RequestBody GetBusinessCheckinDetailsRequest request) {
+	public BusinessCheckinDetailsResponse getBusinessCheckinDetails(
+			@RequestBody GetBusinessCheckinDetailsRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/getBusinessCheckinDetails");
 		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
@@ -202,9 +203,10 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getBusinessCheckinHistory", method = RequestMethod.POST, headers = "Accept=application/json")
-	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(@RequestBody GetBusinessCheckinHistoryRequest request) {
+	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(
+			@RequestBody GetBusinessCheckinHistoryRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/getBusinessCheckinHistory");
 		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
 		try {
@@ -215,7 +217,7 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/businessCancelCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
 	public BusinessCheckinDetailsResponse businessCancelCheckin(@RequestBody BusinessCancelCheckinRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/businessCancelCheckin");
@@ -228,7 +230,7 @@ public class CheckinService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/businessApproveCheckin", method = RequestMethod.POST, headers = "Accept=application/json")
 	public BusinessCheckinDetailsResponse businessApproveCheckin(@RequestBody BusinessApproveCheckinRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/merchant/businessApproveCheckin");
