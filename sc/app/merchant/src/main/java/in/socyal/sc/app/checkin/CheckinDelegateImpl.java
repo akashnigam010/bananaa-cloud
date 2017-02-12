@@ -299,15 +299,17 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			filter = new CheckinFilterCriteria(true, true, true);
 			checkin = checkinDao.getCheckin(request.getId(), filter);
 			response.setCheckinStatus(checkin.getStatus());
+			response.setMerchantName(checkin.getMerchantQrMapping().getMerchant().getName());
 			// Fetch previous checkin count
 			Integer checkinCount = checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
 					checkin.getMerchantId());
-			response.setMerchantName(checkin.getMerchantQrMapping().getMerchant().getName());
 			response.setShortAddress(
 					checkin.getMerchantQrMapping().getMerchant().getAddress().getLocality().getShortAddress());
 			response.setNewCheckinCount(checkinCount);
 			response.setPreviousCheckinCount(checkinCount - 1);
 			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
+		} else if (checkin.getStatus() == CheckinStatusType.MERCHANT_CANCELLED) {
+			response.setCheckinStatus(CheckinStatusType.CANCELLED);
 		}
 
 		return response;
