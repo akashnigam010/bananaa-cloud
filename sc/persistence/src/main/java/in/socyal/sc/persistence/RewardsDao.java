@@ -50,10 +50,8 @@ public class RewardsDao {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		checkinEntity.setRewardStatus(newStatus);
-		checkinEntity.setCheckinDateTime(checkinEntity.getCheckinDateTime());
-		checkinEntity.setApprovedDateTime(checkinEntity.getApprovedDateTime());
 		checkinEntity.setUpdatedDateTime(clock.cal());
-		getSession().save(checkinEntity);
+		getSession().update(checkinEntity);
 		CheckinDto checkinDto = new CheckinDto();
 		checkinMapper.mapToCheckinDto(checkinEntity, checkinDto, filter);
 		return checkinDto;
@@ -68,10 +66,8 @@ public class RewardsDao {
 		checkRewardStatus(checkinEntity);
 		checkinEntity.setRewardStatus(RewardStatusType.GIVEN);
 		checkinEntity.setRewardMessage(createRewardMessage(request));
-		checkinEntity.setCheckinDateTime(checkinEntity.getCheckinDateTime());
-		checkinEntity.setApprovedDateTime(checkinEntity.getApprovedDateTime());
 		checkinEntity.setUpdatedDateTime(clock.cal());
-		getSession().save(checkinEntity);
+		getSession().update(checkinEntity);
 		CheckinDto checkinDto = new CheckinDto();
 		checkinMapper.mapToCheckinDto(checkinEntity, checkinDto, filter);
 		return checkinDto;

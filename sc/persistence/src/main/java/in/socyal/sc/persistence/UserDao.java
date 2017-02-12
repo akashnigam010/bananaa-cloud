@@ -136,10 +136,10 @@ public class UserDao {
 			entity = new UserEntity();
 			mapper.map(user, entity, fbAccessToken);
 			sessionFactory.getCurrentSession().save(entity);
-		} else if (StringUtils.equals(entity.getFacebookId(), fbAccessToken)) {
-			entity.setFacebookId(fbAccessToken);
+		} else if (StringUtils.equals(entity.getFacebookId(), user.getId())) {
+			entity.setFacebookToken(fbAccessToken);
 			entity.setUpdatedDateTime(clock.cal());
-			sessionFactory.getCurrentSession().save(entity);
+			sessionFactory.getCurrentSession().update(entity);
 		}
 		mapper.map(entity, userDto);
 		return userDto;
