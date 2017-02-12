@@ -44,8 +44,11 @@ public class RewardsDao {
 		this.sessionFactory = sessionFactory;
 	}
 
-	public CheckinDto saveRewardStatus(Integer checkinId, RewardStatusType newStatus, CheckinFilterCriteria filter) {
-		CheckinEntity checkinEntity = (CheckinEntity) getSession().get(CheckinEntity.class, checkinId);
+	public CheckinDto saveRewardStatus(Integer checkinId, RewardStatusType newStatus, CheckinFilterCriteria filter)
+			throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("id", checkinId));
+		CheckinEntity checkinEntity = (CheckinEntity) criteria.uniqueResult();
 		if (checkinEntity == null) {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
@@ -58,7 +61,9 @@ public class RewardsDao {
 	}
 
 	public CheckinDto saveReward(SubmitRewardsRequest request, CheckinFilterCriteria filter) throws BusinessException {
-		CheckinEntity checkinEntity = (CheckinEntity) getSession().get(CheckinEntity.class, request.getCheckinId());
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
+		criteria.add(Restrictions.eq("id", request.getCheckinId()));
+		CheckinEntity checkinEntity = (CheckinEntity) criteria.uniqueResult();
 		if (checkinEntity == null) {
 			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
