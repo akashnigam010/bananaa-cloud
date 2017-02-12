@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
@@ -23,6 +24,7 @@ import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.date.util.DayUtil;
 
 @Component
 public class CheckinDelegateMapper {
@@ -67,7 +69,7 @@ public class CheckinDelegateMapper {
 			checkinResponse.setRating(calculateRatingFromFeedback(dto.getFeedback()));
 			checkinResponse.setRewardMessage(dto.getRewardMessage());
 			checkinResponse.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
-			checkinResponse.setTimestamp(dto.getCheckinDateTime().getTime());
+			checkinResponse.setTimestamp(DayUtil.getUnixTime(dto.getCheckinDateTime()));
 			checkinResponse.setUser(getUserDetailsResponse(dto.getUser(), userCheckinMap));
 			checkinResponse.setHasLiked(dto.isLiked());
 			checkins.add(checkinResponse);
@@ -109,7 +111,7 @@ public class CheckinDelegateMapper {
 			if (StringUtils.isNotEmpty(dto.getRewardMessage())) {
 				to.setRewardMessage(dto.getRewardMessage());
 			}
-			to.setTimestamp(dto.getCheckinDateTime().getTime());
+			to.setTimestamp(DayUtil.getUnixTime(dto.getCheckinDateTime()));
 			to.setCard(dto.getMerchantQrMapping().getCardId());
 			to.setCheckinStatus(dto.getStatus());
 			response.getCheckins().add(to);
@@ -127,7 +129,7 @@ public class CheckinDelegateMapper {
 			bCheckin.setFeedbackDetails(mapFeedbackResponse(dto.getFeedback()));
 			bCheckin.setRewardMessage(dto.getRewardMessage());
 			bCheckin.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
-			bCheckin.setTimestamp(dto.getCheckinDateTime().getTime());
+			bCheckin.setTimestamp(DayUtil.getUnixTime(dto.getCheckinDateTime()));
 			bCheckin.setUser(getUserDetailsResponse(dto.getUser(), null));
 			checkins.add(bCheckin);
 		}

@@ -131,4 +131,13 @@ public class DayUtil {
         cal.set(Calendar.MILLISECOND, 00);
         return cal;
     }
+	
+	/**
+	 * gets unix time
+	 * @param date
+	 * @return
+	 */
+	public static Long getUnixTime(Calendar date) {
+		return date.getTimeInMillis()/1000;
+	}
 }

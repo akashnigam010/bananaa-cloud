@@ -412,7 +412,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
 			throws BusinessException {
-		GetBusinessCheckinHistoryResponse response = getGetBusinessCheckinHistoryResponse(request);
+		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
 		List<CheckinDto> checkins = checkinDao.getBusinessCheckinHistory(request.getPage(),
 				jwtDetailsHelper.getCurrentMerchantId(), request.getUserId(), filter);
@@ -556,48 +556,5 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			list.add(taggedUserResponse);
 		}
 		return list;
-	}
-
-	// FIXME : dummy response, replace with actual logic
-	private GetBusinessCheckinHistoryResponse getGetBusinessCheckinHistoryResponse(
-			GetBusinessCheckinHistoryRequest request) {
-		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
-		List<BusinessCheckin> list = new ArrayList<>();
-		if (request.getPage() == 1) {
-			BusinessCheckin checkin = new BusinessCheckin();
-			checkin.setId(1);
-			checkin.setCard("15");
-			checkin.setCheckinStatus(CheckinStatusType.APPROVED);
-			FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-			feedbackDetails.setFoodRating("4.5");
-			feedbackDetails.setAmbienceRating("3.0");
-			feedbackDetails.setServiceRating("2.5");
-			checkin.setFeedbackDetails(feedbackDetails);
-			checkin.setRating(4.5);
-			checkin.setRewardMessage("Won Amazon gift coupon worth Rs. 100!");
-			List<TaggedUserResponse> taggedUsers = new ArrayList<>();
-			TaggedUserResponse taggedUser = new TaggedUserResponse();
-			taggedUser.setId(1);
-			taggedUser.setName("Dharmasena");
-			taggedUsers.add(taggedUser);
-			checkin.setTaggedUsers(taggedUsers);
-			checkin.setTimestamp(clock.cal().getTime());
-			UserDetailsResponse userDetails = new UserDetailsResponse();
-			userDetails.setId(request.getUserId());
-			userDetails.setImageUrl(
-					"https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
-			userDetails.setName("Akash Nigam");
-			userDetails.setUserCheckins(20);
-			checkin.setUser(userDetails);
-			list.add(checkin);
-			list.add(checkin);
-			list.add(checkin);
-			list.add(checkin);
-			list.add(checkin);
-		} else {
-			list = Collections.emptyList();
-		}
-		response.setCheckins(list);
-		return response;
 	}
 }
