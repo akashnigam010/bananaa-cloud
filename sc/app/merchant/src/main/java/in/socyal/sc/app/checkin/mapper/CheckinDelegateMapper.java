@@ -49,9 +49,7 @@ public class CheckinDelegateMapper {
 		response.setRewardMessage(checkin.getRewardMessage());
 		FeedbackDto feedback = checkin.getFeedback();
 		response.setFeedbackStatus(feedback.getStatus());
-		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
-			response.setFeedbackDetails(mapFeedbackResponseForBCheckinDetails(feedback));
-		}
+		response.setFeedbackDetails(mapFeedbackResponse(feedback));
 		return response;
 	}
 
@@ -124,7 +122,7 @@ public class CheckinDelegateMapper {
 			bCheckin.setId(dto.getId());
 			bCheckin.setCheckinStatus(dto.getStatus());
 			bCheckin.setCard(dto.getMerchantQrMapping().getCardId());
-			bCheckin.setFeedbackDetails(mapFeedbackResponseForBCheckinHistory(dto.getFeedback()));
+			bCheckin.setFeedbackDetails(mapFeedbackResponse(dto.getFeedback()));
 			bCheckin.setRewardMessage(dto.getRewardMessage());
 			bCheckin.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
 			bCheckin.setTimestamp(dto.getCheckinDateTime().getTimeInMillis());
@@ -147,26 +145,17 @@ public class CheckinDelegateMapper {
 		return rating;
 	}
 
-	public FeedbackDetailsResponse mapFeedbackResponseForBCheckinDetails(FeedbackDto feedback) {
-		FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-		feedbackDetails.setFoodRating(feedback.getFoodRating() != null ? feedback.getFoodRating().toString() : "NA");
-		feedbackDetails.setAmbienceRating(
-				feedback.getAmbienceRating() != null ? feedback.getAmbienceRating().toString() : "NA");
-		feedbackDetails
-				.setServiceRating(feedback.getServiceRating() != null ? feedback.getServiceRating().toString() : "NA");
-		return feedbackDetails;
-	}
-
-	public FeedbackDetailsResponse mapFeedbackResponseForBCheckinHistory(FeedbackDto feedback) {
-		// if any rating is null it means feedback was submitted as 'NOTHANKS',
-		// hence return null (handle in mobile app)
-		if (feedback.getFoodRating() == null) {
-			return null;
+	public FeedbackDetailsResponse mapFeedbackResponse(FeedbackDto feedback) {
+		FeedbackDetailsResponse feedbackDetails = null;
+		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
+			feedbackDetails = new FeedbackDetailsResponse();
+			feedbackDetails.setFoodRating(feedback.getFoodRating() != null ? feedback.getFoodRating().toString() : "NA");
+			feedbackDetails.setAmbienceRating(
+					feedback.getAmbienceRating() != null ? feedback.getAmbienceRating().toString() : "NA");
+			feedbackDetails
+					.setServiceRating(feedback.getServiceRating() != null ? feedback.getServiceRating().toString() : "NA");
 		}
-		FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-		feedbackDetails.setFoodRating(feedback.getFoodRating().toString());
-		feedbackDetails.setAmbienceRating(feedback.getAmbienceRating().toString());
-		feedbackDetails.setServiceRating(feedback.getServiceRating().toString());
+		
 		return feedbackDetails;
 	}
 }
