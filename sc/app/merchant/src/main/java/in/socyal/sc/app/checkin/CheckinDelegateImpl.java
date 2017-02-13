@@ -229,20 +229,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
 		CancelCheckinResponse response = new CancelCheckinResponse();
-		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
-		CheckinDto checkin = checkinDao.getCheckin(request.getId(), filter);
-		if (checkin == null) {
-			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		} else if (CheckinStatusType.APPROVED == checkin.getStatus()) {
-			throw new BusinessException(CheckinErrorCodeType.USER_CHECKIN_ALREADY_APPROVED);
-		} else if (CheckinStatusType.USER_CANCELLED == checkin.getStatus()) {
-			LOG.error("Checkin is already cancelled for checkinID:" + request.getId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
-		}
 		checkinDao.cancelCheckin(request.getId());
-		// FIXME
-		// send notification to MERCHANT
 		return response;
 	}
 
@@ -426,9 +413,6 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
 		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId(), filter);
-		if (checkin == null) {
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		}
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
 		// FIXME notify user asynchronously

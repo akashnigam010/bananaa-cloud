@@ -120,14 +120,23 @@ public class CheckinDao {
 		return response;
 	}
 
-	public void cancelCheckin(Integer checkinId) {
+	public void cancelCheckin(Integer checkinId) throws BusinessException {
 		CheckinEntity checkin = (CheckinEntity) sessionFactory.getCurrentSession().get(CheckinEntity.class, checkinId);
-		if (checkin != null) {
+		if (checkin == null) {
+			LOG.error("Checkin entity not found for checkinID:" + checkinId);
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		} else {
+			if (CheckinStatusType.APPROVED == checkin.getStatus()) {
+				LOG.error("Checkin is already aprpoved for checkinID:" + checkinId);
+				throw new BusinessException(CheckinErrorCodeType.USER_CHECKIN_ALREADY_APPROVED);
+			} else if (CheckinStatusType.USER_CANCELLED == checkin.getStatus() 
+					|| CheckinStatusType.MERCHANT_CANCELLED == checkin.getStatus()) {
+				LOG.error("Checkin is already cancelled for checkinID:" + checkinId);
+				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
+			}
 			checkin.setStatus(CheckinStatusType.USER_CANCELLED);
 			checkin.setUpdatedDateTime(clock.cal());
 			sessionFactory.getCurrentSession().update(checkin);
-		} else {
-			LOG.error("Checkin entity not found for checkinID:" + checkinId);
 		}
 	}
 
@@ -325,6 +334,8 @@ public class CheckinDao {
 			} else {
 				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 			}
+		} else {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		return checkinDto;
 	}
