@@ -14,7 +14,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 public class CheckinDto {
 	private Integer id;
 	private UserDto user;
-	private MerchantDto merchant;
+	private Integer merchantId;
 	private CheckinStatusType status;
 	private MerchantQrMappingDto merchantQrMapping;
 	private String rewardMessage;
@@ -41,14 +41,6 @@ public class CheckinDto {
 
 	public void setUser(UserDto user) {
 		this.user = user;
-	}
-
-	public MerchantDto getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(MerchantDto merchant) {
-		this.merchant = merchant;
 	}
 
 	public CheckinStatusType getStatus() {
@@ -140,5 +132,13 @@ public class CheckinDto {
 
 	public void setFeedback(FeedbackDto feedback) {
 		this.feedback = feedback;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
 	}
 }

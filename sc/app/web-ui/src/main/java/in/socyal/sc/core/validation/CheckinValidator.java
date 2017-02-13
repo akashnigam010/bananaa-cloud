@@ -18,10 +18,10 @@ import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
 import in.socyal.sc.api.checkin.request.MyFeedsRequest;
 import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.RoleType;
-import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
 
 @Component
 public class CheckinValidator {

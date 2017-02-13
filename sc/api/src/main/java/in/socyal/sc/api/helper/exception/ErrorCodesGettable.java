@@ -1,4 +1,4 @@
-package in.socyal.sc.helper.exception;
+package in.socyal.sc.api.helper.exception;
 
 import java.util.List;
 

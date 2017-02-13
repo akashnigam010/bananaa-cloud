@@ -2,10 +2,10 @@ package in.socyal.sc.core.validation;
 
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.reward.request.RewardRequest;
 import in.socyal.sc.api.reward.request.SubmitRewardsRequest;
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
 public class RewardsValidator {

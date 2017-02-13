@@ -17,7 +17,7 @@ public class BusinessCheckin implements Serializable {
 	private List<TaggedUserResponse> taggedUsers;
 	private String rewardMessage;
 	private Double rating;
-	private Date timestamp;
+	private Long timestamp;
 	private String card;
 	private CheckinStatusType checkinStatus;
 	private FeedbackDetailsResponse feedbackDetails;
@@ -65,11 +65,11 @@ public class BusinessCheckin implements Serializable {
 		this.rating = rating;
 	}
 
-	public Date getTimestamp() {
+	public Long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
 

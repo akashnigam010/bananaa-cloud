@@ -16,9 +16,9 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.RoleType;
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import net.oauth.jsontoken.JsonToken;
 import net.oauth.jsontoken.JsonTokenParser;
 import net.oauth.jsontoken.crypto.HmacSHA256Signer;

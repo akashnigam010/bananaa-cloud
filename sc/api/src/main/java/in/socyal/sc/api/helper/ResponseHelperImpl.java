@@ -1,4 +1,4 @@
-package in.socyal.sc.helper;
+package in.socyal.sc.api.helper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -9,13 +9,12 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.exception.BusinessNoRollbackException;
-import in.socyal.sc.helper.exception.ErrorCodesGettable;
+import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.helper.exception.BusinessNoRollbackException;
+import in.socyal.sc.api.helper.exception.ErrorCodesGettable;
 
 @Component
 public class ResponseHelperImpl implements ResponseHelper {
@@ -127,13 +126,16 @@ public class ResponseHelperImpl implements ResponseHelper {
 			Object statusCode = statusCodeType.newInstance();
 			codeField.set(statusCode, errorCode);
 			//This will be the default message, if resource bundle doesn't have error message 
-			String errorDescription = "Something went wrong! Please try again! (Error Message not found in Resource Bundle...)";
+			String errorDescription = "";
 			try {
 				errorDescription = resource.getString(errorCode.toString());
     		} catch (MissingResourceException mre) {
     			LOG.error("Resource missing for key:" + errorCode + " in 'socyal-error-code' resource bundle");
-        		}
-			descField.set(statusCode, (StringUtils.isNotBlank(errorDescription)) ? errorDescription : errorCode);
+        	}
+			if (errorDescription == "") {
+				errorDescription = "Something went wrong. Please try again later.";
+			}
+			descField.set(statusCode, errorDescription);
 			statusCodes.add(statusCode);
 		}
 		return statusCodes;

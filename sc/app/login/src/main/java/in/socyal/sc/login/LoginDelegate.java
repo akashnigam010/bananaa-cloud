@@ -1,10 +1,10 @@
 package in.socyal.sc.login;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
-import in.socyal.sc.helper.exception.BusinessException;
 
 public interface LoginDelegate {
 	/**

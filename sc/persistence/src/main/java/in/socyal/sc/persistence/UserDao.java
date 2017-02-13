@@ -136,10 +136,10 @@ public class UserDao {
 			entity = new UserEntity();
 			mapper.map(user, entity, fbAccessToken);
 			sessionFactory.getCurrentSession().save(entity);
-		} else if (StringUtils.equals(entity.getFacebookId(), fbAccessToken)) {
-			entity.setFacebookId(fbAccessToken);
+		} else if (StringUtils.equals(entity.getFacebookId(), user.getId())) {
+			entity.setFacebookToken(fbAccessToken);
 			entity.setUpdatedDateTime(clock.cal());
-			sessionFactory.getCurrentSession().save(entity);
+			sessionFactory.getCurrentSession().update(entity);
 		}
 		mapper.map(entity, userDto);
 		return userDto;
@@ -156,6 +156,13 @@ public class UserDao {
 		user.setUpdatedDateTime(clock.cal());
 		user.setRegistrationId(registrationId);
 		session.update(user);
+	}
+	
+	public String getRegistrationIdForUser(Integer userId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", userId));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		return entity.getRegistrationId();
 	}
 	
 	/**

@@ -23,20 +23,28 @@ public class CheckinUserLikeMappingDao {
 	}
 
 	public void likeACheckin(Integer checkinId, Integer userId) {
-		CheckinUserLikeEntity entity = new CheckinUserLikeEntity();
-		entity.setCheckinId(checkinId);
-		entity.setUserId(userId);
-		sessionFactory.getCurrentSession().save(entity);
-	}
-	
-	public Boolean isCurrentCheckinLiked(Integer checkinId, Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
     	criteria.add(Restrictions.eq("userId", userId));
     	criteria.add(Restrictions.eq("checkinId", checkinId));
     	@SuppressWarnings("unchecked")
 		List<CheckinEntity> result = criteria.list();
-    	return result.size() > 0 ? Boolean.TRUE : Boolean.FALSE;
+    	
+    	if (result.size() == 0) {
+    		CheckinUserLikeEntity entity = new CheckinUserLikeEntity();
+    		entity.setCheckinId(checkinId);
+    		entity.setUserId(userId);
+    		sessionFactory.getCurrentSession().save(entity);
+    	}
 	}
+	
+//	public Boolean isCurrentCheckinLiked(Integer checkinId, Integer userId) {
+//		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
+//    	criteria.add(Restrictions.eq("userId", userId));
+//    	criteria.add(Restrictions.eq("checkinId", checkinId));
+//    	@SuppressWarnings("unchecked")
+//		List<CheckinEntity> result = criteria.list();
+//    	return result.size() > 0 ? Boolean.TRUE : Boolean.FALSE;
+//	}
 	
 	public Integer fetchLikeCount(Integer checkinId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
@@ -48,9 +56,17 @@ public class CheckinUserLikeMappingDao {
 
 	public void unLikeACheckin(Integer checkinId, Integer userId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
-		criteria.add(Restrictions.eq("userId", userId));
+    	criteria.add(Restrictions.eq("userId", userId));
     	criteria.add(Restrictions.eq("checkinId", checkinId));
-    	CheckinUserLikeEntity entity = (CheckinUserLikeEntity) criteria.uniqueResult();
-    	sessionFactory.getCurrentSession().delete(entity);
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+    	
+    	if (result.size() > 0) {
+    		Criteria criteria2 = sessionFactory.getCurrentSession().createCriteria(CheckinUserLikeEntity.class);
+    		criteria2.add(Restrictions.eq("userId", userId));
+        	criteria2.add(Restrictions.eq("checkinId", checkinId));
+        	CheckinUserLikeEntity entity = (CheckinUserLikeEntity) criteria2.uniqueResult();
+        	sessionFactory.getCurrentSession().delete(entity);
+    	}		
 	}
 }
