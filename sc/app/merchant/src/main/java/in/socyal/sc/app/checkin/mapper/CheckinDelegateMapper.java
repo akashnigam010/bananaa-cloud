@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.checkin.business.response.BusinessCheckin;
@@ -24,13 +23,12 @@ import in.socyal.sc.api.feedback.response.FeedbackDetailsResponse;
 import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.date.util.DayUtil;
 
 @Component
 public class CheckinDelegateMapper {
 	private static final String CHECKIN_CANCELLED_BY_USER = "This checkin has been cancelled by the customer";
 	private static final String CHECKIN_CANCELLED_BY_MERCHANT = "This checkin has been cancelled by the restaurant";
-	
+
 	public BusinessCheckinDetailsResponse mapBusinessCheckinDetails(CheckinDto checkin, Integer userCheckinCount) {
 		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		UserDto user = checkin.getUser();
@@ -52,11 +50,11 @@ public class CheckinDelegateMapper {
 		FeedbackDto feedback = checkin.getFeedback();
 		response.setFeedbackStatus(feedback.getStatus());
 		if (FeedbackStatusType.RECEIVED == feedback.getStatus()) {
-			response.setFeedbackDetails(mapFeedbackResponse(feedback));
+			response.setFeedbackDetails(mapFeedbackResponseForBCheckinDetails(feedback));
 		}
 		return response;
 	}
-	
+
 	public void map(List<CheckinDto> from, FeedsResponse to, Map<Integer, Integer> userCheckinMap) {
 		List<Checkin> checkins = new ArrayList<>();
 		for (CheckinDto dto : from) {
@@ -65,7 +63,7 @@ public class CheckinDelegateMapper {
 			checkinResponse.setLikeCount(dto.getLikeCount());
 			checkinResponse.setMerchantId(dto.getMerchantId());
 			checkinResponse.setMerchantName(dto.getMerchantQrMapping().getMerchant().getName());
-			//Set Rating given by customer
+			// Set Rating given by customer
 			checkinResponse.setRating(calculateRatingFromFeedback(dto.getFeedback()));
 			checkinResponse.setRewardMessage(dto.getRewardMessage());
 			checkinResponse.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
@@ -97,7 +95,7 @@ public class CheckinDelegateMapper {
 		if (userCheckinMap != null) {
 			userDetailsResponse.setUserCheckins(userCheckinMap.get(userId));
 		}
-		
+
 		return userDetailsResponse;
 	}
 
@@ -117,7 +115,7 @@ public class CheckinDelegateMapper {
 			response.getCheckins().add(to);
 		}
 	}
-	
+
 	public void map(List<CheckinDto> from, GetBusinessCheckinHistoryResponse response) {
 		List<BusinessCheckin> checkins = new ArrayList<>();
 		BusinessCheckin bCheckin = null;
@@ -126,7 +124,7 @@ public class CheckinDelegateMapper {
 			bCheckin.setId(dto.getId());
 			bCheckin.setCheckinStatus(dto.getStatus());
 			bCheckin.setCard(dto.getMerchantQrMapping().getCardId());
-			bCheckin.setFeedbackDetails(mapFeedbackResponse(dto.getFeedback()));
+			bCheckin.setFeedbackDetails(mapFeedbackResponseForBCheckinHistory(dto.getFeedback()));
 			bCheckin.setRewardMessage(dto.getRewardMessage());
 			bCheckin.setTaggedUsers(getTaggedUserResponse(dto.getTaggedUsers()));
 			bCheckin.setTimestamp(dto.getCheckinDateTime().getTimeInMillis());
@@ -134,25 +132,41 @@ public class CheckinDelegateMapper {
 			checkins.add(bCheckin);
 		}
 		response.setCheckins(checkins);
-		
+
 	}
-	
+
 	private Double calculateRatingFromFeedback(FeedbackDto feedback) {
 		Double rating = null;
-		if (feedback.getAmbienceRating() != null && feedback.getServiceRating() != null && feedback.getFoodRating() != null) {
+		if (feedback.getAmbienceRating() != null && feedback.getServiceRating() != null
+				&& feedback.getFoodRating() != null) {
 			rating = ((feedback.getFoodRating() + feedback.getAmbienceRating() + feedback.getServiceRating()) / 3);
 			DecimalFormat format = new DecimalFormat("0.0");
-		    return Double.valueOf(format.format(rating));
+			return Double.valueOf(format.format(rating));
 		}
-		
+
 		return rating;
 	}
 
-	public FeedbackDetailsResponse mapFeedbackResponse(FeedbackDto feedback) {
+	public FeedbackDetailsResponse mapFeedbackResponseForBCheckinDetails(FeedbackDto feedback) {
 		FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
-		feedbackDetails.setFoodRating(feedback.getFoodRating() != null ? feedback.getFoodRating().toString() : "0");
-		feedbackDetails.setAmbienceRating(feedback.getAmbienceRating() != null ? feedback.getAmbienceRating().toString() : "0");
-		feedbackDetails.setServiceRating(feedback.getServiceRating() != null ? feedback.getServiceRating().toString() : "0");
+		feedbackDetails.setFoodRating(feedback.getFoodRating() != null ? feedback.getFoodRating().toString() : "NA");
+		feedbackDetails.setAmbienceRating(
+				feedback.getAmbienceRating() != null ? feedback.getAmbienceRating().toString() : "NA");
+		feedbackDetails
+				.setServiceRating(feedback.getServiceRating() != null ? feedback.getServiceRating().toString() : "NA");
+		return feedbackDetails;
+	}
+
+	public FeedbackDetailsResponse mapFeedbackResponseForBCheckinHistory(FeedbackDto feedback) {
+		// if any rating is null it means feedback was submitted as 'NOTHANKS',
+		// hence return null (handle in mobile app)
+		if (feedback.getFoodRating() == null) {
+			return null;
+		}
+		FeedbackDetailsResponse feedbackDetails = new FeedbackDetailsResponse();
+		feedbackDetails.setFoodRating(feedback.getFoodRating().toString());
+		feedbackDetails.setAmbienceRating(feedback.getAmbienceRating().toString());
+		feedbackDetails.setServiceRating(feedback.getServiceRating().toString());
 		return feedbackDetails;
 	}
 }
