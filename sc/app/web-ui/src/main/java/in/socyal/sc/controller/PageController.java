@@ -44,6 +44,11 @@ public class PageController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value = "/app", method = RequestMethod.GET)
+	public String app() {
+		return "redirect:https://play.google.com/store/apps/details?id=com.bananaa";
+	}
+	
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
 	public ModelAndView about() {
 		ModelAndView modelAndView = new ModelAndView("about");

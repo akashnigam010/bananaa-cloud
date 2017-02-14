@@ -9,6 +9,7 @@ import in.socyal.sc.api.response.GenericResponse;
 public class MerchantDetailsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private String nameId;
 	private String name;
 	private String shortAddress;
 	private Integer checkins;
@@ -19,7 +20,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private List<String> openingHours;
 	private List<String> cuisines;
 	private List<String> type;
-	private Double averageCost;
+	private String averageCost;
 	private String longAddress;
 	private Location location;
 	private Integer previousCheckinCount;
@@ -105,11 +106,11 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.type = type;
 	}
 
-	public Double getAverageCost() {
+	public String getAverageCost() {
 		return averageCost;
 	}
 
-	public void setAverageCost(Double averageCost) {
+	public void setAverageCost(String averageCost) {
 		this.averageCost = averageCost;
 	}
 
@@ -151,5 +152,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

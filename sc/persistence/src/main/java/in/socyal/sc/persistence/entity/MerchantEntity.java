@@ -24,6 +24,9 @@ public class MerchantEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Integer id;
+	
+	@Column(name = "NAME_ID")
+	private String nameId;
 
 	@Column(name = "NAME")
 	private String name;
@@ -155,5 +158,13 @@ public class MerchantEntity implements Serializable {
 
 	public void setPromotion(Integer promotion) {
 		this.promotion = promotion;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }
