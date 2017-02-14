@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.location.request.SearchLocationRequest;
 import in.socyal.sc.api.location.response.GetLocalitiesResponse;
 import in.socyal.sc.helper.JsonHelper;
-import in.socyal.sc.helper.ResponseHelper;
 import in.socyal.sc.location.LocationDelegate;
 
 @RestController

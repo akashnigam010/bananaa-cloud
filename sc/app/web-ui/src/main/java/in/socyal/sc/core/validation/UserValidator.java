@@ -4,16 +4,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.RoleType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.user.request.FollowRequest;
 import in.socyal.sc.api.user.request.GetMyFriendsRequest;
 import in.socyal.sc.api.user.request.GetPublicProfileRequest;
 import in.socyal.sc.api.user.request.SaveRegistrationIdRequest;
 import in.socyal.sc.api.user.request.SearchFriendRequest;
 import in.socyal.sc.api.user.request.UnFollowRequest;
-import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
 
 @Component
 public class UserValidator {

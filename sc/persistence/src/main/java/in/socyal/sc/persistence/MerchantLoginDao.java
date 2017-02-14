@@ -1,5 +1,7 @@
 package in.socyal.sc.persistence;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -57,5 +59,14 @@ public class MerchantLoginDao {
 		criteria.add(Restrictions.eq("deviceId", deviceId));
 		MerchantLoginEntity merchantLogin = (MerchantLoginEntity) criteria.uniqueResult();
 		return (merchantLogin != null) ? Boolean.TRUE : Boolean.FALSE;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> getRegistrationIdsForMerchant(Integer merchantId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(MerchantLoginEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		List<MerchantLoginEntity> merchantEntities = criteria.list();
+		return mapper.mapMerchantRegistrationIds(merchantEntities);
 	}
 }
