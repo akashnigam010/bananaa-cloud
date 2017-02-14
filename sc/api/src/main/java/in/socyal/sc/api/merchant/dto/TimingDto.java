@@ -10,8 +10,8 @@ public class TimingDto implements Serializable {
 	private Integer id;
 	private Integer merchantId;
 	private DayType day;
-	private Integer open;
-	private Integer close;
+	private String open;
+	private String close;
 
 	public Integer getId() {
 		return id;
@@ -37,19 +37,19 @@ public class TimingDto implements Serializable {
 		this.day = day;
 	}
 
-	public Integer getOpen() {
+	public String getOpen() {
 		return open;
 	}
 
-	public void setOpen(Integer open) {
+	public void setOpen(String open) {
 		this.open = open;
 	}
 
-	public Integer getClose() {
+	public String getClose() {
 		return close;
 	}
 
-	public void setClose(Integer close) {
+	public void setClose(String close) {
 		this.close = close;
 	}
 }

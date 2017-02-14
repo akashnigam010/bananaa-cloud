@@ -7,7 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>merchant</artifactId>
-	<name>Socyal Merchant Module</name>
+	<name>Bananaa Merchant Module</name>
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +19,11 @@
 		<dependency>
 			<groupId>sc</groupId>
 			<artifactId>persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>notification</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

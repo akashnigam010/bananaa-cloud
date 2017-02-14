@@ -1,0 +1,231 @@
+/* Media Queries CSS - START */
+
+@media (min-width: 100px) {
+    .merchant-image-banner {
+        height:25vh;
+    }
+    .merchant-detail-main {
+    	top: -5vh;
+    }
+    .merchant-detail-background {
+    	margin-bottom: 0vh;
+    }
+    .merchant-icon {
+    	width: 60px;
+    	height: 60px;
+    }
+    .user-icon {
+    	width: 50px;
+    	height: 50px;
+    }
+    .merchant-name, .merchant-icon-text {
+		font-size: 1.2em;
+	}
+	.icon-rating-dynamic {
+		height: 20px;
+    	width: 20px;
+	}
+	.rating-gear-dynamic {
+		height: 40px;
+		width: 80px;
+	}
+	.sub-heading-flexi {
+		font-size: 130%;
+	}
+}
+
+@media (min-width: 500px) {
+    .merchant-image-banner {
+        height:40vh;
+    }
+    .merchant-detail-main {
+    	top: -8vh;
+    }
+    .merchant-detail-background {
+    	margin-bottom: -3vh;
+    }
+    .merchant-icon {
+    	width: 90px;
+    	height: 90px;
+    }
+    .user-icon {
+    	width: 65px;
+    	height: 65px;
+    }
+    .merchant-name, .merchant-icon-text {
+		font-size: 1.8em;
+	}
+	.icon-rating-dynamic {
+		height: 20px;
+    	width: 20px;
+	}
+	.rating-gear-dynamic {
+		height: 45px;
+		width: 90px;
+	}
+	.sub-heading-flexi {
+		font-size: 150%;
+	}
+}
+
+@media (min-width: 1090px) {
+    .merchant-image-banner {
+        height:60vh;
+    }
+    .merchant-detail-main {
+    	top: -12vh;
+    }
+    .merchant-detail-background {
+    	margin-bottom: -7vh;
+    }
+    .merchant-icon {
+    	width: 120px;
+    	height: 120px;
+    }
+    .user-icon {
+    	width: 80px;
+    	height: 80px;
+    }
+    .merchant-name, .merchant-icon-text {
+		font-size: 2.5em;
+	}
+	.rating-value-dynamic {
+		font-size: 1.5em;	
+	}
+	.icon-rating-dynamic {
+		height: 30px;
+    	width: 30px;
+	}
+	.rating-gear-dynamic {
+		height: 50px;
+		width: 100px;
+	}
+	.sub-heading-flexi {
+		font-size: 150%;
+	}
+
+}
+
+@media (max-width: 1090px) {
+	.hidden-till-1090 {
+		display: none;
+	}
+}
+
+@media (min-width: 768px) {
+	.detail-about > .col-sm-8 {
+	    width: 65.666667%;
+	}
+}
+
+/* Media Queries CSS - END */
+
+.vertical-align-center {
+	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
+}
+
+.top-image {
+	display:inline-block;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    vertical-align:top;
+    object-fit: cover;
+}
+
+.details-wrapper {
+	border-radius: 6px;
+}
+
+.merchant-detail-background {
+	background: #E6E9EE;
+}
+
+.merchant-icon {
+	background: #E6E9EE;
+	border-radius: 50%;
+	text-align: center;
+}
+
+.merchant-icon-text {
+  	font-family: _light;
+  	color: #9ba8ba;
+}
+
+.float-left {
+	float: left;
+}
+
+.name-wrapper {
+	padding-left: 5%;
+	width: 80%;
+}
+
+.under-heading {
+	font-family: _light;
+	color: #909090;
+}
+
+.sub-heading-flexi {
+	padding: 5% 5% 0% 5%; 
+	font-family: _light;
+	color: #9932CC;
+}
+
+.rating-gear-dynamic {
+    background-color: #9932CC;
+    color: #FFFFFF;
+    border-radius: 4px;
+}
+
+.icon-rating-dynamic {
+    content:url("../img/rating-icon.png");
+}
+
+.detail-type-1 {
+	font-family: _light;
+	color: #9932CC;
+}
+
+.detail-type-2 {
+	font-family: _regular;
+}
+
+.detail-type-padding {
+	padding: 5%;
+}
+
+.checkin-item {
+	padding: 5% 5% 0% 5%;
+	font-family: _light;
+	color: #909090;
+}
+
+.user-icon {
+	border-radius: 50%;
+	text-align: center;
+	background-position: center;
+	background-repeat: no-repeat;
+	object-fit: cover;
+}
+
+.user-name-wrapper {
+	padding-left: 5%;
+	width: 70%;
+}
+
+.user-name {
+	color: #33373D; 
+	font-family: _regular;
+}
+
+.tagged-users {
+	padding: 5% 0% 5% 10%;
+}
+
+.reward-message {
+	padding: 0% 0% 5% 10%;
+	color: #e3a717;
+}

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class MerchantResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private String nameId;
 	private String name;
 	private String shortAddress;
 	private Integer checkins;
@@ -75,5 +76,13 @@ public class MerchantResponse implements Serializable {
 
 	public void setDistance(Double distance) {
 		this.distance = distance;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

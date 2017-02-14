@@ -7,6 +7,7 @@ import java.util.Set;
 public class MerchantDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private String nameId;
 	private String name;
 	private String imageUrl;
 	private ContactDto contact;
@@ -104,5 +105,13 @@ public class MerchantDto implements Serializable {
 
 	public void setAverageCost(Double averageCost) {
 		this.averageCost = averageCost;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

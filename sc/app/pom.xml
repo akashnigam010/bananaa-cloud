@@ -7,8 +7,9 @@
 		<artifactId>socyalcloud</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	
 	<artifactId>app</artifactId>
-	<name>Socyal Applications Module</name>
+	<name>Bananaa Applications Module</name>
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,8 +34,9 @@
 		</dependency>		
 	</dependencies>
 	<modules>
-		<module>core</module>
+		<module>web-ui</module>
 		<module>user</module>
+		<module>notification</module>
 		<module>login</module>
 		<module>merchant</module>
 		<module>location</module>

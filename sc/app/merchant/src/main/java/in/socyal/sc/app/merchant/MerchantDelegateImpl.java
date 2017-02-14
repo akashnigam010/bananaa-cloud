@@ -7,38 +7,54 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
+import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
+import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
-import in.socyal.sc.api.merchant.response.LocationResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
+import in.socyal.sc.api.type.error.MerchantErrorCodeType;
+import in.socyal.sc.api.type.error.MerchantLoginErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
+import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
+import in.socyal.sc.helper.JwtTokenDetailsHelper;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
-import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.MerchantDao;
+import in.socyal.sc.persistence.MerchantLoginDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
+	private static final Logger LOG = Logger.getLogger(MerchantDelegateImpl.class);
 	@Autowired MerchantDao dao;
+	@Autowired CheckinDao checkinDao;
 	@Autowired MerchantDelegateMapper mapper;
 	@Autowired DayUtil dayUtil;
+	@Autowired Clock clock;
+	@Autowired MerchantLoginDao merchantLoginDao;
+	@Autowired JwtTokenDetailsHelper jwtDetailsHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -49,12 +65,12 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<MerchantDto> merchants = null;
 		//TODO - FIX ME: Decide on what Default sorting needs to be happened
 		MerchantListSortType sortType = MerchantListSortType.DISTANCE;
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, true, false);
 		if (sortType == MerchantListSortType.RATING || sortType == MerchantListSortType.PROMOTION) {
-			merchants = dao.getMerchantsByRatingOrPromotion(requestDto, sortType);
+			merchants = dao.getMerchantsByRatingOrPromotion(requestDto, sortType, filter);
 		} else {
-			merchants = dao.getMerchantsByDistance(requestDto);
+			merchants = dao.getMerchantsByDistance(requestDto, filter);
 		}
-		
 		if (merchants == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}
@@ -67,12 +83,15 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
 			throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
-		MerchantDto merchantDto = dao.getMerchantDetails(request.getId());
-		if (merchantDto == null) {
-			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
-		}
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
+		MerchantDto merchantDto = dao.getMerchantDetails(request.getId(), filter);
 		try {
-			buildMerchantDetailsResponse(merchantDto, response);
+			int previousCheckinCount = 0;
+			if (jwtDetailsHelper.isUserLoggedIn()) {
+				previousCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
+						request.getId());
+			}
+			buildMerchantDetailsResponse(merchantDto, response, previousCheckinCount);
 		} catch (ParseException e) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
 		}
@@ -83,11 +102,11 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
-		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString());
-		if (merchants == null) {
-			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(false, true, false, false, false, false);
+		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString(), filter);
+		if (merchants != null) {
+			buildSearchMerchantsResponse(merchants, response);
 		}
-		buildSearchMerchantsResponse(merchants, response);
 		return response;
 	}
 
@@ -99,11 +118,35 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		dao.saveMerchantDetails(merchantDto);
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
+			throws BusinessException {
+		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(false);
+		Integer currentMerchantId = jwtDetailsHelper.getCurrentMerchantId();
+		Integer currentMerchantDeviceId = jwtDetailsHelper.getCurrentMerchantDeviceId();
+		MerchantDto merchant = dao.getMerchantDetails(currentMerchantId, filter);
+		if (merchant == null) {
+			LOG.error("Exception occured: merchant details not found for merchantId:" + currentMerchantId);
+			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
+		}
+		if (!merchantLoginDao.isMerchantLoginDetailsPresent(currentMerchantId, currentMerchantId)) {
+			LOG.error("Exception occured: business device details not found for merchantId:" + currentMerchantId
+					+ " and deviceId:" + currentMerchantId);
+			throw new BusinessException(MerchantLoginErrorCodeType.MERCHANT_DEVICE_DETAILS_FOUND);
+		}
+		merchantLoginDao.saveRegistrationIdForMerchant(currentMerchantId, currentMerchantDeviceId,
+				request.getRegistrationId());
+		return response;
+	}
+
 	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
 		List<MerchantResponse> merchantResponse = new ArrayList<>();
 		for (MerchantDto dto : merchants) {
 			MerchantResponse merchant = new MerchantResponse();
 			merchant.setId(dto.getId());
+			merchant.setNameId(dto.getNameId());
 			merchant.setName(dto.getName());
 			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchantResponse.add(merchant);
@@ -116,6 +159,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<MerchantResponse> merchantResponse = new ArrayList<>();
 		for (MerchantDto dto : merchants) {
 			MerchantResponse merchant = new MerchantResponse();
+			merchant.setNameId(dto.getNameId());
 			merchant.setId(dto.getId());
 			merchant.setImageUrl(dto.getImageUrl());
 			merchant.setIsOpen(isOpen(dto.getTimings()));
@@ -145,12 +189,12 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private Boolean isOpen(Set<TimingDto> timings) {
-		Calendar today = Calendar.getInstance();
+		Calendar today = clock.cal();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
 				String timeStr = dayUtil.formatDate(today, DateFormatType.DATE_FORMAT_24_HOUR);
-				Integer time = Integer.parseInt(timeStr);
-				if (time >= dto.getOpen() && time < dto.getClose()) {
+				if (Integer.parseInt(timeStr) >= Integer.parseInt(dto.getOpen())
+						&& Integer.parseInt(timeStr) < Integer.parseInt(dto.getClose())) {
 					return Boolean.TRUE;
 				}
 
@@ -160,7 +204,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private List<String> getOpeningHours(Set<TimingDto> timings) throws ParseException {
-		Calendar today = Calendar.getInstance();
+		Calendar today = clock.cal();
 		List<String> openingHours = new ArrayList<>();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
@@ -178,15 +222,15 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return openStr + " to " + closeStr;
 	}
 
-	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response)
-			throws ParseException {
-		response.setAverageCost(merchantDto.getAverageCost());
+	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response,
+			int previousCheckinCount) throws ParseException {
+		response.setAverageCost(merchantDto.getAverageCost().intValue()+ " for 2");
 		response.setCheckins(merchantDto.getCheckins());
 		response.setCuisines(merchantDto.getCuisines());
-		// For calculating distance we need user's current place latitude and
-		// longitude
+		// For calculating distance we need user's current place latitude and longitude
 		response.setDistance(null);
 		response.setId(merchantDto.getId());
+		response.setNameId(merchantDto.getNameId());
 		response.setImageUrl(merchantDto.getImageUrl());
 		response.setIsOpen(isOpen(merchantDto.getTimings()));
 		response.setLocation(buildLocationResponse(merchantDto.getAddress()));
@@ -196,11 +240,14 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
-		response.setPreviousCheckinCount(12);
+		response.setPreviousCheckinCount(previousCheckinCount);
+		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
+			response.setPhone(merchantDto.getContact().getPhone1());
+		}
 	}
 
-	private LocationResponse buildLocationResponse(AddressDto address) {
-		LocationResponse locationResponse = new LocationResponse();
+	private Location buildLocationResponse(AddressDto address) {
+		Location locationResponse = new Location();
 		locationResponse.setLatitude(address.getLatitude());
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;

@@ -33,4 +33,18 @@ public class JwtTokenHelperImpl implements JwtTokenHelper {
 		}
 		return roles;
 	}
+
+	@Override
+	public String getDeviceId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();
+		return userDetails.getDeviceId();
+	}
+
+	@Override
+	public String getMerchantId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();
+		return userDetails.getMerchantId();
+	}
 }

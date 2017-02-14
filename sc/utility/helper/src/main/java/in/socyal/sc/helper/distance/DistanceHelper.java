@@ -1,13 +1,21 @@
 package in.socyal.sc.helper.distance;
 
+import java.util.ResourceBundle;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class DistanceHelper {
-	public static Boolean isNearBy(double lat1, double lon1, double lat2, double lon2) {
+	private static ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String CHECKIN_RANGE = "checkin.range";
+	
+	public static Boolean isCoordinateInRange(double lat1, double lon1, double lat2, double lon2) {
 		Boolean flag = Boolean.FALSE;
-		//Logic for calculating distance
-		flag = Boolean.TRUE;
+		Integer checkinRange = Integer.valueOf(resource.getString(CHECKIN_RANGE));
+		double distance = distance(lat1, lon1, lat2, lon2, DistanceUnitType.KM.getCode());
+		if (distance * 1000 < checkinRange) {
+			flag = Boolean.TRUE;
+		}
 		return flag;
 	}
 	
@@ -19,7 +27,7 @@ public class DistanceHelper {
 		dist = dist * 60 * 1.1515;
 		if (unit == "K") {
 			dist = dist * 1.609344;
-		} else if (unit == "N") {
+		} else if (unit == "M") {
 			dist = dist * 0.8684;
 		}
 

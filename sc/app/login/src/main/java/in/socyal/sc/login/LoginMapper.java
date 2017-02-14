@@ -2,7 +2,6 @@ package in.socyal.sc.login;
 
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.api.login.dto.FacebookUser;
 import in.socyal.sc.api.login.dto.LoginUserDto;
 
 @Component
@@ -24,15 +23,6 @@ public class LoginMapper {
 		LoginUserDto userDto = new LoginUserDto();
 		userDto.setFirstName(GUEST_NAME);
 		userDto.setImageUrl(GUEST_IMAGE_URL);
-		return userDto;
-	}
-
-	public in.socyal.sc.api.login.dto.LoginUserDto mapFbUserToUserDto(FacebookUser fbUser) {
-		LoginUserDto userDto = new LoginUserDto();
-		userDto.setFirstName(fbUser.getFirst_name());
-		userDto.setLastName(fbUser.getLast_name());
-		userDto.setId(Integer.parseInt(fbUser.getId()));
-		userDto.setImageUrl(fbUser.getPicture().getData().getUrl());
 		return userDto;
 	}
 }

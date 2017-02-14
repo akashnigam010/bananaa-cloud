@@ -6,6 +6,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.persistence.entity.MerchantQrMappingEntity;
 import in.socyal.sc.persistence.mapper.MerchantQrMappingMapper;
@@ -22,14 +23,14 @@ public class MerchantQrMappingDao {
         this.sessionFactory = sessionFactory;
     }
  
-    public MerchantQrMappingDto getMerchantQrMapping(String qrCode) {
+    public MerchantQrMappingDto getMerchantQrMapping(String qrCode, MerchantFilterCriteria filter) {
     	MerchantQrMappingDto dto = null;
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantQrMappingEntity.class);
     	criteria.add(Restrictions.eq("qrCode", qrCode));
     	MerchantQrMappingEntity entity = (MerchantQrMappingEntity) criteria.uniqueResult();
     	if (entity != null) {
     		dto = new MerchantQrMappingDto();
-    		mapper.map(entity, dto);
+    		mapper.map(entity, dto, filter);
     	}
     	return dto;
     }

@@ -1,0 +1,24 @@
+<head th:fragment="head">
+	<meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title th:text="${title}">Bananaa</title>
+    <meta name="description" th:attr="content=${description}" />
+    <meta name="robots" content="NOODP,NOYDIR" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon"></link>
+    
+    <meta property="fb:app_id" content="1631840747117125" />
+    <meta property="og:title" th:attr="content=${title}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" th:attr="content=${url}" />
+    <meta property="og:site_name" content="Bananaa" />
+    <meta property="og:description" th:attr="content=${fbDescription}" />
+    <meta property="og:image" content="https://s3.ap-south-1.amazonaws.com/bananaimages/logo_bananaa.png" />    
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet"></link>
+    <link href="/css/font.css" rel="stylesheet"></link>
+    <link href="/css/main.css" rel="stylesheet"></link>
+    <link href="/css/detail.css" rel="stylesheet"></link>
+    <link href="css/jqcloud.min.css" rel="stylesheet"></link>
+</head>

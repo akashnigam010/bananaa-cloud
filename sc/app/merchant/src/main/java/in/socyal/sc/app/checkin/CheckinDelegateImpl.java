@@ -2,7 +2,10 @@ package in.socyal.sc.app.checkin;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,37 +13,75 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.restfb.exception.FacebookOAuthException;
+
+import in.socyal.sc.api.checkin.business.request.BusinessApproveCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.BusinessCancelCheckinRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinDetailsRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinHistoryRequest;
+import in.socyal.sc.api.checkin.business.request.GetBusinessCheckinsRequest;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinHistoryResponse;
+import in.socyal.sc.api.checkin.business.response.GetBusinessCheckinsResponse;
 import in.socyal.sc.api.checkin.dto.CheckinDetailsDto;
 import in.socyal.sc.api.checkin.dto.CheckinDto;
-import in.socyal.sc.api.checkin.dto.CheckinResponseDto;
+import in.socyal.sc.api.checkin.dto.CheckinFilterCriteria;
+import in.socyal.sc.api.checkin.dto.CheckinTaggedUserDto;
+import in.socyal.sc.api.checkin.request.AroundMeFeedsRequest;
 import in.socyal.sc.api.checkin.request.CancelCheckinRequest;
 import in.socyal.sc.api.checkin.request.CheckinRequest;
 import in.socyal.sc.api.checkin.request.ConfirmCheckinRequest;
+import in.socyal.sc.api.checkin.request.GetMerchantCheckinsRequest;
+import in.socyal.sc.api.checkin.request.LikeCheckinRequest;
+import in.socyal.sc.api.checkin.request.MyFeedsRequest;
+import in.socyal.sc.api.checkin.request.ProfileFeedsRequest;
 import in.socyal.sc.api.checkin.request.ValidateCheckinRequest;
 import in.socyal.sc.api.checkin.response.CancelCheckinResponse;
 import in.socyal.sc.api.checkin.response.ConfirmCheckinResponse;
+import in.socyal.sc.api.checkin.response.FeedsResponse;
 import in.socyal.sc.api.checkin.response.GetCheckinStatusResponse;
+import in.socyal.sc.api.checkin.response.LikeCheckinResponse;
 import in.socyal.sc.api.checkin.response.TaggedUserResponse;
 import in.socyal.sc.api.checkin.response.ValidateCheckinResponse;
+import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.FeedbackStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
+import in.socyal.sc.api.type.error.CheckinErrorCodeType;
+import in.socyal.sc.api.type.error.CheckinLikeErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.MerchantQrMappingErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.app.merchant.CheckinErrorCodeType;
-import in.socyal.sc.app.merchant.MerchantQrMappingErrorCodeType;
+import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
+import in.socyal.sc.date.type.DateFormatType;
+import in.socyal.sc.date.util.Clock;
+import in.socyal.sc.date.util.DayUtil;
+import in.socyal.sc.helper.JwtTokenDetailsHelper;
+import in.socyal.sc.helper.async.AsyncExecutor;
+import in.socyal.sc.helper.async.SimpleCallable;
 import in.socyal.sc.helper.distance.DistanceHelper;
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.helper.facebook.OAuth2FbHelper;
+import in.socyal.sc.notification.NotificationCreator;
+import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.CheckinTaggedUserMappingDao;
+import in.socyal.sc.persistence.CheckinUserLikeMappingDao;
+import in.socyal.sc.persistence.FeedbackDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantQrMappingDao;
 import in.socyal.sc.persistence.UserDao;
-import in.socyal.sc.persistence.entity.CheckinTaggedUserEntity;
+import in.socyal.sc.persistence.UserFollowerMappingDao;
+import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Service
 public class CheckinDelegateImpl implements CheckinDelegate {
 	private static final Logger LOG = Logger.getLogger(CheckinDelegateImpl.class);
+	private static final String CHECKIN_CANCELLED_BY_MERCHANT = "Your checkin has been cancelled by the restaurant";
+
 	@Autowired
 	CheckinDao checkinDao;
 	@Autowired
@@ -52,57 +93,464 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Autowired
 	UserDao userDao;
 	@Autowired
-	JwtTokenHelper jwtHelper;
+	CheckinUserLikeMappingDao checkinLikeDao;
+	@Autowired
+	UserDaoMapper userMapper;
+	@Autowired
+	OAuth2FbHelper fbHelper;
+	@Autowired
+	Clock clock;
+	@Autowired
+	CheckinDelegateMapper checkinMapper;
+	@Autowired
+	DayUtil dayUtil;
+	@Autowired
+	UserFollowerMappingDao userFollowerDao;
+	@Autowired
+	FeedbackDao feedbackDao;
+	@Autowired
+	JwtTokenDetailsHelper jwtDetailsHelper;
+	@Autowired
+	NotificationDelegate notificationDelegate;
+	@Autowired
+	NotificationCreator notificationCreator;
+	@Autowired
+	AsyncExecutor async;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public List<CheckinResponseDto> getRestaurantCheckins(Integer restaurantId, Integer page) {
-		List<CheckinResponseDto> checkins = new ArrayList<>();
-		return checkins;
+	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
+		List<CheckinDto> checkins = checkinDao.getMerchantCheckins(request.getId(), request.getPage(), filter);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		// TODO : rather than hitting DB frequently fetch checkin count at once
+		for (CheckinDto checkin : checkins) {
+			Integer userId = checkin.getUser().getId();
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		// Fetching user id list whom the current user is following including
+		// current user
+		List<Integer> userIds = userFollowerDao.fetchMyFriendsIds(jwtDetailsHelper.getCurrentUserId());
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(userIds, request.getPage(), filter);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		// TODO : rather than hitting DB frequently fetch checkin count at once
+		for (Integer userId : userIds) {
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
+		List<CheckinDto> checkins = checkinDao.getUserCheckins(Collections.singletonList(request.getUserId()),
+				request.getPage(), filter);
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		userApprovedCheckins.put(request.getUserId(), checkinDao.getUserCheckinCount(request.getUserId()));
+		checkinMapper.map(checkins, response, userApprovedCheckins);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
+		FeedsResponse response = new FeedsResponse();
+		// TODO: Fix this condition for fetching data only in a particular city
+		// based on location
+		List<CheckinDto> checkins = null;
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
+		if (jwtDetailsHelper.isUserLoggedIn()) {
+			checkins = checkinDao.getAroundMeFeeds(jwtDetailsHelper.getCurrentUserId(), request.getPage(), filter);
+		} else {
+			checkins = checkinDao.getAroundMeFeeds(null, request.getPage(), filter);
+		}
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		// TODO : rather than hitting DB frequently fetch checkin count at once
+		for (CheckinDto checkin : checkins) {
+			Integer userId = checkin.getUser().getId();
+			userApprovedCheckins.put(userId, checkinDao.getUserCheckinCount(userId));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
+		return response;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
-		// Added by Akash : on confirm checkin, location check will be made
-		// again
-		MerchantQrMappingDto qrMapping = qrMappingDao.getMerchantQrMapping(request.getQrCode());
-		if (qrMapping == null) {
-			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
+		// TODO : Temporarily commenting Share on FB logic until Bananaa App is
+		// registered with FB
+		/*
+		 * if (request.getShareOnFb()) { checkForTokenValidity(); }
+		 */
+		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
+		validateQrCodeStatusAndCheckinLocation(request.getLocation(), qrMappingDetails);
+		CheckinDetailsDto dto = prepareCheckinDetails(request, qrMappingDetails.getMerchant());
+		Integer checkinId = checkinDao.confirmCheckin(dto);
+		List<UserDto> taggedUserDetails = tagUsers(request, checkinId);
+		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
+		response.setCheckinId(checkinId);
+		response.setMerchantId(qrMappingDetails.getMerchant().getId());
+		response.setMerchantName(qrMappingDetails.getMerchant().getName());
+		response.setPreviousCheckinCount(checkinDao.getUserCheckinsCountForAMerchant(
+				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
+		response.setShortAddress(qrMappingDetails.getMerchant().getAddress().getLocality().getShortAddress());
+		if (taggedUserDetails != null) {
+			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
+		}
+		int userId = jwtDetailsHelper.getCurrentUserId();
+		int merchantId = qrMappingDetails.getMerchant().getId();
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createCheckinNotificationToMerchant(checkinId, userId, merchantId));
+				return null;
+			}
+		});
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
+		ValidateCheckinResponse response = new ValidateCheckinResponse();
+		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
+		validateQrCodeStatusAndCheckinLocation(request.getLocation(), qrMappingDetails);
+		response.setPreviousCheckinCount(checkinDao.getUserCheckinsCountForAMerchant(
+				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
+		response.setMerchantName(qrMappingDetails.getMerchant().getName());
+		response.setShortAddress(qrMappingDetails.getMerchant().getAddress().getLocality().getShortAddress());
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
+		CancelCheckinResponse response = new CancelCheckinResponse();
+		checkinDao.cancelCheckin(request.getId());
+		return response;
+	}
+
+	// @Override
+	// @Deprecated
+	// @Transactional(propagation = Propagation.REQUIRES_NEW)
+	// public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request)
+	// throws BusinessException {
+	// CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true,
+	// true);
+	// CheckinDto checkin = checkinDao.getCheckin(request.getId(), filter);
+	// if (checkin == null) {
+	// LOG.error("Checkin not found while trying to fetch checkin status :" +
+	// request.getId());
+	// throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+	// }
+	//
+	// // Fetch previous checkin count
+	// Integer checkinCount =
+	// checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
+	// checkin.getMerchantId());
+	// GetCheckinStatusResponse response = new GetCheckinStatusResponse();
+	// response.setCheckinId(checkin.getId());
+	// response.setMerchantId(checkin.getMerchantId());
+	// response.setMerchantName(checkin.getMerchantQrMapping().getMerchant().getName());
+	// response.setShortAddress(checkin.getMerchantQrMapping().getMerchant().getAddress().getLocality().getShortAddress());
+	// response.setCheckinStatus(checkin.getStatus());
+	// if (checkin.getStatus() == CheckinStatusType.PENDING) {
+	// response.setPreviousCheckinCount(checkinCount);
+	// response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
+	// } else if (checkin.getStatus() == CheckinStatusType.APPROVED) {
+	// response.setNewCheckinCount(checkinCount);
+	// response.setPreviousCheckinCount(checkinCount - 1);
+	// response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
+	// }
+	// return response;
+	// }
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request) throws BusinessException {
+		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
+		CheckinDto checkin = checkinDao.getCheckin(request.getId(), filter);
+		if (checkin == null) {
+			LOG.error("Checkin not found while trying to fetch checkin status, Checkin ID : " + request.getId());
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 
-		Boolean isNearBy = DistanceHelper.isNearBy(request.getLocation().getLatitude(),
-				request.getLocation().getLongitude(), qrMapping.getMerchant().getAddress().getLatitude(),
-				qrMapping.getMerchant().getAddress().getLongitude());
-		if (!isNearBy) {
+		response.setCheckinId(checkin.getId());
+		response.setMerchantId(checkin.getMerchantId());
+		if (checkin.getStatus() == CheckinStatusType.PENDING) {
+			response.setCheckinStatus(checkin.getStatus());
+		} else if (checkin.getStatus() == CheckinStatusType.APPROVED) {
+			filter = new CheckinFilterCriteria(true, true, true);
+			checkin = checkinDao.getCheckin(request.getId(), filter);
+			response.setCheckinStatus(checkin.getStatus());
+			response.setMerchantName(checkin.getMerchantQrMapping().getMerchant().getName());
+			// Fetch previous checkin count
+			Integer checkinCount = checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
+					checkin.getMerchantId());
+			response.setShortAddress(
+					checkin.getMerchantQrMapping().getMerchant().getAddress().getLocality().getShortAddress());
+			response.setNewCheckinCount(checkinCount);
+			response.setPreviousCheckinCount(checkinCount - 1);
+			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
+		} else if (checkin.getStatus() == CheckinStatusType.MERCHANT_CANCELLED) {
+			response.setCheckinStatus(CheckinStatusType.CANCELLED);
+			response.setCancelMessage(CHECKIN_CANCELLED_BY_MERCHANT);
+		}
+
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
+		LikeCheckinResponse response = new LikeCheckinResponse();
+		// validate whether current user is logged in or not
+		if (!jwtDetailsHelper.isUserLoggedIn()) {
+			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		// validate whether checkin already exists
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId(), filter);
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+
+		// not required - just ignore if already liked
+		// Write logic for validating whether a LIKE was already done
+		// if (checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(),
+		// jwtDetailsHelper.getCurrentUserId())) {
+		// throw new
+		// BusinessException(CheckinLikeErrorCodeType.CHECKIN_ALREADY_LIKED);
+		// }
+		checkinLikeDao.likeACheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentUserId());
+		response.setLikeCount(fetchLikeCount(request.getCheckinId()));
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException {
+		LikeCheckinResponse response = new LikeCheckinResponse();
+		// validate whether current user is logged in or not
+		if (!jwtDetailsHelper.isUserLoggedIn()) {
+			throw new BusinessException(CheckinLikeErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		// validate whether checkin already exists
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId(), filter);
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+
+		// not required - just ignore if already unliked
+		// Write logic for validating whether a LIKE was done or not
+		// if (!checkinLikeDao.isCurrentCheckinLiked(request.getCheckinId(),
+		// jwtDetailsHelper.getCurrentUserId())) {
+		// throw new
+		// BusinessException(CheckinLikeErrorCodeType.CHECKIN_NOT_LIKED);
+		// }
+		checkinLikeDao.unLikeACheckin(request.getCheckinId(), jwtDetailsHelper.getCurrentUserId());
+		response.setLikeCount(fetchLikeCount(request.getCheckinId()));
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request) {
+		GetBusinessCheckinsResponse response = new GetBusinessCheckinsResponse();
+		Calendar checkinDate = getDateFromIdentifier(request.getDateIdentifier());
+		Calendar checkinNextDate = getImmediateNextDateFromIdentifier(request.getDateIdentifier());
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
+		List<CheckinDto> checkins = checkinDao.getBusinessCheckins(request.getPage(), checkinDate, checkinNextDate,
+				jwtDetailsHelper.getCurrentMerchantId(), filter);
+		response.setDate(dayUtil.formatDate(checkinDate, DateFormatType.DATE_FORMAT_DD_MM_YYYY));
+		response.setCheckinCount(checkinDao.getBusinessCheckinsCountPerDay(request.getPage(), checkinDate,
+				checkinNextDate, jwtDetailsHelper.getCurrentMerchantId()));
+		Map<Integer, Integer> userApprovedCheckins = new HashMap<>();
+		for (CheckinDto checkin : checkins) {
+			Integer userId = checkin.getUser().getId();
+			userApprovedCheckins.put(userId,
+					checkinDao.getUserCheckinsCountForAMerchant(userId, checkin.getMerchantId()));
+		}
+		checkinMapper.map(checkins, response, userApprovedCheckins);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
+			throws BusinessException {
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
+		CheckinDto checkin = checkinDao.getCheckin(request.getCheckinId(), filter);
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchantId());
+		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
+			throws BusinessException {
+		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
+		List<CheckinDto> checkins = checkinDao.getBusinessCheckinHistory(request.getPage(),
+				jwtDetailsHelper.getCurrentMerchantId(), request.getUserId(), filter);
+		checkinMapper.map(checkins, response);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessCheckinDetailsResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
+			throws BusinessException {
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
+		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId(), filter);
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchantId());
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createCancelCheckinNotificationToCustomer(checkin));
+				return null;
+			}
+		});
+		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public BusinessCheckinDetailsResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
+			throws BusinessException {
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
+		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId(), filter);
+		if (checkin == null) {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
+		}
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchantId());
+		// FIXME : userCheckinCount doesn't updates for this current APPROVED
+		// checkin because of current checkin object not geting persisted untill
+		// the end of session, therefore doing it manually
+		userCheckinCount++;
+		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchantId());
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createApproveCheckinNotificationToCustomer(checkin));
+				return null;
+			}
+		});
+		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
+		return response;
+	}
+
+	private Integer fetchLikeCount(Integer checkinId) {
+		return checkinLikeDao.fetchLikeCount(checkinId);
+	}
+
+	private Calendar getDateFromIdentifier(Integer identifier) {
+		Calendar date = clock.cal();
+		date.add(Calendar.DAY_OF_MONTH, (-1 * (identifier)));
+		return date;
+	}
+
+	private Calendar getImmediateNextDateFromIdentifier(Integer identifier) {
+		Calendar date = clock.cal();
+		date.add(Calendar.DAY_OF_MONTH, ((-1 * (identifier)) + 1));
+		return date;
+	}
+
+	@SuppressWarnings("unused")
+	private void checkForTokenValidity() throws BusinessException {
+		boolean isTokenValid = false;
+		UserDto user = userDao.fetchUser(jwtDetailsHelper.getCurrentUserId());
+		if (user == null) {
+			throw new BusinessException(CheckinErrorCodeType.USER_NOT_FOUND);
+		}
+		try {
+			isTokenValid = fbHelper.checkForTokenValidity(user.getFacebookToken());
+		} catch (FacebookOAuthException e) {
+			LOG.error("Error while inspecting user token from FB, UserId : " + user.getId() + ", Error Message : "
+					+ e.getErrorMessage());
+		}
+		if (!isTokenValid) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+	}
+
+	private MerchantQrMappingDto getQrDetails(String qrCode) throws BusinessException {
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(false, true);
+		MerchantQrMappingDto qrMappingDetails = qrMappingDao.getMerchantQrMapping(qrCode, filter);
+		if (qrMappingDetails == null) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
+		}
+		return qrMappingDetails;
+	}
+
+	private void validateQrCodeStatusAndCheckinLocation(Location location, MerchantQrMappingDto qrMappingDetails) {
+		if (!qrMappingDetails.getStatus()) {
+			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_DISABLED);
+		}
+		Boolean isQrCodeInRange = DistanceHelper.isCoordinateInRange(location.getLatitude(), location.getLongitude(),
+				qrMappingDetails.getMerchant().getAddress().getLatitude(),
+				qrMappingDetails.getMerchant().getAddress().getLongitude());
+		if (!isQrCodeInRange) {
 			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
 		}
-		// TODO : Perform all these operations in a transaction
-		ConfirmCheckinResponse response = new ConfirmCheckinResponse();
-		// Fetching Merchant Details
-		MerchantDto merchant = getMerchantDetailsFromQrMapping(request.getQrCode());
-		// Preparing CheckIn Details
-		CheckinDetailsDto dto = prepareCheckinDetails(request, merchant);
-		// Performing A CheckIn
-		Integer checkinId = checkinDao.confirmCheckin(dto);
+	}
+
+	private List<UserDto> tagUsers(ConfirmCheckinRequest request, Integer checkinId) {
 		List<UserDto> taggedUserDetails = null;
-		// Tagging the users to a CheckIn
 		if (request.getTaggedUsers() != null && !request.getTaggedUsers().isEmpty()) {
 			taggedUserDetails = getTaggedUserDetails(request.getTaggedUsers());
 			taggedUserDao.tagUsersToACheckin(checkinId, request.getTaggedUsers());
 		}
+		return taggedUserDetails;
+	}
 
-		// Building confirm checkin response
-		response.setCheckinId(checkinId);
-		response.setMerchantId(merchant.getId());
-		response.setMerchantName(merchant.getName());
-		response.setPreviousCheckinCount(dto.getPreviousCheckinCount());
-		response.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
-		if (taggedUserDetails != null) {
-			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
+	private CheckinDetailsDto prepareCheckinDetails(ConfirmCheckinRequest request, MerchantDto merchant)
+			throws BusinessException {
+		CheckinDetailsDto checkinDetails = new CheckinDetailsDto();
+		checkinDetails.setMerchantId(merchant.getId());
+		checkinDetails.setUserId(jwtDetailsHelper.getCurrentUserId());
+		checkinDetails.setCheckinDateTime(clock.cal());
+		checkinDetails.setUpdatedDateTime(clock.cal());
+		checkinDetails.setQrCode(request.getQrCode());
+		checkinDetails.setStatus(CheckinStatusType.PENDING);
+		checkinDetails.setRewardStatus(RewardStatusType.NOT_GIVEN);
+		checkinDetails.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+		return checkinDetails;
+	}
+
+	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {
+		return userDao.fetchUsersByIds(taggedUserIds);
+	}
+
+	private List<TaggedUserResponse> getTaggedUsersInCheckin(List<CheckinTaggedUserDto> taggedUsers) {
+		List<UserDto> users = new ArrayList<>();
+		for (CheckinTaggedUserDto taggedUser : taggedUsers) {
+			users.add(taggedUser.getUser());
 		}
-
-		return response;
+		return createTaggedUserResponse(users);
 	}
 
 	private List<TaggedUserResponse> createTaggedUserResponse(List<UserDto> taggedUserDetails) {
@@ -114,133 +562,5 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			list.add(taggedUserResponse);
 		}
 		return list;
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
-		ValidateCheckinResponse response = new ValidateCheckinResponse();
-		MerchantQrMappingDto qrMapping = qrMappingDao.getMerchantQrMapping(request.getQrCode());
-		if (qrMapping == null) {
-			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
-		}
-
-		Boolean isNearBy = DistanceHelper.isNearBy(request.getLocation().getLatitude(),
-				request.getLocation().getLongitude(), qrMapping.getMerchant().getAddress().getLatitude(),
-				qrMapping.getMerchant().getAddress().getLongitude());
-		if (!isNearBy) {
-			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_LOCATION_OUT_OF_RANGE);
-		}
-
-		response.setPreviousCheckinCount(
-				checkinDao.getPreviousCheckins(getCurrentUserId(), qrMapping.getMerchant().getId()));
-		response.setMerchantName(qrMapping.getMerchant().getName());
-		response.setShortAddress(qrMapping.getMerchant().getAddress().getLocality().getShortAddress());
-		return response;
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
-		CancelCheckinResponse response = new CancelCheckinResponse();
-		CheckinDto checkin = checkinDao.getCheckin(request.getId());
-		if (checkin == null) {
-			LOG.error("Cancel checkin failed because Checkin ID was not found :" + request.getId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		} else if (CheckinStatusType.CANCELLED == checkin.getStatus()) {
-			LOG.error("Checkin is already cancelled for checkinID:" + request.getId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED);
-		}
-		checkinDao.cancelCheckin(request.getId());
-		return response;
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request) throws BusinessException {
-		CheckinDto checkin = checkinDao.getCheckin(request.getId());
-		if (checkin == null) {
-			LOG.error("Checkin not found while getting checkin status :" + request.getId());
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		}
-
-		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
-		response.setCheckinId(checkin.getId());
-		response.setPreviousCheckinCount(checkin.getPreviousCheckinCount());
-		response.setMerchantId(checkin.getMerchant().getId());
-		response.setMerchantName(checkin.getMerchant().getName());
-		response.setShortAddress(checkin.getMerchant().getAddress().getLocality().getShortAddress());
-
-		// FIXME : implements actual logic
-		// adding temporary logic to return different statuses for testing
-		// purpose
-		if (checkin.getId() % 3 == 0) {
-			response.setCheckinStatus(CheckinStatusType.APPROVED);
-			response.setNewCheckinCount(checkin.getPreviousCheckinCount() + 1);
-			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
-		} else if (checkin.getId() % 3 == 1) {
-			response.setCheckinStatus(CheckinStatusType.CANCELLED);
-			response.setCancelMessage("Your checkin has been cancelled by Merchant");
-		} else {
-			response.setCheckinStatus(CheckinStatusType.PENDING);
-			// FIXME : Need to keep the logic to fetch tagged users in cache
-			response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getId()));
-		}
-
-		return response;
-	}
-
-	private CheckinDetailsDto prepareCheckinDetails(ConfirmCheckinRequest request, MerchantDto merchant)
-			throws BusinessException {
-		CheckinDetailsDto checkinDetails = new CheckinDetailsDto();
-		checkinDetails.setMerchantId(merchant.getId());
-		Integer userId = getCurrentUserId();
-		checkinDetails.setUserId(userId);
-		checkinDetails.setCheckinDateTime(Calendar.getInstance());
-		checkinDetails.setUpdatedDateTime(Calendar.getInstance());
-		checkinDetails.setPreviousCheckinCount(getPreviousCheckins(userId, merchant.getId()));
-		checkinDetails.setQrCode(request.getQrCode());
-		checkinDetails.setStatus(CheckinStatusType.PENDING);
-		return checkinDetails;
-	}
-
-	private MerchantDto getMerchantDetailsFromQrMapping(String qrCode) throws BusinessException {
-		MerchantQrMappingDto dto = qrMappingDao.getMerchantQrMapping(qrCode);
-		if (dto == null) {
-			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_NOT_FOUND);
-		}
-
-		return dto.getMerchant();
-	}
-
-	private Integer getPreviousCheckins(Integer userId, Integer merchantId) {
-		return checkinDao.getPreviousCheckins(userId, merchantId);
-	}
-
-	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {
-		List<UserDto> taggedUserDetails = new ArrayList<>();
-		for (Integer userId : taggedUserIds) {
-			// FIXME : Instead of single user per DB call, pass list of user ids
-			// and get back list of users
-			UserDto user = userDao.fetchUser(userId);
-			if (user == null) {
-				throw new BusinessException(CheckinErrorCodeType.USER_NOT_FOUND);
-			}
-			taggedUserDetails.add(user);
-		}
-		return taggedUserDetails;
-	}
-
-	private List<TaggedUserResponse> getTaggedUsersInCheckin(Integer checkinId) {
-		List<CheckinTaggedUserEntity> taggedUserEntities = taggedUserDao.getTaggedUsers(checkinId);
-		List<Integer> taggedUserEntityIds = new ArrayList<>();
-		for (CheckinTaggedUserEntity entity : taggedUserEntities) {
-			taggedUserEntityIds.add(entity.getUserId());
-		}
-		return createTaggedUserResponse(getTaggedUserDetails(taggedUserEntityIds));
-	}
-
-	private Integer getCurrentUserId() {
-		return Integer.valueOf(jwtHelper.getUserName());
 	}
 }

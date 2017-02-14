@@ -2,11 +2,11 @@ package in.socyal.sc.api.checkin.request;
 
 import java.io.Serializable;
 
-import in.socyal.sc.api.merchant.request.LocationRequest;
+import in.socyal.sc.api.merchant.dto.Location;
 
 public class ValidateCheckinRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private LocationRequest location;
+	private Location location;
 	private String qrCode;
 
 	public String getQrCode() {
@@ -17,11 +17,11 @@ public class ValidateCheckinRequest implements Serializable {
 		this.qrCode = qrCode;
 	}
 
-	public LocationRequest getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
-	public void setLocation(LocationRequest location) {
+	public void setLocation(Location location) {
 		this.location = location;
 	}
 }

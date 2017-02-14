@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,14 +16,14 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 
 public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-	public JwtAuthenticationFilter() {
-		super("/**");
+	public JwtAuthenticationFilter(String defaultProcessingUrl) {
+		super(defaultProcessingUrl);
 	}
 
-	@Override
+	/*@Override
 	protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		return true;
-	}
+	}*/
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -31,9 +32,9 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 		String header = request.getHeader("Authorization");
 
 		if (header == null || !header.startsWith("Bearer ")) {
-			// throw new JwtTokenMissingException("No JWT token found in request
-			// headers");
-			throw new RuntimeException("No JWT token found in request headers");
+			//throw new JwtTokenMissingException("No JWT token found in request headers");
+			//throw new RuntimeException("No JWT token found in request headers");
+			throw new AuthenticationCredentialsNotFoundException("No JWT token found in request headers");
 		}
 
 		String authToken = header.substring(7);

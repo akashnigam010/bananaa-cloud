@@ -1,22 +1,31 @@
 package in.socyal.sc.api.checkin.dto;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import in.socyal.sc.api.feedback.dto.FeedbackDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.qr.dto.MerchantQrMappingDto;
 import in.socyal.sc.api.type.CheckinStatusType;
+import in.socyal.sc.api.type.RewardStatusType;
+import in.socyal.sc.api.user.dto.UserDto;
 
 public class CheckinDto {
 	private Integer id;
-	private Integer userId;
-	private MerchantDto merchant;
+	private UserDto user;
+	private Integer merchantId;
 	private CheckinStatusType status;
-	private Integer likeCount;
-	private String qrCode;
-	private Integer previousCheckinCount;
+	private MerchantQrMappingDto merchantQrMapping;
 	private String rewardMessage;
+	private RewardStatusType rewardStatus;
 	private Calendar checkinDateTime;
 	private Calendar approvedDateTime;
 	private Calendar updatedDateTime;
+	private List<CheckinTaggedUserDto> taggedUsers;
+	private Integer likeCount;
+	private boolean liked;
+	private FeedbackDto feedback;
 
 	public Integer getId() {
 		return id;
@@ -26,20 +35,12 @@ public class CheckinDto {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
-		return userId;
+	public UserDto getUser() {
+		return user;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public MerchantDto getMerchant() {
-		return merchant;
-	}
-
-	public void setMerchant(MerchantDto merchant) {
-		this.merchant = merchant;
+	public void setUser(UserDto user) {
+		this.user = user;
 	}
 
 	public CheckinStatusType getStatus() {
@@ -50,28 +51,12 @@ public class CheckinDto {
 		this.status = status;
 	}
 
-	public Integer getLikeCount() {
-		return likeCount;
+	public MerchantQrMappingDto getMerchantQrMapping() {
+		return merchantQrMapping;
 	}
 
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
-	}
-
-	public String getQrCode() {
-		return qrCode;
-	}
-
-	public void setQrCode(String qrCode) {
-		this.qrCode = qrCode;
-	}
-
-	public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
+	public void setMerchantQrMapping(MerchantQrMappingDto merchantQrMapping) {
+		this.merchantQrMapping = merchantQrMapping;
 	}
 
 	public String getRewardMessage() {
@@ -104,5 +89,56 @@ public class CheckinDto {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public List<CheckinTaggedUserDto> getTaggedUsers() {
+		if (taggedUsers == null) {
+			return new ArrayList<>();
+		}
+		return taggedUsers;
+	}
+
+	public void setTaggedUsers(List<CheckinTaggedUserDto> taggedUsers) {
+		this.taggedUsers = taggedUsers;
+	}
+
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public boolean isLiked() {
+		return liked;
+	}
+
+	public void setLiked(boolean liked) {
+		this.liked = liked;
+	}
+
+	public RewardStatusType getRewardStatus() {
+		return rewardStatus;
+	}
+
+	public void setRewardStatus(RewardStatusType rewardStatus) {
+		this.rewardStatus = rewardStatus;
+	}
+
+	public FeedbackDto getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(FeedbackDto feedback) {
+		this.feedback = feedback;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
 	}
 }

@@ -18,19 +18,19 @@ public class MerchantQrMappingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "QR_CODE")
 	private String qrCode;
+	
+	@Column(name = "ID")
+	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MERCHANT_ID")
 	private MerchantEntity merchant;
 	
 	@Column(name = "CARD_ID")
-	private Integer cardId;
+	private String cardId;
 	
 	@Column(name = "STATUS")
 	private Boolean status;
@@ -59,11 +59,11 @@ public class MerchantQrMappingEntity implements Serializable {
 		this.merchant = merchant;
 	}
 
-	public Integer getCardId() {
+	public String getCardId() {
 		return cardId;
 	}
 
-	public void setCardId(Integer cardId) {
+	public void setCardId(String cardId) {
 		this.cardId = cardId;
 	}
 
