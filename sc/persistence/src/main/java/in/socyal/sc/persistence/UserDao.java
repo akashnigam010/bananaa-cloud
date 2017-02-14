@@ -172,9 +172,10 @@ public class UserDao {
     private String discoverNewUsersQuery() {
     	StringBuilder query = new StringBuilder();
     	query.append("SELECT * FROM Socyal.USER ");
-    	query.append("where FIRST_NAME LIKE :search_string OR LAST_NAME LIKE :search_string ");
+    	query.append("where (FIRST_NAME LIKE :search_string OR LAST_NAME LIKE :search_string) ");
     	query.append("AND ID NOT IN ");
     	query.append("(SELECT USER_ID FROM Socyal.USER_FOLLOWER_MAPPING WHERE FOLLOWER_USER_ID = :current_user_id) ");
+    	query.append("AND ID != :current_user_id ");
     	return query.toString();
     }
 }
