@@ -33,6 +33,7 @@ public class MerchantDaoMapper {
 
 	public void map(MerchantEntity entity, MerchantDto dto, MerchantFilterCriteria filter) {
 		dto.setId(entity.getId());
+		dto.setNameId(entity.getNameId());
 		dto.setName(entity.getName());
 		if (filter.getMapImage()) {
 			dto.setImageUrl(entity.getImageUrl());

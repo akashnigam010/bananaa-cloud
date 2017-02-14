@@ -142,6 +142,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		for (MerchantDto dto : merchants) {
 			MerchantResponse merchant = new MerchantResponse();
 			merchant.setId(dto.getId());
+			merchant.setNameId(dto.getNameId());
 			merchant.setName(dto.getName());
 			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchantResponse.add(merchant);
@@ -154,6 +155,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<MerchantResponse> merchantResponse = new ArrayList<>();
 		for (MerchantDto dto : merchants) {
 			MerchantResponse merchant = new MerchantResponse();
+			merchant.setNameId(dto.getNameId());
 			merchant.setId(dto.getId());
 			merchant.setImageUrl(dto.getImageUrl());
 			merchant.setIsOpen(isOpen(dto.getTimings()));
@@ -225,6 +227,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		// longitude
 		response.setDistance(null);
 		response.setId(merchantDto.getId());
+		response.setNameId(merchantDto.getNameId());
 		response.setImageUrl(merchantDto.getImageUrl());
 		response.setIsOpen(isOpen(merchantDto.getTimings()));
 		response.setLocation(buildLocationResponse(merchantDto.getAddress()));

@@ -9,6 +9,7 @@ import in.socyal.sc.api.response.GenericResponse;
 public class MerchantDetailsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private String nameId;
 	private String name;
 	private String shortAddress;
 	private Integer checkins;
@@ -151,5 +152,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }
