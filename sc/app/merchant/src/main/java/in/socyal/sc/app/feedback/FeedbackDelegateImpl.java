@@ -16,6 +16,8 @@ import in.socyal.sc.api.reward.response.RewardStatusResponse;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
+import in.socyal.sc.helper.async.AsyncExecutor;
+import in.socyal.sc.helper.async.SimpleCallable;
 import in.socyal.sc.notification.NotificationCreator;
 import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
@@ -35,6 +37,8 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	NotificationDelegate notificationDelegate;
 	@Autowired
 	NotificationCreator notificationCreator;
+	@Autowired
+	AsyncExecutor async;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -54,8 +58,13 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, true, false);
 		CheckinDto checkin = dao.saveFeedback(request.getCheckinId(), request, filter);
 		checkAndSetRewardDetails(checkin, response);
-		// TODO : notify merchant asynchronously
-		notificationDelegate.sendDataNotification(notificationCreator.createSubmitFeedbackNotificationToMerchant(checkin));
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createSubmitFeedbackNotificationToMerchant(checkin));
+				return null;
+			}
+		});
 		return response;
 	}
 
@@ -66,8 +75,13 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 		CheckinDto checkin = dao.saveFeedbackStatus(request.getCheckinId(), FeedbackStatusType.ASKED, filter);
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
-		// FIXME : Notify customer asynchronously
-		notificationDelegate.sendDataNotification(notificationCreator.createAskFeedbackNotificationToCustomer(checkin));
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createAskFeedbackNotificationToCustomer(checkin));
+				return null;
+			}
+		});
 		return mapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 	}
 

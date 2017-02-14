@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonArray;
 
@@ -29,6 +31,7 @@ public class NotificationDelegateImpl implements NotificationDelegate {
 	NotificationsService pushNotificationsService;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SendTestNotificationResponse sendDataNotification(NotificationRequest request) throws BusinessException {
 		JSONObject body = createDefaultMessageBody(request);
 		body.put("data", createDataPayload(request));

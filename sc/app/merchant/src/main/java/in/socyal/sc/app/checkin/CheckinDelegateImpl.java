@@ -61,6 +61,8 @@ import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.JwtTokenDetailsHelper;
+import in.socyal.sc.helper.async.AsyncExecutor;
+import in.socyal.sc.helper.async.SimpleCallable;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.notification.NotificationCreator;
@@ -112,6 +114,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	NotificationDelegate notificationDelegate;
 	@Autowired
 	NotificationCreator notificationCreator;
+	@Autowired
+	AsyncExecutor async;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -206,9 +210,15 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		if (taggedUserDetails != null) {
 			response.setTaggedUsers(createTaggedUserResponse(taggedUserDetails));
 		}
-		// FIXME send notification to the MERCHANT - asynchronously
-		notificationDelegate.sendDataNotification(notificationCreator.createCheckinNotificationToMerchant(checkinId,
-				jwtDetailsHelper.getCurrentUserId(), qrMappingDetails.getMerchant().getId()));
+		int userId = jwtDetailsHelper.getCurrentUserId();
+		int merchantId = qrMappingDetails.getMerchant().getId();
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createCheckinNotificationToMerchant(checkinId, userId, merchantId));
+				return null;
+			}
+		});
 		return response;
 	}
 
@@ -415,9 +425,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId(), filter);
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
-		// FIXME notify user asynchronously
-		notificationDelegate
-				.sendDataNotification(notificationCreator.createCancelCheckinNotificationToCustomer(checkin));
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createCancelCheckinNotificationToCustomer(checkin));
+				return null;
+			}
+		});
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
 	}
@@ -438,9 +452,13 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		// the end of session, therefore doing it manually
 		userCheckinCount++;
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchantId());
-		// FIXME notify user asynchronously
-		notificationDelegate
-				.sendDataNotification(notificationCreator.createApproveCheckinNotificationToCustomer(checkin));
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createApproveCheckinNotificationToCustomer(checkin));
+				return null;
+			}
+		});
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
 	}

@@ -21,6 +21,8 @@ import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
 import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
 import in.socyal.sc.app.rewards.mapper.RewardsDelegateMapper;
+import in.socyal.sc.helper.async.AsyncExecutor;
+import in.socyal.sc.helper.async.SimpleCallable;
 import in.socyal.sc.notification.NotificationCreator;
 import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
@@ -41,6 +43,8 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	NotificationDelegate notificationDelegate;
 	@Autowired
 	NotificationCreator notificationCreator;
+	@Autowired
+	AsyncExecutor async;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -58,9 +62,13 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 		CheckinDto checkin = dao.saveReward(request, filter);
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
-		// FIXME : notify user asynchronously
-		notificationDelegate
-				.sendDataNotification(notificationCreator.createSubmitRewardNotificationToCustomer(checkin));
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createSubmitRewardNotificationToCustomer(checkin));
+				return null;
+			}
+		});
 		return checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 	}
 

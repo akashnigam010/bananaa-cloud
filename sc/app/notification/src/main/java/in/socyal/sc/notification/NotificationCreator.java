@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.checkin.dto.CheckinDto;
 import in.socyal.sc.api.login.request.Data;
@@ -33,6 +35,7 @@ public class NotificationCreator {
 	@Autowired
 	CheckinDao checkinDao;
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public NotificationRequest createCheckinNotificationToMerchant(Integer checkinId, Integer userId,
 			Integer merchantId) {
 		NotificationRequest notificationRequest = new NotificationRequest();
@@ -48,6 +51,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public NotificationRequest createSubmitFeedbackNotificationToMerchant(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle(checkin.getUser().getName() + " has provided feedback");
@@ -61,6 +65,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public NotificationRequest createApproveCheckinNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Yay! your checkin is confirmed");
@@ -71,6 +76,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public NotificationRequest createCancelCheckinNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Uh oh! your checkin was cancelled");
@@ -81,6 +87,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public NotificationRequest createSubmitRewardNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Hi there! you won a surprise gift");
@@ -95,6 +102,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public NotificationRequest createAskFeedbackNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Liked or not ?");
