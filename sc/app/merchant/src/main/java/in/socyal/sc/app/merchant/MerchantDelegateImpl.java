@@ -47,12 +47,18 @@ import in.socyal.sc.persistence.MerchantLoginDao;
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
 	private static final Logger LOG = Logger.getLogger(MerchantDelegateImpl.class);
-	@Autowired MerchantDao dao;
-	@Autowired MerchantDelegateMapper mapper;
-	@Autowired DayUtil dayUtil;
-	@Autowired Clock clock;
-	@Autowired MerchantLoginDao merchantLoginDao;
-	@Autowired JwtTokenHelper jwtHelper;
+	@Autowired
+	MerchantDao dao;
+	@Autowired
+	MerchantDelegateMapper mapper;
+	@Autowired
+	DayUtil dayUtil;
+	@Autowired
+	Clock clock;
+	@Autowired
+	MerchantLoginDao merchantLoginDao;
+	@Autowired
+	JwtTokenHelper jwtHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -61,7 +67,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
 		mapper.map(request, requestDto);
 		List<MerchantDto> merchants = null;
-		//TODO - FIX ME: Decide on what Default sorting needs to be happened
+		// TODO - FIX ME: Decide on what Default sorting needs to be happened
 		MerchantListSortType sortType = MerchantListSortType.DISTANCE;
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, true, false);
 		if (sortType == MerchantListSortType.RATING || sortType == MerchantListSortType.PROMOTION) {
@@ -69,7 +75,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		} else {
 			merchants = dao.getMerchantsByDistance(requestDto, filter);
 		}
-		
+
 		if (merchants == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}
@@ -79,8 +85,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
-			throws BusinessException {
+	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
 		MerchantDto merchantDto = dao.getMerchantDetails(request.getId(), filter);
@@ -103,7 +108,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString(), filter);
 		if (merchants != null) {
 			buildSearchMerchantsResponse(merchants, response);
-		}		
+		}
 		return response;
 	}
 
@@ -114,7 +119,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		mapper.map(request, merchantDto);
 		dao.saveMerchantDetails(merchantDto);
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
@@ -131,9 +136,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 					+ " and deviceId:" + getCurrentDeviceId());
 			throw new BusinessException(MerchantLoginErrorCodeType.MERCHANT_DEVICE_DETAILS_FOUND);
 		}
-		merchantLoginDao.saveRegistrationIdForMerchant(getCurrentMerchantId(), 
-													   getCurrentDeviceId(), 
-													   request.getRegistrationId());
+		merchantLoginDao.saveRegistrationIdForMerchant(getCurrentMerchantId(), getCurrentDeviceId(),
+				request.getRegistrationId());
 		return response;
 	}
 
@@ -142,6 +146,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		for (MerchantDto dto : merchants) {
 			MerchantResponse merchant = new MerchantResponse();
 			merchant.setId(dto.getId());
+			merchant.setNameId(dto.getNameId());
 			merchant.setName(dto.getName());
 			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchantResponse.add(merchant);
@@ -154,6 +159,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<MerchantResponse> merchantResponse = new ArrayList<>();
 		for (MerchantDto dto : merchants) {
 			MerchantResponse merchant = new MerchantResponse();
+			merchant.setNameId(dto.getNameId());
 			merchant.setId(dto.getId());
 			merchant.setImageUrl(dto.getImageUrl());
 			merchant.setIsOpen(isOpen(dto.getTimings()));
@@ -187,8 +193,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
 				String timeStr = dayUtil.formatDate(today, DateFormatType.DATE_FORMAT_24_HOUR);
-				Integer time = Integer.parseInt(timeStr);
-				if (time >= dto.getOpen() && time < dto.getClose()) {
+				if (Integer.parseInt(timeStr) >= Integer.parseInt(dto.getOpen())
+						&& Integer.parseInt(timeStr) < Integer.parseInt(dto.getClose())) {
 					return Boolean.TRUE;
 				}
 
@@ -225,6 +231,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		// longitude
 		response.setDistance(null);
 		response.setId(merchantDto.getId());
+		response.setNameId(merchantDto.getNameId());
 		response.setImageUrl(merchantDto.getImageUrl());
 		response.setIsOpen(isOpen(merchantDto.getTimings()));
 		response.setLocation(buildLocationResponse(merchantDto.getAddress()));
@@ -234,7 +241,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
-		//FIXME: Fetch correct previousCheckinCount details
+		// FIXME: Fetch correct previousCheckinCount details
 		response.setPreviousCheckinCount(12);
 		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
 			response.setPhone(merchantDto.getContact().getPhone1());
@@ -247,11 +254,11 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;
 	}
-	
+
 	private Integer getCurrentMerchantId() {
 		return Integer.valueOf(jwtHelper.getMerchantId());
 	}
-	
+
 	private Integer getCurrentDeviceId() {
 		return Integer.valueOf(jwtHelper.getDeviceId());
 	}
