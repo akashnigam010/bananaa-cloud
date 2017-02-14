@@ -18,6 +18,7 @@ import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.type.MerchantListSortType;
+import in.socyal.sc.api.type.error.MerchantErrorCodeType;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 
@@ -89,6 +90,8 @@ public class MerchantDao {
     	if (entity != null) {
     		dto = new MerchantDto();
     		mapper.map(entity, dto, filter);
+    	} else {
+    		throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
     	}
     	
     	return dto;

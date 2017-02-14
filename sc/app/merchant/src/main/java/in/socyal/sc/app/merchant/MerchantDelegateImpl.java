@@ -38,27 +38,23 @@ import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
+import in.socyal.sc.helper.JwtTokenDetailsHelper;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
-import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantLoginDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
 	private static final Logger LOG = Logger.getLogger(MerchantDelegateImpl.class);
-	@Autowired
-	MerchantDao dao;
-	@Autowired
-	MerchantDelegateMapper mapper;
-	@Autowired
-	DayUtil dayUtil;
-	@Autowired
-	Clock clock;
-	@Autowired
-	MerchantLoginDao merchantLoginDao;
-	@Autowired
-	JwtTokenHelper jwtHelper;
+	@Autowired MerchantDao dao;
+	@Autowired CheckinDao checkinDao;
+	@Autowired MerchantDelegateMapper mapper;
+	@Autowired DayUtil dayUtil;
+	@Autowired Clock clock;
+	@Autowired MerchantLoginDao merchantLoginDao;
+	@Autowired JwtTokenDetailsHelper jwtDetailsHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -67,7 +63,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
 		mapper.map(request, requestDto);
 		List<MerchantDto> merchants = null;
-		// TODO - FIX ME: Decide on what Default sorting needs to be happened
+		//TODO - FIX ME: Decide on what Default sorting needs to be happened
 		MerchantListSortType sortType = MerchantListSortType.DISTANCE;
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, true, false);
 		if (sortType == MerchantListSortType.RATING || sortType == MerchantListSortType.PROMOTION) {
@@ -75,7 +71,6 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		} else {
 			merchants = dao.getMerchantsByDistance(requestDto, filter);
 		}
-
 		if (merchants == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}
@@ -85,15 +80,18 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException {
+	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
+			throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
 		MerchantDto merchantDto = dao.getMerchantDetails(request.getId(), filter);
-		if (merchantDto == null) {
-			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
-		}
 		try {
-			buildMerchantDetailsResponse(merchantDto, response);
+			int previousCheckinCount = 0;
+			if (jwtDetailsHelper.isUserLoggedIn()) {
+				previousCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
+						request.getId());
+			}
+			buildMerchantDetailsResponse(merchantDto, response, previousCheckinCount);
 		} catch (ParseException e) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
 		}
@@ -126,17 +124,19 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			throws BusinessException {
 		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(false);
-		MerchantDto merchant = dao.getMerchantDetails(getCurrentMerchantId(), filter);
+		Integer currentMerchantId = jwtDetailsHelper.getCurrentMerchantId();
+		Integer currentMerchantDeviceId = jwtDetailsHelper.getCurrentMerchantDeviceId();
+		MerchantDto merchant = dao.getMerchantDetails(currentMerchantId, filter);
 		if (merchant == null) {
-			LOG.error("Exception occured: merchant details not found for merchantId:" + getCurrentMerchantId());
+			LOG.error("Exception occured: merchant details not found for merchantId:" + currentMerchantId);
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);
 		}
-		if (!merchantLoginDao.isMerchantLoginDetailsPresent(getCurrentMerchantId(), getCurrentDeviceId())) {
-			LOG.error("Exception occured: business device details not found for merchantId:" + getCurrentMerchantId()
-					+ " and deviceId:" + getCurrentDeviceId());
+		if (!merchantLoginDao.isMerchantLoginDetailsPresent(currentMerchantId, currentMerchantId)) {
+			LOG.error("Exception occured: business device details not found for merchantId:" + currentMerchantId
+					+ " and deviceId:" + currentMerchantId);
 			throw new BusinessException(MerchantLoginErrorCodeType.MERCHANT_DEVICE_DETAILS_FOUND);
 		}
-		merchantLoginDao.saveRegistrationIdForMerchant(getCurrentMerchantId(), getCurrentDeviceId(),
+		merchantLoginDao.saveRegistrationIdForMerchant(currentMerchantId, currentMerchantDeviceId,
 				request.getRegistrationId());
 		return response;
 	}
@@ -222,13 +222,12 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return openStr + " to " + closeStr;
 	}
 
-	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response)
-			throws ParseException {
+	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response,
+			int previousCheckinCount) throws ParseException {
 		response.setAverageCost(merchantDto.getAverageCost().intValue()+ " for 2");
 		response.setCheckins(merchantDto.getCheckins());
 		response.setCuisines(merchantDto.getCuisines());
-		// For calculating distance we need user's current place latitude and
-		// longitude
+		// For calculating distance we need user's current place latitude and longitude
 		response.setDistance(null);
 		response.setId(merchantDto.getId());
 		response.setNameId(merchantDto.getNameId());
@@ -241,8 +240,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setRating(merchantDto.getRating());
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
-		// FIXME: Fetch correct previousCheckinCount details
-		response.setPreviousCheckinCount(12);
+		response.setPreviousCheckinCount(previousCheckinCount);
 		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
 			response.setPhone(merchantDto.getContact().getPhone1());
 		}
@@ -253,13 +251,5 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		locationResponse.setLatitude(address.getLatitude());
 		locationResponse.setLongitude(address.getLongitude());
 		return locationResponse;
-	}
-
-	private Integer getCurrentMerchantId() {
-		return Integer.valueOf(jwtHelper.getMerchantId());
-	}
-
-	private Integer getCurrentDeviceId() {
-		return Integer.valueOf(jwtHelper.getDeviceId());
 	}
 }

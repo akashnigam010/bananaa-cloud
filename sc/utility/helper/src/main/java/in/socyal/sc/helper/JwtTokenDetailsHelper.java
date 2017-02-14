@@ -58,4 +58,8 @@ public class JwtTokenDetailsHelper {
 	public Integer getCurrentMerchantId() {
 		return Integer.valueOf(jwtHelper.getMerchantId());
 	}
+	
+	public Integer getCurrentMerchantDeviceId() {
+		return Integer.valueOf(jwtHelper.getDeviceId());
+	}
 }
