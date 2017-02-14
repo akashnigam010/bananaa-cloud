@@ -89,24 +89,6 @@ public class MerchantDaoMapper {
 		return dto;
 	}
 
-	public Set<TimingEntity> mapTimingEntities(Set<TimingDto> dtos) {
-		Set<TimingEntity> entities = new HashSet<>();
-		for (TimingDto dto : dtos) {
-			entities.add(mapTimingEntity(dto));
-		}
-		return entities;
-	}
-
-	public TimingEntity mapTimingEntity(TimingDto dto) {
-		TimingEntity entity = new TimingEntity();
-		entity.setId(dto.getId());
-		entity.setMerchantId(dto.getMerchantId());
-		entity.setDay(dto.getDay());
-		entity.setOpen(dto.getOpen());
-		entity.setClose(dto.getClose());
-		return entity;
-	}
-
 	public void map(ContactEntity from, ContactDto to) {
 		to.setEmail(from.getEmail());
 		to.setId(from.getId());
