@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
 import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
 import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
@@ -30,15 +32,14 @@ import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.MerchantListSortType;
+import in.socyal.sc.api.type.error.MerchantErrorCodeType;
+import in.socyal.sc.api.type.error.MerchantLoginErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
-import in.socyal.sc.app.merchant.type.MerchantErrorCodeType;
-import in.socyal.sc.app.merchant.type.MerchantLoginErrorCodeType;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
-import in.socyal.sc.helper.exception.BusinessException;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.MerchantLoginDao;
@@ -62,10 +63,11 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<MerchantDto> merchants = null;
 		//TODO - FIX ME: Decide on what Default sorting needs to be happened
 		MerchantListSortType sortType = MerchantListSortType.DISTANCE;
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, true, false);
 		if (sortType == MerchantListSortType.RATING || sortType == MerchantListSortType.PROMOTION) {
-			merchants = dao.getMerchantsByRatingOrPromotion(requestDto, sortType);
+			merchants = dao.getMerchantsByRatingOrPromotion(requestDto, sortType, filter);
 		} else {
-			merchants = dao.getMerchantsByDistance(requestDto);
+			merchants = dao.getMerchantsByDistance(requestDto, filter);
 		}
 		
 		if (merchants == null) {
@@ -80,7 +82,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
 			throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
-		MerchantDto merchantDto = dao.getMerchantDetails(request.getId());
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
+		MerchantDto merchantDto = dao.getMerchantDetails(request.getId(), filter);
 		if (merchantDto == null) {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
 		}
@@ -96,7 +99,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
-		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString());
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(false, true, false, false, false, false);
+		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString(), filter);
 		if (merchants != null) {
 			buildSearchMerchantsResponse(merchants, response);
 		}		
@@ -116,7 +120,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
 			throws BusinessException {
 		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
-		MerchantDto merchant = dao.getMerchantDetails(getCurrentMerchantId());
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(false);
+		MerchantDto merchant = dao.getMerchantDetails(getCurrentMerchantId(), filter);
 		if (merchant == null) {
 			LOG.error("Exception occured: merchant details not found for merchantId:" + getCurrentMerchantId());
 			throw new BusinessException(MerchantErrorCodeType.MERCHANTS_NOT_FOUND);

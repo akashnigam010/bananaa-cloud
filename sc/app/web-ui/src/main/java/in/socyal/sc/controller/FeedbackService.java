@@ -6,18 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.feedback.business.request.BusinessAskFeedbackRequest;
-import in.socyal.sc.api.feedback.business.request.BusinessCancelFeedbackRequest;
-import in.socyal.sc.api.feedback.business.response.BusinessAskFeedbackResponse;
-import in.socyal.sc.api.feedback.business.response.BusinessCancelFeedbackResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
 import in.socyal.sc.api.feedback.request.FeedbackRequest;
 import in.socyal.sc.api.feedback.request.SubmitFeedbackRequest;
+import in.socyal.sc.api.helper.ResponseHelper;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.reward.response.RewardStatusResponse;
 import in.socyal.sc.app.feedback.FeedbackDelegate;
 import in.socyal.sc.core.validation.FeedbackValidator;
 import in.socyal.sc.helper.JsonHelper;
-import in.socyal.sc.helper.ResponseHelper;
-import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
 @RequestMapping(value = "/socyal/feedback")
@@ -29,12 +26,10 @@ public class FeedbackService {
 	@Autowired
 	FeedbackDelegate delegate;
 
-	// FIXME : Add new service - Ask for Feedback
-
-	// FIXME : Add new service - Cancel Feedback
-
 	/**
-	 * Response of dismiss feedback service returns the status of the reward message
+	 * Response of dismiss feedback service returns the status of the reward
+	 * message
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -44,16 +39,7 @@ public class FeedbackService {
 		RewardStatusResponse response = new RewardStatusResponse();
 		try {
 			validator.validateFeedbackRequest(request);
-			// FIXME : Add actual logic to set DISMISS status of feedback for a checkin
-			// FIXME : Add actual logic to fetch reward status for a checkin
-			response.setCheckinId(request.getCheckinId());
-			if (request.getCheckinId() % 2 == 0) {
-				response.setShowReward(Boolean.FALSE);
-			} else {
-				response.setShowReward(Boolean.TRUE);
-				response.setRewardMessage(
-						"Won an exciting gift card worth Rs. 100 and additional discount worth Rs. 250");
-			}
+			response = delegate.dismissFeedback(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
@@ -61,7 +47,9 @@ public class FeedbackService {
 	}
 
 	/**
-	 * Response of submit feedback service returns the status of the reward message
+	 * Response of submit feedback service returns the status of the reward
+	 * message
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -71,41 +59,32 @@ public class FeedbackService {
 		RewardStatusResponse response = new RewardStatusResponse();
 		try {
 			validator.validateSubmitFeedbackRequest(request);
-			// FIXME : Add actual logic to set SUBMITTED status of feedback for a checkin
-			// FIXME : Add actual logic to fetch reward status for a checkin
-			response.setCheckinId(request.getCheckinId());
-			if (request.getCheckinId() % 2 == 0) {
-				response.setShowReward(Boolean.FALSE);
-			} else {
-				response.setShowReward(Boolean.TRUE);
-				response.setRewardMessage(
-						"Won an exciting gift card worth Rs. 100 and additional discount worth Rs. 250");
-			}
+			response = delegate.submitFeedback(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/businessAskFeedback", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessAskFeedbackResponse businessAskFeedback(@RequestBody BusinessAskFeedbackRequest request) {
+	public BusinessCheckinDetailsResponse businessAskFeedback(@RequestBody FeedbackRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/feedback/businessAskFeedback");
-		BusinessAskFeedbackResponse response = new BusinessAskFeedbackResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
-			validator.validateBusinessAskFeedbackRequest(request);
+			validator.validateFeedbackRequest(request);
 			response = delegate.businessAskFeedback(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/businessCancelFeedback", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessCancelFeedbackResponse businessCancelFeedback(@RequestBody BusinessCancelFeedbackRequest request) {
+	public BusinessCheckinDetailsResponse businessCancelFeedback(@RequestBody FeedbackRequest request) {
 		JsonHelper.logRequest(request, CheckinService.class, "/feedback/businessCancelFeedback");
-		BusinessCancelFeedbackResponse response = new BusinessCancelFeedbackResponse();
+		BusinessCheckinDetailsResponse response = new BusinessCheckinDetailsResponse();
 		try {
-			validator.validateBusinessCancelFeedbackRequest(request);
+			validator.validateFeedbackRequest(request);
 			response = delegate.businessCancelFeedback(request);
 			return helper.success(response);
 		} catch (BusinessException e) {

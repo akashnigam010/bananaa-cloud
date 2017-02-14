@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.helper.ResponseHelper;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
 import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
@@ -19,8 +21,6 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.validation.MerchantValidator;
 import in.socyal.sc.helper.JsonHelper;
-import in.socyal.sc.helper.ResponseHelper;
-import in.socyal.sc.helper.exception.BusinessException;
 
 @RestController
 @RequestMapping(value = "/socyal/merchant")

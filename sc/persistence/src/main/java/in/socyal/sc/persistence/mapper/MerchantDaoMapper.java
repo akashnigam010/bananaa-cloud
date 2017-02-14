@@ -13,6 +13,7 @@ import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.ContactDto;
 import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
@@ -22,36 +23,51 @@ import in.socyal.sc.persistence.entity.TimingEntity;
 
 @Component
 public class MerchantDaoMapper {
-	public void map(List<MerchantEntity> from, List<MerchantDto> to) {
+	public void map(List<MerchantEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
-			map(entity, dto, true);
+			map(entity, dto, filter);
 			to.add(dto);
 		}
 	}
 
-	public void map(MerchantEntity entity, MerchantDto dto, Boolean mapFullDetails) {
+	public void map(MerchantEntity entity, MerchantDto dto, MerchantFilterCriteria filter) {
 		dto.setId(entity.getId());
-		dto.setImageUrl(entity.getImageUrl());
 		dto.setName(entity.getName());
-		if (entity.getAddress() != null) {
-			AddressDto addressDto = new AddressDto();
-			map(entity.getAddress(), addressDto);
-			dto.setAddress(addressDto);
+		if (filter.getMapImage()) {
+			dto.setImageUrl(entity.getImageUrl());
 		}
-		if (mapFullDetails) {
+		
+		if (filter.getMapAddress()) {
+			if (entity.getAddress() != null) {
+				AddressDto addressDto = new AddressDto();
+				map(entity.getAddress(), addressDto);
+				dto.setAddress(addressDto);
+			}
+		}		
+		
+		if (filter.getMapTimings()) {
 			dto.setTimings(mapTimingDtos(entity.getTimings()));
+		}
+		
+		if (filter.getMapRating()) {
 			dto.setRating(entity.getRating());
+		}
+		
+		if (filter.getMapCheckins()) {
+			dto.setCheckins(entity.getCheckins());
+		}
+		
+		if (filter.getMapOtherDetails()) {
 			dto.setAverageCost(entity.getAverageCost());
+			dto.setCuisines(parseToList(entity.getCuisine()));
+			dto.setTypes(parseToList(entity.getType()));
 			if (entity.getContact() != null) {
 				ContactDto contactDto = new ContactDto();
 				map(entity.getContact(), contactDto);
 				dto.setContact(contactDto);
 			}
-			dto.setCheckins(entity.getCheckins());
-			dto.setCuisines(parseToList(entity.getCuisine()));
-			dto.setTypes(parseToList(entity.getType()));
-		}		
+		}
 	}
 
 	public Set<TimingDto> mapTimingDtos(Set<TimingEntity> entities) {

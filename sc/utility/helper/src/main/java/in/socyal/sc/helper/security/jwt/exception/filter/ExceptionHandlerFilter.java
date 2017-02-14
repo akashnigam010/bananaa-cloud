@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import in.socyal.sc.api.ArrayOfStatusCode;
 import in.socyal.sc.api.StatusCode;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.response.GenericResponse;
-import in.socyal.sc.helper.exception.BusinessException;
-import in.socyal.sc.helper.type.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 	private static final Logger LOG = Logger.getLogger(ExceptionHandlerFilter.class);

@@ -8,17 +8,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import in.socyal.sc.api.checkin.business.response.BusinessApproveCheckinResponse;
-import in.socyal.sc.api.checkin.response.UserDetailsResponse;
+import in.socyal.sc.api.checkin.business.response.BusinessCheckinDetailsResponse;
+import in.socyal.sc.api.checkin.dto.CheckinDto;
+import in.socyal.sc.api.checkin.dto.CheckinFilterCriteria;
+import in.socyal.sc.api.feedback.response.FeedbackStatusResponse;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.reward.business.response.GetBusinessRewardsResponse;
+import in.socyal.sc.api.reward.request.RewardRequest;
 import in.socyal.sc.api.reward.request.SubmitRewardsRequest;
-import in.socyal.sc.api.reward.response.SubmitRewardsResponse;
 import in.socyal.sc.api.rewards.dto.RewardsDto;
-import in.socyal.sc.api.type.CheckinStatusType;
 import in.socyal.sc.api.type.FeedbackStatusType;
 import in.socyal.sc.api.type.RewardStatusType;
+import in.socyal.sc.app.checkin.mapper.CheckinDelegateMapper;
 import in.socyal.sc.app.rewards.mapper.RewardsDelegateMapper;
-import in.socyal.sc.helper.exception.BusinessException;
+import in.socyal.sc.helper.async.AsyncExecutor;
+import in.socyal.sc.helper.async.SimpleCallable;
+import in.socyal.sc.notification.NotificationCreator;
+import in.socyal.sc.notification.NotificationDelegate;
+import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.RewardsDao;
 
 @Service
@@ -27,8 +34,18 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	@Autowired
 	RewardsDao dao;
 	@Autowired
+	CheckinDao checkinDao;
+	@Autowired
 	RewardsDelegateMapper mapper;
-	
+	@Autowired
+	CheckinDelegateMapper checkinMapper;
+	@Autowired
+	NotificationDelegate notificationDelegate;
+	@Autowired
+	NotificationCreator notificationCreator;
+	@Autowired
+	AsyncExecutor async;
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public GetBusinessRewardsResponse getRewardsList(Integer merchantId) throws BusinessException {
@@ -40,19 +57,40 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public SubmitRewardsResponse submitRewards(SubmitRewardsRequest request) throws BusinessException {
-		SubmitRewardsResponse response = new SubmitRewardsResponse();
-		UserDetailsResponse userDetails = new UserDetailsResponse();
-		userDetails.setId(6);
-		userDetails.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c1.0.160.160/p160x160/15578891_1180564885332226_632797692936181444_n.jpg?oh=7834859a26b7b40c9801ad1e563e9015&oe=58FF1D94");
-		userDetails.setName("Akash Nigam");
-		userDetails.setUserCheckins(54);
-		response.setUser(userDetails);
-		response.setCardNumber(4);
-		response.setCheckinStatus(CheckinStatusType.APPROVED);
-		response.setRewardStatus(RewardStatusType.GIVEN);
-		response.setRewardMessage("Won amazon gift voucher worth Rs. 1500!");
-		response.setFeedbackStatus(FeedbackStatusType.NOT_ASKED);
+	public BusinessCheckinDetailsResponse submitRewards(SubmitRewardsRequest request) throws BusinessException {
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
+		CheckinDto checkin = dao.saveReward(request, filter);
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
+				checkin.getMerchantId());
+		async.submit(new SimpleCallable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				notificationDelegate.sendDataNotification(notificationCreator.createSubmitRewardNotificationToCustomer(checkin));
+				return null;
+			}
+		});
+		return checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public FeedbackStatusResponse dismissReward(RewardRequest request) throws BusinessException {
+		FeedbackStatusResponse response = new FeedbackStatusResponse();
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, false, false);
+		CheckinDto checkin = dao.saveRewardStatus(request.getCheckinId(), RewardStatusType.SEEN, filter);
+		checkAndSetFeedbackDetails(checkin, response);
 		return response;
+	}
+
+	private void checkAndSetFeedbackDetails(CheckinDto checkin, FeedbackStatusResponse response) {
+		if (checkin.getFeedback().getStatus() == FeedbackStatusType.ASKED) {
+			response.setCheckinId(checkin.getId());
+			response.setShowFeedback(true);
+			response.setMerchantName(checkin.getMerchantQrMapping().getMerchant().getName());
+			response.setShortAddress(
+					checkin.getMerchantQrMapping().getMerchant().getAddress().getLocality().getShortAddress());
+		} else {
+			response.setShowFeedback(false);
+		}
 	}
 }

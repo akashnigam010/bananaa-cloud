@@ -33,14 +33,22 @@ public class UserFollowerMappingDao {
 	}
 	
 	public void follow(Integer userId, Integer followerUserId) {
-		UserFollowerMappingEntity entity = new UserFollowerMappingEntity();
-		UserEntity user = new UserEntity();
-		user.setId(userId);
-		entity.setUser(user);
-		UserEntity followerUser = new UserEntity();
-		followerUser.setId(followerUserId);
-		entity.setFollowerUser(followerUser);
-		sessionFactory.getCurrentSession().save(entity);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+    	criteria.add(Restrictions.eq("user.id", userId));
+    	criteria.add(Restrictions.eq("followerUser.id", followerUserId));
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+    	
+    	if (result.size() == 0) {
+    		UserFollowerMappingEntity entity = new UserFollowerMappingEntity();
+    		UserEntity user = new UserEntity();
+    		user.setId(userId);
+    		entity.setUser(user);
+    		UserEntity followerUser = new UserEntity();
+    		followerUser.setId(followerUserId);
+    		entity.setFollowerUser(followerUser);
+    		sessionFactory.getCurrentSession().save(entity);
+    	}
 	}
 	
 	public Boolean isAlreadyFollowing(Integer userId, Integer followerUserId) {
@@ -54,10 +62,18 @@ public class UserFollowerMappingDao {
 
 	public void unFollow(Integer userId, Integer followerUserId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
-		criteria.add(Restrictions.eq("user.id", userId));
+    	criteria.add(Restrictions.eq("user.id", userId));
     	criteria.add(Restrictions.eq("followerUser.id", followerUserId));
-    	UserFollowerMappingEntity entity = (UserFollowerMappingEntity) criteria.uniqueResult();
-    	sessionFactory.getCurrentSession().delete(entity);
+    	@SuppressWarnings("unchecked")
+		List<CheckinEntity> result = criteria.list();
+    	
+    	if (result.size() > 0) {
+    		Criteria criteria2 = sessionFactory.getCurrentSession().createCriteria(UserFollowerMappingEntity.class);
+    		criteria2.add(Restrictions.eq("user.id", userId));
+        	criteria2.add(Restrictions.eq("followerUser.id", followerUserId));
+        	UserFollowerMappingEntity entity = (UserFollowerMappingEntity) criteria2.uniqueResult();
+        	sessionFactory.getCurrentSession().delete(entity);
+    	}
 	}
 
 	public List<UserDto> fetchMyFriendsByPage(Integer page, Integer currentUserId) {
