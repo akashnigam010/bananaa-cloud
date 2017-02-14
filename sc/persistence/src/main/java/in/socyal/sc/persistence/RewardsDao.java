@@ -96,15 +96,16 @@ public class RewardsDao {
 	}
 
 	private String createRewardMessage(SubmitRewardsRequest request) {
-		String rewardMessage = "";
+		String rewardMessage = "Won ";
 		List<RewardsEntity> rewardsEntities = fetchRewardEntites(request.getRewards());
 		if (rewardsEntities.size() == 0 && request.getDiscount() != null) {
-			rewardMessage += "Discount worth Rs. " + request.getDiscount();
+			rewardMessage += "a discount worth Rs. " + request.getDiscount();
 		} else if (rewardsEntities.size() != 0 && request.getDiscount() == null) {
 			boolean isMorethanOne = false;
 			int i = 0;
 			for (i = 0; i < rewardsEntities.size() - 1; i++) {
-				rewardMessage += rewardsEntities.get(i).getReward();
+				rewardMessage += getPreposition(rewardsEntities.get(i).getReward()) + " "
+						+ rewardsEntities.get(i).getReward();
 				if (i < rewardsEntities.size() - 2) {
 					rewardMessage += ", ";
 				} else {
@@ -115,22 +116,35 @@ public class RewardsDao {
 			if (isMorethanOne) {
 				rewardMessage += "and ";
 			}
-			rewardMessage += rewardsEntities.get(i).getReward();
+			rewardMessage += getPreposition(rewardsEntities.get(i).getReward()) + " "
+					+ rewardsEntities.get(i).getReward();
 		} else if (rewardsEntities.size() != 0 && request.getDiscount() != null) {
 			int i = 0;
 			for (i = 0; i < rewardsEntities.size() - 1; i++) {
-				rewardMessage += rewardsEntities.get(i).getReward();
+				rewardMessage += getPreposition(rewardsEntities.get(i).getReward()) + " "
+						+ rewardsEntities.get(i).getReward();
 				if (i < rewardsEntities.size() - 1) {
 					rewardMessage += ", ";
 				} else {
 					rewardMessage += " ";
 				}
 			}
-			rewardMessage += rewardsEntities.get(i).getReward();
-			rewardMessage += " and Discount worth Rs. " + request.getDiscount();
+			rewardMessage += getPreposition(rewardsEntities.get(i).getReward()) + " "
+					+ rewardsEntities.get(i).getReward();
+			rewardMessage += " and a discount worth Rs. " + request.getDiscount();
 		}
 
 		return rewardMessage;
+	}
+
+	private String getPreposition(String word) {
+		char initChar = word.charAt(0);
+		if (initChar == 'a' || initChar == 'A' || initChar == 'e' || initChar == 'E' || initChar == 'i'
+				|| initChar == 'I' || initChar == 'o' || initChar == 'O' || initChar == 'u' || initChar == 'U') {
+			return "an";
+		} else {
+			return "a";
+		}
 	}
 
 	@SuppressWarnings("unchecked")
