@@ -20,7 +20,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private List<String> openingHours;
 	private List<String> cuisines;
 	private List<String> type;
-	private Double averageCost;
+	private String averageCost;
 	private String longAddress;
 	private Location location;
 	private Integer previousCheckinCount;
@@ -106,11 +106,11 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.type = type;
 	}
 
-	public Double getAverageCost() {
+	public String getAverageCost() {
 		return averageCost;
 	}
 
-	public void setAverageCost(Double averageCost) {
+	public void setAverageCost(String averageCost) {
 		this.averageCost = averageCost;
 	}
 

@@ -224,7 +224,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response)
 			throws ParseException {
-		response.setAverageCost(merchantDto.getAverageCost());
+		response.setAverageCost(merchantDto.getAverageCost().intValue()+ " for 2");
 		response.setCheckins(merchantDto.getCheckins());
 		response.setCuisines(merchantDto.getCuisines());
 		// For calculating distance we need user's current place latitude and
