@@ -2,6 +2,7 @@ package in.socyal.sc.controller;
 
 import java.util.ResourceBundle;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.type.CityType;
@@ -17,6 +19,7 @@ import in.socyal.sc.helper.security.jwt.JwtHelper;
 
 @Controller
 public class PageController {
+	private static final Logger LOG = Logger.getLogger(PageController.class);
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
 	private static final String HOME_URL = "home.url";
 	private static final String HOME_TITLE = "home.title";
@@ -33,7 +36,7 @@ public class PageController {
 	}
 	
 	@RequestMapping(value = "/hyderabad", method = RequestMethod.GET)
-	public ModelAndView city() {
+	public ModelAndView city() throws BusinessException {
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("accessToken", JwtHelper.createJsonWebTokenForGuest());
 		modelAndView.addObject("city", "hyderabad");
@@ -74,7 +77,7 @@ public class PageController {
 	}
 	
 	@RequestMapping(value = "/hyderabad/{id}", method = RequestMethod.GET)
-	public ModelAndView details(@PathVariable String id) {
+	public ModelAndView details(@PathVariable String id) throws BusinessException {
 		MerchantDetailsRequest request = new MerchantDetailsRequest();
 		request.setId(Integer.parseInt(id));
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);

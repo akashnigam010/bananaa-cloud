@@ -75,8 +75,9 @@ public class JwtHelper {
 	 * @param userId
 	 * @param durationInDays
 	 * @return
+	 * @throws BusinessException 
 	 */
-	public static String createJsonWebTokenForUser(String userId) {
+	public static String createJsonWebTokenForUser(String userId) throws BusinessException {
 		// Current time and signing algorithm
 		Calendar cal = Calendar.getInstance();
 		HmacSHA256Signer signer;
@@ -105,7 +106,7 @@ public class JwtHelper {
 		}
 	}
 	
-	public static String createJsonWebTokenForGuest() {
+	public static String createJsonWebTokenForGuest() throws BusinessException {
 		// Current time and signing algorithm
 		Calendar cal = Calendar.getInstance();
 		HmacSHA256Signer signer;
@@ -133,7 +134,7 @@ public class JwtHelper {
 		}
 	}
 	
-	public static String createJsonWebTokenForMerchant(String deviceId, String merchantId) {
+	public static String createJsonWebTokenForMerchant(String deviceId, String merchantId) throws BusinessException {
 		// Current time and signing algorithm
 		Calendar cal = Calendar.getInstance();
 		HmacSHA256Signer signer;
@@ -169,6 +170,7 @@ public class JwtHelper {
 	 * 
 	 * @param token
 	 * @return
+	 * @throws BusinessException 
 	 * @throws SignatureException
 	 * @throws InvalidKeyException
 	 */
@@ -229,11 +231,11 @@ public class JwtHelper {
 			return null;
 		} catch (InvalidKeyException e) {
 			LOG.error("Exception occured for invalid key while verifying JWT token ", e);
-			throw new BusinessException(GenericErrorCodeType.JWT_TOKEN_EXPIRED);
+			throw new AuthenticationCredentialsNotFoundException("Token expired! Kindly login again");
 		}
 	}
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws BusinessException {
 		System.out.println(createJsonWebTokenForUser("5"));
 	}
 	

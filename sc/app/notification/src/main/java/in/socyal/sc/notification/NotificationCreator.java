@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.checkin.dto.CheckinDto;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.Data;
 import in.socyal.sc.api.login.request.NotificationRequest;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -35,7 +36,7 @@ public class NotificationCreator {
 	@Autowired
 	CheckinDao checkinDao;
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public NotificationRequest createCheckinNotificationToMerchant(Integer checkinId, Integer userId,
 			Integer merchantId) {
 		NotificationRequest notificationRequest = new NotificationRequest();
@@ -51,7 +52,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public NotificationRequest createSubmitFeedbackNotificationToMerchant(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle(checkin.getUser().getName() + " has provided feedback");
@@ -65,7 +66,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public NotificationRequest createApproveCheckinNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Yay! your checkin is confirmed");
@@ -76,7 +77,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public NotificationRequest createCancelCheckinNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Uh oh! your checkin was cancelled");
@@ -87,7 +88,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public NotificationRequest createSubmitRewardNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Hi there! you won a surprise gift");
@@ -102,7 +103,7 @@ public class NotificationCreator {
 		return notificationRequest;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public NotificationRequest createAskFeedbackNotificationToCustomer(CheckinDto checkin) {
 		NotificationRequest notificationRequest = new NotificationRequest();
 		notificationRequest.setTitle("Liked or not ?");
