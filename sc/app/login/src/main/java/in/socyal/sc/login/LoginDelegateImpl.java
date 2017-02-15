@@ -52,7 +52,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	MerchantDao merchantDao;
 
 	@Override
-	public LoginResponse skipLogin() {
+	public LoginResponse skipLogin() throws BusinessException {
 		LoginResponse response = new LoginResponse();
 		// Sets JWT access token
 		response.setAccessToken(JwtHelper.createJsonWebTokenForGuest());
@@ -61,7 +61,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public LoginResponse fbLogin(LoginRequest request) throws BusinessException {
 		LoginResponse response = new LoginResponse();
 		try {
@@ -83,8 +83,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public BusinessLoginResponse businessLogin(BusinessLoginRequest request) {
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public BusinessLoginResponse businessLogin(BusinessLoginRequest request) throws BusinessException {
 		BusinessLoginResponse response = new BusinessLoginResponse();
 		MerchantLoginDto merchantLoginDto = merchantLoginDao.validateBusinessUser(request.getUsername(), request.getPassword());
 		if (merchantLoginDto == null) {

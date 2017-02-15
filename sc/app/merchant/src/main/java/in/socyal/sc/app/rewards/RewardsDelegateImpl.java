@@ -47,7 +47,7 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	AsyncExecutor async;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public GetBusinessRewardsResponse getRewardsList(Integer merchantId) throws BusinessException {
 		GetBusinessRewardsResponse response = new GetBusinessRewardsResponse();
 		List<RewardsDto> result = dao.fetchRewardsList(merchantId);
@@ -56,7 +56,7 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse submitRewards(SubmitRewardsRequest request) throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
 		CheckinDto checkin = dao.saveReward(request, filter);
@@ -73,7 +73,7 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FeedbackStatusResponse dismissReward(RewardRequest request) throws BusinessException {
 		FeedbackStatusResponse response = new FeedbackStatusResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, false, false);

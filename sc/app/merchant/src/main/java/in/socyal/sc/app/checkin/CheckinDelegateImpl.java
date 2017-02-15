@@ -118,7 +118,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	AsyncExecutor async;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FeedsResponse getMerchantCheckins(GetMerchantCheckinsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
@@ -134,7 +134,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FeedsResponse getMyFeeds(MyFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		// Fetching user id list whom the current user is following including
@@ -152,7 +152,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FeedsResponse getProfileFeeds(ProfileFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, true);
@@ -165,7 +165,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FeedsResponse getAroundMeFeeds(AroundMeFeedsRequest request) {
 		FeedsResponse response = new FeedsResponse();
 		// TODO: Fix this condition for fetching data only in a particular city
@@ -188,7 +188,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public ConfirmCheckinResponse confirmCheckin(ConfirmCheckinRequest request) throws BusinessException {
 		// TODO : Temporarily commenting Share on FB logic until Bananaa App is
 		// registered with FB
@@ -223,7 +223,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public ValidateCheckinResponse validateCheckin(ValidateCheckinRequest request) throws BusinessException {
 		ValidateCheckinResponse response = new ValidateCheckinResponse();
 		MerchantQrMappingDto qrMappingDetails = getQrDetails(request.getQrCode());
@@ -236,50 +236,15 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public CancelCheckinResponse cancelCheckin(CancelCheckinRequest request) throws BusinessException {
 		CancelCheckinResponse response = new CancelCheckinResponse();
 		checkinDao.cancelCheckin(request.getId());
 		return response;
 	}
 
-	// @Override
-	// @Deprecated
-	// @Transactional(propagation = Propagation.REQUIRES_NEW)
-	// public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request)
-	// throws BusinessException {
-	// CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true,
-	// true);
-	// CheckinDto checkin = checkinDao.getCheckin(request.getId(), filter);
-	// if (checkin == null) {
-	// LOG.error("Checkin not found while trying to fetch checkin status :" +
-	// request.getId());
-	// throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-	// }
-	//
-	// // Fetch previous checkin count
-	// Integer checkinCount =
-	// checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
-	// checkin.getMerchantId());
-	// GetCheckinStatusResponse response = new GetCheckinStatusResponse();
-	// response.setCheckinId(checkin.getId());
-	// response.setMerchantId(checkin.getMerchantId());
-	// response.setMerchantName(checkin.getMerchantQrMapping().getMerchant().getName());
-	// response.setShortAddress(checkin.getMerchantQrMapping().getMerchant().getAddress().getLocality().getShortAddress());
-	// response.setCheckinStatus(checkin.getStatus());
-	// if (checkin.getStatus() == CheckinStatusType.PENDING) {
-	// response.setPreviousCheckinCount(checkinCount);
-	// response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
-	// } else if (checkin.getStatus() == CheckinStatusType.APPROVED) {
-	// response.setNewCheckinCount(checkinCount);
-	// response.setPreviousCheckinCount(checkinCount - 1);
-	// response.setTaggedUsers(getTaggedUsersInCheckin(checkin.getTaggedUsers()));
-	// }
-	// return response;
-	// }
-
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public GetCheckinStatusResponse getCheckinStatus(CheckinRequest request) throws BusinessException {
 		GetCheckinStatusResponse response = new GetCheckinStatusResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
@@ -315,7 +280,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public LikeCheckinResponse likeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
 		// validate whether current user is logged in or not
@@ -342,7 +307,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public LikeCheckinResponse unLikeACheckin(LikeCheckinRequest request) throws BusinessException {
 		LikeCheckinResponse response = new LikeCheckinResponse();
 		// validate whether current user is logged in or not
@@ -369,7 +334,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public GetBusinessCheckinsResponse getBusinessCheckins(GetBusinessCheckinsRequest request) {
 		GetBusinessCheckinsResponse response = new GetBusinessCheckinsResponse();
 		Calendar checkinDate = getDateFromIdentifier(request.getDateIdentifier());
@@ -391,7 +356,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse getBusinessCheckinDetails(GetBusinessCheckinDetailsRequest request)
 			throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
@@ -406,7 +371,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public GetBusinessCheckinHistoryResponse getBusinessCheckinHistory(GetBusinessCheckinHistoryRequest request)
 			throws BusinessException {
 		GetBusinessCheckinHistoryResponse response = new GetBusinessCheckinHistoryResponse();
@@ -418,7 +383,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse businessCancelCheckin(BusinessCancelCheckinRequest request)
 			throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
@@ -437,7 +402,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
 			throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
@@ -506,7 +471,8 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return qrMappingDetails;
 	}
 
-	private void validateQrCodeStatusAndCheckinLocation(Location location, MerchantQrMappingDto qrMappingDetails) {
+	private void validateQrCodeStatusAndCheckinLocation(Location location, MerchantQrMappingDto qrMappingDetails)
+			throws BusinessException {
 		if (!qrMappingDetails.getStatus()) {
 			throw new BusinessException(MerchantQrMappingErrorCodeType.QR_CODE_DISABLED);
 		}
@@ -527,8 +493,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return taggedUserDetails;
 	}
 
-	private CheckinDetailsDto prepareCheckinDetails(ConfirmCheckinRequest request, MerchantDto merchant)
-			throws BusinessException {
+	private CheckinDetailsDto prepareCheckinDetails(ConfirmCheckinRequest request, MerchantDto merchant) {
 		CheckinDetailsDto checkinDetails = new CheckinDetailsDto();
 		checkinDetails.setMerchantId(merchant.getId());
 		checkinDetails.setUserId(jwtDetailsHelper.getCurrentUserId());
@@ -541,7 +506,7 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		return checkinDetails;
 	}
 
-	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) throws BusinessException {
+	private List<UserDto> getTaggedUserDetails(List<Integer> taggedUserIds) {
 		return userDao.fetchUsersByIds(taggedUserIds);
 	}
 

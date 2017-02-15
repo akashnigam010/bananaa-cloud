@@ -9,13 +9,13 @@ import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
 public class RewardsValidator {
-	public void validateSubmitRewardsRequest(SubmitRewardsRequest request) {
+	public void validateSubmitRewardsRequest(SubmitRewardsRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateRewardRequest(RewardRequest request) {
+	public void validateRewardRequest(RewardRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
