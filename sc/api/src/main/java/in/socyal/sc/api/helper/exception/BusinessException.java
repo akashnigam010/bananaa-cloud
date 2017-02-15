@@ -13,7 +13,7 @@ import in.socyal.sc.api.helper.BusinessErrorCode;
  * @author ysadula
  *
  */
-public class BusinessException extends RuntimeException implements ErrorCodesGettable {
+public class BusinessException extends Exception implements ErrorCodesGettable {
 	private static final long serialVersionUID = 1L;
 	private final List<Integer> errorCodes;
 

@@ -57,7 +57,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Autowired JwtTokenDetailsHelper jwtDetailsHelper;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public GetMerchantListResponse getMerchants(GetMerchantListRequest request) throws BusinessException {
 		GetMerchantListResponse response = new GetMerchantListResponse();
 		GetMerchantListRequestDto requestDto = new GetMerchantListRequestDto();
@@ -79,7 +79,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request)
 			throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
@@ -99,7 +99,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(false, true, false, false, false, false);
@@ -111,7 +111,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void saveMerchantDetails(SaveMerchantDetailsRequest request) throws BusinessException {
 		MerchantDto merchantDto = new MerchantDto();
 		mapper.map(request, merchantDto);
@@ -119,7 +119,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request)
 			throws BusinessException {
 		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
