@@ -405,17 +405,9 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse businessApproveCheckin(BusinessApproveCheckinRequest request)
 			throws BusinessException {
-		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
-		CheckinDto checkin = checkinDao.businessApproveCheckin(request.getCheckinId(), filter);
-		if (checkin == null) {
-			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
-		}
+		CheckinDto checkin = approveBusinessCheckin(request.getCheckinId());
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
-		// FIXME : userCheckinCount doesn't updates for this current APPROVED
-		// checkin because of current checkin object not geting persisted untill
-		// the end of session, therefore doing it manually
-		userCheckinCount++;
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchantId());
 		async.submit(new SimpleCallable<Void>() {
 			@Override
@@ -426,6 +418,12 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		});
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = BusinessException.class)
+	private CheckinDto approveBusinessCheckin(Integer checkinId) throws BusinessException {
+		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
+		return checkinDao.businessApproveCheckin(checkinId, filter);
 	}
 
 	private Integer fetchLikeCount(Integer checkinId) {

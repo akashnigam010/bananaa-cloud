@@ -310,6 +310,8 @@ public class CheckinDao {
 			} else {
 				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 			}
+		} else {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		return checkinDto;
 	}
