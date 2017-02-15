@@ -283,6 +283,10 @@ public class CheckinDao {
 			Integer merchantId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		List<CheckinStatusType> statuses = new ArrayList<>();
+		statuses.add(CheckinStatusType.APPROVED);
+		statuses.add(CheckinStatusType.PENDING);
+		criteria.add(Restrictions.in("status", statuses));
 		criteria.add(Restrictions.between("checkinDateTime", DayUtil.initialTimeOfDate(checkinDate),
 				DayUtil.initialTimeOfDate(checkinNextDate)));
 		criteria.addOrder(Order.desc("checkinDateTime"));
