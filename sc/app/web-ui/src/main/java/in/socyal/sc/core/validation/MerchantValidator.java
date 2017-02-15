@@ -14,13 +14,13 @@ public class MerchantValidator {
 		// FIXME : add validation logic
 	}
 
-	public void validateGetMerchantDetailsRequest(MerchantDetailsRequest request) {
+	public void validateGetMerchantDetailsRequest(MerchantDetailsRequest request) throws BusinessException {
 		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateSaveBusinessRegistrationIdRequest(SaveBusinessRegistrationIdRequest request) {
+	public void validateSaveBusinessRegistrationIdRequest(SaveBusinessRegistrationIdRequest request) throws BusinessException {
 		if (request.getRegistrationId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}

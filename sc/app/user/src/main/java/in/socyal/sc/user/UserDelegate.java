@@ -35,14 +35,14 @@ public interface UserDelegate {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public FriendResponse getMyFriends(GetMyFriendsRequest request);
+	public FriendResponse getMyFriends(GetMyFriendsRequest request) throws BusinessException;
 
 	/**
 	 * Fetch public profile details
 	 * @return
 	 * @throws BusinessException
 	 */
-	public UserProfileResponse getPublicProfile(GetPublicProfileRequest request);
+	public UserProfileResponse getPublicProfile(GetPublicProfileRequest request) throws BusinessException;
 
 	/**
 	 * Fetch list of friends to tag

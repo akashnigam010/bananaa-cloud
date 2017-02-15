@@ -31,7 +31,7 @@ public class NotificationDelegateImpl implements NotificationDelegate {
 	NotificationsService pushNotificationsService;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SendTestNotificationResponse sendDataNotification(NotificationRequest request) throws BusinessException {
 		JSONObject body = createDefaultMessageBody(request);
 		body.put("data", createDataPayload(request));

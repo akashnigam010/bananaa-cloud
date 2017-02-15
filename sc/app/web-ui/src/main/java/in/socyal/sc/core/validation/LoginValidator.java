@@ -11,7 +11,7 @@ import in.socyal.sc.api.type.error.LoginErrorCodeType;
 
 @Component
 public class LoginValidator {
-	public void validateFbLoginRequest(LoginRequest request) {
+	public void validateFbLoginRequest(LoginRequest request) throws BusinessException {
 		if (StringUtils.isEmpty(request.getFbId())) {
 			throw new BusinessException(LoginErrorCodeType.USER_ID_NOT_FOUND);
 		}
@@ -21,7 +21,7 @@ public class LoginValidator {
 		}
 	}
 
-	public void validateBusinessLoginRequest(BusinessLoginRequest request) {
+	public void validateBusinessLoginRequest(BusinessLoginRequest request) throws BusinessException {
 		if (StringUtils.isEmpty(request.getUsername()) || StringUtils.isEmpty(request.getPassword())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}

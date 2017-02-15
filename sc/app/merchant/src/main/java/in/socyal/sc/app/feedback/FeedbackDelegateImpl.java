@@ -41,7 +41,7 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	AsyncExecutor async;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public RewardStatusResponse dismissFeedback(FeedbackRequest request) throws BusinessException {
 		RewardStatusResponse response = new RewardStatusResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, false, false);
@@ -52,7 +52,7 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public RewardStatusResponse submitFeedback(SubmitFeedbackRequest request) throws BusinessException {
 		RewardStatusResponse response = new RewardStatusResponse();
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(false, true, false);
@@ -69,8 +69,8 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public BusinessCheckinDetailsResponse businessAskFeedback(FeedbackRequest request) {
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public BusinessCheckinDetailsResponse businessAskFeedback(FeedbackRequest request) throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
 		CheckinDto checkin = dao.saveFeedbackStatus(request.getCheckinId(), FeedbackStatusType.ASKED, filter);
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
@@ -86,7 +86,7 @@ public class FeedbackDelegateImpl implements FeedbackDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse businessCancelFeedback(FeedbackRequest request) throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
 		CheckinDto checkin = dao.saveFeedbackStatus(request.getCheckinId(), FeedbackStatusType.NOT_ASKED, filter);
