@@ -10,13 +10,13 @@ import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
 public class FeedbackValidator {
-	public void validateFeedbackRequest(FeedbackRequest request) {
+	public void validateFeedbackRequest(FeedbackRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateSubmitFeedbackRequest(SubmitFeedbackRequest request) {
+	public void validateSubmitFeedbackRequest(SubmitFeedbackRequest request) throws BusinessException {
 		if (request.getCheckinId() == null || StringUtils.isEmpty(request.getFoodRating())
 				|| StringUtils.isEmpty(request.getServiceRating())
 				|| StringUtils.isEmpty(request.getAmbienceRating())) {

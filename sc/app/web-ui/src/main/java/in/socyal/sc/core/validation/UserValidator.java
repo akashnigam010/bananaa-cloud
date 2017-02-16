@@ -20,26 +20,26 @@ public class UserValidator {
 	@Autowired
 	JwtTokenHelper jwtHelper;
 	
-	public void validateSearchFriendRequest(SearchFriendRequest request) {
+	public void validateSearchFriendRequest(SearchFriendRequest request) throws BusinessException {
 		if (StringUtils.isEmpty(request.getSearchString())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateGetMyFriendsRequest(GetMyFriendsRequest request) {
+	public void validateGetMyFriendsRequest(GetMyFriendsRequest request) throws BusinessException {
 		validateIfLoggedInUser();
 		if (request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateGetPublicProfileRequest(GetPublicProfileRequest request) {
+	public void validateGetPublicProfileRequest(GetPublicProfileRequest request) throws BusinessException {
 		if (request.getUserId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 	
-	public void validateSearchUserRequest(SearchFriendRequest request) {
+	public void validateSearchUserRequest(SearchFriendRequest request) throws BusinessException {
 		if (StringUtils.isEmpty(request.getSearchString())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
@@ -49,7 +49,7 @@ public class UserValidator {
 	 * check if user is logged in or not.
 	 * Throws exception if user is not logged in
 	 */
-	private void validateIfLoggedInUser() {
+	private void validateIfLoggedInUser() throws BusinessException {
 		for (String role : jwtHelper.getRoles()) {
 			RoleType roleType = RoleType.getRole(role);
 			if (RoleType.GUEST == roleType) {
@@ -58,19 +58,19 @@ public class UserValidator {
 		}
 	}
 
-	public void validateRegistrationIdRequest(SaveRegistrationIdRequest request) {
+	public void validateRegistrationIdRequest(SaveRegistrationIdRequest request) throws BusinessException {
 		if (StringUtils.isBlank(request.getRegistrationId())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateFollowRequest(FollowRequest request) {
+	public void validateFollowRequest(FollowRequest request) throws BusinessException {
 		if (request.getUserId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateUnFollowRequest(UnFollowRequest request) {
+	public void validateUnFollowRequest(UnFollowRequest request) throws BusinessException {
 		if (request.getUserId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}

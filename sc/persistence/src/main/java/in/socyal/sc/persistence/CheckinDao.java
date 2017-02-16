@@ -283,6 +283,10 @@ public class CheckinDao {
 			Integer merchantId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CheckinEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		List<CheckinStatusType> statuses = new ArrayList<>();
+		statuses.add(CheckinStatusType.APPROVED);
+		statuses.add(CheckinStatusType.PENDING);
+		criteria.add(Restrictions.in("status", statuses));
 		criteria.add(Restrictions.between("checkinDateTime", DayUtil.initialTimeOfDate(checkinDate),
 				DayUtil.initialTimeOfDate(checkinNextDate)));
 		criteria.addOrder(Order.desc("checkinDateTime"));
@@ -294,22 +298,24 @@ public class CheckinDao {
 		CheckinDto checkinDto = null;
 		CheckinEntity entity = (CheckinEntity) session.get(CheckinEntity.class, checkinId);
 		if (entity != null) {
-			if (entity.getStatus() == CheckinStatusType.APPROVED) {
-				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_APPROVED);
-			} else if (entity.getStatus() == CheckinStatusType.MERCHANT_CANCELLED) {
-				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED_BY_MERCHANT);
-			} else if (entity.getStatus() == CheckinStatusType.USER_CANCELLED) {
-				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED_BY_USER);
-			} else if (entity.getStatus() == CheckinStatusType.PENDING) {
+			if (entity.getStatus() == CheckinStatusType.PENDING) {
 				checkinDto = new CheckinDto();
 				entity.setStatus(CheckinStatusType.APPROVED);
 				entity.setApprovedDateTime(clock.cal());
 				entity.setUpdatedDateTime(clock.cal());
 				session.saveOrUpdate(entity);
 				mapper.mapToCheckinDto(entity, checkinDto, filter);
+			} else if (entity.getStatus() == CheckinStatusType.MERCHANT_CANCELLED) {
+				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED_BY_MERCHANT);
+			} else if (entity.getStatus() == CheckinStatusType.USER_CANCELLED) {
+				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_CANCELLED_BY_USER);
+			} else if (entity.getStatus() == CheckinStatusType.APPROVED) {
+				throw new BusinessException(CheckinErrorCodeType.CHECKIN_ALREADY_APPROVED);
 			} else {
 				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 			}
+		} else {
+			throw new BusinessException(CheckinErrorCodeType.CHECKIN_ID_NOT_FOUND);
 		}
 		return checkinDto;
 	}

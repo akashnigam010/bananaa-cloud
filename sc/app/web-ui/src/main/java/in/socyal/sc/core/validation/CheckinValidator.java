@@ -28,14 +28,14 @@ public class CheckinValidator {
 	@Autowired
 	JwtTokenHelper jwtHelper;
 
-	public void validateGetMerchantCheckinsRequest(GetMerchantCheckinsRequest request) {
+	public void validateGetMerchantCheckinsRequest(GetMerchantCheckinsRequest request) throws BusinessException {
 		// public call - no authentication required
 		if (request.getId() == null || request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateValidateCheckinRequest(ValidateCheckinRequest request) {
+	public void validateValidateCheckinRequest(ValidateCheckinRequest request) throws BusinessException {
 		validateIfLoggedInUser();
 		if (request.getLocation() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
@@ -46,7 +46,7 @@ public class CheckinValidator {
 		}
 	}
 
-	public void validateConfirmCheckinRequest(ConfirmCheckinRequest request) {
+	public void validateConfirmCheckinRequest(ConfirmCheckinRequest request) throws BusinessException {
 		validateIfLoggedInUser();
 		if (request.getLocation() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
@@ -57,21 +57,21 @@ public class CheckinValidator {
 		}
 	}
 
-	public void validateCancelCheckinRequest(CancelCheckinRequest request) {
+	public void validateCancelCheckinRequest(CancelCheckinRequest request) throws BusinessException {
 		validateIfLoggedInUser();
 		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateCheckinRequest(CheckinRequest request) {
+	public void validateCheckinRequest(CheckinRequest request) throws BusinessException {
 		validateIfLoggedInUser();
 		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateLikeCheckinRequest(LikeCheckinRequest request) {
+	public void validateLikeCheckinRequest(LikeCheckinRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
@@ -88,21 +88,21 @@ public class CheckinValidator {
 		}
 	}
 
-	public void validateMyFeedsRequest(MyFeedsRequest request) {
+	public void validateMyFeedsRequest(MyFeedsRequest request) throws BusinessException {
 		validateIfLoggedInUser();
 		if (request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateProfileFeedsRequest(ProfileFeedsRequest request) {
+	public void validateProfileFeedsRequest(ProfileFeedsRequest request) throws BusinessException {
 		// public call - no authentication required
 		if (request.getUserId() == null || request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateGetBusinessCheckinsRequest(GetBusinessCheckinsRequest request) {
+	public void validateGetBusinessCheckinsRequest(GetBusinessCheckinsRequest request) throws BusinessException {
 		if (request.getDateIdentifier() == null || request.getPage() == null || request.getDateIdentifier() < 0
 				|| request.getPage() <= 0) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
@@ -113,7 +113,7 @@ public class CheckinValidator {
 	 * check if user is logged in or not. Throws exception if user is not logged
 	 * in
 	 */
-	private void validateIfLoggedInUser() {
+	private void validateIfLoggedInUser() throws BusinessException {
 		for (String role : jwtHelper.getRoles()) {
 			RoleType roleType = RoleType.getRole(role);
 			if (RoleType.GUEST == roleType) {
@@ -122,25 +122,25 @@ public class CheckinValidator {
 		}
 	}
 
-	public void validateGetBusinessCheckinDetailsRequest(GetBusinessCheckinDetailsRequest request) {
+	public void validateGetBusinessCheckinDetailsRequest(GetBusinessCheckinDetailsRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateGetBusinessCheckinHistoryRequest(GetBusinessCheckinHistoryRequest request) {
+	public void validateGetBusinessCheckinHistoryRequest(GetBusinessCheckinHistoryRequest request) throws BusinessException {
 		if (request.getUserId() == null || request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateBusinessCancelCheckinRequest(BusinessCancelCheckinRequest request) {
+	public void validateBusinessCancelCheckinRequest(BusinessCancelCheckinRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 
-	public void validateBusinessApproveCheckinRequest(BusinessApproveCheckinRequest request) {
+	public void validateBusinessApproveCheckinRequest(BusinessApproveCheckinRequest request) throws BusinessException {
 		if (request.getCheckinId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}

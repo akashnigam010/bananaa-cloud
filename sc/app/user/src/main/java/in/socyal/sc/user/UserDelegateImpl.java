@@ -45,7 +45,7 @@ public class UserDelegateImpl implements UserDelegate {
 	@Autowired JwtTokenDetailsHelper jwtDetailsHelper;
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public UserProfileResponse getProfile() throws BusinessException {
 		authorizeUser();
 		UserProfileResponse response = new UserProfileResponse();
@@ -59,7 +59,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public UserProfileResponse getPublicProfile(GetPublicProfileRequest request) throws BusinessException {
 		UserProfileResponse response = new UserProfileResponse();
 		Integer userId = request.getUserId();
@@ -81,7 +81,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SearchFriendToTagResponse searchFriendsToTag(SearchFriendRequest request) throws BusinessException {
 		SearchFriendToTagResponse response = new SearchFriendToTagResponse(); 
 		List<UserDto> users = userFollowerDao.fetchMyFriendsBySearchString(jwtDetailsHelper.getCurrentUserId(), 
@@ -94,7 +94,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SearchFriendResponse searchFriends(SearchFriendRequest request) throws BusinessException {
 		SearchFriendResponse response = new SearchFriendResponse();
 		List<UserDto> friends = null;
@@ -116,7 +116,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FriendResponse getMyFriends(GetMyFriendsRequest request) throws BusinessException {
 		FriendResponse response = new FriendResponse();
 		List<UserDto> users = userFollowerDao.fetchMyFriendsByPage(request.getPage(), 
@@ -128,7 +128,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SaveRegistrationIdResponse saveRegistrationId(SaveRegistrationIdRequest request) throws BusinessException {
 		SaveRegistrationIdResponse response = new SaveRegistrationIdResponse();
 		Integer userId = jwtDetailsHelper.getCurrentUserId();
@@ -142,7 +142,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FollowResponse follow(FollowRequest request) throws BusinessException {
 		FollowResponse response = new FollowResponse();
 		//validate whether current user is logged in or not
@@ -171,7 +171,7 @@ public class UserDelegateImpl implements UserDelegate {
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public UnFollowResponse unFollow(UnFollowRequest request) throws BusinessException {
 		UnFollowResponse response = new UnFollowResponse();
 		//validate whether current user is logged in or not
