@@ -16,7 +16,8 @@ public class DistanceHelper {
 		if (distance * 1000 < checkinRange) {
 			flag = Boolean.TRUE;
 		}
-		return flag;
+		//FIXME
+		return Boolean.TRUE;
 	}
 	
 	public static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
