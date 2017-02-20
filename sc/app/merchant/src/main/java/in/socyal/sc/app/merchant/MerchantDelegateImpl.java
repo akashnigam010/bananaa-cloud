@@ -133,7 +133,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		}
 		if (!merchantLoginDao.isMerchantLoginDetailsPresent(currentMerchantId, currentMerchantDeviceId)) {
 			LOG.error("Exception occured: business device details not found for merchantId:" + currentMerchantId
-					+ " and deviceId:" + currentMerchantId);
+					+ " and deviceId:" + currentMerchantDeviceId);
 			throw new BusinessException(MerchantLoginErrorCodeType.MERCHANT_DEVICE_DETAILS_FOUND);
 		}
 		merchantLoginDao.saveRegistrationIdForMerchant(currentMerchantId, currentMerchantDeviceId,
