@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -388,15 +389,19 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 			throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
 		CheckinDto checkin = checkinDao.businessCancelCheckin(request.getCheckinId(), filter);
-		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
-				checkin.getMerchantId());
-		async.submit(new SimpleCallable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				notificationDelegate.sendDataNotification(notificationCreator.createCancelCheckinNotificationToCustomer(checkin));
-				return null;
-			}
-		});
+		Integer userId = checkin.getUser().getId();
+		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(userId, checkin.getMerchantId());
+		//Check if user has a valid registrationId for receiving notification
+		if (StringUtils.isNotBlank(checkin.getUser().getRegistrationId())) {
+			async.submit(new SimpleCallable<Void>() {
+				@Override
+				public Void call() throws Exception {
+					notificationDelegate.sendDataNotification(
+							notificationCreator.createCancelCheckinNotificationToCustomer(checkin));
+					return null;
+				}
+			});
+		}
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
 	}
@@ -409,13 +414,17 @@ public class CheckinDelegateImpl implements CheckinDelegate {
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
 		merchantDao.updateMerchantCheckinCountDetails(checkin.getMerchantId());
-		async.submit(new SimpleCallable<Void>() {
-			@Override
-			public Void call() throws Exception {
-				notificationDelegate.sendDataNotification(notificationCreator.createApproveCheckinNotificationToCustomer(checkin));
-				return null;
-			}
-		});
+		//Check if user has a valid registrationId for receiving notification
+		if (StringUtils.isNotBlank(checkin.getUser().getRegistrationId())) {
+			async.submit(new SimpleCallable<Void>() {
+				@Override
+				public Void call() throws Exception {
+					notificationDelegate.sendDataNotification(
+							notificationCreator.createApproveCheckinNotificationToCustomer(checkin));
+					return null;
+				}
+			});
+		}
 		BusinessCheckinDetailsResponse response = checkinMapper.mapBusinessCheckinDetails(checkin, userCheckinCount);
 		return response;
 	}
