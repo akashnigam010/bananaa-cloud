@@ -32,7 +32,9 @@ INSERT INTO `Socyal`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (6,
 -- Merchant_QR_Mapping
 
 -- Rewards
-
+INSERT INTO `Socyal`.`REWARDS` (`MERCHANT_ID`, `REWARD`) VALUES (6, '1 Glass of 200ml Beer');
+INSERT INTO `Socyal`.`REWARDS` (`MERCHANT_ID`, `REWARD`) VALUES (6, '1 Welcome Drink');
+INSERT INTO `Socyal`.`REWARDS` (`MERCHANT_ID`, `REWARD`) VALUES (6, '1 Mocktail');
 -- Merchant_Login
 
 
