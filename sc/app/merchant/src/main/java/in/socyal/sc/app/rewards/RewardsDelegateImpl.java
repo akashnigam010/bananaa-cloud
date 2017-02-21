@@ -1,5 +1,6 @@
 package in.socyal.sc.app.rewards;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -14,6 +15,7 @@ import in.socyal.sc.api.checkin.dto.CheckinFilterCriteria;
 import in.socyal.sc.api.feedback.response.FeedbackStatusResponse;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.reward.business.response.GetBusinessRewardsResponse;
+import in.socyal.sc.api.reward.request.Reward;
 import in.socyal.sc.api.reward.request.RewardRequest;
 import in.socyal.sc.api.reward.request.SubmitRewardsRequest;
 import in.socyal.sc.api.rewards.dto.RewardsDto;
@@ -26,6 +28,8 @@ import in.socyal.sc.helper.async.SimpleCallable;
 import in.socyal.sc.notification.NotificationCreator;
 import in.socyal.sc.notification.NotificationDelegate;
 import in.socyal.sc.persistence.CheckinDao;
+import in.socyal.sc.persistence.DiscountGivenDao;
+import in.socyal.sc.persistence.RewardGivenDao;
 import in.socyal.sc.persistence.RewardsDao;
 
 @Service
@@ -45,6 +49,10 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	NotificationCreator notificationCreator;
 	@Autowired
 	AsyncExecutor async;
+	@Autowired
+	RewardGivenDao rewardGivenDao;
+	@Autowired
+	DiscountGivenDao discountGivenDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -59,6 +67,19 @@ public class RewardsDelegateImpl implements RewardsDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public BusinessCheckinDetailsResponse submitRewards(SubmitRewardsRequest request) throws BusinessException {
 		CheckinFilterCriteria filter = new CheckinFilterCriteria(true, true, false);
+		//1. Save rewards and discount in REWARD_GIVEN and DISCOUNT_GIVEN tables respectively
+		Integer checkinId = request.getCheckinId();
+		List<Reward> rewards = request.getRewards();
+		if (rewards != null) {
+			for (Reward reward : rewards) {
+			rewardGivenDao.saveRewardGiven(reward, checkinId);
+			}
+		}
+		
+		if (request.getDiscount() != null) {
+			discountGivenDao.saveDiscountGiven(new BigDecimal(request.getDiscount()), checkinId);
+		}
+		//2. Update checkin table with actual rewards and discount details
 		CheckinDto checkin = dao.saveReward(request, filter);
 		Integer userCheckinCount = checkinDao.getUserCheckinsCountForAMerchant(checkin.getUser().getId(),
 				checkin.getMerchantId());
