@@ -14,6 +14,8 @@ public class RewardsDaoMapper {
 		to.setId(from.getId());
 		to.setMerchantId(from.getMerchantId());
 		to.setReward(from.getReward());
+		to.setStatus(from.getStatus());
+		to.setValue(from.getValue());
 	}
 	
 	public void map(List<RewardsEntity> from, List<RewardsDto> to) {
