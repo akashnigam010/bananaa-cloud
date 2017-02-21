@@ -66,6 +66,7 @@ public class MerchantLoginDao {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(MerchantLoginEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.isNotNull("registrationId"));
 		List<MerchantLoginEntity> merchantEntities = criteria.list();
 		return mapper.mapMerchantRegistrationIds(merchantEntities);
 	}
