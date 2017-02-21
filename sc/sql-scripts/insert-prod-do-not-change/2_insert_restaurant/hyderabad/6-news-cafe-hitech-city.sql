@@ -48,7 +48,9 @@ INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`QR_CODE`, `MERCHANT_ID`, `CARD_ID`,
 INSERT INTO `Socyal`.`MERCHANT_QR_MAPPING` (`QR_CODE`, `MERCHANT_ID`, `CARD_ID`, `STATUS`) VALUES ('1-6-15', 6, '15', TRUE);
 
 -- Rewards
-
+INSERT INTO `Socyal`.`REWARDS` (`MERCHANT_ID`, `REWARD`) VALUES (6, '1 Glass of 200ml Beer');
+INSERT INTO `Socyal`.`REWARDS` (`MERCHANT_ID`, `REWARD`) VALUES (6, '1 Welcome Drink');
+INSERT INTO `Socyal`.`REWARDS` (`MERCHANT_ID`, `REWARD`) VALUES (6, '1 Mocktail');
 -- Merchant_Login
 
 
