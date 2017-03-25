@@ -72,14 +72,14 @@ a:hover {
 
 .logo-round {
     object-fit: cover;
-    height: 100px;
+    height: 70px;
     border: 3px solid;
     border-radius: 100px;
     border-color: white;
 }
 
 .logo-wrapper {
-    height: 150px;
+    height: 100px;
 }
 
 .logo {
@@ -90,7 +90,7 @@ a:hover {
 .tagline {
     color: #FFF;
     font-family: bna-simpson;
-    font-size: 4em;
+    font-size: 3em;
 }
 
 .home-banner {
@@ -99,7 +99,7 @@ a:hover {
                      rgba(20,20,20, .5)),
                      url("../img/background.jpeg");
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center left;
 }
 
 .icon-search {
@@ -109,7 +109,7 @@ a:hover {
 }
 
 .search-box-wrapper {
-    height: 100px;
+    height: 85px;
     padding-top: 2%;
 }
 
@@ -392,13 +392,13 @@ hr {
 .login-info {
     cursor: pointer; 
     color: white; 
-    padding-right: 3%; 
-    padding-top: 2%;    
+    padding-right: 5%; 
+    padding-top: 5%;    
 }
 
 .header-icon {
     color: #fff;
-    font-size: 2em;
-    padding-left: 3%; 
-    padding-top: 2%; 
+    font-size: 1.5em;
+    padding-left: 7%; 
+    padding-top: 7%; 
 }

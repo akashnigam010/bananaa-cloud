@@ -150,7 +150,6 @@
 }
 
 .merchant-icon-text {
-  	font-family: _light;
   	color: #9ba8ba;
 }
 
@@ -164,13 +163,11 @@
 }
 
 .under-heading {
-	font-family: _light;
 	color: #909090;
 }
 
 .sub-heading-flexi {
 	padding: 5% 5% 0% 5%; 
-	font-family: _light;
 	color: #9932CC;
 }
 
@@ -185,12 +182,11 @@
 }
 
 .detail-type-1 {
-	font-family: _light;
 	color: #9932CC;
 }
 
 .detail-type-2 {
-	font-family: _regular;
+	/* font-family: _regular; */
 }
 
 .detail-type-padding {
@@ -199,7 +195,6 @@
 
 .checkin-item {
 	padding: 5% 5% 0% 5%;
-	font-family: _light;
 	color: #909090;
 }
 
@@ -217,8 +212,7 @@
 }
 
 .user-name {
-	color: #33373D; 
-	font-family: _regular;
+	color: #33373D;
 }
 
 .tagged-users {

@@ -1,24 +1,19 @@
 @font-face {
-    font-family: _bold;
-    src: url(../fonts/MONTSERRAT-BOLD.OTF);
+    font-family: bna-web;
+    src: url('../fonts/bna-web-regular.woff') format('woff');
 }
+
 @font-face {
-    font-family: _extraBold;
-    src: url(../fonts/MONTSERRAT-EXTRABOLD.OTF);
+    font-family: bna-bold;
+    src: url('../fonts/bna-web-bold.woff') format('woff');
 }
+
 @font-face {
-    font-family: _light;
-    src: url(../fonts/MONTSERRAT-LIGHT.OTF);
+    font-family: bna-icon;
+    src: url('../fonts/bna-icon-font.woff') format('woff');
 }
+
 @font-face {
-    font-family: _regular;
-    src: url(../fonts/MONTSERRAT-REGULAR.OTF);
-}
-@font-face {
-    font-family: _semiBold;
-    src: url(../fonts/MONTSERRAT-SEMIBOLD.OTF);
-}
-@font-face {
-    font-family: _ultraLight;
-    src: url(../fonts/MONTSERRAT-ULTRALIGHT.OTF);
+    font-family: bna-simpson;
+    src: url('../fonts/bna-simpson-font.ttf') format('truetype');
 }
