@@ -5,6 +5,8 @@
 
 <head th:replace="fragments/head :: head"></head>
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
 <body>
 	<script type="text/javascript" src="/js/login.js"></script>
 	<script type="text/javascript">
@@ -45,19 +47,123 @@
                     <div class="tagline align-center">
                         <span>good food suggestions !</span>
                     </div>
-                    <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 search-box-wrapper">
-                        <form class="form-horizontal">
-                            <div class="form-group form-group-lg has-feedback">
-                                <input type="text" id="search-field" name="search" class="form-control" placeholder="Find your Restaurant" />
-                                <i class="glyphicon icon-search form-control-feedback"></i>                            
-                            </div>
-                        </form> 
-                        <div class="row search-box-suggestion"></div>            
-                    </div>
-                </div>
+					<div
+						class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 search-box-wrapper">
+						<form class="form-horizontal">
+							<div class="form-group form-group-lg has-feedback">
+								<input type="text" id="search-field" name="search"
+									class="form-control" placeholder="Find your Restaurant"
+									autocomplete="off" /> <i
+									class="glyphicon icon-search form-control-feedback"></i>
+							</div>
+						</form>
+						<div class="row search-box-suggestion"></div>
+					</div>
+				</div>
             </div>            
         </div>
 		<!-- Top Banner ENDS -->
+		
+		<!-- Trending places STARTS -->
+		<div class="row trending">
+            <div class="col-xs-12 trending-heading">
+                <p class="bold">Where to eat</p>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                        <div class="row trending-wrapper slick-class clearfix">
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12346.png" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Fusion 9</span>
+                                                    <br />
+                                                    <span class="light">Hitech City, Hyderabad</span>
+                                                </p>
+                                                <span>320 Recommendations</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12347.png" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">News Cafe</span>
+                                                    <br />
+                                                    <span class="light">Hitech City, Hyderabad</span>
+                                                </p>
+                                                <span>120 Recommendations</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12348.png" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Punjab Grill</span>
+                                                    <br />
+                                                    <span class="light">Jubilee Hills, Hyderabad</span>
+                                                </p>
+                                                <span>410 Recommendations</span>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12349.png" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Urban Asia Bar and Grill</span>
+                                                    <br />
+                                                    <span class="light">Jubilee Hills, Hyderabad</span>
+                                                </p>
+                                                <span>450 Recommendations</span>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Free Flow</span>
+                                                    <br />
+                                                    <span class="light">Jubilee Hills, Hyderabad</span>
+                                                </p>
+                                                <span>320 Recommendations</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>           
+        </div>
+		<!-- Trending places ENDS -->
 		
 		<!-- About banner STARTS -->
         <div class="row" style="height: 1000px;">

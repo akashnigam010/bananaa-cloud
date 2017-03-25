@@ -17,3 +17,33 @@
     font-family: bna-simpson;
     src: url('../fonts/bna-simpson-font.ttf') format('truetype');
 }
+
+body {
+    font-family: bna-web, sans-serif !important;
+    color: #444;
+    line-height: 1.5;
+}
+
+.web {
+	font-family: bna-web;
+}
+
+.bold {
+    font-family: bna-bold;
+}
+
+.simpson {
+    font-family: bna-simpson;   
+}
+
+.light {
+    color: #939393;
+}
+
+.font-1-3 {
+	font-size: 1.3em;
+}
+
+.font-0-8 {
+	font-size: 0.8em;
+}

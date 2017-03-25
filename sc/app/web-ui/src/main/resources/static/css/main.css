@@ -1,20 +1,5 @@
 body {
-    font-family: bna-web, sans-serif !important;
-    color: #444;
-    font-size: 15px;
-    line-height: 1.5;
-}
-
-.bold {
-    font-family: bna-bold;
-}
-
-.light {
-    color: #939393;
-}
-
-.simpson {
-    font-family: bna-simpson;   
+    font-size: 13px;
 }
 
 .white-background {
@@ -95,7 +80,7 @@ a:hover {
 
 .home-banner {
     background: linear-gradient(
-                     rgba(20,20,20, .5), 
+                     rgba(20,20,20, .2), 
                      rgba(20,20,20, .5)),
                      url("../img/background.jpeg");
     background-repeat: no-repeat;
@@ -111,6 +96,10 @@ a:hover {
 .search-box-wrapper {
     height: 100px;
     padding-top: 2%;
+}
+
+.search-box-wrapper>.form-horizontal>.form-group-lg>input {
+    font-size: 1.2em;
 }
 
 .search-box-suggestion {
@@ -192,7 +181,7 @@ a:hover {
 }
 
 .trending-heading {
-    padding: 5% 5% 0% 5%;
+    padding: 5% 3% 1% 11%;
     text-transform: uppercase;  
 }
 
@@ -202,11 +191,11 @@ a:hover {
 }
 
 .trending-item {
-    padding: 10%;
+    margin-right: 10px;
 }
 
 .trend-image {
-    display:inline-block;
+    object-fit: cover;
     width:100%;
     height:180px;
     overflow:hidden;
@@ -217,7 +206,6 @@ a:hover {
 
 .trending-item-desc {
     background-color: #FFFFFF;
-    padding: 5%;
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
 }
@@ -326,27 +314,6 @@ a:hover {
 
 /* Modal CSS - END */
 
-/* HEADER CSS - START */
-
-.header {
-    background-color: #9932CC; 
-    background-image: url("../img/hero_banner_bg.png");
-    background-repeat: no-repeat;
-    background-position: bottom;
-}
-
-.logo-header {
-    position: absolute;
-    background-repeat: no-repeat;
-    height: 15%;
-    /* test */
-    margin-left: 0%;
-    cursor: pointer;
-    display: block;
-}
-
-/* HEADER CSS - END */
-
 /* ERROR PAGE CSS - START*/
 
 .error-message-primary {
@@ -402,3 +369,18 @@ hr {
     padding-left: 3%; 
     padding-top: 2%; 
 }
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+body .slick-next, body .slick-prev{
+    top: 40%;
+}
+
+.slick-prev:before, .slick-next:before {
+    color: black !important;
+}
+
