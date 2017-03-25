@@ -177,7 +177,6 @@ a:hover {
 
 .trending {
     background: #E6E9EE;
-    padding-bottom: 5%;
 }
 
 .trending-heading {
@@ -385,6 +384,10 @@ hr {
 }
 
 .login-info>.btn {
+    font-size: 10px;
+}
+
+.dropdown-menu {
     font-size: 10px;
 }
 
