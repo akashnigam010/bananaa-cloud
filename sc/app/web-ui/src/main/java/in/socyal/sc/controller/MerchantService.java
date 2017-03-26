@@ -74,6 +74,19 @@ public class MerchantService {
 			return responseHelper.failure(response, e);
 		}
 	}
+	
+	@RequestMapping(value = "/getTrendingRestaurants", method = RequestMethod.GET, headers = "Accept=application/json")
+	public SearchMerchantResponse getTrendingRestaurants() {
+		SearchMerchantResponse response = new SearchMerchantResponse();
+		try {
+			SearchMerchantRequest request = new SearchMerchantRequest();
+			request.setSearchString("as");
+			response = delegate.searchMerchant(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
 
 	// Testing purpose
 	@RequestMapping(value = "/saveMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")

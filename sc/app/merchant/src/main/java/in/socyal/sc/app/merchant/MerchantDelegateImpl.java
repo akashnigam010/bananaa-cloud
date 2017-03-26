@@ -102,7 +102,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
-		MerchantFilterCriteria filter = new MerchantFilterCriteria(false, true, false, false, false, false);
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, false, false, false, false);
 		List<MerchantDto> merchants = dao.searchMerchant(request.getSearchString(), filter);
 		if (merchants != null) {
 			buildSearchMerchantsResponse(merchants, response);
@@ -149,6 +149,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setNameId(dto.getNameId());
 			merchant.setName(dto.getName());
 			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
+			merchant.setImageUrl(dto.getImageUrl());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);

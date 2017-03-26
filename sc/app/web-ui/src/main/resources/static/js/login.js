@@ -63,7 +63,6 @@ function logout() {
 function initApp() {
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      console.log(user);
       var displayName = user.displayName;
       $("#login-info").text(displayName);
       isLoggedIn = true;

@@ -184,7 +184,7 @@ a:hover {
     text-transform: uppercase;  
 }
 
-.trending-wrapper {
+.trending-restaurant-wrapper, .trending-food-wrapper {
     padding-left: 3%;
     padding-right: 3%;
 }
@@ -376,6 +376,7 @@ hr {
 }
 /* PLACEHOLDER CSS - END*/
 
+/* Login Button CSS starts */
 .login-info {
     cursor: pointer; 
     color: white; 
@@ -390,10 +391,27 @@ hr {
 .dropdown-menu {
     font-size: 10px;
 }
+/* Login Button CSS ends */
 
+/*Home Icon CSS Starts*/
 .header-icon {
     color: #fff;
     font-size: 1.5em;
     padding-left: 7%; 
     padding-top: 7%; 
 }
+/*Home Icon CSS ends*/
+
+/*Loader CSS starts*/
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #9932CC;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-left: 40%;
+    margin-top: 15%;
+    margin-bottom: 25%;
+}
+/*Loader CSS ends*/
