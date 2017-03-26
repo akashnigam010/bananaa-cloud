@@ -1,0 +1,25 @@
+<div th:fragment="login-modal">
+	<!-- Login Modal STARTS -->
+	<div class="modal fade" id="loginModal" role="dialog">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header align-center">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
+	                </button>
+	                <h4 class="modal-title bold">Log in to Bananaa</h4>
+	            </div>
+	            <div class="modal-body align-center">
+	                <div align="center" style="padding-top: 5%;">
+	                    <img class="img-responsive btn" onclick="fbSignIn();" src="/img/fb_login_button.png"></img> 
+	                </div>
+	                <div align="center" style="padding-top: 3%; padding-bottom: 5%;">
+	                    <img class="img-responsive btn" onclick="googleSignIn();" src="/img/google_login_button.png"></img>
+	                </div>
+	            </div>
+	        </div>
+	
+	    </div>
+	</div>
+	<!-- Login Modal ENDS -->
+</div>

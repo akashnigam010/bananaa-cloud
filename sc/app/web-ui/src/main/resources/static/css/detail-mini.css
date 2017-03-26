@@ -1,101 +1,65 @@
+body {
+    font-size: 12px;
+}
+
 /* Media Queries CSS - START */
-@media (min-width: 500px) {
+
+@media (min-width: 100px) {
     .merchant-image-banner {
-        height:40vh;
-    }
-    .merchant-detail-main {
-    	top: -8vh;
-    }
-    .merchant-detail-background {
-    	margin-bottom: -3vh;
+        height:25vh;
     }
     .merchant-icon {
-    	width: 90px;
-    	height: 90px;
+    	width: 60px;
+    	height: 60px;
     }
     .user-icon {
-    	width: 65px;
-    	height: 65px;
+    	width: 50px;
+    	height: 50px;
     }
     .merchant-name, .merchant-icon-text {
-		font-size: 1.8em;
+		font-size: 1.2em;
 	}
 	.icon-rating-dynamic {
 		height: 20px;
     	width: 20px;
 	}
 	.rating-gear-dynamic {
-		height: 45px;
-		width: 90px;
+		height: 40px;
+		width: 80px;
 	}
 	.sub-heading-flexi {
-		font-size: 150%;
-	}
-}
-
-@media (min-width: 1090px) {
-    .merchant-image-banner {
-        height:60vh;
-    }
-    .merchant-detail-main {
-    	top: -12vh;
-    }
-    .merchant-detail-background {
-    	margin-bottom: -7vh;
-    }
-    .merchant-icon {
-    	width: 120px;
-    	height: 120px;
-    }
-    .user-icon {
-    	width: 80px;
-    	height: 80px;
-    }
-    .merchant-name, .merchant-icon-text {
-		font-size: 2.5em;
-	}
-	.rating-value-dynamic {
-		font-size: 1.5em;	
-	}
-	.icon-rating-dynamic {
-		height: 30px;
-    	width: 30px;
-	}
-	.rating-gear-dynamic {
-		height: 50px;
-		width: 100px;
-	}
-	.sub-heading-flexi {
-		font-size: 150%;
-	}
-
-}
-
-@media (min-width: 768px) {
-	.detail-about > .col-sm-8 {
-	    width: 65.666667%;
+		font-size: 130%;
 	}
 }
 
 .primary-image-banner {
-	height: 350px;
+	height: 180px;
 }
+
 
 /* Login Button CSS starts */
 .login-info {
     cursor: pointer; 
     color: white; 
-    padding-right: 3%; 
-    padding-top: 2%;    
+    padding-right: 5%; 
+    padding-top: 5%;    
+}
+
+.login-info>.btn {
+    font-size: 10px;
+}
+
+.dropdown-menu {
+    font-size: 10px;
 }
 /* Login Button CSS ends */
 
 /*Home Icon CSS Starts*/
 .header-icon {
     color: #fff;
-    font-size: 2em;
-    padding-left: 3%; 
-    padding-top: 2%; 
+    font-size: 1.5em;
+    padding-left: 7%; 
+    padding-top: 7%; 
 }
 /*Home Icon CSS ends*/
 
@@ -115,7 +79,7 @@
 }
 
 .details-wrapper {
-	border-radius: 6px;
+	border-radius: 0px 0px 6px 6px;
 }
 
 .merchant-detail-background {
@@ -130,6 +94,15 @@
 
 .merchant-icon-text {
   	color: #9ba8ba;
+}
+
+.float-left {
+	float: left;
+}
+
+.name-wrapper {
+	padding-left: 5%;
+	width: 80%;
 }
 
 .under-heading {
@@ -152,7 +125,7 @@
 }
 
 .detail-type-padding {
-	padding: 5%;
+	padding: 3%;
 }
 
 .checkin-item {

@@ -66,6 +66,7 @@ $(document).ready(function() {
     });
     
     getTrendingRestaurants();
+    getTrendingFood();
     
 });
 
@@ -106,4 +107,8 @@ function getTrendingRestaurants() {
     			  }
     		  }
     	  });
+}
+
+function getTrendingFood() {
+	addSlick($('.trending-food-wrapper'));
 }

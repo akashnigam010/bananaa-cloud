@@ -5,6 +5,8 @@
 
 <head th:replace="fragments/head :: head"></head>
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
+<link href="/css/home.css" rel="stylesheet"></link>
+<link href="/css/home-mini.css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
 <body>
@@ -21,7 +23,7 @@
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-6">
-                        <p class="simpson header-icon">bananaa</p>
+                        <p class="simpson header-icon cursor-pointer" onclick="location.href='http://www.bananaa.in';">bananaa</p>
                     </div>
                     <div class="col-xs-6">
                         <div class="btn-group login-info pull-right">
@@ -121,7 +123,75 @@
                                         </div>
                                     </div>
                                 </a>
-                            </div>                            
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/chicken-shawarma.jpg" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Chicken Shawarma</span>
+                                                    <br />
+                                                    <span class="light">Palamuru Grill, Kondapur, Hyderabad</span>
+                                                </p>
+                                                <span>90 Recommendations</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/arrabiata-pasta.jpeg" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Arrabiata Pasta</span>
+                                                    <br />
+                                                    <span class="light">Little Italy, Hitech City, Hyderabad</span>
+                                                </p>
+                                                <span>45 Recommendations</span>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/chicken-momoes.jpg" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Chicken Momoes</span>
+                                                    <br />
+                                                    <span class="light">Momoe Hut, Kondapur, Hyderabad</span>
+                                                </p>
+                                                <span>230 Recommendations</span>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="trending-item">
+                                <a href="hyderabad/12346">
+                                    <div>
+                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/noodles.jpg" alt=""/>
+                                        <div class="trending-item-desc">
+                                            <div style="padding: 4%;">
+                                                <p>
+                                                    <span class="bold font-1-3">Noodles</span>
+                                                    <br />
+                                                    <span class="light">Nanking, Hitech City, Hyderabad</span>
+                                                </p>
+                                                <span>320 Recommendations</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>                           
                         </div>
                     </div>
                 </div>
@@ -129,29 +199,7 @@
         </div>
 		<!-- Trending ENDS -->
 
-		<!-- Login Modal STARTS -->
-        <div class="modal fade" id="loginModal" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header align-center">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
-                        </button>
-                        <h4 class="modal-title bold">Log in to Bananaa</h4>
-                    </div>
-                    <div class="modal-body align-center">
-                        <div align="center" style="padding-top: 5%;">
-                            <img class="img-responsive btn" onclick="fbSignIn();" src="img/fb_login_button.png"></img> 
-                        </div>
-                        <div align="center" style="padding-top: 3%; padding-bottom: 5%;">
-                            <img class="img-responsive btn" onclick="googleSignIn();" src="img/google_login_button.png"></img>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <!-- Login Modal ENDS -->
+		<div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
 
 		<div lang="en" th:replace="fragments/footer :: footer"></div>
 
