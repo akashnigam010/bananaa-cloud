@@ -12,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
+import in.socyal.sc.api.merchant.response.Dish;
+import in.socyal.sc.api.merchant.response.DishResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
@@ -84,12 +86,46 @@ public class PageController {
 		
 		ModelAndView modelAndView = new ModelAndView("detail");
 		modelAndView.addObject("detail", response);
+		modelAndView.addObject("popularDishes", getPopularDishes());
 		modelAndView.addObject("description", getDetailMetaDescription(response));
 		modelAndView.addObject("fbDescription", getDetailMetaDescription(response));
 		modelAndView.addObject("title", getDetailMetaTitle(response));
 		modelAndView.addObject("url", getDetailMetaUrl(response, CityType.HYDERABAD.getName()));
 		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xfl1/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE&__gda__=1494528018_4c3d954c3fe507b4d4aa581df02de6e7");
 		return modelAndView;
+	}
+	
+	private DishResponse getPopularDishes() {
+		DishResponse dishResponse = new DishResponse();
+		Dish dish = new Dish();
+		dish.setId(1);
+		dish.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
+		dish.setName("Joojeh Kebab");
+		dish.setNameId("joojeh-kebeb");
+		dish.setRecommendations(22);
+		dishResponse.getDishes().add(dish);
+		Dish dish2 = new Dish();
+		dish2.setId(2);
+		dish2.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
+		dish2.setName("Lowley Sirley");
+		dish2.setNameId("lowley-shirley");
+		dish2.setRecommendations(15);
+		dishResponse.getDishes().add(dish2);
+		Dish dish3 = new Dish();
+		dish3.setId(3);
+		dish3.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
+		dish3.setName("Arrabiata Pasta");
+		dish3.setNameId("arrabiata-pasta");
+		dish3.setRecommendations(12);
+		dishResponse.getDishes().add(dish3);
+		Dish dish4 = new Dish();
+		dish4.setId(4);
+		dish4.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
+		dish4.setName("Mango Delight Punch");
+		dish4.setNameId("mango-delight");
+		dish4.setRecommendations(10);
+		dishResponse.getDishes().add(dish4);
+		return dishResponse;
 	}
 	
 	private String getDetailMetaDescription(MerchantDetailsResponse response) {

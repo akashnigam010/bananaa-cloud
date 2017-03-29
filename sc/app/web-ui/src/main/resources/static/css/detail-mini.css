@@ -1,43 +1,4 @@
-body {
-    font-size: 12px;
-}
-
-/* Media Queries CSS - START */
-
-@media (min-width: 100px) {
-    .merchant-image-banner {
-        height:25vh;
-    }
-    .merchant-icon {
-    	width: 60px;
-    	height: 60px;
-    }
-    .user-icon {
-    	width: 50px;
-    	height: 50px;
-    }
-    .merchant-name, .merchant-icon-text {
-		font-size: 1.2em;
-	}
-	.icon-rating-dynamic {
-		height: 20px;
-    	width: 20px;
-	}
-	.rating-gear-dynamic {
-		height: 40px;
-		width: 80px;
-	}
-	.sub-heading-flexi {
-		font-size: 130%;
-	}
-}
-
-.primary-image-banner {
-	height: 180px;
-}
-
-
-/* Login Button CSS starts */
+/* Common mini-CSS STARTS */
 .login-info {
     cursor: pointer; 
     color: white; 
@@ -52,88 +13,51 @@ body {
 .dropdown-menu {
     font-size: 10px;
 }
-/* Login Button CSS ends */
 
-/*Home Icon CSS Starts*/
 .header-icon {
     color: #fff;
     font-size: 1.5em;
     padding-left: 7%; 
     padding-top: 7%; 
 }
-/*Home Icon CSS ends*/
 
-.vertical-align-center {
-	position: relative;
-  	top: 50%;
-  	transform: translateY(-50%);
+body {
+    font-size: 12px;
 }
 
-.top-image {
-	display:inline-block;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    vertical-align:top;
-    object-fit: cover;
+/* Common mini-CSS ENDS */
+
+.primary-image-banner {
+	height: 180px;
 }
 
 .details-wrapper {
+	border-radius: 6px;
+}
+
+.details-top-wrapper {
 	border-radius: 0px 0px 6px 6px;
 }
 
-.merchant-detail-background {
-	background: #E6E9EE;
+.recommended-item {
+	padding: 3%;
 }
 
-.merchant-icon {
-	background: #E6E9EE;
-	border-radius: 50%;
-	text-align: center;
+.item-desc-wrapper {
+	margin-left: 4%
 }
 
-.merchant-icon-text {
-  	color: #9ba8ba;
-}
-
-.float-left {
-	float: left;
-}
-
-.name-wrapper {
-	padding-left: 5%;
-	width: 80%;
-}
-
-.under-heading {
-	color: #909090;
-}
-
-.sub-heading-flexi {
-	padding: 5% 5% 0% 5%; 
-	color: #9932CC;
-}
-
-.rating-gear-dynamic {
-    background-color: #9932CC;
-    color: #FFFFFF;
-    border-radius: 4px;
-}
-
-.icon-rating-dynamic {
-    content:url("../img/rating-icon.png");
+.recommend-item-name {
+	padding-top: 1%;
 }
 
 .detail-type-padding {
 	padding: 3%;
 }
 
-.checkin-item {
-	padding: 5% 5% 0% 5%;
-	color: #909090;
-}
-
 .user-icon {
+	width: 40px;
+	height: 40px;
 	border-radius: 50%;
 	text-align: center;
 	background-position: center;
@@ -141,25 +65,16 @@ body {
 	object-fit: cover;
 }
 
-.user-name-wrapper {
-	padding-left: 5%;
-	width: 70%;
-}
-
-.user-name {
-	color: #33373D;
-}
-
-.tagged-users {
-	padding: 5% 0% 5% 10%;
-}
-
-.reward-message {
-	padding: 0% 0% 5% 10%;
-	color: #e3a717;
-}
-
 hr {
     margin-top: 2px;
     margin-bottom: 2px; 
+}
+
+.recommend-desc-area {
+	height: 100px;
+}
+
+.recommend-button {
+    width: 90%;
+    height: 45px;
 }

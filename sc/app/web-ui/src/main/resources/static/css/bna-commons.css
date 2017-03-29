@@ -41,11 +41,6 @@ body {
     color: #939393;
 }
 
-.grey-text {
-    color: #939393;
-    padding-bottom: 3%;
-}
-
 a {
     color: inherit;
     text-decoration : none
@@ -84,6 +79,14 @@ a:hover {
   padding: 5%;
 }
 
+.padding-4 {
+  padding: 4%;
+}
+
+.padding-3 {
+  padding: 3%;
+}
+
 .padding-left {
   padding-left: 5%;
 }
@@ -114,6 +117,10 @@ a:hover {
 
 .grey-background {
     background-color: #f3f3f3;
+}
+
+.blue-white-background {
+  background: #E6E9EE;
 }
 
 @-webkit-keyframes spin {
@@ -182,3 +189,133 @@ body .slick-next, body .slick-prev{
 }
 
 /* Footer CSS - END */
+
+
+/* Material Design Input STARTS */
+.group        { 
+  position:relative; 
+  margin-bottom:45px; 
+}
+input, textarea {
+  /*font-size:18px;*/
+  padding:10px 10px 10px 5px;
+  display:block;
+  width:90%;
+  border:none;
+  border-bottom:1px solid #757575;
+}
+input:focus, textarea:focus { 
+  outline:none; 
+}
+
+/* LABEL */
+label          {
+  color:#999; 
+  /*font-size:18px;*/
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:5px;
+  top:10px;
+  transition:0.2s ease all; 
+}
+
+/* active state */
+input:focus ~ label, input:valid ~ label, textarea:focus ~ label, textarea:valid ~ label     {
+  top:-20px;
+  font-size:10px;
+  color:#9932CC;
+}
+
+/* BOTTOM BARS */
+.bar { 
+  position:relative; 
+  display:block; 
+  width:90%; 
+}
+
+.bar:before, .bar:after {
+  content:'';
+  height:2px; 
+  width:0;
+  bottom:1px; 
+  position:absolute;
+  background:#9932CC; 
+  transition:0.2s ease all; 
+}
+
+.bar:before {
+  left:50%;
+}
+
+.bar:after {
+  right:50%; 
+}
+
+/* active state */
+input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:before, textarea:focus ~ .bar:after {
+  width:50%;
+}
+
+/* HIGHLIGHTER */
+.highlight {
+  position:absolute;
+  height:60%; 
+  width:100px; 
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}
+
+/* active state */
+input:focus ~ .highlight, textarea:focus ~ .highlight {
+  animation:inputHighlighter 0.3s ease;
+}
+
+/* ANIMATIONS */
+@keyframes inputHighlighter {
+  from  { background:#9932CC; }
+  to    { width:0; background:transparent; }
+}
+/* Material Design Input ENDS */
+
+
+ul.typeahead.dropdown-menu {
+  width: 90%;
+}
+
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover {
+    color: #fff;
+    background-color: #9932CC;
+}
+
+.bna-button {
+    padding: 10px 16px;
+    margin: 10px;
+    line-height: 1.3333333;
+    border-radius: 3px;
+    -webkit-appearance: button;
+    cursor: pointer;
+    align-items: flex-start;
+    text-align: center;
+    background-color: #9932CC;
+    color: #fff;
+    border: none;
+    outline: none;
+}
+
+.bna-button-light {
+    padding: 10px 16px;
+    margin: 10px;
+    line-height: 1.3333333;
+    border-radius: 3px;
+    -webkit-appearance: button;
+    cursor: pointer;
+    align-items: flex-start;
+    text-align: center;
+    background-color: #E0E1E2;
+    color: #000;
+    border: none;
+    outline: none;
+}
