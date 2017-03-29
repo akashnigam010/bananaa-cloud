@@ -203,6 +203,7 @@ input, textarea {
   width:90%;
   border:none;
   border-bottom:1px solid #757575;
+  box-shadow: none;
 }
 input:focus, textarea:focus { 
   outline:none; 
