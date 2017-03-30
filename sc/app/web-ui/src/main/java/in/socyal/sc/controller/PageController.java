@@ -15,6 +15,8 @@ import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.Dish;
 import in.socyal.sc.api.merchant.response.DishResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.Recommendation;
+import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
@@ -92,6 +94,7 @@ public class PageController {
 		modelAndView.addObject("title", getDetailMetaTitle(response));
 		modelAndView.addObject("url", getDetailMetaUrl(response, CityType.HYDERABAD.getName()));
 		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xfl1/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE&__gda__=1494528018_4c3d954c3fe507b4d4aa581df02de6e7");
+		modelAndView.addObject("accessToken", JwtHelper.createJsonWebTokenForGuest());
 		return modelAndView;
 	}
 	

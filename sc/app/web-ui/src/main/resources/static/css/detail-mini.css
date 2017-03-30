@@ -71,10 +71,14 @@ hr {
 }
 
 .recommend-desc-area {
-	height: 100px;
+	height: 90px;
 }
 
 .recommend-button {
     width: 90%;
     height: 45px;
+}
+
+.my-recommendations {
+	padding-bottom: 5%;
 }

@@ -31,18 +31,8 @@ $(document).ready(function() {
         $('#addRecommendButton').on('mouseup', function (e) {
         	openRecommendationModal('', '', false);
         });
-
-        $(".recommended-item").on('mouseup', function(e){
-        	var id = e.currentTarget.childNodes[1].childNodes[1].childNodes[0].data;
-        	var hash = e.currentTarget.childNodes[1].childNodes[3].childNodes[0].data;
-        	var name = e.currentTarget.childNodes[1].childNodes[5].childNodes[0].data;
-        	var desc = e.currentTarget.childNodes[3].childNodes[0].data;
-        	rcmdOb = {
-        		id: id,
-        		name: name
-        	};
-        	openRecommendationModal(name, desc.trim(), true);
-        });
+        
+        getMyRecommendations(1);
 });
 
 function openRecommendationModal(name, desc, isUpdateFlag) {
@@ -80,4 +70,65 @@ function removeRecommendation() {
 	$("#alertText").html('Are you sure you want to remove ' + rcmdOb.name + ' from your recommendations ?')
 	$("#alertHeading").html('Confirm action')
 	$("#alertModal").modal('show');
+}
+
+function getMyRecommendations(restId) {
+	accessToken = $('#accessToken').val();
+	var dataOb = {
+			id : restId
+	};
+	$.ajax({
+    	  method: "POST",
+    	  url: "/socyal/merchant/getMyRecommendations",
+    	  contentType : "application/json",
+    	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
+    	  data: JSON.stringify(dataOb)
+    	})
+    	  .done(function(response) {
+    		  var myRecommendationsHtml = '';
+    		  if (response.result == true) {
+    			  if (response.recommendations.length > 0) {
+    				  for (var i=0; i<response.recommendations.length; i++) {
+    					  myRecommendationsHtml += 
+    						  '<div class="row">'+
+		                          '<div class="col-xs-12 recommended-item cursor-pointer">'+
+		                              '<div class="bold recommend-item-name">'+
+		                                  '<span class="hide item-id">'+response.recommendations[i].id+'</span>'+
+		                                  '<span class="bna-color item-hash">#'+(i+1)+'</span>'+
+		                                  '&nbsp; <span class="item-name">'+response.recommendations[i].name+'</span>'+
+		                              '</div>'+
+		                              '<div class="recommend-item-desc">'+
+		                              	(response.recommendations[i].description!=null?response.recommendations[i].description:'')+
+		                              '</div>'+                                                                         
+		                          '</div>'+
+		                      '</div>';
+    				  }
+    				  $('.my-recommendations').html(myRecommendationsHtml);
+    				  if (response.addMore) {
+    					  $('.addRecommendButtonDiv').show();
+    				  } else {
+    					  $('.addRecommendButtonDiv').hide();
+    				  }
+    				  $('.my-recommendation-loader').hide();
+    				  activateUpdateRcmdModal();
+    			  }
+    		  }
+    	  });
+}
+
+function activateUpdateRcmdModal() {
+	$(".recommended-item").on('mouseup', function(e){
+    	var id = e.currentTarget.childNodes[0].childNodes[0].childNodes[0].data;
+    	var hash = e.currentTarget.childNodes[0].childNodes[1].childNodes[0].data;
+    	var name = e.currentTarget.childNodes[0].childNodes[3].childNodes[0].data;
+    	var desc = '';
+    	if (e.currentTarget.childNodes[1].childNodes.length != 0) {
+    		desc = e.currentTarget.childNodes[1].childNodes[0].data;
+    	} 
+    	rcmdOb = {
+    		id: id,
+    		name: name
+    	};
+    	openRecommendationModal(name, desc.trim(), true);
+    });
 }

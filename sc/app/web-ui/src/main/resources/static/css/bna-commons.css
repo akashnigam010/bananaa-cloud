@@ -25,6 +25,33 @@ body {
     font-size: 13px;
 }
 
+@media (max-width: 480px) {
+    .loader {
+        margin-left: 40%;
+        margin-top: 15%;
+        margin-bottom: 25%;
+    }
+}
+
+@media (min-width: 481px) {
+    .loader {
+        margin-left: 50%;
+        margin-top: 10%;
+        margin-bottom: 15%;
+    }
+}
+
+/*Loader CSS starts*/
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #9932CC;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+/*Loader CSS ends*/
+
 .web {
 	font-family: bna-web;
 }
@@ -259,7 +286,7 @@ input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:befor
 }
 
 /* HIGHLIGHTER */
-.highlight {
+/* .highlight {
   position:absolute;
   height:60%; 
   width:100px; 
@@ -267,7 +294,7 @@ input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:befor
   left:0;
   pointer-events:none;
   opacity:0.5;
-}
+} */
 
 /* active state */
 input:focus ~ .highlight, textarea:focus ~ .highlight {

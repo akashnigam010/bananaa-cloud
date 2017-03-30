@@ -16,6 +16,8 @@ import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.Recommendation;
+import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
@@ -86,6 +88,36 @@ public class MerchantService {
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		}
+	}
+	
+	@RequestMapping(value = "/getMyRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
+	public RecommendationResponse getMyRecommendations(@RequestBody MerchantDetailsRequest request) {
+		RecommendationResponse response = new RecommendationResponse();
+		try {
+			response = getMyRecommendation();
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	private RecommendationResponse getMyRecommendation() throws BusinessException {
+		RecommendationResponse response = new RecommendationResponse();
+		Recommendation rcmdn1 = new Recommendation();
+		rcmdn1.setId(11);
+		rcmdn1.setName("Mutton Seekh Kebab");
+		rcmdn1.setDescription("Very tastey and juicy, as if drops from heaven");
+		response.getRecommendations().add(rcmdn1);
+		Recommendation rcmdn2 = new Recommendation();
+		rcmdn2.setId(11);
+		rcmdn2.setName("Galawati Kebab");
+		response.getRecommendations().add(rcmdn2);
+		Recommendation rcmdn3 = new Recommendation();
+		rcmdn3.setId(11);
+		rcmdn3.setName("Grilled Mushroom");
+		rcmdn3.setDescription("Very tastey and juicy, as if drops from heaven");
+		response.getRecommendations().add(rcmdn3);
+		return response;		
 	}
 
 	// Testing purpose

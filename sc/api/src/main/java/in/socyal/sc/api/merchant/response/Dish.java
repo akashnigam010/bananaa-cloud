@@ -1,11 +1,6 @@
 package in.socyal.sc.api.merchant.response;
 
-import java.io.Serializable;
-
-import in.socyal.sc.api.response.GenericResponse;
-
-public class Dish extends GenericResponse implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Dish {
 	private Integer id;
 	private String nameId;
 	private String name;

@@ -337,17 +337,3 @@ hr {
     padding-top: 7%; 
 }
 /*Home Icon CSS ends*/
-
-/*Loader CSS starts*/
-.loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #9932CC;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin-left: 40%;
-    margin-top: 15%;
-    margin-bottom: 25%;
-}
-/*Loader CSS ends*/
