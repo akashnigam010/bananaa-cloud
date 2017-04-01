@@ -40,5 +40,6 @@
 		<module>login</module>
 		<module>merchant</module>
 		<module>location</module>
+		<module>recommendation</module>
 	</modules>
 </project>
