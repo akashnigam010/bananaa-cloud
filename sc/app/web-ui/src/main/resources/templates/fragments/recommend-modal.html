@@ -1,44 +1,51 @@
 <div th:fragment="recommend-modal">
 <!-- Recommendation Modal STARTS -->
 	<div class="modal fade" id="recommendModal" role="dialog">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header align-center">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	                    <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
-	                </button>
-	                <h4 class="modal-title bold">My recommendation</h4>
-	            </div>
-	            <div class="modal-body align-center" style="padding-top: 7%;">
-	                <div>
-	                    <form>
-	                        <div class="group">      
-	                          <input class="bold" type="text" data-provide="typeahead" id="typeahead-item-name" required="required" />
-	                          <span class="highlight"></span>
-	                          <span class="bar"></span>
-	                          <label>Food or drink name</label>
-	                        </div>
-	                          
-	                        <div class="group" style="margin-bottom: 30px;">
-	                          <textarea class="recommend-desc-area" id="recommend-desc-area" maxlength="140" required="required"></textarea>
-	                          <span class="highlight"></span>
-	                          <span class="bar"></span>
-	                          <label>Add a mini review in 140 characters</label>
-	                        </div>
-	
-	                        <div id="removeRecommendation" onclick="removeRecommendation();">
-	                            <p class="cursor-pointer light">Remove this recommendation</p>
-	                        </div>
-	                        
-	                      </form>
-	                </div>
-	            </div>
-	            <div id="recommendSubmit" class="modal-footer cursor-pointer align-center recommendSubmit" onclick="submitRecommendation();">
-	                Add recommendation
-	            </div>
-	        </div>
-	
-	    </div>
-	</div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="loader hide"></div>
+                    <div class="main-area">
+                        <div class="modal-header align-center">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
+                            </button>
+                            <h4 class="modal-title bold">My recommendation</h4>
+                        </div>
+                        <div class="modal-body align-center" style="padding-top: 7%;">
+                            <div>
+                                <form>
+                                    <div class="group">
+                                      <p class="hide" id="modal-recommendation-id"></p>
+                                      <p class="hide" id="modal-item-id"></p>
+                                      <input class="bold" type="text" data-provide="typeahead" id="modal-item-name" required="required" autocomplete="off" />
+                                      <span class="highlight"></span>
+                                      <span class="bar"></span>
+                                      <label>Food or drink name</label>
+                                    </div>
+                                    <div class="error-label font-0-8 red align-left hide">
+                                        Please select the food or drink item
+                                    </div>
+                                    <div class="group" style="margin-bottom: 30px;">
+                                      <textarea class="recommend-desc-area" id="modal-item-desc" maxlength="140" required="required"></textarea>
+                                      <span class="highlight"></span>
+                                      <span class="bar"></span>
+                                      <label>Add a mini review in 140 characters</label>
+                                    </div>
+
+                                    <div id="removeRecommendation" onclick="removeRecommendation();">
+                                        <p class="cursor-pointer light">Remove this recommendation</p>
+                                    </div>
+                                    
+                                  </form>
+                            </div>
+                        </div>
+                        <div id="recommendSubmit" class="modal-footer cursor-pointer align-center recommendSubmit" onclick="submitRecommendation();">
+                            Add recommendation
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 	<!-- Recommendation Modal ENDS -->
 </div>

@@ -2,6 +2,7 @@ package in.socyal.sc.api.merchant.response;
 
 public class Recommendation {
 	private Integer id;
+	private Integer itemId;
 	private String name;
 	private String description;
 
@@ -27,5 +28,13 @@ public class Recommendation {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Integer dishId) {
+		this.itemId = dishId;
 	}
 }

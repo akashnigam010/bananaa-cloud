@@ -90,3 +90,8 @@ hr {
     width: 50%;
     height: 45px;
 }
+
+.error-label {
+    margin-top: -5%;
+    margin-bottom: 5%;
+}

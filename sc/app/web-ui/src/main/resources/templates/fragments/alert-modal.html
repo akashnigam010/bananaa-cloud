@@ -3,20 +3,23 @@
         <div class="modal fade" id="alertModal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header align-center">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
-                        </button>
-                        <h4 class="modal-title bold" id="alertHeading">Confirm action</h4>
-                    </div>
-                    <div class="modal-body align-center">
-                        <div id="alertText" align="center" style="padding-top: 5%;">
-                            Are you sure?
+                    <div class="loader hide"></div>
+                    <div class="main-area">
+                        <div class="modal-header align-center">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
+                            </button>
+                            <h4 class="modal-title bold" id="alertHeading">Login to Bananaa</h4>
                         </div>
-                    </div>
-                    <div class="modal-footer align-center">
-                        <button class="bna-button" style="width: 25%;" id="confirmAlertButton" >Yes</button>
-                        <button class="bna-button-light" style="width: 25%;" data-dismiss="modal" aria-label="Close">No</button>
+                        <div class="modal-body align-center">
+                            <div id="alertText" align="center" style="padding-top: 5%;">
+                                Are you sure you want to do this?
+                            </div>
+                        </div>
+                        <div class="modal-footer align-center">
+                            <button class="bna-button" style="width: 25%;" id="confirmAlertButton" >Yes</button>
+                            <button class="bna-button-light" style="width: 25%;" data-dismiss="modal" aria-label="Close">No</button>
+                        </div>
                     </div>
                 </div>
 

@@ -82,3 +82,8 @@ hr {
 .my-recommendations {
 	padding-bottom: 5%;
 }
+
+.error-label {
+    margin-top: -10%;
+    margin-bottom: 10%;
+}

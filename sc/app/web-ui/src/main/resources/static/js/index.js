@@ -103,7 +103,7 @@ function getTrendingRestaurants() {
     				  }
     				  $('.trending-restaurant-wrapper').html(trendingRestaurantHtml);
     				  addSlick($('.trending-restaurant-wrapper'));
-    				  $('.trending-restaurant-wrapper-loader').hide();
+    				  $('.trending-restaurants').find('.loader').hide();
     			  }
     		  }
     	  });

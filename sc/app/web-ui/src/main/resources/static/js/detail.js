@@ -1,3 +1,4 @@
+var rcmdOb = {};
 $(document).ready(function() {
     var primaryImage = $("#primaryImageTemp").html();
     var background = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0)),url("+primaryImage+")";
@@ -6,7 +7,7 @@ $(document).ready(function() {
     $(".primary-image-banner").css("background-position", "center");
     $(".primary-image-banner").css("background-size", "cover");
 
-        $('#typeahead-item-name').typeahead({
+        $('#modal-item-name').typeahead({
 	    	minLength: 2,
 	    	autoSelect: true,
 	    	//showHintOnFocus: true,
@@ -29,15 +30,60 @@ $(document).ready(function() {
 	    });
         
         $('#addRecommendButton').on('mouseup', function (e) {
-        	openRecommendationModal('', '', false);
+        	openRecommendationModal('', '', '', '', false);
         });
         
         getMyRecommendations(1);
 });
 
-function openRecommendationModal(name, desc, isUpdateFlag) {
-	$("#typeahead-item-name").val(name);
-	$("#recommend-desc-area").val(desc);
+function loadPopularDishes() {
+	accessToken = $('#accessToken').val();
+	var dataOb = {
+			id : 1
+	};
+	$.ajax({
+    	  method: "POST",
+    	  url: "/socyal/merchant/getPopularItems",
+    	  contentType : "application/json",
+    	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
+    	  data: JSON.stringify(dataOb)
+    	})
+    	  .done(function(response) {
+    		  var popularItemsHtml = '';
+    		  if (response.result == true) {
+    			  if (response.items.length > 0) {
+    				  for (var i=0; i<response.items.length; i++) {
+    					  popularItemsHtml += 
+    						  '<div class="row">'+
+			                     '<div class="col-xs-12 recommended-item">'+
+			                          '<div class="float-left" style="object-fit: cover;">'+
+			                              '<img class="user-icon" src="'+response.items[i].imageUrl+'" />'+
+			                          '</div>'+
+			                          '<div class="float-left item-desc-wrapper">'+
+			                              '<div class="bold item-name">'+
+			                              		response.items[i].name+
+			                              '</div>'+
+			                               '<div>'+
+			                               		response.items[i].recommendations+' people recommended'+
+			                              '</div>'+
+			                          '</div>'+                                                                           
+			                      '</div>'+
+			                  '</div>';
+    				  }
+    				  $('.loadmore-wrapper').html(popularItemsHtml);
+    				  $('#loadMoreModal').modal('show');
+    			  }
+    		  }
+    	  });
+}
+
+function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
+	$("#recommendModal").find('.main-area').show();
+	$("#recommendModal").find('.loader').addClass('hide');
+	$("#modal-recommendation-id").val(rcmdId);
+	$("#modal-item-id").val(itemId);
+	$("#modal-item-name").val(name);
+	$("#modal-item-desc").val(desc);
 	if (isUpdateFlag) {
 		$("#removeRecommendation").removeClass('hide');
 		$("#recommendSubmit").html('Update recommendation');
@@ -45,31 +91,55 @@ function openRecommendationModal(name, desc, isUpdateFlag) {
 		$("#removeRecommendation").addClass('hide');
 		$("#recommendSubmit").html('Add recommendation');
 	}
+	$('#recommendModal').find('.error-label').addClass('hide');
 	$('#recommendModal').modal('show');
 }
 
 function submitRecommendation() {
-	var $input = $('#typeahead-item-name');
-	var current = $input.typeahead("getActive");
+	var nameInput = $('#modal-item-name');	
+	var $rcmdId = $('#modal-recommendation-id').val();
+	var $itemId = $('#modal-item-id').val();
+	var $name = nameInput.val();
+	var $desc = $('#modal-item-desc').val();
+	var current = nameInput.typeahead("getActive");
 	if (current) {
-	    // Some item from your model is active!
-	    if (current.name == $input.val()) {
-	      // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
-	      console.log('exact match');
-	      console.log(current);		  
+		if (current.name.toLowerCase() == $name.toLowerCase()) {
+	      	$("#recommendModal").find('.main-area').hide();
+			$("#recommendModal").find('.loader').removeClass('hide');
 	    } else {
-	      //console.log('partial match');
+	    	handlePartialMatch($rcmdId, $itemId, $name, $desc);
 	    }
 	  } else {
-	    //console.log('no match');
+	  		handlePartialMatch($rcmdId, $itemId, $name, $desc);
 	  }
 }
 
+function handlePartialMatch(rcmdId, id, name, desc) {
+	if (name === rcmdOb.name && desc === rcmdOb.desc) {
+		$('#recommendModal').modal('hide');
+	}
+	if (name === rcmdOb.name) {
+		if (desc != rcmdOb.desc) {
+			console.log('update this recommendation\'s description  - rcmdId: ' + rcmdId);	
+		}
+	} else {
+		$('#recommendModal').find('.error-label').removeClass('hide');
+	}	
+}
+
 function removeRecommendation() {
+	$("#alertModal").find('.main-area').show();
+	$("#alertModal").find('.loader').addClass('hide');
 	$('#recommendModal').modal('hide');
 	$("#alertText").html('Are you sure you want to remove ' + rcmdOb.name + ' from your recommendations ?')
 	$("#alertHeading").html('Confirm action')
 	$("#alertModal").modal('show');
+	$("#confirmAlertButton").on('mouseup', function (e) {
+		$("#alertModal").find('.main-area').hide();
+		$("#alertModal").find('.loader').removeClass('hide');
+		console.log('Removing id:' + rcmdOb.rcmdId + ', name: ' + rcmdOb.name);
+		// $("#alertModal").modal('hide');
+	});
 }
 
 function getMyRecommendations(restId) {
@@ -93,7 +163,8 @@ function getMyRecommendations(restId) {
     						  '<div class="row">'+
 		                          '<div class="col-xs-12 recommended-item cursor-pointer">'+
 		                              '<div class="bold recommend-item-name">'+
-		                                  '<span class="hide item-id">'+response.recommendations[i].id+'</span>'+
+		                                  '<span class="hide recommendation-id">'+response.recommendations[i].id+'</span>'+
+		                              	  '<span class="hide item-id">'+response.recommendations[i].itemId+'</span>'+
 		                                  '<span class="bna-color item-hash">#'+(i+1)+'</span>'+
 		                                  '&nbsp; <span class="item-name">'+response.recommendations[i].name+'</span>'+
 		                              '</div>'+
@@ -109,7 +180,7 @@ function getMyRecommendations(restId) {
     				  } else {
     					  $('.addRecommendButtonDiv').hide();
     				  }
-    				  $('.my-recommendation-loader').hide();
+    				  $('.recommended-wrapper').find('.loader').hide();
     				  activateUpdateRcmdModal();
     			  }
     		  }
@@ -118,17 +189,12 @@ function getMyRecommendations(restId) {
 
 function activateUpdateRcmdModal() {
 	$(".recommended-item").on('mouseup', function(e){
-    	var id = e.currentTarget.childNodes[0].childNodes[0].childNodes[0].data;
-    	var hash = e.currentTarget.childNodes[0].childNodes[1].childNodes[0].data;
-    	var name = e.currentTarget.childNodes[0].childNodes[3].childNodes[0].data;
-    	var desc = '';
-    	if (e.currentTarget.childNodes[1].childNodes.length != 0) {
-    		desc = e.currentTarget.childNodes[1].childNodes[0].data;
-    	} 
     	rcmdOb = {
-    		id: id,
-    		name: name
+    		rcmdId: $(this).find('.recommendation-id').html(),
+    		itemId: $(this).find('.item-id').html(),
+    		name: $(this).find('.item-name').html(),
+    		desc: $(this).find('.recommend-item-desc').html().trim()
     	};
-    	openRecommendationModal(name, desc.trim(), true);
+    	openRecommendationModal(rcmdOb.rcmdId, rcmdOb.itemId, rcmdOb.name, rcmdOb.desc, true);
     });
 }

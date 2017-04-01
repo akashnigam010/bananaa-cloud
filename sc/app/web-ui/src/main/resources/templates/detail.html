@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="row padding-top">
                                     <hr />
-                                    <div class="pull-right bna-color padding-3">
+                                    <div class="pull-right bna-color padding-3 cursor-pointer" onclick="loadPopularDishes();">
                                         <a>See all recommendations</a>
                                     </div>                                    
                                 </div>                                               
@@ -168,11 +168,12 @@
                                 </div>
                                 <div class="row recommended-wrapper">
                                     <div class="col-xs-12">
-                                    	<div class="loader my-recommendation-loader"></div>
+                                    	<div class="loader"></div>
                                    		<div class="my-recommendations">
 	                                        <!-- <div class="row">
 	                                            <div class="col-xs-12 recommended-item cursor-pointer">
 	                                                <div class="bold recommend-item-name">
+	                                                	<span class="hide recommendation-id">21</span>
 	                                                    <span class="hide item-id">11</span>
 	                                                    <span class="bna-color item-hash">#1</span>
 	                                                    <span class="item-name">Joojeh Kebab</span>
@@ -199,6 +200,10 @@
         <div lang="en" th:replace="fragments/recommend-modal :: recommend-modal"></div>
         
         <div lang="en" th:replace="fragments/alert-modal :: alert-modal"></div>
+        
+        <div lang="en" th:replace="fragments/loadmore-modal :: loadmore-modal"></div>
+        
+        <!-- <div lang="en" th:replace="fragments/loading-modal :: loading-modal"></div> -->
         
         <div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
 
