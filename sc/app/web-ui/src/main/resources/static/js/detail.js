@@ -37,6 +37,20 @@ $(document).ready(function() {
 });
 
 function loadPopularDishes() {
+	$('#loadMoreModal').on('show.bs.modal', function(e) {
+        window.location.hash = "modal";
+    });
+    $('#loadMoreModal').on('hidden.bs.modal', function(e) {
+    	if(window.location.hash == "#modal") {
+            window.history.back();
+        }    	
+    });
+
+    $(window).on('hashchange', function (event) {
+        if(window.location.hash != "#modal") {
+            $('#loadMoreModal').modal('hide');
+        }
+    });
 	accessToken = $('#accessToken').val();
 	var dataOb = {
 			id : 1
