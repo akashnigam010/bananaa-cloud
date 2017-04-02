@@ -39,10 +39,6 @@ body {
 	border-radius: 0px 0px 6px 6px;
 }
 
-.recommended-item {
-	padding: 3%;
-}
-
 .item-desc-wrapper {
 	margin-left: 4%
 }
@@ -70,6 +66,10 @@ hr {
     margin-bottom: 2px; 
 }
 
+.recommend-desc-area {
+	height: 90px;
+}
+
 .recommend-button {
     width: 90%;
     height: 45px;
@@ -82,4 +82,8 @@ hr {
 .error-label {
     margin-top: -10%;
     margin-bottom: 10%;
+}
+
+.reviews {
+    margin-bottom: 5%;
 }

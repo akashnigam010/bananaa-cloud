@@ -14,9 +14,12 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.Dish;
 import in.socyal.sc.api.merchant.response.DishResponse;
+import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.Recommendation;
 import in.socyal.sc.api.merchant.response.RecommendationResponse;
+import in.socyal.sc.api.merchant.response.Review;
+import in.socyal.sc.api.merchant.response.User;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
@@ -96,6 +99,74 @@ public class PageController {
 		modelAndView.addObject("userImage", "https://fb-s-a-a.akamaihd.net/h-ak-xfl1/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE&__gda__=1494528018_4c3d954c3fe507b4d4aa581df02de6e7");
 		modelAndView.addObject("accessToken", JwtHelper.createJsonWebTokenForGuest());
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/hyderabad/fusion-9-hitech-city/{id}", method = RequestMethod.GET)
+	public ModelAndView foodDetails(@PathVariable String id) throws BusinessException {
+		ModelAndView modelAndView = new ModelAndView("item-detail");
+		ItemDetailsResponse response = getItemDetails();
+		modelAndView.addObject("detail", response);
+		//modelAndView.addObject("description", getDetailMetaDescription(response));
+		//modelAndView.addObject("fbDescription", getDetailMetaDescription(response));
+		modelAndView.addObject("title", response.getName()+" @ "+response.getMerchantName());
+		//modelAndView.addObject("url", getDetailMetaUrl(response, CityType.HYDERABAD.getName()));
+		modelAndView.addObject("accessToken", JwtHelper.createJsonWebTokenForGuest());
+		return modelAndView;
+	}
+	
+	private ItemDetailsResponse getItemDetails() {
+		ItemDetailsResponse response = new ItemDetailsResponse();
+		response.setId(1);
+		response.setName("Joojeh Kebab");
+		response.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
+		response.setMerchantName("Fusion 9");
+		response.setMerchantShortAddress("Hitech City, Hyderabad");
+		response.setMerchantUrl("hyderabad/12346");
+		response.setRecommendations(23);
+		Review review1 = new Review();
+		User user1 = new User();
+		user1.setId(1);
+		user1.setName("Shubhankar Saxena");
+		user1.setRecommendations(10);
+		user1.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE");
+		review1.setId(1);
+		review1.setUser(user1);
+		review1.setDesc("The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
+		response.getReviews().add(review1);
+		
+		Review review2 = new Review();
+		User user2 = new User();
+		user2.setId(2);
+		user2.setName("Deepak Gupta");
+		user2.setRecommendations(14);
+		user2.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16195135_10202582907209226_8892726716716657102_n.jpg?oh=88a1701d79b3ad41916b6dd14fa254a5&oe=5938B99B");
+		review2.setId(2);
+		review2.setUser(user2);
+		review2.setDesc("The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
+		response.getReviews().add(review2);
+		
+		Review review3 = new Review();
+		User user3 = new User();
+		user3.setId(3);
+		user3.setName("Subhajoy Laskar");
+		user3.setRecommendations(34);
+		user3.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA");
+		review3.setId(3);
+		review3.setUser(user3);
+		review3.setDesc("The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.");
+		response.getReviews().add(review3);
+		
+		Review review4 = new Review();
+		User user4 = new User();
+		user4.setId(4);
+		user4.setName("Ayush Singh");
+		user4.setRecommendations(34);
+		user4.setImageUrl("https://scontent.xx.fbcdn.net/v/t1.0-1/c27.0.160.160/p160x160/15337536_987021314735785_2690017545352587728_n.jpg?oh=de9c0549fb958af561b3bcd33092776c&oe=592F7F57");
+		review4.setId(5);
+		review4.setUser(user4);
+		review4.setDesc("The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
+		response.getReviews().add(review4);
+		return response;
 	}
 	
 	private DishResponse getPopularDishes() {

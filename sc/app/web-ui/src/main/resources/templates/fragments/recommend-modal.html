@@ -18,20 +18,20 @@
                                       <p class="hide" id="modal-recommendation-id"></p>
                                       <p class="hide" id="modal-item-id"></p>
                                       <input class="bold" type="text" data-provide="typeahead" id="modal-item-name" required="required" autocomplete="off" />
-                                      <span class="highlight"></span>
                                       <span class="bar"></span>
                                       <label>Food or drink name</label>
                                     </div>
-                                    <div class="error-label font-0-8 red align-left hide">
+                                    <div class="error-label error-label-name font-0-8 red align-left hide">
                                         Please select the food or drink item
                                     </div>
-                                    <div class="group" style="margin-bottom: 30px;">
-                                      <textarea class="recommend-desc-area" id="modal-item-desc" maxlength="140" required="required"></textarea>
-                                      <span class="highlight"></span>
+                                    <div class="group">
+                                      <textarea class="recommend-desc-area" id="modal-item-desc" maxlength="200"></textarea>
                                       <span class="bar"></span>
-                                      <label>Add a mini review in 140 characters</label>
+                                      <label>Add a mini food review</label>
                                     </div>
-
+									<div class="error-label error-label-review font-0-8 red align-left hide">
+                                        Your review needs to be minimum 50 and maximum 200 characters long
+                                    </div>
                                     <div id="removeRecommendation" onclick="removeRecommendation();">
                                         <p class="cursor-pointer light">Remove this recommendation</p>
                                     </div>

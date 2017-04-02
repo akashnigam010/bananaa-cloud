@@ -389,3 +389,20 @@ ul.typeahead.dropdown-menu {
   }
 }*/
 /*Full screen modal css ENDS*/
+
+/*Input placeholder css STARTS*/
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color:    #939393;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   color:    #939393;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   color:    #939393;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color:    #939393;
+}
+/*Input placeholder css ENDS*/

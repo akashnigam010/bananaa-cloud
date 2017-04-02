@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head"></head>
+<link href="/css/item-detail.css" rel="stylesheet"></link>
+<link href="/css/item-detail-mini.css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
+<script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
+
+<body>
+	<script type="text/javascript" src="/js/login.js"></script>
+	<script type="text/javascript">
+		window.onload = function() {
+			initApp();
+		};
+	</script>
+	<div class="container-fluid">
+
+		<div class="hide" id="primaryImageTemp" th:text="${detail.imageUrl}"></div>
+        <div class="row primary-image-banner">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <p class="simpson header-icon cursor-pointer" onclick="location.href='/">bananaa</p>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="btn-group login-info pull-right">
+                            <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span id="login-info">Login</span> <span class="caret"></span>                        
+                            </button>
+                            <ul id="login-dropdown" class="dropdown-menu pull-right">
+                                    <li><a href="javascript:logout();">Logout</a></li>
+                                </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+
+        <div class="row merchant-detail-background blue-white-background">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 merchant-detail-main">
+                <div class="row white-background details-wrapper details-top-wrapper">
+                    <div class="col-xs-12">
+                        <div class="row" style="padding: 3% 0%;">
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row padding-left">
+                                            <div class="col-xs-12 bold font-2" th:text="${detail.name}">
+                                            </div>
+                                             <div class="col-xs-12 light" th:text="'@ ' + ${detail.merchantName} + ', ' + ${detail.merchantShortAddress}">
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hidden-xs col-sm-4">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row padding-left" style="padding-top: 2%;">
+                                            <div class="col-xs-12 bold font-1-5" th:text="${detail.recommendations}">
+                                                
+                                            </div>
+                                             <div class="col-xs-12 bna-color">
+                                                RECOMMENDATIONS
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row padding-left">
+                                            <div class="col-xs-12 padding-top">
+                                                <hr />
+                                                <span class="bold font-1-5" th:text="${detail.recommendations}"></span>
+                                            <span class="bna-color">RECOMMENDATIONS</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                                              
+                    </div>   
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-sm-push-8 white-background details-wrapper" style="margin-top: 10px;">
+                        <div class="col-xs-12">
+                            <div class="row" style="padding: 2%;">
+                                <div class="col-xs-12 detail-type-padding">
+                                    <div class="detail-type-2">Does it soothe your taste buds, let us know..</div>
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="row align-center addRecommendButtonDiv">
+                                        <button id="addRecommendButton" class="bna-button recommend-button">Add a recommendation</button>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="detail-about">
+                        <div class="col-xs-12 col-sm-8 col-sm-pull-4 white-background details-wrapper" style="margin-top: 10px;">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-12 font-1-5 bna-color padding-3">
+                                        Reviews
+                                    </div>    
+                                </div>
+                                <div class="row recommended-wrapper">
+                                    <div class="col-xs-12 reviews">
+                                        <div class="row" th:each="review, iterStat : ${detail.reviews}">
+                                            <div class="col-xs-12 review-item-top">
+                                                <div class="float-left" style="object-fit: cover;">
+                                                    <img class="user-icon" th:src="${review.user.imageUrl}" />
+                                                </div>
+                                                <div class="float-left item-desc-wrapper">
+                                                    <div class="bold item-name" th:text="${review.user.name}">
+                                                        
+                                                    </div>
+                                                     <div class="light" th:text="${review.user.recommendations} + ' recommendations'">
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 review-item-desc" th:text="${review.desc}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                                              
+                            </div>                        
+                        </div>                                               
+                    </div> 
+                </div>
+            </div>
+        </div>
+        
+        <div lang="en" th:replace="fragments/recommend-modal :: recommend-modal"></div>
+        
+        <div lang="en" th:replace="fragments/alert-modal :: alert-modal"></div>
+        
+        <div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
+
+		<div lang="en" th:replace="fragments/footer :: footer"></div>
+
+	</div>
+	<input type="hidden" id="accessToken" th:value='${accessToken}' />
+	<script src="/js/detail.js"></script>
+</body>
+
+</html>

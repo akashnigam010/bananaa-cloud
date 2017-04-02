@@ -48,10 +48,6 @@
 	border-radius: 6px;
 }
 
-.recommended-item {
-	padding: 3%;
-}
-
 .item-desc-wrapper {
 	margin-left: 3%
 }
@@ -87,15 +83,23 @@ hr {
 }
 
 .recommend-button {
-    width: 50%;
+    width: 90%;
     height: 45px;
-}
-
-.recommend-desc-area {
-	height: 100px;
 }
 
 .error-label {
     margin-top: -5%;
     margin-bottom: 5%;
+}
+
+.review-desc {
+    padding-top: 0%;
+    padding-bottom: 6%;
+}
+
+.review-item-top {
+    padding: 3% 3% 0% 3%;
+}
+.review-item-desc {
+    padding: 3% 3% 10% 3%
 }
