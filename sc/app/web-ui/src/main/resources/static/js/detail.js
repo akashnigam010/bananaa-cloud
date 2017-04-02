@@ -42,7 +42,8 @@ function loadPopularDishes() {
     });
     $('#loadMoreModal').on('hidden.bs.modal', function(e) {
     	if(window.location.hash == "#modal") {
-            window.history.back();
+    		//temporary commenting because this works absurdly in chrome for desktop
+    		//window.history.back();
         }    	
     });
 

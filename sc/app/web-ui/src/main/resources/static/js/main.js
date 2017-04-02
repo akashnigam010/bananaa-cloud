@@ -34,7 +34,19 @@ $(document).ready(function() {
         $('.modal:visible').each(repositionModal);
     });
     
-    
+    $('.modal').on('show.bs.modal', function(e) {
+        window.location.hash = "modal";
+    });
+    // $('.modal').on('hidden.bs.modal', function(e) {
+    // 	if(window.location.hash == "#modal") {
+    //         window.history.back();
+    //     }    	
+    // });
+    $(window).on('hashchange', function (event) {
+        if(window.location.hash != "#modal") {
+            $('.modal').modal('hide');
+        }
+    });
 });
 
 function addSlick(slickElement) {
