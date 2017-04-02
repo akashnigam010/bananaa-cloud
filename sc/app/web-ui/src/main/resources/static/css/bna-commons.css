@@ -239,13 +239,11 @@ body .slick-next, body .slick-prev{
 /* Footer CSS - END */
 
 
-/* Material Design Input STARTS */
 .group        { 
   position:relative; 
   margin-bottom:45px; 
 }
 input, textarea {
-  /*font-size:18px;*/
   padding:10px 10px 10px 5px;
   display:block;
   width:90%;
@@ -260,7 +258,6 @@ input:focus, textarea:focus {
 /* LABEL */
 label          {
   color:#999; 
-  /*font-size:18px;*/
   font-weight:normal;
   position:absolute;
   pointer-events:none;
@@ -270,7 +267,7 @@ label          {
 }
 
 /* active state */
-input:focus ~ label, input:valid ~ label, textarea:focus ~ label, textarea:valid ~ label     {
+input:focus ~ label, input:valid ~ label, textarea:focus ~ label     {
   top:-20px;
   font-size:10px;
   color:#9932CC;
@@ -305,6 +302,17 @@ input:focus ~ label, input:valid ~ label, textarea:focus ~ label, textarea:valid
 input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:before, textarea:focus ~ .bar:after {
   width:50%;
 }
+
+/* HIGHLIGHTER */
+/*.highlight {
+  position:absolute;
+  height:60%; 
+  width:100px; 
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+}*/
 
 /* active state */
 input:focus ~ .highlight, textarea:focus ~ .highlight {
