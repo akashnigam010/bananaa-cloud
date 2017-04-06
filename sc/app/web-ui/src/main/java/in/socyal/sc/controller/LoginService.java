@@ -1,5 +1,9 @@
 package in.socyal.sc.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.login.dto.LoginUserDto;
+import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
@@ -27,6 +33,10 @@ public class LoginService {
 	ResponseHelper helper;
 	@Autowired
 	LoginValidator validator;
+	@Autowired
+	HttpServletResponse httpResponse;
+	@Autowired 
+	HttpServletRequest httpRequest;
 
 	@RequestMapping(value = "/skipLogin", method = RequestMethod.GET, headers = "Accept=application/json")
 	public LoginResponse skipLogin() {
@@ -60,6 +70,20 @@ public class LoginService {
 		try {
 			validator.validateFbLoginRequest(request);
 			response = delegate.fbLogin(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/loginWithFirebase", method = RequestMethod.POST, headers = "Accept=application/json")
+	public LoginResponse loginWithFirebase(@RequestBody IdTokenRequest request) {
+		LoginResponse response = new LoginResponse();
+		Cookie cookie = new Cookie("bna-login-cookie", "bananaa-auth-token");
+		cookie.setPath("/");
+		httpResponse.addCookie(cookie);
+		try {
+			delegate.firebaseLogin(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

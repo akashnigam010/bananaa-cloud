@@ -14,14 +14,17 @@ import com.restfb.types.User;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.dto.BusinessLoginUserDto;
 import in.socyal.sc.api.login.request.BusinessLoginRequest;
+import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
+import in.socyal.sc.api.login.response.FirebaseLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.merchant.business.dto.MerchantLoginDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.type.error.LoginErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
+import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.persistence.CheckinDao;
 import in.socyal.sc.persistence.MerchantDao;
@@ -50,6 +53,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	MerchantLoginDao merchantLoginDao;
 	@Autowired
 	MerchantDao merchantDao;
+	@Autowired
+	FirebaseAuthHelper firebaseHelper;
 
 	@Override
 	public LoginResponse skipLogin() throws BusinessException {
@@ -101,5 +106,12 @@ public class LoginDelegateImpl implements LoginDelegate {
 		response.setUser(loggedInUser);
 		response.setSupportNumber(resource.getString(BANANAA_SUPPORT));
 		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public FirebaseLoginResponse firebaseLogin(IdTokenRequest request) throws BusinessException {
+		firebaseHelper.getUid(request.getIdToken());
+		return null;
 	}
 }
