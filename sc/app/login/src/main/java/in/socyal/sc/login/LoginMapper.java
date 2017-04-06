@@ -2,7 +2,7 @@ package in.socyal.sc.login;
 
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.api.login.dto.LoginUserDto;
+import in.socyal.sc.api.login.response.LoginUserDto;
 
 @Component
 public class LoginMapper {

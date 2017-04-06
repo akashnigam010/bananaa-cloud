@@ -1,6 +1,5 @@
 package in.socyal.sc.api.login.response;
 
-import in.socyal.sc.api.login.dto.BusinessLoginUserDto;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class BusinessLoginResponse extends GenericResponse {

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import in.socyal.sc.api.type.DayType;
 
 @Entity
-@Table(name = "TIMING", schema = "Socyal")
+@Table(name = "TIMING", schema = "bna")
 public class TimingEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

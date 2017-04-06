@@ -1,4 +1,4 @@
-package in.socyal.sc.api.login.dto;
+package in.socyal.sc.api.login.response;
 
 public class LoginUserDto {
 	private Integer id;

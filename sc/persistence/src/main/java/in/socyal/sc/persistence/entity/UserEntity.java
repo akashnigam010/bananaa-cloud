@@ -5,13 +5,17 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import in.socyal.sc.api.type.GenderType;
+
 @Entity
-@Table(name = "USER", schema = "Socyal")
+@Table(name = "USER", schema = "bna")
 public class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -20,38 +24,30 @@ public class UserEntity implements Serializable {
 	@Column(name = "ID")
 	private Integer id;
 
+	@Column(name = "UID")
+	private String uid;
+
 	@Column(name = "FIRST_NAME")
 	private String firstName;
 
 	@Column(name = "LAST_NAME")
 	private String lastName;
-	
+
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
 
 	@Column(name = "EMAIL")
 	private String email;
-	
-	@Column(name = "FACEBOOK_ID")
-	private String facebookId;
-	
-	@Column(name = "FACEBOOK_LINK")
-	private String facebookLink;
-	
-	@Column(name = "FACEBOOK_TOKEN")
-	private String facebookToken;
-	
+
 	@Column(name = "GENDER")
-	private String gender;
-	
+	@Enumerated(EnumType.STRING)
+	private GenderType gender;
+
 	@Column(name = "CREATED_DATETIME")
 	private Calendar createdDateTime;
-	
+
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
-	
-	@Column(name = "REGISTRATION_ID")
-	private String registrationId;
 
 	public Integer getId() {
 		return id;
@@ -93,35 +89,19 @@ public class UserEntity implements Serializable {
 		this.email = email;
 	}
 
-	public String getFacebookId() {
-		return facebookId;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setFacebookId(String facebookId) {
-		this.facebookId = facebookId;
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
-	public String getFacebookLink() {
-		return facebookLink;
-	}
-
-	public void setFacebookLink(String facebookLink) {
-		this.facebookLink = facebookLink;
-	}
-
-	public String getFacebookToken() {
-		return facebookToken;
-	}
-
-	public void setFacebookToken(String facebookToken) {
-		this.facebookToken = facebookToken;
-	}
-
-	public String getGender() {
+	public GenderType getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(GenderType gender) {
 		this.gender = gender;
 	}
 
@@ -139,13 +119,5 @@ public class UserEntity implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
-	}
-
-	public String getRegistrationId() {
-		return registrationId;
-	}
-
-	public void setRegistrationId(String registrationId) {
-		this.registrationId = registrationId;
 	}
 }

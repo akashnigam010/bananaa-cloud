@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import in.socyal.sc.api.login.dto.LoginUserDto;
+import in.socyal.sc.api.login.response.LoginUserDto;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class SearchFriendToTagResponse extends GenericResponse implements Serializable {

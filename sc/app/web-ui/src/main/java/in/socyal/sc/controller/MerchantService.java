@@ -226,22 +226,17 @@ public class MerchantService {
 		}
 	}
 	
-	/**
-	 * This method is used to save REGISTRATION_ID for a respective merchant logged in device
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/saveBusinessRegistrationId", method = RequestMethod.POST, headers = "Accept=application/json")
-	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(@RequestBody SaveBusinessRegistrationIdRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/merchant/saveBusinessRegistrationId");
-		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
-		try {
-			validator.validateSaveBusinessRegistrationIdRequest(request);
-			response = delegate.saveBusinessRegistrationId(request);
-			return responseHelper.success(response);
-		} catch (BusinessException e) {
-			return responseHelper.failure(response, e);
-		}
-	}
+//	@RequestMapping(value = "/saveBusinessRegistrationId", method = RequestMethod.POST, headers = "Accept=application/json")
+//	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(@RequestBody SaveBusinessRegistrationIdRequest request) {
+//		JsonHelper.logRequest(request, MerchantService.class, "/merchant/saveBusinessRegistrationId");
+//		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
+//		try {
+//			validator.validateSaveBusinessRegistrationIdRequest(request);
+//			response = delegate.saveBusinessRegistrationId(request);
+//			return responseHelper.success(response);
+//		} catch (BusinessException e) {
+//			return responseHelper.failure(response, e);
+//		}
+//	}
 	
 }

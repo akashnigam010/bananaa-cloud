@@ -22,7 +22,7 @@ function googleSignIn() {
       var email = error.email;
       var credential = error.credential;
       if (errorCode === 'auth/account-exists-with-different-credential') {
-        alert('You have already signed up with a different auth provider for that email.');
+        alert('You have already signed up with Facebook, please use the same method again to login.');
       } else {
         console.error(error);
       }
@@ -45,7 +45,7 @@ function fbSignIn() {
       var email = error.email;
       var credential = error.credential;
       if (errorCode === 'auth/account-exists-with-different-credential') {
-        alert('You have already signed up with a different auth provider for that email.');
+    	  alert('You have already signed up with Google, please use the same method again to login.');
       } else {
         console.error(error);
       }
@@ -62,7 +62,14 @@ function logout() {
 
 function initApp() {
   firebase.auth().onAuthStateChanged(function(user) {
+	  console.log('called onAuthStateChanged');
     if (user) {
+      firebase.auth().currentUser.getToken(/* forceRefresh */ true).then(function(idToken) {
+		  // Send token to your backend via HTTPS
+    	  loginWithIdToken(idToken);
+		}).catch(function(error) {
+		  // Handle error
+		});
       var displayName = user.displayName;
       $("#login-info").text(displayName);
       isLoggedIn = true;
@@ -72,4 +79,20 @@ function initApp() {
       isLoggedIn = false;
     }
   });
+}
+
+function loginWithIdToken(idToken) {
+	var dataOb = {
+			idToken : idToken
+	};
+	$.ajax({
+  	  method: "POST",
+  	  url: "/socyal/login/login",
+  	  contentType : "application/json",
+  	  //beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
+  	  data: JSON.stringify(dataOb)
+  	})
+  	  .done(function(response) {
+  		  console.log(response);
+  	  });
 }

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.BusinessLoginRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.login.response.LoginUserDto;
 import in.socyal.sc.core.validation.LoginValidator;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.login.LoginDelegate;
@@ -50,34 +50,8 @@ public class LoginService {
 		}
 	}
 	
-	@RequestMapping(value = "/businessLogin", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessLoginResponse businessLogin(@RequestBody BusinessLoginRequest request) {
-		BusinessLoginResponse response = new BusinessLoginResponse();
-		try {
-			LOG.info("Business login request");
-			validator.validateBusinessLoginRequest(request);
-			response = delegate.businessLogin(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
-	
-	@RequestMapping(value = "/fbLogin", method = RequestMethod.POST, headers = "Accept=application/json")
-	public LoginResponse fbLogin(@RequestBody LoginRequest request) {
-		JsonHelper.logRequest(request, LoginService.class, "/login/fbLogin");
-		LoginResponse response = new LoginResponse();
-		try {
-			validator.validateFbLoginRequest(request);
-			response = delegate.fbLogin(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
-	
-	@RequestMapping(value = "/loginWithFirebase", method = RequestMethod.POST, headers = "Accept=application/json")
-	public LoginResponse loginWithFirebase(@RequestBody IdTokenRequest request) {
+	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	public LoginResponse login(@RequestBody IdTokenRequest request) {
 		LoginResponse response = new LoginResponse();
 		Cookie cookie = new Cookie("bna-login-cookie", "bananaa-auth-token");
 		cookie.setPath("/");
@@ -89,4 +63,30 @@ public class LoginService {
 			return helper.failure(response, e);
 		}
 	}
+	
+//	@RequestMapping(value = "/businessLogin", method = RequestMethod.POST, headers = "Accept=application/json")
+//	public BusinessLoginResponse businessLogin(@RequestBody BusinessLoginRequest request) {
+//		BusinessLoginResponse response = new BusinessLoginResponse();
+//		try {
+//			LOG.info("Business login request");
+//			validator.validateBusinessLoginRequest(request);
+//			response = delegate.businessLogin(request);
+//			return helper.success(response);
+//		} catch (BusinessException e) {
+//			return helper.failure(response, e);
+//		}
+//	}
+//	
+//	@RequestMapping(value = "/fbLogin", method = RequestMethod.POST, headers = "Accept=application/json")
+//	public LoginResponse fbLogin(@RequestBody LoginRequest request) {
+//		JsonHelper.logRequest(request, LoginService.class, "/login/fbLogin");
+//		LoginResponse response = new LoginResponse();
+//		try {
+//			validator.validateFbLoginRequest(request);
+//			response = delegate.fbLogin(request);
+//			return helper.success(response);
+//		} catch (BusinessException e) {
+//			return helper.failure(response, e);
+//		}
+//	}
 }

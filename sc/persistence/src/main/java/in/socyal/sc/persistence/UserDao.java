@@ -3,18 +3,14 @@ package in.socyal.sc.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.restfb.types.User;
 
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.Clock;
@@ -114,56 +110,26 @@ public class UserDao {
 		return userDtos;
 	}
 
-	/**
-	 * Save or update user details. <br>
-	 * <br>
-	 * If user doesn't exist, a new user is created.<br>
-	 * If user already exists, its FB access token is compared with the passed
-	 * access token, and updated accordingly.<br>
-	 * This is done to update the token if it was expired already
-	 * 
-	 * @param user
-	 * @param fbAccessToken
-	 * @return
-	 */
-	public UserDto saveOrUpdate(User user, String fbAccessToken) {
-		UserDto userDto = new UserDto();
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		criteria.add(Restrictions.eq("facebookId", user.getId()));
-		UserEntity entity = (UserEntity) criteria.uniqueResult();
-
-		if (entity == null) {
-			entity = new UserEntity();
-			mapper.map(user, entity, fbAccessToken);
-			sessionFactory.getCurrentSession().save(entity);
-		} else if (StringUtils.equals(entity.getFacebookId(), user.getId())) {
-			entity.setFacebookToken(fbAccessToken);
-			entity.setUpdatedDateTime(clock.cal());
-			sessionFactory.getCurrentSession().update(entity);
-		}
-		mapper.map(entity, userDto);
-		return userDto;
-	}
 	
-	/**
-	 * This method is used to save registrationId for a user
-	 * @param userId
-	 * @param registrationId
-	 */
-	public void saveRegistrationIdForUser(Integer userId, String registrationId) {
-		Session session = sessionFactory.getCurrentSession();
-		UserEntity user = (UserEntity) session.load(UserEntity.class, userId);
-		user.setUpdatedDateTime(clock.cal());
-		user.setRegistrationId(registrationId);
-		session.update(user);
-	}
+//	public UserDto saveOrUpdate(User user, String fbAccessToken) {
+//		UserDto userDto = new UserDto();
+//		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+//		criteria.add(Restrictions.eq("facebookId", user.getId()));
+//		UserEntity entity = (UserEntity) criteria.uniqueResult();
+//
+//		if (entity == null) {
+//			entity = new UserEntity();
+//			mapper.map(user, entity, fbAccessToken);
+//			sessionFactory.getCurrentSession().save(entity);
+//		} else if (StringUtils.equals(entity.getFacebookId(), user.getId())) {
+//			entity.setFacebookToken(fbAccessToken);
+//			entity.setUpdatedDateTime(clock.cal());
+//			sessionFactory.getCurrentSession().update(entity);
+//		}
+//		mapper.map(entity, userDto);
+//		return userDto;
+//	}
 	
-	public String getRegistrationIdForUser(Integer userId) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		criteria.add(Restrictions.eq("id", userId));
-		UserEntity entity = (UserEntity) criteria.uniqueResult();
-		return entity.getRegistrationId();
-	}
 	
 	/**
 	 * Method for forming SQL query for discovering new users
