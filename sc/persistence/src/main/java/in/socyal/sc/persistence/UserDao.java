@@ -109,6 +109,39 @@ public class UserDao {
 
 		return userDtos;
 	}
+	
+	public UserDto getUserByUid(String uid) {
+		UserDto dto = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("uid", uid));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		if (entity != null) {
+			dto = new UserDto();
+			mapper.map(entity, dto);
+		}
+		return dto;
+	}
+	
+	public UserDto saveUser(UserDto user) {
+		UserEntity entity = mapper.map(user);
+		entity = (UserEntity) sessionFactory.getCurrentSession().save(entity);
+		user.setId(entity.getId());
+		return user;
+	}
+	
+	/**
+	 * Method for forming SQL query for discovering new users
+	 * @return
+	 */
+    private String discoverNewUsersQuery() {
+    	StringBuilder query = new StringBuilder();
+    	query.append("SELECT * FROM Socyal.USER ");
+    	query.append("where (FIRST_NAME LIKE :search_string OR LAST_NAME LIKE :search_string) ");
+    	query.append("AND ID NOT IN ");
+    	query.append("(SELECT USER_ID FROM Socyal.USER_FOLLOWER_MAPPING WHERE FOLLOWER_USER_ID = :current_user_id) ");
+    	query.append("AND ID != :current_user_id ");
+    	return query.toString();
+    }
 
 	
 //	public UserDto saveOrUpdate(User user, String fbAccessToken) {
@@ -129,19 +162,4 @@ public class UserDao {
 //		mapper.map(entity, userDto);
 //		return userDto;
 //	}
-	
-	
-	/**
-	 * Method for forming SQL query for discovering new users
-	 * @return
-	 */
-    private String discoverNewUsersQuery() {
-    	StringBuilder query = new StringBuilder();
-    	query.append("SELECT * FROM Socyal.USER ");
-    	query.append("where (FIRST_NAME LIKE :search_string OR LAST_NAME LIKE :search_string) ");
-    	query.append("AND ID NOT IN ");
-    	query.append("(SELECT USER_ID FROM Socyal.USER_FOLLOWER_MAPPING WHERE FOLLOWER_USER_ID = :current_user_id) ");
-    	query.append("AND ID != :current_user_id ");
-    	return query.toString();
-    }
 }

@@ -5,14 +5,10 @@ import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import in.socyal.sc.api.type.GenderType;
 
 @Entity
 @Table(name = "USER", schema = "bna")
@@ -38,10 +34,6 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "EMAIL")
 	private String email;
-
-	@Column(name = "GENDER")
-	@Enumerated(EnumType.STRING)
-	private GenderType gender;
 
 	@Column(name = "CREATED_DATETIME")
 	private Calendar createdDateTime;
@@ -95,14 +87,6 @@ public class UserEntity implements Serializable {
 
 	public void setUid(String uid) {
 		this.uid = uid;
-	}
-
-	public GenderType getGender() {
-		return gender;
-	}
-
-	public void setGender(GenderType gender) {
-		this.gender = gender;
 	}
 
 	public Calendar getCreatedDateTime() {

@@ -6,17 +6,13 @@ import java.util.Calendar;
 public class UserDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
+	private String uid;
 	private String firstName;
 	private String lastName;
 	private String imageUrl;
 	private String email;
-	private String facebookId;
-	private String facebookLink;
-	private String facebookToken;
-	private String gender;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
-	private String registrationId;
 
 	public Integer getId() {
 		return id;
@@ -24,6 +20,14 @@ public class UserDto implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getFirstName() {
@@ -57,38 +61,6 @@ public class UserDto implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public String getFacebookId() {
-		return facebookId;
-	}
-
-	public void setFacebookId(String facebookId) {
-		this.facebookId = facebookId;
-	}
-
-	public String getFacebookLink() {
-		return facebookLink;
-	}
-
-	public void setFacebookLink(String facebookLink) {
-		this.facebookLink = facebookLink;
-	}
-
-	public String getFacebookToken() {
-		return facebookToken;
-	}
-
-	public void setFacebookToken(String facebookToken) {
-		this.facebookToken = facebookToken;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
 
 	public Calendar getCreatedDateTime() {
 		return createdDateTime;
@@ -109,18 +81,10 @@ public class UserDto implements Serializable {
 	public String getName() {
 		return this.firstName + " " + this.lastName;
 	}
-	
-	public String getRegistrationId() {
-		return registrationId;
-	}
-
-	public void setRegistrationId(String registrationId) {
-		this.registrationId = registrationId;
-	}
 
 	@Override
 	public boolean equals(Object obj) {
 		UserDto user = (UserDto) obj;
-        return (this.id == user.id);
-    }
+		return (this.id == user.id);
+	}
 }

@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.firebase.FirebaseUser;
 import in.socyal.sc.api.firebase.Uid;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
@@ -40,18 +42,28 @@ public class LoginDelegateImpl implements LoginDelegate {
 		response.setUser(mapper.mapGuestUser());
 		return response;
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public LoginResponse firebaseLogin(IdTokenRequest request) throws BusinessException {
+		LoginResponse loginResponse = new LoginResponse();
 		Uid uid = firebaseHelper.getUid(request.getIdToken());
 		if (!uid.isStatus()) {
 			LOG.debug("Invalid id token passed while logging in");
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
-		// call to see if the user is present in db
-
-		return null;
+		UserDto user = userDao.getUserByUid(uid.getUid());
+		if (user == null) {
+			FirebaseUser firebaseUser = firebaseHelper.getUserDetails(uid.getUid());
+			if (!firebaseUser.isStatus()) {
+				LOG.debug("Error occurred while fetching user details from firebase");
+				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+			}
+			UserDto newUser = mapper.mapFirebaseUser(firebaseUser);
+			user = userDao.saveUser(newUser);
+		}
+		loginResponse.setUser(mapper.mapToLoginUserDto(user));
+		return loginResponse;
 	}
 
 	// @Override

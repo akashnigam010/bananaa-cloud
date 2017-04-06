@@ -35,7 +35,7 @@ public class LoginService {
 	LoginValidator validator;
 	@Autowired
 	HttpServletResponse httpResponse;
-	@Autowired 
+	@Autowired
 	HttpServletRequest httpRequest;
 
 	@RequestMapping(value = "/skipLogin", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -49,44 +49,51 @@ public class LoginService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public LoginResponse login(@RequestBody IdTokenRequest request) {
 		LoginResponse response = new LoginResponse();
-		Cookie cookie = new Cookie("bna-login-cookie", "bananaa-auth-token");
-		cookie.setPath("/");
-		httpResponse.addCookie(cookie);
 		try {
-			delegate.firebaseLogin(request);
+			response = delegate.firebaseLogin(request);
+			addLoginCookie(response);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
 		}
 	}
-	
-//	@RequestMapping(value = "/businessLogin", method = RequestMethod.POST, headers = "Accept=application/json")
-//	public BusinessLoginResponse businessLogin(@RequestBody BusinessLoginRequest request) {
-//		BusinessLoginResponse response = new BusinessLoginResponse();
-//		try {
-//			LOG.info("Business login request");
-//			validator.validateBusinessLoginRequest(request);
-//			response = delegate.businessLogin(request);
-//			return helper.success(response);
-//		} catch (BusinessException e) {
-//			return helper.failure(response, e);
-//		}
-//	}
-//	
-//	@RequestMapping(value = "/fbLogin", method = RequestMethod.POST, headers = "Accept=application/json")
-//	public LoginResponse fbLogin(@RequestBody LoginRequest request) {
-//		JsonHelper.logRequest(request, LoginService.class, "/login/fbLogin");
-//		LoginResponse response = new LoginResponse();
-//		try {
-//			validator.validateFbLoginRequest(request);
-//			response = delegate.fbLogin(request);
-//			return helper.success(response);
-//		} catch (BusinessException e) {
-//			return helper.failure(response, e);
-//		}
-//	}
+
+	private void addLoginCookie(LoginResponse response) {
+		Cookie cookie = new Cookie("bna-login-cookie", "bananaa-auth-token");
+		cookie.setPath("/");
+		httpResponse.addCookie(cookie);
+	}
+
+	// @RequestMapping(value = "/businessLogin", method = RequestMethod.POST,
+	// headers = "Accept=application/json")
+	// public BusinessLoginResponse businessLogin(@RequestBody
+	// BusinessLoginRequest request) {
+	// BusinessLoginResponse response = new BusinessLoginResponse();
+	// try {
+	// LOG.info("Business login request");
+	// validator.validateBusinessLoginRequest(request);
+	// response = delegate.businessLogin(request);
+	// return helper.success(response);
+	// } catch (BusinessException e) {
+	// return helper.failure(response, e);
+	// }
+	// }
+	//
+	// @RequestMapping(value = "/fbLogin", method = RequestMethod.POST, headers
+	// = "Accept=application/json")
+	// public LoginResponse fbLogin(@RequestBody LoginRequest request) {
+	// JsonHelper.logRequest(request, LoginService.class, "/login/fbLogin");
+	// LoginResponse response = new LoginResponse();
+	// try {
+	// validator.validateFbLoginRequest(request);
+	// response = delegate.fbLogin(request);
+	// return helper.success(response);
+	// } catch (BusinessException e) {
+	// return helper.failure(response, e);
+	// }
+	// }
 }
