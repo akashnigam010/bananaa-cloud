@@ -1,7 +1,5 @@
-var accessToken = '';
 var isMobile = false;
 $(document).ready(function() {
-	accessToken = $('#accessToken').val();
 	isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
     window.onresize = function(event) {
         isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
@@ -13,12 +11,12 @@ $(document).ready(function() {
     };
     
     $('#login-button').on('mouseup', function (e) {
-    	if (isLoggedIn == false) {
+    	if ($("#login-info").html() == 'Login') {
     		$('#login-dropdown').addClass('hide');
     		$('#loginModal').modal('show');
     	} else {
     		$('#login-dropdown').removeClass('hide');
-    	} 	
+    	}
     });
     
     function repositionModal() {

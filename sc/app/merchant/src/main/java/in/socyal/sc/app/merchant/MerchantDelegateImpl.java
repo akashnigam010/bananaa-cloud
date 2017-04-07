@@ -81,7 +81,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
-		MerchantDto merchantDto = dao.getMerchantDetails(request.getId(), filter);
+		MerchantDto merchantDto = dao.getMerchantDetails(request.getNameId(), filter);
 		try {
 			int previousCheckinCount = 0;
 			if (jwtHelper.isUserLoggedIn()) {
@@ -155,6 +155,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setName(dto.getName());
 			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchant.setImageUrl(dto.getImageUrl());
+			merchant.setMerchantUrl(dto.getMerchantUrl());
 			merchantResponse.add(merchant);
 		}
 		response.setMerchants(merchantResponse);
@@ -168,6 +169,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setNameId(dto.getNameId());
 			merchant.setId(dto.getId());
 			merchant.setImageUrl(dto.getImageUrl());
+			merchant.setMerchantUrl(dto.getMerchantUrl());
 			merchant.setIsOpen(isOpen(dto.getTimings()));
 			merchant.setName(dto.getName());
 			merchant.setRating(dto.getRating());

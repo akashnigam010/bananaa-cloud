@@ -49,7 +49,7 @@ $(document).ready(function() {
                 		  } else {
                 			  for (var i=0; i < response.merchants.length; i++) {
                     			  sugestionHtml += 	'<div class="col-xs-12 suggestion-wrapper">'+
-    					                			'<a href="'+ $('#city').val() + "/" +response.merchants[i].id +'" >'+
+    					                			'<a href="'+ response.merchants[i].merchantUrl +'" >'+
     					                			'<p class="suggestion" align="left">';
                     			  sugestionHtml += '<b>' + response.merchants[i].name + "</b>, " + response.merchants[i].shortAddress;
                     			  if ( i == (response.merchants.length*1)-1) {
@@ -74,8 +74,8 @@ function getTrendingRestaurants() {
 	$.ajax({
     	  method: "GET",
     	  url: "/socyal/merchant/getTrendingRestaurants",
-    	  contentType : "application/json",
-    	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); }
+    	  contentType : "application/json"
+    	  //beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); }
     	})
     	  .done(function(response) {
     		  var trendingRestaurantHtml = '';
@@ -84,7 +84,7 @@ function getTrendingRestaurants() {
     				  for (var i=0; i<response.merchants.length; i++) {
     					  trendingRestaurantHtml += 
     						  '<div class="trending-item">'+
-			                              '<a href="hyderabad/'+response.merchants[i].id+'">'+
+			                              '<a href="'+response.merchants[i].merchantUrl+'">'+
 			                          '<div>'+
 			                              '<img class="trend-image" src="'+response.merchants[i].imageUrl+'" alt=""/>'+
 			                              '<div class="trending-item-desc">'+

@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class AuthenticatedUser implements UserDetails {
 	String userId;
+	String firstName;
 	String deviceId;
 	String merchantId;
 	String userName;
@@ -16,13 +17,15 @@ public class AuthenticatedUser implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	public AuthenticatedUser(String userId, 
+	public AuthenticatedUser(String userId,
+							 String firstName,
 							 String deviceId, 
 							 String merchantId, 
 							 String userName, 
 							 String token, 
 							 List<GrantedAuthority> authorityList) {
 		this.userId = userId;
+		this.firstName = firstName;
 		this.deviceId = deviceId;
 		this.merchantId = merchantId;
 		this.userName = userName;
@@ -75,5 +78,9 @@ public class AuthenticatedUser implements UserDetails {
 	
 	public String getUserId() {
 		return userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
 	}
 }

@@ -77,7 +77,7 @@ public class JwtHelper {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	public static String createJsonWebTokenForUser(String userId) throws BusinessException {
+	public static String createJsonWebTokenForUser(String userId, String firstName) throws BusinessException {
 		// Current time and signing algorithm
 		Calendar cal = Calendar.getInstance();
 		HmacSHA256Signer signer;
@@ -95,6 +95,7 @@ public class JwtHelper {
 		// Configure request object, which provides information of the item
 		JsonObject request = new JsonObject();
 		request.addProperty("userId", userId);
+		request.addProperty("firstName", firstName);
 		request.addProperty("role", RoleType.USER.getRole());
 		JsonObject payload = token.getPayloadAsJsonObject();
 		payload.add("info", request);
@@ -206,7 +207,9 @@ public class JwtHelper {
 			if (issuer.equals(issuer) && StringUtils.isNotBlank(roleString)) {
 				if (RoleType.USER == RoleType.getRole(roleString)) {
 					String userIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("userId").getAsString();
+					String firstNameString = payload.getAsJsonObject("info").getAsJsonPrimitive("firstName").getAsString();
 					tokenInfo.setUserId(userIdString);
+					tokenInfo.setFirstName(firstNameString);
 					tokenInfo.setRole(roleString);
 					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
 					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
@@ -234,47 +237,4 @@ public class JwtHelper {
 			throw new AuthenticationCredentialsNotFoundException("Token expired! Kindly login again");
 		}
 	}
-	
-	public static void main(String args[]) throws BusinessException {
-		System.out.println(createJsonWebTokenForUser("5"));
-	}
-	
-	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis) {
-
-	// The JWT signature algorithm we will be using to sign the token
-	SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-	long nowMillis = System.currentTimeMillis();
-	Date now = new Date(nowMillis);
-
-	// We will sign our JWT with our ApiKey secret
-	byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("Sample");
-	Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-	// Let's set the JWT Claims
-	JwtBuilder builder = Jwts.builder().setId(id).setIssuedAt(now).setSubject(subject).setIssuer(issuer)
-			.signWith(signatureAlgorithm, signingKey);
-
-	// if it has been specified, let's add the expiration
-	if (ttlMillis >= 0) {
-		long expMillis = nowMillis + ttlMillis;
-		Date exp = new Date(expMillis);
-		builder.setExpiration(exp);
-	}
-
-	// Builds the JWT and serializes it to a compact, URL-safe string
-	return builder.compact();
-}
-
-public static void parseJWT(String jwt) {
-
-	// This line will throw an exception if it is not a signed JWS (as
-	// expected)
-	Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary("Sample")).parseClaimsJws(jwt)
-			.getBody();
-	System.out.println("ID: " + claims.getId());
-	System.out.println("Subject: " + claims.getSubject());
-	System.out.println("Issuer: " + claims.getIssuer());
-	System.out.println("Expiration: " + claims.getExpiration());
-}*/
 }

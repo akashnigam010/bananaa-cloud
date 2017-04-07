@@ -5,8 +5,8 @@
 
 <head th:replace="fragments/head :: head"></head>
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
-<link href="/css/home.css" rel="stylesheet"></link>
-<link href="/css/home-mini.css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
+<link href="/css/home.css" type="text/css" rel="stylesheet"></link>
+<link href="/css/home-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
 <body>
@@ -29,7 +29,7 @@
                         <div class="btn-group login-info pull-right">
                             <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <span id="login-info">Login</span> <span class="caret"></span>                        
+                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
                             </button>
                             <ul id="login-dropdown" class="dropdown-menu pull-right">
                                     <li><a href="javascript:logout();">Logout</a></li>
@@ -44,7 +44,7 @@
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-12 align-center logo-wrapper">
-                        <img class="logo-round" src="img/192_round.png" />                    
+                        <img class="logo-round" src="/img/192_round.png" />                    
                     </div>
                     <div class="tagline align-center">
                         <span>good food suggestions !</span>

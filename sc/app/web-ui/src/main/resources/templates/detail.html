@@ -4,8 +4,8 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head th:replace="fragments/head :: head"></head>
-<link href="/css/detail.css" rel="stylesheet"></link>
-<link href="/css/detail-mini.css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
+<link href="/css/detail.css" type="text/css" rel="stylesheet"></link>
+<link href="/css/detail-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
 
 <body>
@@ -23,7 +23,7 @@
                         <div class="btn-group login-info pull-right">
                             <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <span id="login-info">Login</span> <span class="caret"></span>                        
+                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
                             </button>
                             <ul id="login-dropdown" class="dropdown-menu pull-right">
                                     <li><a href="javascript:logout();">Logout</a></li>

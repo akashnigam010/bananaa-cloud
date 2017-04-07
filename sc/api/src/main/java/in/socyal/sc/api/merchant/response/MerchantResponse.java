@@ -13,6 +13,7 @@ public class MerchantResponse implements Serializable {
 	private Double rating;
 	private Boolean isOpen;
 	private Double distance;
+	private String merchantUrl;
 
 	public Integer getId() {
 		return id;
@@ -84,5 +85,13 @@ public class MerchantResponse implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public String getMerchantUrl() {
+		return merchantUrl;
+	}
+
+	public void setMerchantUrl(String merchantUrl) {
+		this.merchantUrl = merchantUrl;
 	}
 }

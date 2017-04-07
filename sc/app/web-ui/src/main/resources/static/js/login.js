@@ -1,5 +1,3 @@
-var isLoggedIn = false;
-
 var config = {
 	apiKey : "AIzaSyA5PvxQeVFkwJWObrJ_hflHmBOCMKycK4w",
 	authDomain : "testsignin-160611.firebaseapp.com",
@@ -53,29 +51,16 @@ function fbSignIn() {
 
 function logout() {
 	firebase.auth().signOut();
-	isLoggedIn = false;
+	$.ajax({
+	  	  method: "GET",
+	  	  url: "/socyal/login/logout",
+	  	  contentType : "application/json"
+	  	})
+	  	  .done(function(response) {
+	  		  location.reload();
+	  		  //$("#login-info").text('Login');
+	  	  });
 }
-
-//function initApp() {
-//  firebase.auth().onAuthStateChanged(function(user) {
-//	  console.log('called onAuthStateChanged');
-//    if (user) {
-//      firebase.auth().currentUser.getToken(/* forceRefresh */ true).then(function(idToken) {
-//		  // Send token to your backend via HTTPS
-//    	  loginWithIdToken(idToken);
-//		}).catch(function(error) {
-//		  // Handle error
-//		});
-//      var displayName = user.displayName;
-//      $("#login-info").text(displayName);
-//      isLoggedIn = true;
-//      $("#loginModal").modal('hide');
-//    } else {
-//      $("#login-info").text('Login');
-//      isLoggedIn = false;
-//    }
-//  });
-//}
 
 function loginWithIdToken(idToken) {
 	firebase.auth().currentUser.getToken(true).then(function(idToken) {
@@ -90,12 +75,11 @@ function loginWithIdToken(idToken) {
 	  	})
 	  	  .done(function(response) {
 	  		  if (response.result) {
-	  			$("#login-info").text(response.user.firstName);
-	  			isLoggedIn = true;
-	  			$("#loginModal").modal('hide');
+	  			location.reload();
+	  			//$("#login-info").text(response.user.firstName);
+	  			//$("#loginModal").modal('hide');
 	  		  } else {
 	  			$("#login-info").text('Login');
-	  			isLoggedIn = false;
 	  		  }		
 	  	  });
 	}).catch(function(error) {

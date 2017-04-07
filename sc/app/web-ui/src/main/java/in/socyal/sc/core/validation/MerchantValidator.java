@@ -1,5 +1,6 @@
 package in.socyal.sc.core.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
@@ -15,7 +16,7 @@ public class MerchantValidator {
 	}
 
 	public void validateGetMerchantDetailsRequest(MerchantDetailsRequest request) throws BusinessException {
-		if (request.getId() == null) {
+		if (StringUtils.isEmpty(request.getNameId())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

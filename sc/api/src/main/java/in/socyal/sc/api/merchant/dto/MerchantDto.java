@@ -18,6 +18,7 @@ public class MerchantDto implements Serializable {
 	private Integer checkins;
 	private List<String> cuisines;
 	private List<String> types;
+	private String merchantUrl;
 
 	public Integer getId() {
 		return id;
@@ -113,5 +114,13 @@ public class MerchantDto implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public String getMerchantUrl() {
+		return merchantUrl;
+	}
+
+	public void setMerchantUrl(String merchantUrl) {
+		this.merchantUrl = merchantUrl;
 	}
 }

@@ -58,9 +58,19 @@ public class JwtTokenHelperImpl implements JwtTokenHelper {
 		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();
 		return Integer.valueOf(userDetails.getUserId());
 	}
+	
+	public String getFirstName() throws BusinessException {
+		if (!isUserLoggedIn()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();
+		return userDetails.getFirstName();
+	}
 
 	@Override
 	public void setAuthUser(String authToken) {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
 		if (!StringUtils.isEmpty(authToken)) {
 			TokenInfo user = JwtHelper.verifyToken(authToken);
 			GrantedAuthority role = new RoleGrantedAuthority(user.getRole());
@@ -69,8 +79,9 @@ public class JwtTokenHelperImpl implements JwtTokenHelper {
 			authRequest.setToken(authToken);
 
 			Authentication authentication = authenticationManager.authenticate(authRequest);
-			SecurityContext securityContext = SecurityContextHolder.getContext();
 			securityContext.setAuthentication(authentication);
+		} else {
+			securityContext.getAuthentication().setAuthenticated(false);
 		}
 	}
 
