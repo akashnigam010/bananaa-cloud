@@ -35,9 +35,9 @@ import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
-import in.socyal.sc.helper.JwtTokenDetailsHelper;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
 
 @Service
@@ -51,8 +51,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	DayUtil dayUtil;
 	@Autowired
 	Clock clock;
-	@Autowired
-	JwtTokenDetailsHelper jwtDetailsHelper;
+	@Autowired 
+	JwtTokenHelper jwtHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -84,10 +84,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		MerchantDto merchantDto = dao.getMerchantDetails(request.getId(), filter);
 		try {
 			int previousCheckinCount = 0;
-			if (jwtDetailsHelper.isUserLoggedIn()) {
-				// previousCheckinCount =
-				// checkinDao.getUserCheckinsCountForAMerchant(jwtDetailsHelper.getCurrentUserId(),
-				// request.getId());
+			if (jwtHelper.isUserLoggedIn()) {
+				System.out.println(jwtHelper.getUserId());
 			}
 			buildMerchantDetailsResponse(merchantDto, response, previousCheckinCount);
 		} catch (ParseException e) {

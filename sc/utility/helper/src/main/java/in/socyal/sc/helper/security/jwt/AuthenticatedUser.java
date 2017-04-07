@@ -72,10 +72,8 @@ public class AuthenticatedUser implements UserDetails {
 	public String getMerchantId() {
 		return merchantId;
 	}
-
-	@Override
-	public String toString() {
-		return "AuthenticatedUser [userId=" + userId + ", userName=" + userName + ", authorityList=" + authorityList
-				+ "]";
+	
+	public String getUserId() {
+		return userId;
 	}
 }

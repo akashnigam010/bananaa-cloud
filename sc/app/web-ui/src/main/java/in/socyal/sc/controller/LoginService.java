@@ -21,6 +21,7 @@ import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.login.response.LoginUserDto;
 import in.socyal.sc.core.validation.LoginValidator;
 import in.socyal.sc.helper.JsonHelper;
+import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.LoginDelegate;
 
 @RestController
@@ -62,8 +63,8 @@ public class LoginService {
 		}
 	}
 
-	private void addLoginCookie(LoginResponse response) {
-		Cookie cookie = new Cookie("bna-login-cookie", "bananaa-auth-token");
+	private void addLoginCookie(LoginResponse response) throws BusinessException {
+		Cookie cookie = new Cookie("blc", JwtHelper.createJsonWebTokenForUser(response.getUser().getId().toString()));
 		cookie.setPath("/");
 		httpResponse.addCookie(cookie);
 	}
