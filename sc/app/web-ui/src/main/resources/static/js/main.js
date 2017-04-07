@@ -14,12 +14,10 @@ $(document).ready(function() {
     
     $('#login-button').on('mouseup', function (e) {
     	if (isLoggedIn == false) {
-    		console.log('user not logged in');
     		$('#login-dropdown').addClass('hide');
     		$('#loginModal').modal('show');
     	} else {
     		$('#login-dropdown').removeClass('hide');
-    		console.log('user already logged in, not opening modal');
     	} 	
     });
     
