@@ -26,8 +26,8 @@ public class Recommendation {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String review) {
+		this.description = review;
 	}
 
 	public Integer getItemId() {

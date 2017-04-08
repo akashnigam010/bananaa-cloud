@@ -17,10 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.Item;
+import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.login.response.LoginStatus;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
-import in.socyal.sc.api.merchant.response.Dish;
-import in.socyal.sc.api.merchant.response.DishResponse;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.Review;
@@ -147,7 +147,7 @@ public class HomeController {
 				"https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE");
 		review1.setId(1);
 		review1.setUser(user1);
-		review1.setDesc(
+		review1.setDescription(
 				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
 		response.getReviews().add(review1);
 
@@ -160,7 +160,7 @@ public class HomeController {
 				"https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16195135_10202582907209226_8892726716716657102_n.jpg?oh=88a1701d79b3ad41916b6dd14fa254a5&oe=5938B99B");
 		review2.setId(2);
 		review2.setUser(user2);
-		review2.setDesc(
+		review2.setDescription(
 				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
 		response.getReviews().add(review2);
 
@@ -173,7 +173,7 @@ public class HomeController {
 				"https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA");
 		review3.setId(3);
 		review3.setUser(user3);
-		review3.setDesc(
+		review3.setDescription(
 				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.");
 		response.getReviews().add(review3);
 
@@ -186,42 +186,42 @@ public class HomeController {
 				"https://scontent.xx.fbcdn.net/v/t1.0-1/c27.0.160.160/p160x160/15337536_987021314735785_2690017545352587728_n.jpg?oh=de9c0549fb958af561b3bcd33092776c&oe=592F7F57");
 		review4.setId(5);
 		review4.setUser(user4);
-		review4.setDesc(
+		review4.setDescription(
 				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
 		response.getReviews().add(review4);
 		return response;
 	}
 
-	private DishResponse getPopularDishes() {
-		DishResponse dishResponse = new DishResponse();
-		Dish dish = new Dish();
+	private ItemsResponse getPopularDishes() {
+		ItemsResponse dishResponse = new ItemsResponse();
+		Item dish = new Item();
 		dish.setId(1);
 		dish.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
 		dish.setName("Joojeh Kebab");
 		dish.setNameId("joojeh-kebeb");
 		dish.setRecommendations(22);
-		dishResponse.getDishes().add(dish);
-		Dish dish2 = new Dish();
+		dishResponse.getItems().add(dish);
+		Item dish2 = new Item();
 		dish2.setId(2);
 		dish2.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
 		dish2.setName("Lowley Sirley");
 		dish2.setNameId("lowley-shirley");
 		dish2.setRecommendations(15);
-		dishResponse.getDishes().add(dish2);
-		Dish dish3 = new Dish();
+		dishResponse.getItems().add(dish2);
+		Item dish3 = new Item();
 		dish3.setId(3);
 		dish3.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
 		dish3.setName("Arrabiata Pasta");
 		dish3.setNameId("arrabiata-pasta");
 		dish3.setRecommendations(12);
-		dishResponse.getDishes().add(dish3);
-		Dish dish4 = new Dish();
+		dishResponse.getItems().add(dish3);
+		Item dish4 = new Item();
 		dish4.setId(4);
 		dish4.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
 		dish4.setName("Mango Delight Punch");
 		dish4.setNameId("mango-delight");
 		dish4.setRecommendations(10);
-		dishResponse.getDishes().add(dish4);
+		dishResponse.getItems().add(dish4);
 		return dishResponse;
 	}
 

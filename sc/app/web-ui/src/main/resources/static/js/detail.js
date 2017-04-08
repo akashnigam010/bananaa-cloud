@@ -6,58 +6,85 @@ $(document).ready(function() {
     $(".primary-image-banner").css("background-repeat", "no-repeat");
     $(".primary-image-banner").css("background-position", "center");
     $(".primary-image-banner").css("background-size", "cover");
-
-        $('#modal-item-name').typeahead({
-	    	minLength: 2,
-	    	autoSelect: true,
-	    	//showHintOnFocus: true,
-	        source: function (query, process) {
-	        	var accessToken = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJCYW5hbmFhIEFwcGxpY2F0aW9uIiwiYXVkIjoiQmFuYW5hYSBBcHBsaWNhdGlvbiIsImlhdCI6MTQ5MDc5MzQwNCwiZXhwIjoxNTIyMzI5NDA0LCJpbmZvIjp7InJvbGUiOiJHVUVTVCJ9fQ.I6VkrPf3JA5VQxDHSiPal3sFKPrXk8-c4y7SnXdOHxQ";
-	        	var dataOb = {
-	        			searchString : query
-	        	};
-	            return $.ajax({
-	          	  method: "POST",
-	          	  url: "/socyal/merchant/searchMerchant",
-	          	  contentType : "application/json",
-	          	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
-	          	  data: JSON.stringify(dataOb)
-	          	})
-	          	  .done(function(response) {
-	          		  return process(response.merchants);
-	          	  });
-	        }
-	    });
+    
+    var timeout;
+    $('#modal-item-name').typeahead({
+    	minLength: 2,
+    	autoSelect: true,
+    	//showHintOnFocus: true,
+    	source: function(query, process) {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function() {
+            	var dataOb = {
+            			searchString : query
+            	};
+                return $.ajax({
+              	  method: "POST",
+              	  url: "/socyal/item/searchItems",
+              	  contentType : "application/json",
+              	  data: JSON.stringify(dataOb)
+              	})
+              	  .done(function(response) {
+              		  if (response.result) {
+              			return process(response.items);
+              		  } else {
+            			  handleErrorCallback(response);
+            		  }	          		  
+              	  });
+            }, 500);
+        }
+//        source: function (query, process) {
+//        	var dataOb = {
+//        			searchString : query
+//        	};
+//            return $.ajax({
+//          	  method: "POST",
+//          	  url: "/socyal/item/searchItems",
+//          	  contentType : "application/json",
+//          	  data: JSON.stringify(dataOb)
+//          	})
+//          	  .done(function(response) {
+//          		  if (response.result) {
+//          			return process(response.items);
+//          		  } else {
+//        			  handleErrorCallback(response);
+//        		  }	          		  
+//          	  });
+//        }
+    });
         
-        $('#addRecommendButton').on('mouseup', function (e) {
-        	openRecommendationModal('', '', '', '', false);
-        });
-        
-        $('#modal-item-desc').on('focusin', function(e) {
-        	$(this).attr('placeholder', 'Dive down into the specifics! Tell us how this dish or drink stands out to be a recommendation. And remember to keep it short - a minimum of 50 and a maximum of 200 characters. :)');
-        });
-        $('#modal-item-desc').on('focusout', function(e) {
-        	$(this).attr('placeholder', '');
-        });
-        
-        getMyRecommendations(1);
+    $('#addRecommendButton').on('mouseup', function (e) {
+    	openRecommendationModal('', '', '', '', false);
+    });
+    
+    $('#modal-item-desc').on('focusin', function(e) {
+    	$(this).attr('placeholder', 'Dive down into the specifics! Tell us how this dish or drink stands out to be a recommendation. And remember to keep it short - a minimum of 50 and a maximum of 200 characters. :)');
+    });
+    $('#modal-item-desc').on('focusout', function(e) {
+    	$(this).attr('placeholder', '');
+    });
+    
+    getMyRecommendations(1);
 });
 
 function loadPopularDishes() {
 	accessToken = $('#accessToken').val();
 	var dataOb = {
-			id : 1
+			merchantId : 1,
+			page : 1
 	};
 	$.ajax({
     	  method: "POST",
-    	  url: "/socyal/merchant/getPopularItems",
+    	  url: "/socyal/recommendation/getPopularItems",
     	  contentType : "application/json",
     	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
     	  data: JSON.stringify(dataOb)
     	})
     	  .done(function(response) {
     		  var popularItemsHtml = '';
-    		  if (response.result == true) {
+    		  if (response.result) {
     			  if (response.items.length > 0) {
     				  for (var i=0; i<response.items.length; i++) {
     					  popularItemsHtml += 
@@ -82,6 +109,8 @@ function loadPopularDishes() {
     				  $('.loadmore-wrapper').html(popularItemsHtml);
     				  $('#loadMoreModal').modal('show');
     			  }
+    		  } else {
+    			  handleErrorCallback(response);
     		  }
     	  });
 }
@@ -133,7 +162,7 @@ function handlePartialMatch(rcmdId, itemId, name, desc) {
 	if (name === rcmdOb.name) {
 		if (desc != rcmdOb.desc) {
 			if (handleReview($desc)) {
-				console.log('update this recommendation\'s description  - rcmdId: ' + rcmdId);	
+				console.log('update this recommendation\'s review  - rcmdId: ' + rcmdId);	
 			}
 			return;	
 		}
@@ -172,18 +201,19 @@ function removeRecommendation() {
 function getMyRecommendations(restId) {
 	accessToken = $('#accessToken').val();
 	var dataOb = {
-			id : restId
+			merchantId : restId,
+			page : 1
 	};
 	$.ajax({
     	  method: "POST",
-    	  url: "/socyal/merchant/getMyRecommendations",
+    	  url: "/socyal/recommendation/getMyRecommendations",
     	  contentType : "application/json",
-    	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
+    	  //beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
     	  data: JSON.stringify(dataOb)
     	})
     	  .done(function(response) {
     		  var myRecommendationsHtml = '';
-    		  if (response.result == true) {
+    		  if (response.result) {
     			  if (response.recommendations.length > 0) {
     				  for (var i=0; i<response.recommendations.length; i++) {
     					  myRecommendationsHtml += 
@@ -202,9 +232,11 @@ function getMyRecommendations(restId) {
 		                      '</div>';
     				  }
     				  $('.my-recommendations').html(myRecommendationsHtml);
-    				  $('.recommended-wrapper').find('.loader').hide();
     				  activateUpdateRcmdModal();
     			  }
+    			  $('.recommended-wrapper').find('.loader').hide();
+    		  } else {
+    			  handleErrorCallback(response);
     		  }
     	  });
 }

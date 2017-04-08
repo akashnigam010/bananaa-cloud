@@ -40,26 +40,30 @@ $(document).ready(function() {
                 	  data: JSON.stringify(dataOb)
                 	})
                 	  .done(function(response) {
-                		  var sugestionHtml = '';
-                		  if (response.merchants.length == 0) {
-                			  sugestionHtml += 	'<div class="col-xs-12 suggestion-wrapper">'+
-	                			'<p class="suggestion" align="left">'+
-	                			'<b>Oops, no results found</b>'+
-	                			'</p></div>';
-                		  } else {
-                			  for (var i=0; i < response.merchants.length; i++) {
+                		  if (response.result) {
+                			  var sugestionHtml = '';
+                    		  if (response.merchants.length == 0) {
                     			  sugestionHtml += 	'<div class="col-xs-12 suggestion-wrapper">'+
-    					                			'<a href="'+ response.merchants[i].merchantUrl +'" >'+
-    					                			'<p class="suggestion" align="left">';
-                    			  sugestionHtml += '<b>' + response.merchants[i].name + "</b>, " + response.merchants[i].shortAddress;
-                    			  if ( i == (response.merchants.length*1)-1) {
-                    				  sugestionHtml += '</p></a></div>';
-                    			  } else {
-                    				  sugestionHtml += '</p></a><hr /></div>';
-                    			  }
-                    		  }
-                		  }    
-                		  $('.search-box-suggestion').html(sugestionHtml);
+    	                			'<p class="suggestion" align="left">'+
+    	                			'<b>Oops, no results found</b>'+
+    	                			'</p></div>';
+                    		  } else {
+                    			  for (var i=0; i < response.merchants.length; i++) {
+                        			  sugestionHtml += 	'<div class="col-xs-12 suggestion-wrapper">'+
+        					                			'<a href="'+ response.merchants[i].merchantUrl +'" >'+
+        					                			'<p class="suggestion" align="left">';
+                        			  sugestionHtml += '<b>' + response.merchants[i].name + "</b>, " + response.merchants[i].shortAddress;
+                        			  if ( i == (response.merchants.length*1)-1) {
+                        				  sugestionHtml += '</p></a></div>';
+                        			  } else {
+                        				  sugestionHtml += '</p></a><hr /></div>';
+                        			  }
+                        		  }
+                    		  }    
+                    		  $('.search-box-suggestion').html(sugestionHtml);
+                		  } else {
+                			  handleErrorCallback(response);
+                		  }                		  
                 	  });
             },500);
         };
@@ -79,7 +83,7 @@ function getTrendingRestaurants() {
     	})
     	  .done(function(response) {
     		  var trendingRestaurantHtml = '';
-    		  if (response.result == true) {
+    		  if (response.result) {
     			  if (response.merchants.length > 0) {
     				  for (var i=0; i<response.merchants.length; i++) {
     					  trendingRestaurantHtml += 
@@ -105,6 +109,8 @@ function getTrendingRestaurants() {
     				  addSlick($('.trending-restaurant-wrapper'));
     				  $('.trending-restaurants').find('.loader').hide();
     			  }
+    		  } else {
+    			  handleErrorCallback(response);
     		  }
     	  });
 }

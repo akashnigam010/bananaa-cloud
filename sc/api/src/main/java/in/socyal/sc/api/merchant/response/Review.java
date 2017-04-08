@@ -3,7 +3,7 @@ package in.socyal.sc.api.merchant.response;
 public class Review {
 	private Integer id;
 	private User user;
-	private String desc;
+	private String description;
 
 	public Integer getId() {
 		return id;
@@ -21,11 +21,11 @@ public class Review {
 		this.user = user;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescription(String desc) {
+		this.description = desc;
 	}
 }

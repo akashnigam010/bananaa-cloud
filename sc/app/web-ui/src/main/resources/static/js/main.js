@@ -45,6 +45,18 @@ $(document).ready(function() {
     });
 });
 
+function handleErrorCallback(response) {
+	if (response.statusCodes != null) {
+		  if (response.statusCodes.statusCode[0].code == '90004' ) {
+			  	$("#login-info").html('Login');
+	    		$('#login-dropdown').addClass('hide');
+	    		$('#loginModal').modal('show');
+		  } else {
+			  alert('Something is not right, please try again after refreshing the page.');
+		  }
+	  }
+}
+
 function addSlick(slickElement) {
 	slickElement.slick({
         dots: false,

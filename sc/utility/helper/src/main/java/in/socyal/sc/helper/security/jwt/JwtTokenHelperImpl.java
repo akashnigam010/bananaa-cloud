@@ -88,7 +88,7 @@ public class JwtTokenHelperImpl implements JwtTokenHelper {
 	@SuppressWarnings("unchecked")
 	private List<String> getRoles() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication.getPrincipal() == ANONYMOUS_USER) {
+		if (authentication == null || authentication.getPrincipal() == ANONYMOUS_USER) {
 			return Collections.EMPTY_LIST;
 		}
 		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();

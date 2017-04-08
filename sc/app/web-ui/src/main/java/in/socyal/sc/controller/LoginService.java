@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,6 +64,7 @@ public class LoginService {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET, headers = "Accept=application/json")
 	public LoginResponse logout() {
 		LoginResponse response = new LoginResponse();
+		new SecurityContextLogoutHandler().logout(httpRequest, null, null);
 		removeLoginCookie();
 		return helper.success(response);
 	}

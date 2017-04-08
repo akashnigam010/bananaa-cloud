@@ -1,9 +1,6 @@
-package in.socyal.sc.api.merchant.request;
+package in.socyal.sc.api;
 
-import java.io.Serializable;
-
-public class SearchMerchantRequest implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class SearchRequest {
 	private String searchString;
 
 	public String getSearchString() {

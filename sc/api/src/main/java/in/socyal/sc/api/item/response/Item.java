@@ -1,6 +1,6 @@
-package in.socyal.sc.api.merchant.response;
+package in.socyal.sc.api.item.response;
 
-public class Dish {
+public class Item {
 	private Integer id;
 	private String nameId;
 	private String name;
