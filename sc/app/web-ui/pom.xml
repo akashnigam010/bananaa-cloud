@@ -55,20 +55,5 @@
 			<artifactId>merchant</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>sc</groupId>
-			<artifactId>location</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>sc</groupId>
-			<artifactId>user</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>sc</groupId>
-			<artifactId>notification</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 </project>

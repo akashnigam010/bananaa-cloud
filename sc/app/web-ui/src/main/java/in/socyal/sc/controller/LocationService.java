@@ -1,4 +1,4 @@
-package in.socyal.sc.controller;
+/*package in.socyal.sc.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,3 +38,4 @@ public class LocationService {
 		return helper.success(response);
 	}
 }
+*/
