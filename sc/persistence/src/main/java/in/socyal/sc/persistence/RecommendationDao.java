@@ -8,12 +8,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
@@ -55,12 +57,24 @@ public class RecommendationDao {
 		return response;
 	}
 	
-    private String sortMerchantsByMaxRcmdnQuery() {
-    	StringBuilder query = new StringBuilder();
-    	query.append("SELECT COUNT(*) AS RECOMMENDATIONS, r.MERCHANT_ID ");
-    	query.append("FROM bna.RECOMMENDATION r ");
-    	query.append("GROUP BY r.MERCHANT_ID ");
-    	query.append("ORDER BY RECOMMENDATIONS DESC");
-    	return query.toString();
-    }
+	@SuppressWarnings("unchecked")
+	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
+		List<RecommendationDto> response = new ArrayList<>();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.createAlias("user", "u");
+		criteria.createAlias("dish", "d");
+		criteria.createAlias("d.merchant", "m");
+		criteria.add(Restrictions.eq("u.id", userId));
+		criteria.add(Restrictions.eq("m.id", merchantId));
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		List<RecommendationEntity> result = (List<RecommendationEntity>) criteria.list();
+		for (RecommendationEntity entity : result) {
+			RecommendationDto recommendation = new RecommendationDto();
+			mapper.map(entity, recommendation);
+			response.add(recommendation);
+		}
+		return response;
+	}
 }

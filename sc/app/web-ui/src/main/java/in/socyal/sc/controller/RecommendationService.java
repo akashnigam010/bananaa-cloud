@@ -17,6 +17,7 @@ import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.response.EditRecommendationResponse;
+import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.core.validation.RecommendationValidator;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 
@@ -29,6 +30,8 @@ public class RecommendationService {
 	ResponseHelper helper;
 	@Autowired
 	RecommendationValidator validator;
+	@Autowired
+	RecommendationDelegate delegate;
 	/*
 	 * FIXME: remove jwtTokenHelper wiring once actual implementation is done
 	 * and temp logic is removed
@@ -101,11 +104,7 @@ public class RecommendationService {
 		RecommendationResponse response = new RecommendationResponse();
 		try {
 			validator.validateGetMyRecommendationsRequest(request, blc);
-			/*
-			 * FIXME: response = delegate.getMyRecommendation(request); and
-			 * remove below temp logic
-			 */
-			response = getMyRecommendation();
+			response = delegate.getMyRecommendations(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

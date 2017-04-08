@@ -55,5 +55,10 @@
 			<artifactId>merchant</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>recommendation</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
