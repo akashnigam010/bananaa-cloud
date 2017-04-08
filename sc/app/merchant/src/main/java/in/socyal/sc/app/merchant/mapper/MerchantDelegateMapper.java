@@ -1,14 +1,17 @@
 package in.socyal.sc.app.merchant.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.api.merchant.dto.AddressDto;
-import in.socyal.sc.api.merchant.dto.ContactDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
+import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
+import in.socyal.sc.api.merchant.response.TrendingMerchant;
 
 @Component
 public class MerchantDelegateMapper {
@@ -43,5 +46,21 @@ public class MerchantDelegateMapper {
 //		to.setName(from.getMerchantName());
 //		to.setOpenTime(from.getOpenTime());
 //		to.setRating(from.getRating());
+	}
+
+	public void map(List<TrendingMerchantResultDto> result, GetTrendingMerchantsResponse response) {
+		List<TrendingMerchant> merchants = new ArrayList<>();
+		for (TrendingMerchantResultDto dto : result) {
+			TrendingMerchant trendingMerchant = new TrendingMerchant();
+			MerchantDto merchant = dto.getMerchant();
+			trendingMerchant.setId(merchant.getId());
+			trendingMerchant.setImageUrl(merchant.getImageUrl());
+			trendingMerchant.setName(merchant.getName());
+			trendingMerchant.setRecommendations(dto.getRecommendations());
+			trendingMerchant.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
+			merchants.add(trendingMerchant);
+		}
+		
+		response.setMerchants(merchants);
 	}
 }

@@ -6,6 +6,7 @@ import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
+import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 
@@ -14,5 +15,6 @@ public interface MerchantDelegate {
 	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException;
 	public void saveMerchantDetails(SaveMerchantDetailsRequest request) throws BusinessException;
 	public SearchMerchantResponse searchMerchant(SearchMerchantRequest request) throws BusinessException;
+	public GetTrendingMerchantsResponse getTrendingMerchants() throws BusinessException;
 	//public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(SaveBusinessRegistrationIdRequest request) throws BusinessException;
 }

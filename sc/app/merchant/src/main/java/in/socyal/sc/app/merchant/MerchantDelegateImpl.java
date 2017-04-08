@@ -21,11 +21,13 @@ import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
+import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
+import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
@@ -39,6 +41,7 @@ import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
+import in.socyal.sc.persistence.RecommendationDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
@@ -51,6 +54,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	DayUtil dayUtil;
 	@Autowired
 	Clock clock;
+	@Autowired
+	RecommendationDao rcmdnDao;
 	@Autowired 
 	JwtTokenHelper jwtHelper;
 
@@ -112,6 +117,15 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		MerchantDto merchantDto = new MerchantDto();
 		mapper.map(request, merchantDto);
 		dao.saveMerchantDetails(merchantDto);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public GetTrendingMerchantsResponse getTrendingMerchants() throws BusinessException {
+		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
+		List<TrendingMerchantResultDto> result = rcmdnDao.getTrendingMerchants();
+		mapper.map(result, response);
+		return response;
 	}
 
 	// @Override

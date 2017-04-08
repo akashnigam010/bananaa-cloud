@@ -8,14 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
-import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.Dish;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
+import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.PopularItemsResponse;
 import in.socyal.sc.api.merchant.response.Recommendation;
@@ -80,12 +79,10 @@ public class MerchantService {
 	}
 	
 	@RequestMapping(value = "/getTrendingRestaurants", method = RequestMethod.GET, headers = "Accept=application/json")
-	public SearchMerchantResponse getTrendingRestaurants() {
-		SearchMerchantResponse response = new SearchMerchantResponse();
+	public GetTrendingMerchantsResponse getTrendingRestaurants() {
+		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
 		try {
-			SearchMerchantRequest request = new SearchMerchantRequest();
-			request.setSearchString("as");
-			response = delegate.searchMerchant(request);
+			response = delegate.getTrendingMerchants();
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
