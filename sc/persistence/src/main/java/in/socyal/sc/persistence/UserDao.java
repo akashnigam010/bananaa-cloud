@@ -124,8 +124,8 @@ public class UserDao {
 	
 	public UserDto saveUser(UserDto user) {
 		UserEntity entity = mapper.map(user);
-		entity = (UserEntity) sessionFactory.getCurrentSession().save(entity);
-		user.setId(entity.getId());
+		Integer id = (Integer) sessionFactory.getCurrentSession().save(entity);
+		user.setId(id);
 		return user;
 	}
 	
