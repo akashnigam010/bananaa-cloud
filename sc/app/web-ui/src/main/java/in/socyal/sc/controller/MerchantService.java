@@ -9,17 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.item.response.Item;
-import in.socyal.sc.api.item.response.ItemsResponse;
-import in.socyal.sc.api.merchant.business.request.SaveBusinessRegistrationIdRequest;
-import in.socyal.sc.api.merchant.business.response.SaveBusinessRegistrationIdResponse;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
+import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
-import in.socyal.sc.api.merchant.response.Recommendation;
-import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
@@ -72,20 +67,18 @@ public class MerchantService {
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = delegate.searchMerchant(request);
-			}			
+			}
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getTrendingRestaurants", method = RequestMethod.GET, headers = "Accept=application/json")
-	public SearchMerchantResponse getTrendingRestaurants() {
-		SearchMerchantResponse response = new SearchMerchantResponse();
+	public GetTrendingMerchantsResponse getTrendingRestaurants() {
+		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
 		try {
-			SearchRequest request = new SearchRequest();
-			request.setSearchString("as");
-			response = delegate.searchMerchant(request);
+			response = delegate.getTrendingMerchants();
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
@@ -104,18 +97,4 @@ public class MerchantService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
-//	@RequestMapping(value = "/saveBusinessRegistrationId", method = RequestMethod.POST, headers = "Accept=application/json")
-//	public SaveBusinessRegistrationIdResponse saveBusinessRegistrationId(@RequestBody SaveBusinessRegistrationIdRequest request) {
-//		JsonHelper.logRequest(request, MerchantService.class, "/merchant/saveBusinessRegistrationId");
-//		SaveBusinessRegistrationIdResponse response = new SaveBusinessRegistrationIdResponse();
-//		try {
-//			validator.validateSaveBusinessRegistrationIdRequest(request);
-//			response = delegate.saveBusinessRegistrationId(request);
-//			return responseHelper.success(response);
-//		} catch (BusinessException e) {
-//			return responseHelper.failure(response, e);
-//		}
-//	}
-	
 }

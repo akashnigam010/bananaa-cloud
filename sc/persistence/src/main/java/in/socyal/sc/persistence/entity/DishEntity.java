@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,6 +29,19 @@ public class DishEntity implements Serializable {
 	
 	@Column(name = "CUISINE_ID")
 	private Integer cuisineId;
+	
+	@ManyToOne
+	@JoinColumn(name = "MERCHANT_ID")
+	private MerchantEntity merchant;
+	
+	@Column(name = "IMAGE_URL")
+	private String imageUrl;
+	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
+	
+	@Column(name = "INITIAL_DUMP")
+	private Integer initialDump;
 	
 	public Integer getId() {
 		return id;
@@ -58,5 +73,37 @@ public class DishEntity implements Serializable {
 
 	public void setCuisineId(Integer cuisineId) {
 		this.cuisineId = cuisineId;
+	}
+
+	public MerchantEntity getMerchant() {
+		return merchant;
+	}
+
+	public void setMerchant(MerchantEntity merchant) {
+		this.merchant = merchant;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public Integer getInitialDump() {
+		return initialDump;
+	}
+
+	public void setInitialDump(Integer initialDump) {
+		this.initialDump = initialDump;
 	}
 }
