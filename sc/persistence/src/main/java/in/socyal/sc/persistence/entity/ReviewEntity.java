@@ -23,7 +23,7 @@ public class ReviewEntity implements Serializable {
 	private Integer recommendationId;
 	
 	@Column(name = "DESCRIPTION")
-	private Integer description;
+	private String description;
 
 	public Integer getId() {
 		return id;
@@ -41,11 +41,11 @@ public class ReviewEntity implements Serializable {
 		this.recommendationId = recommendationId;
 	}
 
-	public Integer getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(Integer description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 }

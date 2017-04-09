@@ -3,6 +3,7 @@ package in.socyal.sc.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -17,8 +18,11 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.date.util.Clock;
+import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
+import in.socyal.sc.persistence.entity.ReviewEntity;
 import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
+import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
@@ -76,5 +80,23 @@ public class RecommendationDao {
 			response.add(recommendation);
 		}
 		return response;
+	}
+	
+	public void addRecommendation(Integer userId, Integer dishId, String description) {
+		RecommendationEntity recommendation = new RecommendationEntity();
+		DishEntity dish = new DishEntity();
+		dish.setId(dishId);
+		recommendation.setDish(dish);
+		UserEntity user = new UserEntity();
+		user.setId(userId);
+		recommendation.setUser(user);
+		recommendation.setIsActive(Boolean.TRUE);
+		Integer recommendationId = (Integer) sessionFactory.getCurrentSession().save(recommendation);
+		if (StringUtils.isNotBlank(description)) {
+			ReviewEntity review = new ReviewEntity();
+			review.setRecommendationId(recommendationId);
+			review.setDescription(description);
+			sessionFactory.getCurrentSession().save(review);
+		}
 	}
 }
