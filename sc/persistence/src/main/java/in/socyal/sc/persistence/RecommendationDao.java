@@ -90,6 +90,7 @@ public class RecommendationDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("user.id", userId));
 		criteria.add(Restrictions.eq("dish.id", dishId));
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
 		Calendar cal = Calendar.getInstance();
 		if (recommendation == null) {
