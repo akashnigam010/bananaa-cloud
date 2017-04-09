@@ -19,7 +19,6 @@ $(document).ready(function() {
     }   
 	
     var timerid;
-    accessToken = $('#accessToken').val();
     $("#search-field").on("input",function(e){
         var value = $(this).val();
         if($(this).data("lastval")!= value){
@@ -36,7 +35,6 @@ $(document).ready(function() {
                 	  method: "POST",
                 	  url: "/socyal/merchant/searchMerchant",
                 	  contentType : "application/json",
-                	  beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); },
                 	  data: JSON.stringify(dataOb)
                 	})
                 	  .done(function(response) {
@@ -79,7 +77,6 @@ function getTrendingRestaurants() {
     	  method: "GET",
     	  url: "/socyal/merchant/getTrendingRestaurants",
     	  contentType : "application/json"
-    	  //beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + accessToken); }
     	})
     	  .done(function(response) {
     		  var trendingRestaurantHtml = '';

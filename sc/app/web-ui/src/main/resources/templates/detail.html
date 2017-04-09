@@ -200,15 +200,14 @@
         
         <div lang="en" th:replace="fragments/loadmore-modal :: loadmore-modal"></div>
         
-        <!-- <div lang="en" th:replace="fragments/loading-modal :: loading-modal"></div> -->
-        
         <div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
 
 		<div lang="en" th:replace="fragments/footer :: footer"></div>
 
 	</div>
-	<input type="hidden" id="accessToken" th:value='${accessToken}' />
+	<input type="hidden" id="merchantId" th:value='${detail.id}' />
 	<script src="/js/detail.js"></script>
+	<script src="/js/rcmd.js"></script>
 </body>
 
 </html>

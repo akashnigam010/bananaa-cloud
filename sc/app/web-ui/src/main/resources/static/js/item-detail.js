@@ -5,61 +5,17 @@ $(document).ready(function() {
     $(".primary-image-banner").css("background-repeat", "no-repeat");
     $(".primary-image-banner").css("background-position", "center");
     $(".primary-image-banner").css("background-size", "cover");
-    getMyRecommendations();
+    getMyItemRecommendation();
 });
 
-function loadPopularDishes() {
+function getMyItemRecommendation() {
 	var dataOb = {
-			merchantId : merchantId,
+			itemId : ItemId,
 			page : 1
 	};
 	$.ajax({
     	  method: "POST",
-    	  url: "/socyal/recommendation/getPopularItems",
-    	  contentType : "application/json",
-    	  data: JSON.stringify(dataOb)
-    	})
-    	  .done(function(response) {
-    		  var popularItemsHtml = '';
-    		  if (response.result) {
-    			  if (response.items.length > 0) {
-    				  for (var i=0; i<response.items.length; i++) {
-    					  popularItemsHtml += 
-    						  '<div class="row">'+
-	    						  '<a class="cursor-pointer" href="/hyderabad/fusion-9-hitech-city/12346">'+
-				                     '<div class="col-xs-12 recommended-item">'+
-				                          '<div class="float-left" style="object-fit: cover;">'+
-				                              '<img class="user-icon" src="'+response.items[i].imageUrl+'" />'+
-				                          '</div>'+
-				                          '<div class="float-left item-desc-wrapper">'+
-				                              '<div class="bold item-name">'+
-				                              		response.items[i].name+
-				                              '</div>'+
-				                               '<div>'+
-				                               		response.items[i].recommendations+' people recommended'+
-				                              '</div>'+
-				                          '</div>'+                                                                           
-				                      '</div>'+
-			                      '</a>'+
-			                  '</div>';
-    				  }
-    				  $('.loadmore-wrapper').html(popularItemsHtml);
-    				  $('#loadMoreModal').modal('show');
-    			  }
-    		  } else {
-    			  handleErrorCallback(response);
-    		  }
-    	  });
-}
-
-function getMyRecommendations() {
-	var dataOb = {
-			merchantId : merchantId,
-			page : 1
-	};
-	$.ajax({
-    	  method: "POST",
-    	  url: "/socyal/recommendation/getMyRecommendations",
+    	  url: "/socyal/recommendation/getMyItemRecommendation",
     	  contentType : "application/json",
     	  data: JSON.stringify(dataOb)
     	})
@@ -93,7 +49,7 @@ function getMyRecommendations() {
     	  });
 }
 
-var rcmdActive = function() {
+function activateUpdateRcmdModal() {
 	$(".recommended-item").on('mouseup', function(e){
     	rcmdOb = {
     		rcmdId: $(this).find('.recommendation-id').html(),
@@ -103,12 +59,4 @@ var rcmdActive = function() {
     	};
     	openRecommendationModal(rcmdOb.rcmdId, rcmdOb.itemId, rcmdOb.name, rcmdOb.desc, true);
     });
-	alert('hello');
-}
-
-function activateUpdateRcmdModal() {
-	if (fs['rcmdActive'] === undefined) {
-		fs['rcmdActive'] = rcmdActive;
-		fs['rcmdActive']();
-	}	
 }

@@ -12,7 +12,6 @@ import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
-import in.socyal.sc.api.merchant.response.Recommendation;
 import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
@@ -110,31 +109,6 @@ public class RecommendationService {
 			LOG.debug(e.getMessage());
 			return helper.failure(response, e);
 		}
-	}
-
-	private RecommendationResponse getMyRecommendation() throws BusinessException {
-		RecommendationResponse response = new RecommendationResponse();
-		if (!jwtTokenHelper.isUserLoggedIn()) {
-			return response;
-		}
-		Recommendation rcmdn1 = new Recommendation();
-		rcmdn1.setId(11);
-		rcmdn1.setItemId(21);
-		rcmdn1.setName("Mutton Seekh Kebab");
-		rcmdn1.setDescription("Very tastey and juicy, as if drops from heaven");
-		response.getRecommendations().add(rcmdn1);
-		Recommendation rcmdn2 = new Recommendation();
-		rcmdn2.setId(12);
-		rcmdn1.setItemId(22);
-		rcmdn2.setName("Galawati Kebab");
-		response.getRecommendations().add(rcmdn2);
-		Recommendation rcmdn3 = new Recommendation();
-		rcmdn3.setId(13);
-		rcmdn1.setItemId(23);
-		rcmdn3.setName("Grilled Mushroom");
-		rcmdn3.setDescription("Very tastey and juicy, as if drops from heaven");
-		response.getRecommendations().add(rcmdn3);
-		return response;
 	}
 
 	private ItemsResponse getPopularDishes() throws BusinessException {

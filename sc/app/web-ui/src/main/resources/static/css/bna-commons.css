@@ -267,7 +267,8 @@ label          {
 }
 
 /* active state */
-input:focus ~ label, input:valid ~ label, textarea:focus ~ label     {
+input:focus ~ label, input:valid ~ label {
+  /* handling of label for textarea is done dynamically in the js itself - check rcmdn.js */
   top:-20px;
   font-size:10px;
   color:#9932CC;

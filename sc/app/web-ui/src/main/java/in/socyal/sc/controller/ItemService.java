@@ -30,13 +30,13 @@ public class ItemService {
 				 * FIXME: response.setItems(delegate.searchItems(request));
 				 * return top 5 searches only
 				 */
-				response.setItems(getSearchResults());
+				response.setItems(getSearchResults(request.getSearchString()));
 			}
 		}
 		return helper.success(response);
 	}
 
-	private List<Item> getSearchResults() {
+	private List<Item> getSearchResults(String searchString) {
 		List<Item> items = new ArrayList<>();
 		Item dish5 = new Item();
 		dish5.setId(2);
@@ -80,6 +80,13 @@ public class ItemService {
 		dish10.setNameId("mango-delight");
 		dish10.setRecommendations(10);
 		items.add(dish10);
-		return items;
+
+		List<Item> searchedItems = new ArrayList<>();
+		for (Item item : items) {
+			if (item.getName().toLowerCase().contains(searchString.toLowerCase())) {
+				searchedItems.add(item);
+			}
+		}
+		return searchedItems;
 	}
 }
