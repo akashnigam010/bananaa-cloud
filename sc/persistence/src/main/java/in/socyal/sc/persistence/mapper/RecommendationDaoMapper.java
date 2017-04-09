@@ -40,8 +40,7 @@ public class RecommendationDaoMapper {
 	}
 
 	public void map(RecommendationEntity entity, RecommendationDto dto) {
-		MerchantFilterCriteria criteria = new MerchantFilterCriteria(true, true, false, false, false, true);
-		DishDto dish = dishMapper.map(entity.getDish(), criteria);
+		DishDto dish = dishMapper.map(entity.getDish(), null);
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setIsActive(entity.getIsActive());
