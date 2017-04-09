@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
@@ -15,8 +16,10 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
@@ -98,5 +101,17 @@ public class RecommendationDao {
 			review.setDescription(description);
 			sessionFactory.getCurrentSession().save(review);
 		}
+	}
+	
+	public void removeRecommendation(Integer recommendationId) throws BusinessException {
+		Session session = sessionFactory.getCurrentSession();
+		RecommendationEntity recommendation = (RecommendationEntity) 
+				session.get(RecommendationEntity.class, recommendationId);
+		if (recommendation == null) {
+			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
+		}
+		
+		recommendation.setIsActive(Boolean.FALSE);
+		session.update(recommendation);
 	}
 }

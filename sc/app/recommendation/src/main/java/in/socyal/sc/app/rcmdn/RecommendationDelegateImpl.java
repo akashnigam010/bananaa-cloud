@@ -54,4 +54,13 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		}
 		dao.addRecommendation(jwtHelper.getUserId(), request.getDishId(), request.getDescription());
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void removeRecommendation(EditRecommendationRequest request) throws BusinessException {
+		if (!jwtHelper.isUserLoggedIn()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		dao.removeRecommendation(request.getRcmdnId());
+	}
 }
