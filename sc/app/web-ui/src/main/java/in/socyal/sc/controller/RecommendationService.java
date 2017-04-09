@@ -44,7 +44,7 @@ public class RecommendationService {
 		EditRecommendationResponse response = new EditRecommendationResponse();
 		try {
 			validator.validateAddRecommendationRequest(request, blc);
-			// FIXME: delegate.addRecommendation(request);
+			delegate.addRecommendation(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());
@@ -58,7 +58,7 @@ public class RecommendationService {
 		EditRecommendationResponse response = new EditRecommendationResponse();
 		try {
 			validator.validateUpdateRecommendationRequest(request, blc);
-			// FIXME: delegate.addRecommendation(request);
+			delegate.updateRecommendation(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());
@@ -72,7 +72,7 @@ public class RecommendationService {
 		EditRecommendationResponse response = new EditRecommendationResponse();
 		try {
 			validator.validateRemoveRecommendationRequest(request, blc);
-			// FIXME: delegate.addRecommendation(request);
+			delegate.removeRecommendation(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());
