@@ -53,6 +53,8 @@ function loadPopularDishes() {
 }
 
 function getMyRecommendations() {
+	$('.recommended-wrapper').find('.loader').show();
+	$('.my-recommendations').html('');
 	var dataOb = {
 			merchantId : merchantId,
 			page : 1
@@ -93,7 +95,8 @@ function getMyRecommendations() {
     	  });
 }
 
-var rcmdActive = function() {
+function activateUpdateRcmdModal() {
+	$(".recommended-item").off('mouseup');
 	$(".recommended-item").on('mouseup', function(e){
     	rcmdOb = {
     		rcmdId: $(this).find('.recommendation-id').html(),
@@ -103,12 +106,4 @@ var rcmdActive = function() {
     	};
     	openRecommendationModal(rcmdOb.rcmdId, rcmdOb.itemId, rcmdOb.name, rcmdOb.desc, true);
     });
-	alert('hello');
-}
-
-function activateUpdateRcmdModal() {
-	if (fs['rcmdActive'] === undefined) {
-		fs['rcmdActive'] = rcmdActive;
-		fs['rcmdActive']();
-	}	
 }

@@ -66,21 +66,61 @@ function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
 	if (isUpdateFlag) {
 		$("#removeRecommendation").removeClass('hide');
 		$("#recommendSubmit").html('Update recommendation');
+		$("#recommendSubmit").off('mouseup');
+		$("#recommendSubmit").on('mouseup', updateRecommendation);
+		$('#modal-item-name').prop('disabled', true);
+		$("#modal-item-name-label").addClass('hide');
 	} else {
 		$("#removeRecommendation").addClass('hide');
 		$("#recommendSubmit").html('Add recommendation');
+		$("#recommendSubmit").off('mouseup');
+		$("#recommendSubmit").on('mouseup', addRecommendation);
+		$('#modal-item-name').prop('disabled', false);
+		$("#modal-item-name-label").removeClass('hide');
 	}
 	$('#recommendModal').find('.error-label').addClass('hide');
 	$('#recommendModal').modal('show');
 }
 
-function submitRecommendation() {
-	var nameInput = $('#modal-item-name');	
+function updateRecommendation() {
 	var $rcmdId = $('#modal-recommendation-id').val();
 	var $itemId = $('#modal-item-id').val();
+	var $name = $('#modal-item-name').val();
+	var $desc = $('#modal-item-desc').val();	
+	if ($desc != rcmdOb.desc) {
+		if (handleReview($desc)) {
+			var dataOb = {
+		 			rcmdnId : $rcmdId,
+		 			dishId : $itemId,
+		 			description : $desc
+        	};
+            return $.ajax({
+          	  method: "POST",
+          	  url: "/socyal/recommendation/updateRecommendation",
+          	  contentType : "application/json",
+          	  data: JSON.stringify(dataOb)
+          	})
+          	  .done(function(response) {
+          		$('#recommendModal').modal('hide');
+          		  if (response.result) {
+          			  getMyRecommendations()             			
+          		  } else {
+        			  handleErrorCallback(response);
+        		  }	          		  
+          	  });
+		}
+		return;	
+	} else {
+		$('#recommendModal').modal('hide');
+	}
+}
+
+function addRecommendation() {
+	var nameInput = $('#modal-item-name');
+	var current = nameInput.typeahead("getActive");
+	var $rcmdId = $('#modal-recommendation-id').val();
 	var $name = nameInput.val();
 	var $desc = $('#modal-item-desc').val();
-	var current = nameInput.typeahead("getActive");
 	$('#recommendModal').find('.error-label-name').html('Please select the food or drink item');
 	if (current) {
 		if (current.name.toLowerCase() == $name.toLowerCase()) {
@@ -88,29 +128,31 @@ function submitRecommendation() {
 			if (handleReview($desc)) {
 				$("#recommendModal").find('.main-area').hide();
 				$("#recommendModal").find('.loader').removeClass('hide');
+				var dataOb = {
+			 			dishId : current.id,
+			 			description : $desc
+	        	};
+	            return $.ajax({
+	          	  method: "POST",
+	          	  url: "/socyal/recommendation/addRecommendation",
+	          	  contentType : "application/json",
+	          	  data: JSON.stringify(dataOb)
+	          	})
+	          	  .done(function(response) {
+	          		$('#recommendModal').modal('hide');
+	          		  if (response.result) {
+	          			  getMyRecommendations()             			
+	          		  } else {
+	        			  handleErrorCallback(response);
+	        		  }	          		  
+	          	  });
 			}	      	
 	    } else {
-	    	handlePartialMatch($rcmdId, $itemId, $name, $desc);
+	    	$('#recommendModal').find('.error-label-name').removeClass('hide');
 	    }
 	  } else {
-	  		handlePartialMatch($rcmdId, $itemId, $name, $desc);
+		  	$('#recommendModal').find('.error-label-name').removeClass('hide');
 	  }
-}
-
-function handlePartialMatch(rcmdId, itemId, name, desc) {
-	if (name === rcmdOb.name && desc === rcmdOb.desc) {
-		$('#recommendModal').modal('hide');
-	}
-	if (name === rcmdOb.name) {
-		if (desc != rcmdOb.desc) {
-			if (handleReview($desc)) {
-				console.log('update this recommendation\'s review  - rcmdId: ' + rcmdId);	
-			}
-			return;	
-		}
-	} else {
-		$('#recommendModal').find('.error-label-name').removeClass('hide');
-	}	
 }
 
 function handleReview(desc) {
@@ -131,6 +173,7 @@ function removeRecommendation() {
 		$("#alertModal").find('.loader').addClass('hide');
 		$("#alertText").html('Are you sure you want to remove ' + rcmdOb.name + ' from your recommendations ?');
 		$("#alertModal").modal('show');
+		$("#confirmAlertButton").off('mouseup');
 		$("#confirmAlertButton").on('mouseup', function (e) {
 		 	$("#alertModal").find('.main-area').hide();
 		 	$("#alertModal").find('.loader').removeClass('hide');
