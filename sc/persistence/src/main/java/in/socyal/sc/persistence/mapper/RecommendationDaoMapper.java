@@ -16,10 +16,13 @@ import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 
 @Component
 public class RecommendationDaoMapper {
-	@Autowired MerchantDaoMapper merchantMapper;
-	@Autowired DishDaoMapper dishMapper;
-	@Autowired UserDaoMapper userMapper;
-	
+	@Autowired
+	MerchantDaoMapper merchantMapper;
+	@Autowired
+	DishDaoMapper dishMapper;
+	@Autowired
+	UserDaoMapper userMapper;
+
 	public void map(List<TrendingMerchantResultEntity> result, List<TrendingMerchantResultDto> response) {
 		for (TrendingMerchantResultEntity entity : result) {
 			TrendingMerchantResultDto dto = new TrendingMerchantResultDto();
@@ -27,7 +30,7 @@ public class RecommendationDaoMapper {
 			response.add(dto);
 		}
 	}
-	
+
 	public void map(TrendingMerchantResultEntity entity, TrendingMerchantResultDto dto) {
 		MerchantDto merchant = new MerchantDto();
 		MerchantFilterCriteria criteria = new MerchantFilterCriteria(true, true, false, false, false, true);
@@ -37,8 +40,8 @@ public class RecommendationDaoMapper {
 	}
 
 	public void map(RecommendationEntity entity, RecommendationDto dto) {
-		DishDto dish = new DishDto();
-		dishMapper.map(entity.getDish(), dish);
+		MerchantFilterCriteria criteria = new MerchantFilterCriteria(true, true, false, false, false, true);
+		DishDto dish = dishMapper.map(entity.getDish(), criteria);
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setIsActive(entity.getIsActive());
