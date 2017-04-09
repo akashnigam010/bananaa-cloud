@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
+import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.items.dto.PopularDishesResultDto;
 
 @Component
 public class ItemMapper implements Serializable {
@@ -25,4 +27,20 @@ public class ItemMapper implements Serializable {
 		return items;
 	}
 
+	public ItemsResponse map(List<PopularDishesResultDto> result, ItemsResponse response) {
+		List<Item> items = new ArrayList<>();
+		for (PopularDishesResultDto dto : result) {
+			Item item = new Item();
+			DishDto dish = dto.getDish();
+			item.setId(dish.getId());
+			item.setName(dish.getName());
+			item.setImageUrl(dish.getImageUrl());
+			item.setNameId(dish.getNameId());
+			item.setRecommendations(dto.getRecommendations().intValue());
+			items.add(item);
+		}
+		
+		response.setItems(items);
+		return response;
+	}
 }
