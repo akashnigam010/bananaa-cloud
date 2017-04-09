@@ -70,6 +70,6 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		if (!jwtHelper.isUserLoggedIn()) {
 			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
 		}
-		dao.updateRecommendation(request.getRcmdnId(), request.getDishId(), request.getDescription());
+		dao.updateRecommendation(request.getRcmdnId(), request.getDescription());
 	}
 }

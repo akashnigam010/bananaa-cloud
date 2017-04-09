@@ -49,5 +49,6 @@ public class RecommendationDaoMapper {
 		UserDto user = new UserDto();
 		userMapper.map(entity.getUser(), user);
 		dto.setUser(user);
+		dto.setDescription(entity.getDescription());
 	}
 }

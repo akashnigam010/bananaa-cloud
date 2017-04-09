@@ -7,7 +7,6 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,6 @@ import in.socyal.sc.persistence.mapper.DishDaoMapper;
 
 @Repository
 public class DishDao {
-	private static final Logger LOG = Logger.getLogger(DishDao.class);
 	private static final String NAME = "name";
 
 	@Autowired

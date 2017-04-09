@@ -91,7 +91,6 @@ function updateRecommendation() {
 		if (handleReview($desc)) {
 			var dataOb = {
 		 			rcmdnId : $rcmdId,
-		 			dishId : $itemId,
 		 			description : $desc
         	};
             return $.ajax({

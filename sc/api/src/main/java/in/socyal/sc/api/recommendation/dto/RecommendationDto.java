@@ -11,6 +11,7 @@ public class RecommendationDto implements Serializable {
 	private Integer id;
 	private DishDto dish;
 	private UserDto user;
+	private String description;
 	private Boolean isActive;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
@@ -61,5 +62,13 @@ public class RecommendationDto implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

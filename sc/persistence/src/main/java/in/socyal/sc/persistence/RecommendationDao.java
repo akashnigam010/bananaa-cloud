@@ -13,7 +13,6 @@ import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,14 +23,12 @@ import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
-import in.socyal.sc.persistence.entity.ReviewEntity;
 import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class RecommendationDao {
-	private static final Logger LOG = Logger.getLogger(RecommendationDao.class);
 	private static final Integer RESULTS_PER_PAGE = 5;
 	@Autowired
 	SessionFactory sessionFactory;
@@ -89,22 +86,26 @@ public class RecommendationDao {
 	}
 
 	public void addRecommendation(Integer userId, Integer dishId, String description) {
-		RecommendationEntity recommendation = new RecommendationEntity();
-		DishEntity dish = new DishEntity();
-		dish.setId(dishId);
-		recommendation.setDish(dish);
-		UserEntity user = new UserEntity();
-		user.setId(userId);
-		recommendation.setUser(user);
-		recommendation.setIsActive(Boolean.TRUE);
-		recommendation.setCreatedDateTime(Calendar.getInstance());
-		Integer recommendationId = (Integer) sessionFactory.getCurrentSession().save(recommendation);
-		if (StringUtils.isNotBlank(description)) {
-			ReviewEntity review = new ReviewEntity();
-			review.setRecommendationId(recommendationId);
-			review.setDescription(description);
-			sessionFactory.getCurrentSession().save(review);
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("dish.id", dishId));
+		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
+		Calendar cal = Calendar.getInstance();
+		if (recommendation == null) {
+			recommendation = new RecommendationEntity();
+			recommendation.setDish(new DishEntity(dishId));
+			recommendation.setUser(new UserEntity(userId));
+			recommendation.setIsActive(Boolean.TRUE);
+			recommendation.setCreatedDateTime(cal);
+		} else {
+			if (StringUtils.isBlank(description)) {
+				return;
+			}
 		}
+		recommendation.setDescription(description);
+		recommendation.setUpdatedDateTime(cal);
+		session.saveOrUpdate(recommendation);
 	}
 
 	public void removeRecommendation(Integer recommendationId) throws BusinessException {
@@ -120,8 +121,7 @@ public class RecommendationDao {
 		session.update(recommendation);
 	}
 
-	public void updateRecommendation(Integer recommendationId, Integer dishId, String description)
-			throws BusinessException {
+	public void updateRecommendation(Integer recommendationId, String description) throws BusinessException {
 		Session session = sessionFactory.getCurrentSession();
 		RecommendationEntity recommendation = (RecommendationEntity) session.get(RecommendationEntity.class,
 				recommendationId);
@@ -129,26 +129,8 @@ public class RecommendationDao {
 			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
 		}
 
-		/*
-		 * @akash - Removed update dish logic. For now, user can't change the
-		 * dish while updating a rcmdn
-		 *
-		 *
-		 * DishEntity dish = (DishEntity) session.get(DishEntity.class, dishId);
-		 * if (dish == null) { throw new
-		 * BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND); }
-		 * dish.setId(dishId); recommendation.setDish(dish);
-		 * recommendation.setUpdatedDateTime(Calendar.getInstance());
-		 * session.update(recommendation);
-		 */
-		Criteria criteria = session.createCriteria(ReviewEntity.class);
-		criteria.add(Restrictions.eq("recommendationId", recommendationId));
-		ReviewEntity review = (ReviewEntity) criteria.uniqueResult();
-		if (review == null) {
-			review = new ReviewEntity();
-			review.setRecommendationId(recommendationId);
-		}
-		review.setDescription(description);
-		session.saveOrUpdate(review);
+		recommendation.setDescription(description);
+		recommendation.setUpdatedDateTime(Calendar.getInstance());
+		session.saveOrUpdate(recommendation);
 	}
 }

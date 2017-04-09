@@ -40,6 +40,14 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
+	
+	public UserEntity() {
+		
+	}
+	
+	public UserEntity(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getId() {
 		return id;

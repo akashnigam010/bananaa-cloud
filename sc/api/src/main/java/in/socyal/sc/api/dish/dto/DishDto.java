@@ -2,12 +2,15 @@ package in.socyal.sc.api.dish.dto;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 
 public class DishDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
+	private String nameId;
 	private Integer suggestionId;
 	private Integer cuisineId;
 	private MerchantDto merchant;
@@ -77,5 +80,13 @@ public class DishDto implements Serializable {
 
 	public void setInitialDump(Integer initialDump) {
 		this.initialDump = initialDump;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

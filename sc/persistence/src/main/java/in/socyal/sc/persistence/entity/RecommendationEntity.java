@@ -31,6 +31,9 @@ public class RecommendationEntity implements Serializable {
 	@JoinColumn(name = "USER_ID")
 	private UserEntity user;
 	
+	@Column(name = "DESCRIPTION")
+	private String description;
+	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 
@@ -86,5 +89,13 @@ public class RecommendationEntity implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

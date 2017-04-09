@@ -24,6 +24,9 @@ public class DishEntity implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 	
+	@Column(name = "NAME_ID")
+	private String nameId;
+	
 	@Column(name = "SUGGESTION_ID")
 	private Integer suggestionId;
 	
@@ -42,6 +45,14 @@ public class DishEntity implements Serializable {
 	
 	@Column(name = "INITIAL_DUMP")
 	private Integer initialDump;
+	
+	public DishEntity() {
+		
+	}
+	
+	public DishEntity(Integer id) {
+		this.id = id;
+	}
 	
 	public Integer getId() {
 		return id;
@@ -105,5 +116,13 @@ public class DishEntity implements Serializable {
 
 	public void setInitialDump(Integer initialDump) {
 		this.initialDump = initialDump;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

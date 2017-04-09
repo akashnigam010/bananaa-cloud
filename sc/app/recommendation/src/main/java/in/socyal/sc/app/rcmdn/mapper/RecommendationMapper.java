@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.merchant.response.Recommendation;
@@ -18,14 +19,13 @@ public class RecommendationMapper implements Serializable {
 		List<Recommendation> recommendations = new ArrayList<>();
 		for (RecommendationDto dto : result) {
 			Recommendation recommendation = new Recommendation();
-			//FIX this: fetch review description
-			recommendation.setDescription("Sample description set in mapper:fix this");
+			recommendation.setDescription(StringUtils.isEmpty(dto.getDescription()) ? "" : dto.getDescription());
 			recommendation.setId(dto.getId());
 			recommendation.setItemId(dto.getDish().getId());
 			recommendation.setName(dto.getDish().getName());
 			recommendations.add(recommendation);
 		}
-		
+
 		response.setRecommendations(recommendations);
 	}
 

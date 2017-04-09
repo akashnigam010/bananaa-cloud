@@ -29,6 +29,7 @@ public class DishDaoMapper {
 			dto.setMerchant(merchant);
 		}
 		dto.setName(entity.getName());
+		dto.setNameId(entity.getNameId());
 		dto.setSuggestionId(entity.getSuggestionId());
 		return dto;
 	}
