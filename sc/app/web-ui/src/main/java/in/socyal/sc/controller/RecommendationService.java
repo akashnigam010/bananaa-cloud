@@ -58,7 +58,7 @@ public class RecommendationService {
 		EditRecommendationResponse response = new EditRecommendationResponse();
 		try {
 			validator.validateUpdateRecommendationRequest(request, blc);
-			// FIXME: delegate.addRecommendation(request);
+			delegate.updateRecommendation(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

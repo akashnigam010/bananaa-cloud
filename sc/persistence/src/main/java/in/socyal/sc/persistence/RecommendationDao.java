@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.DishEntity;
@@ -113,5 +114,28 @@ public class RecommendationDao {
 		
 		recommendation.setIsActive(Boolean.FALSE);
 		session.update(recommendation);
+	}
+	
+	public void updateRecommendation(Integer recommendationId, Integer dishId, String description) 
+			throws BusinessException {
+		Session session = sessionFactory.getCurrentSession();
+		RecommendationEntity recommendation = (RecommendationEntity) 
+				session.get(RecommendationEntity.class, recommendationId);
+		if (recommendation == null || !recommendation.getIsActive()) {
+			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
+		}
+		
+		DishEntity dish = (DishEntity) session.get(DishEntity.class, dishId);
+		if (dish == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
+		}
+		dish.setId(dishId);
+		recommendation.setDish(dish);
+		session.update(recommendation);
+		Criteria criteria = session.createCriteria(ReviewEntity.class);
+		criteria.add(Restrictions.eq("recommendationId", recommendationId));
+		ReviewEntity review = (ReviewEntity) criteria.uniqueResult();
+		review.setDescription(description);
+		session.update(review);
 	}
 }

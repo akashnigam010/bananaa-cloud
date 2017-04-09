@@ -9,4 +9,5 @@ public interface RecommendationDelegate {
 	public RecommendationResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException;
 	public void addRecommendation(EditRecommendationRequest request) throws BusinessException;
 	public void removeRecommendation(EditRecommendationRequest request) throws BusinessException;
+	public void updateRecommendation(EditRecommendationRequest request) throws BusinessException;
 }
