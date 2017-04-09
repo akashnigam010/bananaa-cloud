@@ -12,6 +12,7 @@ import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
@@ -104,6 +105,20 @@ public class RecommendationService {
 		try {
 			validator.validateGetMyRecommendationsRequest(request, blc);
 			response = delegate.getMyRecommendations(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			LOG.debug(e.getMessage());
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getMyItemRecommendation", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ItemRecommendationResponse getMyItemRecommendation(@RequestBody GetRecommendationRequest request,
+			@CookieValue(name = "blc", defaultValue = "") String blc) {
+		ItemRecommendationResponse response = new ItemRecommendationResponse();
+		try {
+			validator.validateGetMyItemRecommendationRequest(request, blc);
+			response = delegate.getMyDishRecommendation(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

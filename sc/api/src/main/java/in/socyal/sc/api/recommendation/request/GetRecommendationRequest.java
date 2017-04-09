@@ -2,6 +2,7 @@ package in.socyal.sc.api.recommendation.request;
 
 public class GetRecommendationRequest {
 	private Integer merchantId;
+	private Integer itemId;
 	private Integer page;
 
 	public Integer getMerchantId() {
@@ -18,5 +19,13 @@ public class GetRecommendationRequest {
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public Integer getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
 	}
 }

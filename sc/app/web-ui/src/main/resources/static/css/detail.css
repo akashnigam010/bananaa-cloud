@@ -95,6 +95,10 @@ hr {
 	height: 100px;
 }
 
+.my-recommendations {
+	padding-bottom: 5%;
+}
+
 .error-label {
     margin-top: -5%;
     margin-bottom: 5%;

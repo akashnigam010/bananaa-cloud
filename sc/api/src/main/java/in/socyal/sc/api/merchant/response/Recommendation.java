@@ -1,6 +1,10 @@
 package in.socyal.sc.api.merchant.response;
 
-public class Recommendation {
+import java.io.Serializable;
+
+import in.socyal.sc.api.response.GenericResponse;
+
+public class Recommendation  {
 	private Integer id;
 	private Integer itemId;
 	private String name;

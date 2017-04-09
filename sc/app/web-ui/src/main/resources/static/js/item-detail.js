@@ -10,8 +10,7 @@ $(document).ready(function() {
 
 function getMyItemRecommendation() {
 	var dataOb = {
-			itemId : ItemId,
-			page : 1
+			itemId : itemId
 	};
 	$.ajax({
     	  method: "POST",
@@ -20,29 +19,13 @@ function getMyItemRecommendation() {
     	  data: JSON.stringify(dataOb)
     	})
     	  .done(function(response) {
-    		  var myRecommendationsHtml = '';
+    		  var myItemRecommendationHtml = '';
     		  if (response.result) {
-    			  if (response.recommendations.length > 0) {
-    				  for (var i=0; i<response.recommendations.length; i++) {
-    					  myRecommendationsHtml += 
-    						  '<div class="row">'+
-		                          '<div class="col-xs-12 recommended-item cursor-pointer">'+
-		                              '<div class="bold recommend-item-name">'+
-		                                  '<span class="hide recommendation-id">'+response.recommendations[i].id+'</span>'+
-		                              	  '<span class="hide item-id">'+response.recommendations[i].itemId+'</span>'+
-		                                  '<span class="bna-color item-hash">#'+(i+1)+'</span>'+
-		                                  '&nbsp; <span class="item-name">'+response.recommendations[i].name+'</span>'+
-		                              '</div>'+
-		                              '<div class="recommend-item-desc">'+
-		                              	(response.recommendations[i].description!=null?response.recommendations[i].description:'')+
-		                              '</div>'+                                                                         
-		                          '</div>'+
-		                      '</div>';
-    				  }
-    				  $('.my-recommendations').html(myRecommendationsHtml);
-    				  activateUpdateRcmdModal();
+    			  if (response.recommended) {
+    				  console.log('i recommend');
+    			  } else {
+    				  console.log('i havent recommended yet');
     			  }
-    			  $('.recommended-wrapper').find('.loader').hide();
     		  } else {
     			  handleErrorCallback(response);
     		  }

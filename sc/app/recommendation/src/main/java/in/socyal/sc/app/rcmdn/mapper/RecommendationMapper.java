@@ -8,25 +8,29 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.merchant.response.Recommendation;
-import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 
 @Component
 public class RecommendationMapper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public void map(List<RecommendationDto> result, RecommendationResponse response) {
+	public List<Recommendation> map(List<RecommendationDto> dtos) {
 		List<Recommendation> recommendations = new ArrayList<>();
-		for (RecommendationDto dto : result) {
-			Recommendation recommendation = new Recommendation();
-			recommendation.setDescription(StringUtils.isEmpty(dto.getDescription()) ? "" : dto.getDescription());
-			recommendation.setId(dto.getId());
-			recommendation.setItemId(dto.getDish().getId());
-			recommendation.setName(dto.getDish().getName());
+		Recommendation recommendation = null;
+		for (RecommendationDto dto : dtos) {
+			recommendation = map(dto);
 			recommendations.add(recommendation);
 		}
 
-		response.setRecommendations(recommendations);
+		return recommendations;
 	}
 
+	public Recommendation map(RecommendationDto dto) {
+		Recommendation recommendation = new Recommendation();
+		recommendation.setId(dto.getId());
+		recommendation.setItemId(dto.getDish().getId());
+		recommendation.setDescription(StringUtils.isBlank(dto.getDescription()) ? "" : dto.getDescription());
+		recommendation.setName(dto.getDish().getName());
+		return recommendation;
+	}
 }

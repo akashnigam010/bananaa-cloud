@@ -79,10 +79,24 @@ public class RecommendationDao {
 		List<RecommendationEntity> result = (List<RecommendationEntity>) criteria.list();
 		for (RecommendationEntity entity : result) {
 			RecommendationDto recommendation = new RecommendationDto();
-			mapper.map(entity, recommendation);
+			mapper.map(entity, recommendation, false);
 			response.add(recommendation);
 		}
 		return response;
+	}
+	
+	public RecommendationDto getMyDishRecommendation(Integer userId, Integer dishId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("dish.id", dishId));
+		RecommendationEntity entity = (RecommendationEntity) criteria.uniqueResult();
+		RecommendationDto dto = null;
+		if (entity != null) {
+			dto = new RecommendationDto();
+			mapper.map(entity, dto, false);
+		}
+		return dto;		
 	}
 
 	public void addRecommendation(Integer userId, Integer dishId, String description) {

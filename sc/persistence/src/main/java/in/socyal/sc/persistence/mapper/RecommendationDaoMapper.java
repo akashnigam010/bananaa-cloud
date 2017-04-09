@@ -39,16 +39,18 @@ public class RecommendationDaoMapper {
 		dto.setRecommendations(entity.getRecommendations());
 	}
 
-	public void map(RecommendationEntity entity, RecommendationDto dto) {
+	public void map(RecommendationEntity entity, RecommendationDto dto, boolean mapSubDetails) {
 		DishDto dish = dishMapper.map(entity.getDish(), null);
 		dto.setDish(dish);
 		dto.setId(entity.getId());
-		dto.setIsActive(entity.getIsActive());
-		dto.setCreatedDateTime(entity.getCreatedDateTime());
-		dto.setUpdatedDateTime(entity.getUpdatedDateTime());
-		UserDto user = new UserDto();
-		userMapper.map(entity.getUser(), user);
-		dto.setUser(user);
 		dto.setDescription(entity.getDescription());
+		dto.setIsActive(entity.getIsActive());
+		if (mapSubDetails) {
+			dto.setCreatedDateTime(entity.getCreatedDateTime());
+			dto.setUpdatedDateTime(entity.getUpdatedDateTime());
+			UserDto user = new UserDto();
+			userMapper.map(entity.getUser(), user);
+			dto.setUser(user);			
+		}		
 	}
 }

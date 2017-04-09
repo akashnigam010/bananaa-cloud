@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
@@ -39,7 +40,22 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		}
 		List<RecommendationDto> result = dao.getMyRecommendations(
 				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
-		mapper.map(result, response);
+		response.setRecommendations(mapper.map(result));
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public ItemRecommendationResponse getMyDishRecommendation(GetRecommendationRequest request) throws BusinessException {
+		ItemRecommendationResponse response = new ItemRecommendationResponse();
+		if (!jwtHelper.isUserLoggedIn()) {
+			return response;
+		}
+		RecommendationDto dto = dao.getMyDishRecommendation(jwtHelper.getUserId(), request.getItemId());
+		if (dto != null) {
+			response.setRecommended(Boolean.TRUE);
+			response.setRecommendation(mapper.map(dto));
+		}
 		return response;
 	}
 

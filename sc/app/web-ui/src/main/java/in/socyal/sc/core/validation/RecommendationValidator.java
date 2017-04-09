@@ -68,4 +68,13 @@ public class RecommendationValidator extends Validator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
+
+	public void validateGetMyItemRecommendationRequest(GetRecommendationRequest request, String authToken)
+			throws BusinessException {
+		validateUser(authToken);
+		if (request.getItemId() == null) {
+			LOG.error("Item Id not found while validating get my item recommendation request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
 }
