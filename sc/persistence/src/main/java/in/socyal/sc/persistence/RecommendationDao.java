@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
-import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
 import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.DishEntity;
@@ -66,7 +65,7 @@ public class RecommendationDao {
 		mapper.map(result, response);
 		return response;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
 		List<RecommendationDto> response = new ArrayList<>();
@@ -88,7 +87,7 @@ public class RecommendationDao {
 		}
 		return response;
 	}
-	
+
 	public void addRecommendation(Integer userId, Integer dishId, String description) {
 		RecommendationEntity recommendation = new RecommendationEntity();
 		DishEntity dish = new DishEntity();
@@ -107,41 +106,49 @@ public class RecommendationDao {
 			sessionFactory.getCurrentSession().save(review);
 		}
 	}
-	
+
 	public void removeRecommendation(Integer recommendationId) throws BusinessException {
 		Session session = sessionFactory.getCurrentSession();
-		RecommendationEntity recommendation = (RecommendationEntity) 
-				session.get(RecommendationEntity.class, recommendationId);
+		RecommendationEntity recommendation = (RecommendationEntity) session.get(RecommendationEntity.class,
+				recommendationId);
 		if (recommendation == null) {
 			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
 		}
-		
+
 		recommendation.setIsActive(Boolean.FALSE);
 		recommendation.setUpdatedDateTime(Calendar.getInstance());
 		session.update(recommendation);
 	}
-	
-	public void updateRecommendation(Integer recommendationId, Integer dishId, String description) 
+
+	public void updateRecommendation(Integer recommendationId, Integer dishId, String description)
 			throws BusinessException {
 		Session session = sessionFactory.getCurrentSession();
-		RecommendationEntity recommendation = (RecommendationEntity) 
-				session.get(RecommendationEntity.class, recommendationId);
+		RecommendationEntity recommendation = (RecommendationEntity) session.get(RecommendationEntity.class,
+				recommendationId);
 		if (recommendation == null || !recommendation.getIsActive()) {
 			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
 		}
-		
-		DishEntity dish = (DishEntity) session.get(DishEntity.class, dishId);
-		if (dish == null) {
-			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
-		}
-		dish.setId(dishId);
-		recommendation.setDish(dish);
-		recommendation.setUpdatedDateTime(Calendar.getInstance());
-		session.update(recommendation);
+
+		/*
+		 * @akash - Removed update dish logic. For now, user can't change the
+		 * dish while updating a rcmdn
+		 *
+		 *
+		 * DishEntity dish = (DishEntity) session.get(DishEntity.class, dishId);
+		 * if (dish == null) { throw new
+		 * BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND); }
+		 * dish.setId(dishId); recommendation.setDish(dish);
+		 * recommendation.setUpdatedDateTime(Calendar.getInstance());
+		 * session.update(recommendation);
+		 */
 		Criteria criteria = session.createCriteria(ReviewEntity.class);
 		criteria.add(Restrictions.eq("recommendationId", recommendationId));
 		ReviewEntity review = (ReviewEntity) criteria.uniqueResult();
+		if (review == null) {
+			review = new ReviewEntity();
+			review.setRecommendationId(recommendationId);
+		}
 		review.setDescription(description);
-		session.update(review);
+		session.saveOrUpdate(review);
 	}
 }

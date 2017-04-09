@@ -28,11 +28,6 @@ public class RecommendationValidator extends Validator {
 	public void validateUpdateRecommendationRequest(EditRecommendationRequest request, String authToken)
 			throws BusinessException {
 		validateUserAndThrowException(authToken);
-		if (request.getDishId() == null) {
-			LOG.error("Dish Id not found while validating add recommendation request");
-			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
-		}
-
 		if (request.getRcmdnId() == null) {
 			LOG.error("Recommendation Id not found while validating update recommendation request");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
