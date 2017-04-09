@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.items.dto.PopularDishesResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.persistence.entity.DishEntity;
+import in.socyal.sc.persistence.entity.PopularDishesResult;
 
 @Component
 public class DishDaoMapper {
@@ -40,5 +42,16 @@ public class DishDaoMapper {
 			dtos.add(map(entity, merchantCriteria));
 		}
 		return dtos;
+	}
+	
+	public List<PopularDishesResultDto> map(List<PopularDishesResult> result) {
+		List<PopularDishesResultDto> response = new ArrayList<>();
+		for (PopularDishesResult dish : result) {
+			PopularDishesResultDto dto = new PopularDishesResultDto();
+			dto.setDish(map(dish.getDish(), null));
+			dto.setRecommendations(dish.getRecommendations());
+			response.add(dto);
+		}
+		return response;
 	}
 }

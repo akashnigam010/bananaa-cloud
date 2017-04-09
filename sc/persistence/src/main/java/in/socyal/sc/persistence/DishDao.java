@@ -6,18 +6,25 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.items.dto.PopularDishesResultDto;
 import in.socyal.sc.persistence.entity.DishEntity;
+import in.socyal.sc.persistence.entity.PopularDishesResult;
+import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 
 @Repository
 public class DishDao {
 	private static final String NAME = "name";
-
+	private static final Integer RESULTS_PER_PAGE = 5;
 	@Autowired
 	DishDaoMapper mapper;
 	@Autowired
@@ -47,5 +54,26 @@ public class DishDao {
 			return dishDtos;
 		}
 		return Collections.emptyList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PopularDishesResultDto> getPopularDishesOfMerchant(Integer merchantId, Integer page) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		//criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		criteria.createAlias("dish", "d");
+		criteria.createAlias("d.merchant", "m");
+		criteria.add(Restrictions.eq("m.id", merchantId));
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.count("id").as("recommendations"));
+		projList.add(Projections.groupProperty("dish.id"));
+		projList.add(Projections.property("dish").as("dish"));
+		criteria.setProjection(projList);
+		criteria.addOrder(Order.desc("recommendations"));
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		criteria.setResultTransformer(Transformers.aliasToBean(PopularDishesResult.class));
+		List<PopularDishesResult> result = (List<PopularDishesResult>) criteria.list();
+		return mapper.map(result);
 	}
 }
