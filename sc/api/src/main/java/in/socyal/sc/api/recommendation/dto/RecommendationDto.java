@@ -1,6 +1,7 @@
 package in.socyal.sc.api.recommendation.dto;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.user.dto.UserDto;
@@ -11,7 +12,9 @@ public class RecommendationDto implements Serializable {
 	private DishDto dish;
 	private UserDto user;
 	private Boolean isActive;
-
+	private Calendar createdDateTime;
+	private Calendar updatedDateTime;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -42,5 +45,21 @@ public class RecommendationDto implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Calendar getCreatedDateTime() {
+		return createdDateTime;
+	}
+
+	public void setCreatedDateTime(Calendar createdDateTime) {
+		this.createdDateTime = createdDateTime;
+	}
+
+	public Calendar getUpdatedDateTime() {
+		return updatedDateTime;
+	}
+
+	public void setUpdatedDateTime(Calendar updatedDateTime) {
+		this.updatedDateTime = updatedDateTime;
 	}
 }

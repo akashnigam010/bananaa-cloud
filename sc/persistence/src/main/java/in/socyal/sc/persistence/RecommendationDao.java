@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,7 @@ public class RecommendationDao {
 	public List<TrendingMerchantResultDto> getTrendingMerchants() {
 		List<TrendingMerchantResultDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		criteria.createAlias("dish", "d");
 		criteria.createAlias("d.merchant", "m");
 		ProjectionList projList = Projections.projectionList();
@@ -69,6 +71,7 @@ public class RecommendationDao {
 	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
 		List<RecommendationDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		criteria.createAlias("user", "u");
 		criteria.createAlias("dish", "d");
 		criteria.createAlias("d.merchant", "m");
@@ -95,6 +98,7 @@ public class RecommendationDao {
 		user.setId(userId);
 		recommendation.setUser(user);
 		recommendation.setIsActive(Boolean.TRUE);
+		recommendation.setCreatedDateTime(Calendar.getInstance());
 		Integer recommendationId = (Integer) sessionFactory.getCurrentSession().save(recommendation);
 		if (StringUtils.isNotBlank(description)) {
 			ReviewEntity review = new ReviewEntity();
@@ -113,6 +117,7 @@ public class RecommendationDao {
 		}
 		
 		recommendation.setIsActive(Boolean.FALSE);
+		recommendation.setUpdatedDateTime(Calendar.getInstance());
 		session.update(recommendation);
 	}
 	
@@ -131,6 +136,7 @@ public class RecommendationDao {
 		}
 		dish.setId(dishId);
 		recommendation.setDish(dish);
+		recommendation.setUpdatedDateTime(Calendar.getInstance());
 		session.update(recommendation);
 		Criteria criteria = session.createCriteria(ReviewEntity.class);
 		criteria.add(Restrictions.eq("recommendationId", recommendationId));

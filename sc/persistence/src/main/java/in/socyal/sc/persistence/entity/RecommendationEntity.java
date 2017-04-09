@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +34,12 @@ public class RecommendationEntity implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 
+	@Column(name = "CREATED_DATETIME")
+	private Calendar createdDateTime;
+	
+	@Column(name = "UPDATED_DATETIME")
+	private Calendar updatedDateTime;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -63,5 +70,21 @@ public class RecommendationEntity implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	public Calendar getCreatedDateTime() {
+		return createdDateTime;
+	}
+
+	public void setCreatedDateTime(Calendar createdDateTime) {
+		this.createdDateTime = createdDateTime;
+	}
+
+	public Calendar getUpdatedDateTime() {
+		return updatedDateTime;
+	}
+
+	public void setUpdatedDateTime(Calendar updatedDateTime) {
+		this.updatedDateTime = updatedDateTime;
 	}
 }

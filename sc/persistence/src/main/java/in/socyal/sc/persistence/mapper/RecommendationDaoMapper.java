@@ -42,6 +42,8 @@ public class RecommendationDaoMapper {
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setIsActive(entity.getIsActive());
+		dto.setCreatedDateTime(entity.getCreatedDateTime());
+		dto.setUpdatedDateTime(entity.getUpdatedDateTime());
 		UserDto user = new UserDto();
 		userMapper.map(entity.getUser(), user);
 		dto.setUser(user);
