@@ -28,6 +28,9 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public RecommendationResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException {
 		RecommendationResponse response = new RecommendationResponse();
+		if (!jwtHelper.isUserLoggedIn()) {
+			return response;
+		}
 		List<RecommendationDto> result = dao.getMyRecommendations(
 				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
 		mapper.map(result, response);
