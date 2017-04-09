@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	page = 'detail';
     var primaryImage = $("#primaryImageTemp").html();
     var background = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0)),url("+primaryImage+")";
     $(".primary-image-banner").css("background", background);

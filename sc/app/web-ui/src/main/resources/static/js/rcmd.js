@@ -39,6 +39,10 @@ $(document).ready(function() {
     	openRecommendationModal('', '', '', '', false);
     });
     
+    $("#addItemRecommendButton").on('mouseup', function (e) {
+    	openItemRecommendationModal(itemId, itemName, '');
+    });
+    
     $('#modal-item-desc').on('focusin', function(e) {
     	$(this).attr('placeholder', 'Dive down into the specifics! Tell us how this dish or drink stands out to be a recommendation. And remember to keep it short - a minimum of 50 and a maximum of 200 characters. :)');
 		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
@@ -82,10 +86,31 @@ function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
 	$('#recommendModal').modal('show');
 }
 
+function openItemRecommendationModal(itemId, name, desc) {
+	$("#recommendModal").find('.main-area').show();
+	$("#recommendModal").find('.loader').addClass('hide');
+	$("#modal-item-id").val(itemId);
+	$("#modal-item-name").val(name);
+	$("#modal-item-desc").val(desc);
+	if (desc != '') {
+		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
+	} else {
+		$("#modal-item-desc-label").attr('style', '');
+	}
+	$("#removeRecommendation").addClass('hide');
+	$("#recommendSubmit").html('Add recommendation');
+	$("#recommendSubmit").off('mouseup');
+	$("#recommendSubmit").on('mouseup', addItemRecommendation);
+	$('#modal-item-name').prop('disabled', true);
+	$("#modal-item-name-label").addClass('hide');
+	
+	$('#recommendModal').find('.error-label').addClass('hide');
+	$('#recommendModal').modal('show');
+}
+
 function updateRecommendation() {
 	var $rcmdId = $('#modal-recommendation-id').val();
 	var $itemId = $('#modal-item-id').val();
-	var $name = $('#modal-item-name').val();
 	var $desc = $('#modal-item-desc').val();	
 	if ($desc != rcmdOb.desc) {
 		if (handleReview($desc)) {
@@ -102,7 +127,13 @@ function updateRecommendation() {
           	  .done(function(response) {
           		$('#recommendModal').modal('hide');
           		  if (response.result) {
-          			  getMyRecommendations()             			
+          			  if (page == 'detail') {
+          				getMyRecommendations()
+          			  } else if (page == 'item-detail') {
+          				getMyItemRecommendation();
+          			  } else {
+          				location.reload();
+          			  }             			
           		  } else {
         			  handleErrorCallback(response);
         		  }	          		  
@@ -140,7 +171,7 @@ function addRecommendation() {
 	          	  .done(function(response) {
 	          		$('#recommendModal').modal('hide');
 	          		  if (response.result) {
-	          			  getMyRecommendations()             			
+	          			  getMyRecommendations()
 	          		  } else {
 	        			  handleErrorCallback(response);
 	        		  }	          		  
@@ -152,6 +183,33 @@ function addRecommendation() {
 	  } else {
 		  	$('#recommendModal').find('.error-label-name').removeClass('hide');
 	  }
+}
+
+function addItemRecommendation() {
+	var $itemId = $('#modal-item-id').val();
+	var $desc = $('#modal-item-desc').val();	
+	
+	if (handleReview($desc)) {
+		var dataOb = {
+	 			dishId : $itemId,
+	 			description : $desc
+    	};
+        return $.ajax({
+      	  method: "POST",
+      	  url: "/socyal/recommendation/addRecommendation",
+      	  contentType : "application/json",
+      	  data: JSON.stringify(dataOb)
+      	})
+      	  .done(function(response) {
+      		$('#recommendModal').modal('hide');
+      		  if (response.result) {
+      			  getMyItemRecommendation()             			
+      		  } else {
+    			  handleErrorCallback(response);
+    		  }	          		  
+      	  });
+	}
+	return;
 }
 
 function handleReview(desc) {
@@ -188,7 +246,13 @@ function removeRecommendation() {
           	  .done(function(response) {
           		  $("#alertModal").modal('hide');
           		  if (response.result) {
-          			  getMyRecommendations()             			
+          			  if (page == 'detail') {
+          				getMyRecommendations()
+          			  } else if (page == 'item-detail') {
+          				getMyItemRecommendation();
+          			  } else {
+          				location.reload();
+          			  }             			
           		  } else {
         			  handleErrorCallback(response);
         		  }	          		  

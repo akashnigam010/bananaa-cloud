@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	
+	page = 'index';
     if (isMobile) {
         $('#search-field').on('touchstart', function (e) {
             var minusHeight = $(".search-box-wrapper").height()+15;

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	page = 'item-detail';
     var primaryImage = $("#primaryImageTemp").html();
     var background = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0)),url("+primaryImage+")";
     $(".primary-image-banner").css("background", background);
@@ -21,10 +22,20 @@ function getMyItemRecommendation() {
     	  .done(function(response) {
     		  var myItemRecommendationHtml = '';
     		  if (response.result) {
+    			  $(".my-item-recommendation-wrapper").find('.loader').addClass('hide');
+    			  $(".my-item-recommendation-section").removeClass('hide');
     			  if (response.recommended) {
-    				  console.log('i recommend');
+    				  $(".recommendation-id").html(response.recommendation.id);
+    				  $(".item-id").html(response.recommendation.itemId);
+    				  $(".item-name").html(response.recommendation.name);
+    				  $(".recommend-item-desc").html(response.recommendation.description);
+    				  $("#addItemRecommendButton").addClass('hide');
+    				  $(".recommend-message").addClass('hide');
+    				  activateUpdateRcmdModal();
     			  } else {
-    				  console.log('i havent recommended yet');
+    				  $(".recommend-item-desc").html('');
+    				  $("#addItemRecommendButton").removeClass('hide');
+    				  $(".recommend-message").removeClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);
@@ -33,7 +44,7 @@ function getMyItemRecommendation() {
 }
 
 function activateUpdateRcmdModal() {
-	$(".recommended-item").on('mouseup', function(e){
+	$(".my-item-recommendation").on('mouseup', function(e){
     	rcmdOb = {
     		rcmdId: $(this).find('.recommendation-id').html(),
     		itemId: $(this).find('.item-id').html(),

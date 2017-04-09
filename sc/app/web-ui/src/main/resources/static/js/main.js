@@ -4,6 +4,7 @@ var fs = [];
 var merchantId;
 var itemId;
 var itemName;
+var page;
 $(document).ready(function() {
 	merchantId = $('#merchantId').val();
 	itemId = $('#itemId').val();
