@@ -1,35 +1,9 @@
-/* Media Queries CSS - START */
-
-@media (min-width: 100px) {
-    .header {
-        height: 60px;
-        padding: 5%;
-    }
-    .logo-header {
-        background-image: url("../img/logo-xxxs.png");
-    }
-}
-
-@media (min-width: 500px) {
-    .header {
-        height: 70px;
-        padding: 1%;
-    }
-    .logo-header {
-        background-image: url("../img/logo-xxs.png");
-    }
-    .flexi-font {
-        font-size: 100%;
-    }    
-}
-
-/* Media Queries CSS - END */
-
 /* Hero Banner CSS - START */
 
 .logo-round {
     object-fit: cover;
     height: 100px;
+    width: 100px;
     border: 3px solid;
     border-radius: 100px;
     border-color: white;
@@ -54,7 +28,7 @@
     background: linear-gradient(
                      rgba(20,20,20, .2), 
                      rgba(20,20,20, .5)),
-                     url("../img/background.jpeg");
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
