@@ -18,19 +18,20 @@ public class RecommendationMapper implements Serializable {
 		List<Recommendation> recommendations = new ArrayList<>();
 		Recommendation recommendation = null;
 		for (RecommendationDto dto : dtos) {
-			recommendation = map(dto);
+			recommendation = map(dto, null);
 			recommendations.add(recommendation);
 		}
 
 		return recommendations;
 	}
 
-	public Recommendation map(RecommendationDto dto) {
+	public Recommendation map(RecommendationDto dto, Integer dishRcmdnCount) {
 		Recommendation recommendation = new Recommendation();
 		recommendation.setId(dto.getId());
 		recommendation.setItemId(dto.getDish().getId());
 		recommendation.setDescription(StringUtils.isBlank(dto.getDescription()) ? "" : dto.getDescription());
 		recommendation.setName(dto.getDish().getName());
+		recommendation.setTotalRcmdns(dishRcmdnCount);
 		return recommendation;
 	}
 }
