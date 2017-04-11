@@ -90,11 +90,11 @@ public class HomeController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/hyderabad/{nameId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{city}/{nameId}", method = RequestMethod.GET)
 	public ModelAndView details(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			/* @PathVariable("city") String city, */@PathVariable("nameId") String nameId) throws BusinessException {
+			@PathVariable("city") String city, @PathVariable("nameId") String nameId) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = CityType.HYDERABAD;// .getCity(city);
+		CityType cityType = CityType.getCity(city);
 		MerchantDetailsRequest request = new MerchantDetailsRequest();
 		request.setNameId(nameId);
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
