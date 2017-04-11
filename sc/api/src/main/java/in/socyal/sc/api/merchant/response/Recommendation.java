@@ -1,14 +1,11 @@
 package in.socyal.sc.api.merchant.response;
 
-import java.io.Serializable;
-
-import in.socyal.sc.api.response.GenericResponse;
-
 public class Recommendation  {
 	private Integer id;
 	private Integer itemId;
 	private String name;
 	private String description;
+	private Integer totalRcmdns;
 
 	public Integer getId() {
 		return id;
@@ -40,5 +37,13 @@ public class Recommendation  {
 
 	public void setItemId(Integer dishId) {
 		this.itemId = dishId;
+	}
+
+	public Integer getTotalRcmdns() {
+		return totalRcmdns;
+	}
+
+	public void setTotalRcmdns(Integer totalRcmdns) {
+		this.totalRcmdns = totalRcmdns;
 	}
 }

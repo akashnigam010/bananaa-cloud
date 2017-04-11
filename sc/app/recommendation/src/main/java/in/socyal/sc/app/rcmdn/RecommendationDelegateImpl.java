@@ -1,5 +1,6 @@
 package in.socyal.sc.app.rcmdn;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
+import in.socyal.sc.api.merchant.response.Recommendation;
 import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
@@ -40,7 +42,12 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		}
 		List<RecommendationDto> result = dao.getMyRecommendations(
 				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
-		response.setRecommendations(mapper.map(result));
+		List<Recommendation> rcmdns = new ArrayList<>();
+		for (RecommendationDto dto : result) {
+			Integer dishRcmdnCount = dao.getDishRecommendationCount(dto.getDish().getId());
+			rcmdns.add(mapper.map(dto, dishRcmdnCount));
+		}
+		response.setRecommendations(rcmdns);
 		return response;
 	}
 	
@@ -54,7 +61,7 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		RecommendationDto dto = dao.getMyDishRecommendation(jwtHelper.getUserId(), request.getItemId());
 		if (dto != null) {
 			response.setRecommended(Boolean.TRUE);
-			response.setRecommendation(mapper.map(dto));
+			response.setRecommendation(mapper.map(dto, null));
 		}
 		return response;
 	}

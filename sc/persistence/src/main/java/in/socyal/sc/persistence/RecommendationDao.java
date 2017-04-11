@@ -148,4 +148,10 @@ public class RecommendationDao {
 		recommendation.setUpdatedDateTime(Calendar.getInstance());
 		session.saveOrUpdate(recommendation);
 	}
+	
+	public Integer getDishRecommendationCount(Integer dishId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("dish.id", dishId));
+		return criteria.list().size();
+	}
 }
