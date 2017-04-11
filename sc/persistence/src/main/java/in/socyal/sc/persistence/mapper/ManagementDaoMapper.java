@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
+import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
+import in.socyal.sc.persistence.entity.ItemImageEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 
@@ -57,5 +59,18 @@ public class ManagementDaoMapper {
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		return dto;
+	}
+
+	public List<ItemImageDto> mapItemImages(List<ItemImageEntity> entities) {
+		List<ItemImageDto> dtos = new ArrayList<>();
+		ItemImageDto dto = null;
+		for (ItemImageEntity entity : entities) {
+			dto = new ItemImageDto();
+			dto.setId(entity.getId());
+			dto.setName(entity.getName());
+			dto.setUrl(entity.getUrl());
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 }

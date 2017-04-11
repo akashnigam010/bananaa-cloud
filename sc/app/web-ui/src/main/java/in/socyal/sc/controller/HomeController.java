@@ -19,6 +19,7 @@ import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.login.response.LoginStatus;
 import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
@@ -27,6 +28,7 @@ import in.socyal.sc.api.merchant.response.Review;
 import in.socyal.sc.api.merchant.response.User;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
+import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 
@@ -44,6 +46,8 @@ public class HomeController {
 	@Autowired
 	MerchantDelegate merchantDelegate;
 	@Autowired
+	ItemDelegate itemDelegate;
+	@Autowired
 	HttpServletResponse httpResponse;
 	@Autowired
 	ResponseHelper responseHelper;
@@ -58,6 +62,12 @@ public class HomeController {
 			httpResponse.addCookie(cityCookie);
 		}
 		return "redirect:hyderabad";
+	}
+	
+	@RequestMapping(value = "/bna/manage/managementConsole", method = RequestMethod.GET)
+	public ModelAndView managementConsole() {
+		ModelAndView modelAndView = new ModelAndView("manage");
+		return modelAndView;
 	}
 
 	private LoginStatus loginHandler(String bnaLoginCookie) {
@@ -98,11 +108,14 @@ public class HomeController {
 		MerchantDetailsRequest request = new MerchantDetailsRequest();
 		request.setNameId(nameId);
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
+		GetPopularItemsRequest itemsRequest = new GetPopularItemsRequest();
+		itemsRequest.setMerchantId(response.getId());
+		itemsRequest.setPage(1);
 
 		ModelAndView modelAndView = new ModelAndView("detail");
 		modelAndView.addObject("loginStatus", loginStatus);
 		modelAndView.addObject("detail", response);
-		modelAndView.addObject("popularDishes", getPopularDishes());
+		modelAndView.addObject("popularDishes", itemDelegate.getPopularItems(itemsRequest));
 		modelAndView.addObject("description", getDetailMetaDescription(response));
 		modelAndView.addObject("fbDescription", getDetailMetaDescription(response));
 		modelAndView.addObject("title", getDetailMetaTitle(response));
@@ -192,38 +205,38 @@ public class HomeController {
 		return response;
 	}
 
-	private ItemsResponse getPopularDishes() {
-		ItemsResponse dishResponse = new ItemsResponse();
-		Item dish = new Item();
-		dish.setId(1);
-		dish.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
-		dish.setName("Joojeh Kebab");
-		dish.setNameId("joojeh-kebeb");
-		dish.setRecommendations(22);
-		dishResponse.getItems().add(dish);
-		Item dish2 = new Item();
-		dish2.setId(2);
-		dish2.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
-		dish2.setName("Lowley Sirley");
-		dish2.setNameId("lowley-shirley");
-		dish2.setRecommendations(15);
-		dishResponse.getItems().add(dish2);
-		Item dish3 = new Item();
-		dish3.setId(3);
-		dish3.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
-		dish3.setName("Arrabiata Pasta");
-		dish3.setNameId("arrabiata-pasta");
-		dish3.setRecommendations(12);
-		dishResponse.getItems().add(dish3);
-		Item dish4 = new Item();
-		dish4.setId(4);
-		dish4.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
-		dish4.setName("Mango Delight Punch");
-		dish4.setNameId("mango-delight");
-		dish4.setRecommendations(10);
-		dishResponse.getItems().add(dish4);
-		return dishResponse;
-	}
+//	private ItemsResponse getPopularDishes() {
+//		ItemsResponse dishResponse = new ItemsResponse();
+//		Item dish = new Item();
+//		dish.setId(1);
+//		dish.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
+//		dish.setName("Joojeh Kebab");
+//		dish.setNameId("joojeh-kebeb");
+//		dish.setRecommendations(22);
+//		dishResponse.getItems().add(dish);
+//		Item dish2 = new Item();
+//		dish2.setId(2);
+//		dish2.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
+//		dish2.setName("Lowley Sirley");
+//		dish2.setNameId("lowley-shirley");
+//		dish2.setRecommendations(15);
+//		dishResponse.getItems().add(dish2);
+//		Item dish3 = new Item();
+//		dish3.setId(3);
+//		dish3.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
+//		dish3.setName("Arrabiata Pasta");
+//		dish3.setNameId("arrabiata-pasta");
+//		dish3.setRecommendations(12);
+//		dishResponse.getItems().add(dish3);
+//		Item dish4 = new Item();
+//		dish4.setId(4);
+//		dish4.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/lowley-shirley.jpeg");
+//		dish4.setName("Mango Delight Punch");
+//		dish4.setNameId("mango-delight");
+//		dish4.setRecommendations(10);
+//		dishResponse.getItems().add(dish4);
+//		return dishResponse;
+//	}
 
 	private String getDetailMetaDescription(MerchantDetailsResponse response) {
 		String description = response.getName() + "; ";

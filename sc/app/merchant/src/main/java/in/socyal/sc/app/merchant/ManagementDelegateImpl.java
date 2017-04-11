@@ -11,6 +11,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
+import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
 import in.socyal.sc.persistence.ManagementDao;
 
@@ -53,6 +54,14 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	public GetSuggestionsResponse getSuggestions(SearchRequest request) {
 		GetSuggestionsResponse response = new GetSuggestionsResponse();
 		response.setSuggestions(dao.getSuggestions(request));
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public GetItemImagesResponse getItemImages(SearchRequest request) {
+		GetItemImagesResponse response = new GetItemImagesResponse();
+		response.setImages(dao.getItemImages(request));
 		return response;
 	}
 

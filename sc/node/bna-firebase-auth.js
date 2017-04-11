@@ -6,6 +6,8 @@ var pathToServiceAccountKey = path.resolve(__dirname, 'firebase-dev.json');
 
 app.use(bodyParser.json());
 
+app.use(express.static('js'));
+
 var serviceAccount = require(pathToServiceAccountKey);
 
 var admin = require("firebase-admin");

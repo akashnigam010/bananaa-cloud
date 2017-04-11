@@ -13,6 +13,7 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.response.AddResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
+import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
 import in.socyal.sc.core.validation.ManageValidator;
@@ -79,6 +80,15 @@ public class ManagementService {
 		GetSuggestionsResponse response = new GetSuggestionsResponse();
 		if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 			response = delegate.getSuggestions(request);
+		}
+		return helper.success(response);
+	}
+	
+	@RequestMapping(value = "/getItemImages", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GetItemImagesResponse getItemImages(@RequestBody SearchRequest request) {
+		GetItemImagesResponse response = new GetItemImagesResponse();
+		if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
+			response = delegate.getItemImages(request);
 		}
 		return helper.success(response);
 	}

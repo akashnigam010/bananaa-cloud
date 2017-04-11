@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
+import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
@@ -18,6 +19,7 @@ import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
+import in.socyal.sc.persistence.entity.ItemImageEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.ManagementDaoMapper;
@@ -70,6 +72,14 @@ public class ManagementDao {
 		@SuppressWarnings("unchecked")
 		List<SuggestionEntity> entities = criteria.list();
 		return mapper.mapSuggestion(entities);
+	}
+	
+	public List<ItemImageDto> getItemImages(SearchRequest request) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ItemImageEntity.class);
+		criteria.add(Restrictions.ilike(NAME, request.getSearchString(), MatchMode.ANYWHERE));
+		@SuppressWarnings("unchecked")
+		List<ItemImageEntity> entities = criteria.list();
+		return mapper.mapItemImages(entities);
 	}
 	
 	private MerchantEntity getMerchantById(Integer id) throws BusinessException {

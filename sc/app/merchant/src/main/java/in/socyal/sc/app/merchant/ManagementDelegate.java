@@ -5,6 +5,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
+import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
 
 public interface ManagementDelegate {
@@ -17,4 +18,6 @@ public interface ManagementDelegate {
 	public GetCuisinesResponse getCuisines(SearchRequest request);
 
 	public GetSuggestionsResponse getSuggestions(SearchRequest request);
+	
+	public GetItemImagesResponse getItemImages(SearchRequest request);
 }
