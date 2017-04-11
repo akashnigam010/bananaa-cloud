@@ -29,5 +29,10 @@ public class ItemValidator extends Validator {
 			LOG.error("Page number not found while validating get popular items request");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
+		
+		if (request.getResultsPerPage() == null) {
+			LOG.error("Results Per Page number not found while validating get popular items request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
 	}
 }

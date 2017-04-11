@@ -24,7 +24,6 @@ import in.socyal.sc.persistence.mapper.DishDaoMapper;
 @Repository
 public class DishDao {
 	private static final String NAME = "name";
-	private static final Integer RESULTS_PER_PAGE = 5;
 	@Autowired
 	DishDaoMapper mapper;
 	@Autowired
@@ -57,7 +56,7 @@ public class DishDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PopularDishesResultDto> getPopularDishesOfMerchant(Integer merchantId, Integer page) {
+	public List<PopularDishesResultDto> getPopularDishesOfMerchant(Integer merchantId, Integer page, Integer resultsPerPage) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		//criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		criteria.createAlias("dish", "d");
@@ -69,9 +68,9 @@ public class DishDao {
 		projList.add(Projections.property("dish").as("dish"));
 		criteria.setProjection(projList);
 		criteria.addOrder(Order.desc("recommendations"));
-		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		int firstResult = ((page - 1) * resultsPerPage);
 		criteria.setFirstResult(firstResult);
-		criteria.setMaxResults(RESULTS_PER_PAGE);
+		criteria.setMaxResults(resultsPerPage);
 		criteria.setResultTransformer(Transformers.aliasToBean(PopularDishesResult.class));
 		List<PopularDishesResult> result = (List<PopularDishesResult>) criteria.list();
 		return mapper.map(result);

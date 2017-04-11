@@ -2,6 +2,7 @@ package in.socyal.sc.api.items.request;
 
 public class GetPopularItemsRequest {
 	private Integer merchantId;
+	private Integer resultsPerPage;
 	private Integer page;
 
 	public Integer getMerchantId() {
@@ -18,5 +19,13 @@ public class GetPopularItemsRequest {
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public Integer getResultsPerPage() {
+		return resultsPerPage;
+	}
+
+	public void setResultsPerPage(Integer resultsPerPage) {
+		this.resultsPerPage = resultsPerPage;
 	}
 }
