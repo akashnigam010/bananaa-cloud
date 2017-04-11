@@ -36,7 +36,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 	public ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException {
 		ItemsResponse response = new ItemsResponse();
 		List<PopularDishesResultDto> result = 
-				dishDao.getPopularDishesOfMerchant(request.getMerchantId(), request.getPage());
+				dishDao.getPopularDishesOfMerchant(request.getMerchantId(), request.getPage(), request.getResultsPerPage());
 		return mapper.map(result, response);
 	}
 }
