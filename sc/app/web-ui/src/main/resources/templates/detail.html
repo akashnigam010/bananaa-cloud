@@ -136,7 +136,7 @@
 	                                                    <div class="bold item-name" th:text="${item.name}">
 	                                                        <!-- Joojeh Kebab -->
 	                                                    </div>
-	                                                     <div th:text="${item.recommendations} + ' people recommended'">
+	                                                     <div th:text="${item.recommendations} + ' people recommend'">
 	                                                        <!-- 22 people recommended -->
 	                                                    </div>
 	                                                </div>                                                                           
@@ -153,41 +153,46 @@
                                 </div>                                               
                             </div>                        
                         </div>
-                        <div class="col-xs-12 col-sm-8 white-background details-wrapper" style="margin-top: 10px;">
-                        	<div class="col-xs-12">
-                                <div class="row">
+                        <div class="col-xs-12 col-sm-8 white-background details-wrapper" style="margin-top: 10px;">                        	
+                           <div class="row">
+                                <div class="col-xs-12">
                                     <div class="col-xs-12 font-1-5 bna-color padding-3">
                                         My recommendations &nbsp; <i class="fa fa-heart red" aria-hidden="true"></i>
                                     </div>  
                                     <div class="col-xs-12 light padding-3">
                                         Food or drinks that you simply love having at <span class="bold" th:text="${detail.name}"></span>
-                                    </div>   
-                                </div>
-                                <div class="row recommended-wrapper">
-                                    <div class="col-xs-12">
-                                    	<div class="loader"></div>
-                                   		<div class="my-recommendations">
-	                                        <!-- <div class="row">
-	                                            <div class="col-xs-12 recommended-item cursor-pointer">
-	                                                <div class="bold recommend-item-name">
-	                                                	<span class="hide recommendation-id">21</span>
-	                                                    <span class="hide item-id">11</span>
-	                                                    <span class="bna-color item-hash">#1</span>
-	                                                    <span class="item-name">Joojeh Kebab</span>
-	                                                </div>
-	                                                <div class="recommend-item-desc">
-	                                                    description of the dish
-	                                                </div>                                                                         
-	                                            </div>
-	                                        </div> -->
-                                        </div>
-                                        <div class="row align-center addRecommendButtonDiv">
-                                            <hr />
-                                            <button id="addRecommendButton" class="bna-button recommend-button">Add a recommendation</button>
-                                        </div>
-                                    </div>
-                                </div>                                           
+                                    </div>    
+                                </div>                                   
                             </div>
+                           <div class="row recommended-wrapper">
+                               <div class="col-xs-12">
+                               		<div class="loader"></div>
+                               		<div class="my-recommendations">
+	                              		<!-- <div class="col-xs-12 recommended-item cursor-pointer">
+	                                       <div class="float-left" style="object-fit: cover;">
+	                                           <img class="user-icon" src="https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA" />
+	                                       </div>
+	                                       <div class="float-left item-desc-wrapper">
+	                                           <span class="hide recommendation-id">12</span>
+                                               <span class="hide item-id">12</span>
+	                                           <div class="bold item-name">
+	                                               Joojey Kebab
+	                                           </div>
+	                                            <div class="light">
+	                                               You and 34 others recommend this
+	                                           </div>
+	                                       </div>
+	                                       <div class="col-xs-12 review-item-desc recommend-item-desc">
+	                                           The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.
+	                                       </div>
+	                                   </div> -->
+                                   </div>
+                                   <div class="row align-center addRecommendButtonDiv">
+                                       <hr />
+                                       <button id="addRecommendButton" class="bna-button recommend-button">Add a recommendation</button>
+                                   </div>
+                               </div>
+                           </div>
                         </div>                       
                     </div> 
                 </div>

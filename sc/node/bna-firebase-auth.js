@@ -6,7 +6,7 @@ var pathToServiceAccountKey = path.resolve(__dirname, 'firebase-dev.json');
 
 app.use(bodyParser.json());
 
-app.use(express.static('js'));
+app.use(express.static('static'));
 
 var serviceAccount = require(pathToServiceAccountKey);
 

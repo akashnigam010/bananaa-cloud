@@ -43,6 +43,7 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		List<RecommendationDto> result = dao.getMyRecommendations(
 				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
 		List<Recommendation> rcmdns = new ArrayList<>();
+		//FIXME : Remove multiple calls for each recommendation to db to fetch total recommendation count
 		for (RecommendationDto dto : result) {
 			Integer dishRcmdnCount = dao.getDishRecommendationCount(dto.getDish().getId());
 			rcmdns.add(mapper.map(dto, dishRcmdnCount));

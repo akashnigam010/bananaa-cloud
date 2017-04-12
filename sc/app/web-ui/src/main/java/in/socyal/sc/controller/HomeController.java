@@ -111,6 +111,7 @@ public class HomeController {
 		GetPopularItemsRequest itemsRequest = new GetPopularItemsRequest();
 		itemsRequest.setMerchantId(response.getId());
 		itemsRequest.setPage(1);
+		itemsRequest.setResultsPerPage(5);
 
 		ModelAndView modelAndView = new ModelAndView("detail");
 		modelAndView.addObject("loginStatus", loginStatus);

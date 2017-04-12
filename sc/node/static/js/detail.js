@@ -12,11 +12,12 @@ $(document).ready(function() {
 function loadPopularDishes() {
 	var dataOb = {
 			merchantId : merchantId,
-			page : 1
+			page : 1,
+            resultsPerPage : 10
 	};
 	$.ajax({
     	  method: "POST",
-    	  url: "/socyal/recommendation/getPopularItems",
+    	  url: "/socyal/item/getPopularItems",
     	  contentType : "application/json",
     	  data: JSON.stringify(dataOb)
     	})
@@ -71,20 +72,21 @@ function getMyRecommendations() {
     		  if (response.result) {
     			  if (response.recommendations.length > 0) {
     				  for (var i=0; i<response.recommendations.length; i++) {
-    					  myRecommendationsHtml += 
-    						  '<div class="row">'+
-		                          '<div class="col-xs-12 recommended-item cursor-pointer">'+
-		                              '<div class="bold recommend-item-name">'+
-		                                  '<span class="hide recommendation-id">'+response.recommendations[i].id+'</span>'+
-		                              	  '<span class="hide item-id">'+response.recommendations[i].itemId+'</span>'+
-		                                  '<span class="bna-color item-hash">#'+(i+1)+'</span>'+
-		                                  '&nbsp; <span class="item-name">'+response.recommendations[i].name+'</span>'+
-		                              '</div>'+
-		                              '<div class="recommend-item-desc">'+
-		                              	(response.recommendations[i].description!=null?response.recommendations[i].description:'')+
-		                              '</div>'+                                                                         
-		                          '</div>'+
-		                      '</div>';
+    					  myRecommendationsHtml +=   '<div class="col-xs-12 recommended-item cursor-pointer">'+
+                                                           '<div class="float-left" style="object-fit: cover;">'+
+                                                               '<img class="user-icon" src="'+response.recommendations[i].imageUrl+'" />'+
+                                                           '</div>'+
+                                                           '<div class="float-left item-desc-wrapper">'+
+                                                                '<span class="hide recommendation-id">'+response.recommendations[i].id+'</span>'+
+                                                                '<span class="hide item-id">'+response.recommendations[i].itemId+'</span>'+
+                                                                '<div class="bold item-name">'+response.recommendations[i].name+'</div>'+
+                                                                '<div class="light">'+
+                                                                   getRecommendationHtml(response.recommendations[i].totalRcmdns)+
+                                                                '</div>'+
+                                                           '</div>'+
+                                                           getDescriptionHtml(response.recommendations[i].description)+
+                                                       '</div>';
+
     				  }
     				  $('.my-recommendations').html(myRecommendationsHtml);
     				  activateUpdateRcmdModal();
@@ -96,14 +98,36 @@ function getMyRecommendations() {
     	  });
 }
 
+function getDescriptionHtml(desc) {
+    if (desc != null) {
+        return '<div class="col-xs-12 review-item-desc recommend-item-desc">'+desc+'</div>';
+    } else {
+        return '';
+    }
+}
+
+function getRecommendationHtml(rcmdCount) {
+    if (rcmdCount == 1) {
+        return 'You recommend this';
+    } else if (rcmdCount == 2) {
+        return 'You and 1 other recommend this';
+    } else {
+        return 'You and '+(rcmdCount-1)+' others recommend this';
+    }
+}
+
 function activateUpdateRcmdModal() {
 	$(".recommended-item").off('mouseup');
 	$(".recommended-item").on('mouseup', function(e){
+        var review = '';
+        if ($(this).find('.recommend-item-desc').html()) {
+            review = $(this).find('.recommend-item-desc').html().trim();
+        }
     	rcmdOb = {
     		rcmdId: $(this).find('.recommendation-id').html(),
     		itemId: $(this).find('.item-id').html(),
-    		name: $(this).find('.item-name').html(),
-    		desc: $(this).find('.recommend-item-desc').html().trim()
+    		name: $(this).find('.item-name').html().trim(),
+    		desc: review
     	};
     	openRecommendationModal(rcmdOb.rcmdId, rcmdOb.itemId, rcmdOb.name, rcmdOb.desc, true);
     });

@@ -6,6 +6,7 @@ public class Recommendation  {
 	private String name;
 	private String description;
 	private Integer totalRcmdns;
+	private String imageUrl;
 
 	public Integer getId() {
 		return id;
@@ -45,5 +46,13 @@ public class Recommendation  {
 
 	public void setTotalRcmdns(Integer totalRcmdns) {
 		this.totalRcmdns = totalRcmdns;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }

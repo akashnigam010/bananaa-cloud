@@ -62,6 +62,7 @@ public class DishDao {
 		criteria.createAlias("dish", "d");
 		criteria.createAlias("d.merchant", "m");
 		criteria.add(Restrictions.eq("m.id", merchantId));
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.count("id").as("recommendations"));
 		projList.add(Projections.groupProperty("dish.id"));

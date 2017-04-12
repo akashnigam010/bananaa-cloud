@@ -152,6 +152,7 @@ public class RecommendationDao {
 	public Integer getDishRecommendationCount(Integer dishId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("dish.id", dishId));
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		return criteria.list().size();
 	}
 }
