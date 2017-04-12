@@ -72,7 +72,7 @@ function getMyRecommendations() {
     		  if (response.result) {
     			  if (response.recommendations.length > 0) {
     				  for (var i=0; i<response.recommendations.length; i++) {
-    					  myRecommendationsHtml +=   '<div class="col-xs-12 recommended-item cursor-pointer">'+
+    					  myRecommendationsHtml +=   '<div class="col-xs-12 recommended-item cursor-pointer my-recommended-item">'+
                                                            '<div class="float-left" style="object-fit: cover;">'+
                                                                '<img class="user-icon" src="'+response.recommendations[i].imageUrl+'" />'+
                                                            '</div>'+
@@ -117,8 +117,8 @@ function getRecommendationHtml(rcmdCount) {
 }
 
 function activateUpdateRcmdModal() {
-	$(".recommended-item").off('mouseup');
-	$(".recommended-item").on('mouseup', function(e){
+	$(".my-recommended-item").off('mouseup');
+	$(".my-recommended-item").on('mouseup', function(e){
         var review = '';
         if ($(this).find('.recommend-item-desc').html()) {
             review = $(this).find('.recommend-item-desc').html().trim();
