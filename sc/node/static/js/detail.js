@@ -119,7 +119,7 @@ function getRecommendationHtml(rcmdCount) {
 function activateUpdateRcmdModal() {
 	$(".my-recommended-item").off('mouseup');
 	$(".my-recommended-item").on('mouseup', function(e){
-        var review = '';
+		var review = '';
         if ($(this).find('.recommend-item-desc').html()) {
             review = $(this).find('.recommend-item-desc').html().trim();
         }

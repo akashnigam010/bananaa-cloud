@@ -36,10 +36,18 @@ $(document).ready(function() {
     });
         
     $('#addRecommendButton').on('mouseup', function (e) {
+    	if ($("#loginStatus").html() == 'false') {
+    		activateLogin();
+    		return;
+		}
     	openRecommendationModal('', '', '', '', false);
     });
     
     $("#addItemRecommendButton").on('mouseup', function (e) {
+    	if ($("#loginStatus").html() == 'false') {
+    		activateLogin();
+    		return;
+		}
     	openItemRecommendationModal(itemId, itemName, '');
     });
     

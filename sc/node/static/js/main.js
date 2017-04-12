@@ -20,12 +20,7 @@ $(document).ready(function() {
     };
     
     $('#login-button').on('mouseup', function (e) {
-    	if ($("#login-info").html() == 'Login') {
-    		$('#login-dropdown').addClass('hide');
-    		$('#loginModal').modal('show');
-    	} else {
-    		$('#login-dropdown').removeClass('hide');
-    	}
+    	activateLogin();
     });
     
     function repositionModal() {
@@ -53,6 +48,15 @@ $(document).ready(function() {
         }
     });
 });
+
+function activateLogin() {
+	if ($("#login-info").html() == 'Login') {
+		$('#login-dropdown').addClass('hide');
+		$('#loginModal').modal('show');
+	} else {
+		$('#login-dropdown').removeClass('hide');
+	}
+}
 
 function handleErrorCallback(response) {
 	if (response.statusCodes != null) {
