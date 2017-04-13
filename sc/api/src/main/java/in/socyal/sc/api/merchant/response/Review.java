@@ -1,17 +1,11 @@
 package in.socyal.sc.api.merchant.response;
 
+import java.util.Calendar;
+
 public class Review {
-	private Integer id;
 	private User user;
 	private String description;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	private Calendar date;
 
 	public User getUser() {
 		return user;
@@ -27,5 +21,13 @@ public class Review {
 
 	public void setDescription(String desc) {
 		this.description = desc;
+	}
+
+	public Calendar getDate() {
+		return date;
+	}
+
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 }

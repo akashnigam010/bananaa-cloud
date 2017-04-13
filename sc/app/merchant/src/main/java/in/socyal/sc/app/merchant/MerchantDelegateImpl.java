@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.AddressDto;
@@ -24,7 +25,6 @@ import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
-import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
@@ -83,7 +83,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public MerchantDetailsResponse getMerchantDetails(MerchantDetailsRequest request) throws BusinessException {
+	public MerchantDetailsResponse getMerchantDetails(DetailsRequest request) throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
 		MerchantDto merchantDto = dao.getMerchantDetailsByNameId(request.getNameId(), filter);

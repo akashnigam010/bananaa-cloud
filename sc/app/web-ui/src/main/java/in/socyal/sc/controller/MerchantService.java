@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.GetMerchantListRequest;
-import in.socyal.sc.api.merchant.request.MerchantDetailsRequest;
 import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
@@ -48,7 +48,7 @@ public class MerchantService {
 	}
 
 	@RequestMapping(value = "/getMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
-	public MerchantDetailsResponse getMerchantDetails(@RequestBody MerchantDetailsRequest request) {
+	public MerchantDetailsResponse getMerchantDetails(@RequestBody DetailsRequest request) {
 		JsonHelper.logRequest(request, MerchantService.class, "/merchant/getMerchantDetails");
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		try {

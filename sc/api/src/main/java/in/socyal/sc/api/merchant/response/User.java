@@ -5,6 +5,7 @@ public class User {
 	private String name;
 	private Integer recommendations;
 	private String imageUrl;
+	private String userUrl;
 
 	public Integer getId() {
 		return id;
@@ -36,5 +37,13 @@ public class User {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getUserUrl() {
+		return userUrl;
+	}
+
+	public void setUserUrl(String userUrl) {
+		this.userUrl = userUrl;
 	}
 }
