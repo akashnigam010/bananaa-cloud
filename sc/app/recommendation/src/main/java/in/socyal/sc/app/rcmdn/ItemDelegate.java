@@ -8,7 +8,7 @@ import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 
 public interface ItemDelegate {
-	public ItemsResponse searchItems(SearchRequest request);
-	public ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException;
+	ItemsResponse searchItems(SearchRequest request);
+	ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException;
 	ItemDetailsResponse getItemDetails(DetailsRequest request);
 }

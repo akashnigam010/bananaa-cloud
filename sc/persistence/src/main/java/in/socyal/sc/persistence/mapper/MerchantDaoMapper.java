@@ -35,7 +35,7 @@ public class MerchantDaoMapper {
 		dto.setId(entity.getId());
 		dto.setNameId(entity.getNameId());
 		dto.setName(entity.getName());
-		dto.setMerchantUrl(entity.getAddress().getCity().toLowerCase() + "/" + entity.getNameId());
+		dto.setMerchantUrl(entity.getAddress().getLocality().getCity().toLowerCase() + "/" + entity.getNameId());
 		if (filter.getMapImage()) {
 			dto.setImageUrl(entity.getImageUrl());
 		}
@@ -105,13 +105,9 @@ public class MerchantDaoMapper {
 	public void map(AddressEntity from, AddressDto to) {
 		to.setAddress(from.getAddress());
 		to.setLocality(map(from.getLocality()));
-		to.setCity(from.getCity());
-		to.setCountry(from.getCountry());
 		to.setId(from.getId());
 		to.setLatitude(from.getLatitude());
 		to.setLongitude(from.getLongitude());
-		to.setState(from.getState());
-		to.setZip(from.getZip());
 	}
 
 	private LocalityDto map(LocalityEntity from) {

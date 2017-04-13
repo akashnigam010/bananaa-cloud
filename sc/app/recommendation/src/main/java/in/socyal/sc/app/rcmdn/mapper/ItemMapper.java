@@ -37,9 +37,11 @@ public class ItemMapper implements Serializable {
 			item.setImageUrl(dish.getImageUrl());
 			item.setNameId(dish.getNameId());
 			item.setRecommendations(dto.getRecommendations().intValue());
+			item.setItemUrl(dto.getDish().getMerchant().getAddress().getLocality().getCity() + "/"
+					+ dto.getDish().getMerchant().getNameId() + "/" + dto.getDish().getNameId());
 			items.add(item);
 		}
-		
+
 		response.setItems(items);
 		return response;
 	}

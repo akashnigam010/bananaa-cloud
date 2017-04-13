@@ -46,9 +46,10 @@ public class DishDaoMapper {
 	
 	public List<PopularDishesResultDto> map(List<PopularDishesResult> result) {
 		List<PopularDishesResultDto> response = new ArrayList<>();
+		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
 		for (PopularDishesResult dish : result) {
 			PopularDishesResultDto dto = new PopularDishesResultDto();
-			dto.setDish(map(dish.getDish(), null));
+			dto.setDish(map(dish.getDish(), merchantCriteria));
 			dto.setRecommendations(dish.getRecommendations());
 			response.add(dto);
 		}

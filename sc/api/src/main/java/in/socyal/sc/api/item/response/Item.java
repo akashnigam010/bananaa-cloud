@@ -6,6 +6,7 @@ public class Item {
 	private String name;
 	private String imageUrl;
 	private Integer recommendations;
+	private String itemUrl;
 
 	public Integer getId() {
 		return id;
@@ -45,5 +46,13 @@ public class Item {
 
 	public void setRecommendations(Integer recommendations) {
 		this.recommendations = recommendations;
+	}
+
+	public String getItemUrl() {
+		return itemUrl;
+	}
+
+	public void setItemUrl(String itemUrl) {
+		this.itemUrl = itemUrl;
 	}
 }

@@ -5,6 +5,14 @@ public class GetPopularItemsRequest {
 	private Integer resultsPerPage;
 	private Integer page;
 
+	public GetPopularItemsRequest() {}
+
+	public GetPopularItemsRequest(Integer merchantId, Integer resultsPerPage, Integer page) {
+		this.merchantId = merchantId;
+		this.resultsPerPage = resultsPerPage;
+		this.page = page;
+	}
+
 	public Integer getMerchantId() {
 		return merchantId;
 	}

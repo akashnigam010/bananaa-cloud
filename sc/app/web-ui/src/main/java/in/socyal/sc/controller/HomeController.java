@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.login.response.LoginStatus;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
@@ -27,7 +28,6 @@ import in.socyal.sc.api.merchant.response.User;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
-import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 
 @Controller
@@ -40,6 +40,9 @@ public class HomeController {
 	private static final String DETAIL_DESCRIPTION_1 = "detail.description.1";
 	private static final String DETAIL_DESCRIPTION_2 = "detail.description.2";
 	private static final String DETAIL_TITLE_END = "detail.title.end";
+	private static final String ITEM_DETAIL_DESCRIPTION_1 = "item.detail.description.1";
+	private static final String ITEM_DETAIL_DESCRIPTION_2 = "item.detail.description.2";
+	private static final String ITEM_DETAIL_TITLE_END = "item.detail.title.end";
 
 	@Autowired
 	MerchantDelegate merchantDelegate;
@@ -100,25 +103,29 @@ public class HomeController {
 
 	@RequestMapping(value = "/{city}/{nameId}", method = RequestMethod.GET)
 	public ModelAndView details(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@PathVariable("city") String city, @PathVariable("nameId") String nameId) throws BusinessException {
+			@PathVariable("city") String city, @PathVariable("nameId") String nameId) {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
 		CityType cityType = CityType.getCity(city);
 		DetailsRequest request = new DetailsRequest();
 		request.setNameId(nameId);
-		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
-		GetPopularItemsRequest itemsRequest = new GetPopularItemsRequest();
-		itemsRequest.setMerchantId(response.getId());
-		itemsRequest.setPage(1);
-		itemsRequest.setResultsPerPage(5);
-
+		MerchantDetailsResponse response;
+		GetPopularItemsRequest itemsRequest;
+		ItemsResponse itemsResponse;
+		try {
+			response = merchantDelegate.getMerchantDetails(request);
+			itemsRequest = new GetPopularItemsRequest(response.getId(), 5, 1);
+			itemsResponse = itemDelegate.getPopularItems(itemsRequest);
+		} catch (BusinessException e) {
+			return new ModelAndView("404");
+		}
 		ModelAndView modelAndView = new ModelAndView("detail");
 		modelAndView.addObject("loginStatus", loginStatus);
 		modelAndView.addObject("detail", response);
-		modelAndView.addObject("popularDishes", itemDelegate.getPopularItems(itemsRequest));
-		modelAndView.addObject("description", getDetailMetaDescription(response));
-		modelAndView.addObject("fbDescription", getDetailMetaDescription(response));
-		modelAndView.addObject("title", getDetailMetaTitle(response));
-		modelAndView.addObject("url", getDetailMetaUrl(response, cityType.getName()));
+		modelAndView.addObject("popularDishes", itemsResponse);
+		modelAndView.addObject("description", getMerchantMetaDescription(response));
+		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
+		modelAndView.addObject("title", getMerchantMetaTitle(response));
+		modelAndView.addObject("url", getMerchantMetaUrl(response, cityType.getName()));
 		return modelAndView;
 	}
 
@@ -131,13 +138,10 @@ public class HomeController {
 		ItemDetailsResponse response = getItemDetails();
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("loginStatus", loginStatus);
-		// modelAndView.addObject("description",
-		// getDetailMetaDescription(response));
-		// modelAndView.addObject("fbDescription",
-		// getDetailMetaDescription(response));
-		modelAndView.addObject("title", response.getName() + " @ " + response.getMerchantName());
-		// modelAndView.addObject("url", getDetailMetaUrl(response,
-		// CityType.HYDERABAD.getName()));
+		modelAndView.addObject("description", getItemMetaDescription(response));
+		modelAndView.addObject("fbDescription", getItemMetaDescription(response));
+		modelAndView.addObject("title", getItemMetaTitle(response));
+		modelAndView.addObject("url", getItemMetaUrl(response));
 		return modelAndView;
 	}
 
@@ -200,7 +204,7 @@ public class HomeController {
 		return response;
 	}
 
-	private String getDetailMetaDescription(MerchantDetailsResponse response) {
+	private String getMerchantMetaDescription(MerchantDetailsResponse response) {
 		String description = response.getName() + "; ";
 		description += response.getName() + ", " + response.getShortAddress() + "; ";
 		description += resource.getString(DETAIL_DESCRIPTION_1);
@@ -209,15 +213,34 @@ public class HomeController {
 		return description;
 	}
 
-	private String getDetailMetaTitle(MerchantDetailsResponse response) {
+	private String getMerchantMetaTitle(MerchantDetailsResponse response) {
 		String title = response.getName() + ", " + response.getShortAddress() + " ";
 		title += resource.getString(DETAIL_TITLE_END);
 		return title;
 	}
 
-	private String getDetailMetaUrl(MerchantDetailsResponse response, String city) {
+	private String getMerchantMetaUrl(MerchantDetailsResponse response, String city) {
 		String url = resource.getString(HOME_URL);
 		url += "/" + city + "/" + response.getNameId();
 		return url;
+	}
+
+	private String getItemMetaDescription(ItemDetailsResponse response) {
+		String description = response.getName() + "; ";
+		description += response.getName() + " @ " + response.getMerchantName() + "; ";
+		description += resource.getString(ITEM_DETAIL_DESCRIPTION_1);
+		description += " " + response.getName() + " ";
+		description += resource.getString(DETAIL_DESCRIPTION_2);
+		return description;
+	}
+
+	private String getItemMetaTitle(ItemDetailsResponse response) {
+		String title = response.getName() + " @ " + response.getMerchantName() + " ";
+		title += resource.getString(ITEM_DETAIL_TITLE_END);
+		return title;
+	}
+
+	private String getItemMetaUrl(ItemDetailsResponse response) {
+		return resource.getString(HOME_URL) + "/" + response.getItemUrl();
 	}
 }

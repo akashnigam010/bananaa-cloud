@@ -15,6 +15,7 @@ public class ItemDetailsResponse extends GenericResponse implements Serializable
 	private String merchantUrl;
 	private Integer recommendations;
 	private String imageUrl;
+	private String itemUrl;
 	private List<Review> reviews;
 
 	public Integer getId() {
@@ -82,5 +83,13 @@ public class ItemDetailsResponse extends GenericResponse implements Serializable
 
 	public void setReviews(List<Review> reviews) {
 		this.reviews = reviews;
+	}
+
+	public String getItemUrl() {
+		return itemUrl;
+	}
+
+	public void setItemUrl(String itemUrl) {
+		this.itemUrl = itemUrl;
 	}
 }

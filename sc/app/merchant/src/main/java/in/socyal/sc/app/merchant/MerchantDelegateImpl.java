@@ -200,16 +200,6 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 				address.getLatitude(), address.getLongitude(), DistanceUnitType.KM.getCode());
 	}
 
-	private String createLongAddress(AddressDto address) {
-		StringBuilder longAddress = new StringBuilder();
-		longAddress.append(address.getAddress());
-		longAddress.append(", ");
-		longAddress.append(address.getCity());
-		longAddress.append(", ");
-		longAddress.append(address.getZip());
-		return longAddress.toString();
-	}
-
 	private Boolean isOpen(Set<TimingDto> timings) {
 		Calendar today = clock.cal();
 		for (TimingDto dto : timings) {
@@ -257,7 +247,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setImageUrl(merchantDto.getImageUrl());
 		response.setIsOpen(isOpen(merchantDto.getTimings()));
 		response.setLocation(buildLocationResponse(merchantDto.getAddress()));
-		response.setLongAddress(createLongAddress(merchantDto.getAddress()));
+		response.setLongAddress(merchantDto.getAddress().getAddress());
 		response.setName(merchantDto.getName());
 		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
 		response.setRating(merchantDto.getRating());
