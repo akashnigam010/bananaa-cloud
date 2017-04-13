@@ -9,6 +9,8 @@ firebase.initializeApp(config);
 
 function googleSignIn() {
   if (!firebase.auth().currentUser) {
+	$("#loginModal").find(".loader").removeClass('hide');
+	$("#loginModal").find(".modal-body").addClass('hide');
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function(result) {
       loginWithIdToken();
@@ -30,6 +32,8 @@ function googleSignIn() {
 
 function fbSignIn() {
   if (!firebase.auth().currentUser) {
+	$("#loginModal").find(".loader").removeClass('hide');
+	$("#loginModal").find(".modal-body").addClass('hide');
     var provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider).then(function(result) {
     	loginWithIdToken();
@@ -58,7 +62,6 @@ function logout() {
 	  	})
 	  	  .done(function(response) {
 	  		  location.reload();
-	  		  //$("#login-info").text('Login');
 	  	  });
 }
 
@@ -76,13 +79,16 @@ function loginWithIdToken(idToken) {
 	  	  .done(function(response) {
 	  		  if (response.result) {
 	  			location.reload();
-	  			//$("#login-info").text(response.user.firstName);
-	  			//$("#loginModal").modal('hide');
 	  		  } else {
 	  			$("#login-info").text('Login');
+	  			handleErrorCallback(response);
+	  			$("#loginModal").find(".loader").addClass('hide');
+	  			$("#loginModal").find(".modal-body").removeClass('hide');
 	  		  }		
 	  	  });
 	}).catch(function(error) {
-	  alert('Something is not right, please try again after sometime.');
+		$("#loginModal").find(".loader").addClass('hide');
+		$("#loginModal").find(".modal-body").removeClass('hide');
+		alert('Something is not right, please try again after sometime.');
 	});
 }
