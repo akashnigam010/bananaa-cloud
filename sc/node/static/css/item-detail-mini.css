@@ -16,7 +16,7 @@
 
 .header-icon {
     color: #fff;
-    font-size: 1.5em;
+    font-size: 1.5em; 
     padding-top: 7%; 
 }
 
@@ -36,14 +36,6 @@ body {
 
 .details-top-wrapper {
 	border-radius: 0px 0px 6px 6px;
-}
-
-.item-desc-wrapper {
-	margin-left: 4%
-}
-
-.recommend-item-name {
-	padding-top: 1%;
 }
 
 .detail-type-padding {
@@ -83,6 +75,14 @@ hr {
     margin-bottom: 10%;
 }
 
-.reviews {
-    margin-bottom: 5%;
+.recommended-item {
+    padding: 3%;
+}
+
+.item-desc-wrapper {
+    margin-left: 4%
+}
+
+.review-item-desc {
+    padding: 3% 0%;
 }

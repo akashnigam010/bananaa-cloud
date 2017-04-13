@@ -47,14 +47,6 @@
 	border-radius: 6px;
 }
 
-.item-desc-wrapper {
-	margin-left: 3%
-}
-
-.recommend-item-name {
-	padding-top: 2%;
-}
-
 .detail-type-padding {
 	padding: 5%;
 }
@@ -95,14 +87,18 @@ hr {
     margin-bottom: 5%;
 }
 
-.review-desc {
-    padding-top: 0%;
-    padding-bottom: 6%;
+.my-recommendations {
+    padding-bottom: 5%;
 }
 
-.review-item-top {
-    padding: 3% 3% 0% 3%;
+.recommended-item {
+    padding: 3%;
 }
+
+.item-desc-wrapper {
+    margin-left: 3%
+}
+
 .review-item-desc {
-    padding: 3% 3% 10% 3%
+    padding: 3% 0%;
 }

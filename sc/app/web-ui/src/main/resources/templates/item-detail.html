@@ -4,8 +4,8 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head th:replace="fragments/head :: head"></head>
-<link href="http://cdn.bananaa.in/css/item-detail.css" type="text/css" rel="stylesheet"></link>
-<link href="http://cdn.bananaa.in/css/item-detail-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
+<link href="http://localhost:8443/css/item-detail.css" type="text/css" rel="stylesheet"></link>
+<link href="http://localhost:8443/css/item-detail-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
 
 <body>
@@ -117,34 +117,35 @@
                     </div>
                     <div class="detail-about">
                         <div class="col-xs-12 col-sm-8 col-sm-pull-4 white-background details-wrapper" style="margin-top: 10px;">
-                            <div class="col-xs-12">
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-xs-12">
                                     <div class="col-xs-12 font-1-5 bna-color padding-3">
                                         Reviews
                                     </div>    
+                                </div>                                   
+                            </div>
+                            <div class="row recommended-wrapper">
+                                <div class="col-xs-12">
+                                    <div class="my-recommendations">
+                                    
+                                        <div class="col-xs-12 recommended-item" th:each="review, iterStat : ${detail.reviews}">
+                                            <div class="float-left" style="object-fit: cover;">
+                                                <img class="user-icon" th:src="${review.user.imageUrl}" />
+                                            </div>
+                                            <div class="float-left item-desc-wrapper">
+                                                <div class="bold item-name" th:text="${review.user.name}">
+                                                	
+                                                </div>
+                                                 <div class="light" th:text="${review.user.recommendations} + ' Recommendations'">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 review-item-desc" th:text="${review.description}">                                                
+                                            </div>
+                                        </div>                                                                                                                     
+                                    </div>                                   
                                 </div>
-                                <div class="row recommended-wrapper">
-                                    <div class="col-xs-12 reviews">
-                                        <div class="row" th:each="review, iterStat : ${detail.reviews}">
-                                            <div class="col-xs-12 review-item-top">
-                                                <div class="float-left" style="object-fit: cover;">
-                                                    <img class="user-icon" th:src="${review.user.imageUrl}" />
-                                                </div>
-                                                <div class="float-left item-desc-wrapper">
-                                                    <div class="bold item-name" th:text="${review.user.name}">
-                                                        
-                                                    </div>
-                                                     <div class="light" th:text="${review.user.recommendations} + ' recommendations'">
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 review-item-desc" th:text="${review.description}">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                                              
-                            </div>                        
+                            </div>                      
                         </div>                                               
                     </div> 
                 </div>
@@ -162,7 +163,7 @@
 	</div>
 	<input type="hidden" id="itemId" th:value='${detail.id}' />
 	<input type="hidden" id="itemName" th:value='${detail.name}' />
-	<script src="http://cdn.bananaa.in/js/item-detail.js"></script>
+	<script src="http://localhost:8443/js/item-detail.js"></script>
 	<script src="http://cdn.bananaa.in/js/rcmd.js"></script>
 </body>
 

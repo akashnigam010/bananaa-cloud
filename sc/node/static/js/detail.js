@@ -100,7 +100,7 @@ function getMyRecommendations() {
 
 function getDescriptionHtml(desc) {
     if (desc != null) {
-        return '<div class="col-xs-12 review-item-desc recommend-item-desc">'+desc+'</div>';
+        return '<div class="col-xs-12 recommend-item-desc">'+desc+'</div>';
     } else {
         return '';
     }
