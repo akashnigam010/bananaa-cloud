@@ -25,17 +25,17 @@ function getMyItemRecommendation() {
     			  $(".my-item-recommendation-wrapper").find('.loader').addClass('hide');
     			  $(".my-item-recommendation-section").removeClass('hide');
     			  if (response.recommended) {
-    				  $(".recommendation-id").html(response.recommendation.id);
-    				  $(".item-id").html(response.recommendation.itemId);
-    				  $(".item-name").html(response.recommendation.name);
-    				  $(".recommend-item-desc").html(response.recommendation.description);
+    				  $("#recommendation-id").html(response.recommendation.id);
+    				  $("#item-id").html(response.recommendation.itemId);
+    				  $("#item-name").html(response.recommendation.name);
+    				  $("#recommend-item-desc").html(response.recommendation.description);
     				  $("#addItemRecommendButton").addClass('hide');
-    				  $(".recommend-message").addClass('hide');
+    				  $("#recommend-message").addClass('hide');
     				  activateUpdateRcmdModal();
     			  } else {
-    				  $(".recommend-item-desc").html('');
+    				  $("#recommend-item-desc").html('');
     				  $("#addItemRecommendButton").removeClass('hide');
-    				  $(".recommend-message").removeClass('hide');
+    				  $("#recommend-message").removeClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);
@@ -46,10 +46,10 @@ function getMyItemRecommendation() {
 function activateUpdateRcmdModal() {
 	$(".my-item-recommendation").on('mouseup', function(e){
     	rcmdOb = {
-    		rcmdId: $(this).find('.recommendation-id').html(),
-    		itemId: $(this).find('.item-id').html(),
-    		name: $(this).find('.item-name').html(),
-    		desc: $(this).find('.recommend-item-desc').html().trim()
+    		rcmdId: $(this).find('#recommendation-id').html(),
+    		itemId: $(this).find('#item-id').html(),
+    		name: $(this).find('#item-name').html(),
+    		desc: $(this).find('#recommend-item-desc').html().trim()
     	};
     	openRecommendationModal(rcmdOb.rcmdId, rcmdOb.itemId, rcmdOb.name, rcmdOb.desc, true);
     });
