@@ -1,5 +1,6 @@
 package in.socyal.sc.persistence.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,20 @@ public class RecommendationDaoMapper {
 			userMapper.map(entity.getUser(), user);
 			dto.setUser(user);			
 		}		
+	}
+	
+	public List<RecommendationDto> map(List<RecommendationEntity> entities, boolean mapReviewDetails) {
+		List<RecommendationDto> dtos = new ArrayList<>();
+		for (RecommendationEntity entity : entities) {
+			RecommendationDto dto = new RecommendationDto();
+			dto.setDescription(entity.getDescription());
+			dto.setCreatedDateTime(entity.getCreatedDateTime());
+			dto.setUpdatedDateTime(entity.getUpdatedDateTime());
+			UserDto user = new UserDto();
+			userMapper.map(entity.getUser(), user);
+			dto.setUser(user);
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 }

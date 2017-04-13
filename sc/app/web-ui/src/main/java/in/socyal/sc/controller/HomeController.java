@@ -135,7 +135,14 @@ public class HomeController {
 			@PathVariable("itemNameId") String itemNameId) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
 		ModelAndView modelAndView = new ModelAndView("item-detail");
-		ItemDetailsResponse response = getItemDetails();
+		DetailsRequest detailsRequest = new DetailsRequest();
+		detailsRequest.setNameId(itemNameId);
+		ItemDetailsResponse response = null;
+		try {
+			response = itemDelegate.getItemDetails(detailsRequest);
+		} catch (BusinessException e) {
+			return new ModelAndView("404");
+		}
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("loginStatus", loginStatus);
 		modelAndView.addObject("description", getItemMetaDescription(response));

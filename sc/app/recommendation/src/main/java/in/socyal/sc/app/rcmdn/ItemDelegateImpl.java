@@ -11,9 +11,12 @@ import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.items.dto.DishDetailsResultDto;
 import in.socyal.sc.api.items.dto.PopularDishesResultDto;
 import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.app.rcmdn.mapper.ItemMapper;
 import in.socyal.sc.persistence.DishDao;
 
@@ -43,8 +46,13 @@ public class ItemDelegateImpl implements ItemDelegate {
 	}
 
 	@Override
-	public ItemDetailsResponse getItemDetails(DetailsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException {
+		DishDetailsResultDto dishResult = dishDao.getItemDetails(request.getNameId());
+		if (dishResult == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
+		}
+		List<RecommendationDto> reviews = dishDao.getReviews(dishResult.getDish().getId());
+		return mapper.map(dishResult, reviews);
 	}
 }

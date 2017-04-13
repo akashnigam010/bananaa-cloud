@@ -10,5 +10,5 @@ import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 public interface ItemDelegate {
 	ItemsResponse searchItems(SearchRequest request);
 	ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException;
-	ItemDetailsResponse getItemDetails(DetailsRequest request);
+	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
 }

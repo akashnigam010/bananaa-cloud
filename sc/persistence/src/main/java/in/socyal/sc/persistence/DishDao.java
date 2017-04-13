@@ -15,17 +15,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.items.dto.DishDetailsResultDto;
 import in.socyal.sc.api.items.dto.PopularDishesResultDto;
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.persistence.entity.DishDetailsResult;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.PopularDishesResult;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
+import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class DishDao {
 	private static final String NAME = "name";
 	@Autowired
 	DishDaoMapper mapper;
+	@Autowired
+	RecommendationDaoMapper rcmdnMapper;
 	@Autowired
 	SessionFactory sessionFactory;
 
@@ -75,5 +81,31 @@ public class DishDao {
 		criteria.setResultTransformer(Transformers.aliasToBean(PopularDishesResult.class));
 		List<PopularDishesResult> result = (List<PopularDishesResult>) criteria.list();
 		return mapper.map(result);
+	}
+	
+	public DishDetailsResultDto getItemDetails(String dishNameId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.createAlias("dish", "d");
+		criteria.createAlias("d.merchant", "m");
+		criteria.add(Restrictions.eq("d.nameId", dishNameId));
+		//criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.count("id").as("recommendations"));
+		projList.add(Projections.groupProperty("dish.id"));
+		projList.add(Projections.property("dish").as("dish"));
+		criteria.setProjection(projList);
+		criteria.addOrder(Order.desc("recommendations"));
+		criteria.setResultTransformer(Transformers.aliasToBean(DishDetailsResult.class));
+		DishDetailsResult result = (DishDetailsResult) criteria.uniqueResult();
+		return mapper.map(result);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<RecommendationDto> getReviews(Integer dishId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("dish.id", dishId));
+		criteria.add(Restrictions.isNotNull("description"));
+		List<RecommendationEntity> result = (List<RecommendationEntity>) criteria.list();
+		return rcmdnMapper.map(result, Boolean.TRUE);
 	}
 }

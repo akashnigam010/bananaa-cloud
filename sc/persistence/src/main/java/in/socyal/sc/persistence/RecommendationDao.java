@@ -118,7 +118,10 @@ public class RecommendationDao {
 				return;
 			}
 		}
-		recommendation.setDescription(description);
+		//Setting description field value to null even if the description from UI is null/empty
+		if (StringUtils.isNotBlank(description)) {
+			recommendation.setDescription(description);
+		}
 		recommendation.setUpdatedDateTime(cal);
 		session.saveOrUpdate(recommendation);
 	}
