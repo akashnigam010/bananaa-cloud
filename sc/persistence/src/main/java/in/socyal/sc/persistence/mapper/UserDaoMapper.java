@@ -16,23 +16,26 @@ public class UserDaoMapper {
 	Clock clock;
 
 	public UserEntity map(UserDto from) {
+		Calendar cal = Calendar.getInstance();
 		UserEntity to = new UserEntity();
 		to.setUid(from.getUid());
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
+		to.setNameId(generateUserNameId(from, cal));
 		to.setEmail(from.getEmail());
 		to.setImageUrl(from.getImageUrl());
-		to.setCreatedDateTime(Calendar.getInstance());
-		to.setUpdatedDateTime(Calendar.getInstance());
+		to.setCreatedDateTime(cal);
+		to.setUpdatedDateTime(cal);
 		return to;
 	}
-	
+
 	public void map(UserEntity from, UserDto to) {
 		to.setId(from.getId());
 		to.setUid(from.getUid());
 		to.setEmail(from.getEmail());
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
+		to.setNameId(from.getNameId());
 		to.setImageUrl(from.getImageUrl());
 		to.setCreatedDateTime(from.getCreatedDateTime());
 		to.setUpdatedDateTime(from.getUpdatedDateTime());
@@ -44,5 +47,17 @@ public class UserDaoMapper {
 			map(user, userDto);
 			userDtos.add(userDto);
 		}
+	}
+
+	/**
+	 * Generates unique nameId for user
+	 * @param dto
+	 * @param cal
+	 * @return
+	 */
+	private String generateUserNameId(UserDto dto, Calendar cal) {
+		String nameId = dto.getFirstName().toLowerCase().trim() + "-" + dto.getLastName().toLowerCase().trim() + "-"
+				+ cal.getTimeInMillis();
+		return nameId;
 	}
 }

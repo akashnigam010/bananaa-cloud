@@ -28,6 +28,9 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "LAST_NAME")
 	private String lastName;
+	
+	@Column(name = "NAME_ID")
+	private String nameId;
 
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
@@ -71,6 +74,14 @@ public class UserEntity implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 
 	public String getImageUrl() {

@@ -9,6 +9,7 @@ public class UserDto implements Serializable {
 	private String uid;
 	private String firstName;
 	private String lastName;
+	private String nameId;
 	private String imageUrl;
 	private String email;
 	private Calendar createdDateTime;
@@ -86,5 +87,13 @@ public class UserDto implements Serializable {
 	public boolean equals(Object obj) {
 		UserDto user = (UserDto) obj;
 		return (this.id == user.id);
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }
