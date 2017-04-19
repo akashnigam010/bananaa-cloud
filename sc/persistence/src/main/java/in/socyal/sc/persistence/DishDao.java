@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.DishResult;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
@@ -82,7 +84,7 @@ public class DishDao {
 		return mapper.mapDishResults(result, filterCriteria);
 	}
 
-	public DishResultDto getItemDetails(String merchantNameId, String dishNameId) {
+	public DishResultDto getItemDetails(String merchantNameId, String dishNameId) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.createAlias("dish", "d");
 		criteria.createAlias("d.merchant", "m");
@@ -97,6 +99,9 @@ public class DishDao {
 		criteria.addOrder(Order.desc("recommendations"));
 		criteria.setResultTransformer(Transformers.aliasToBean(DishResult.class));
 		DishResult result = (DishResult) criteria.uniqueResult();
+		if (result == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_DETAILS_NOT_FOUND);
+		}
 		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
 		return mapper.map(result, filterCriteria);
 	}

@@ -416,3 +416,7 @@ ul.typeahead.dropdown-menu {
    color:    #939393;
 }
 /*Input placeholder css ENDS*/
+
+.recommend-item-desc, .review-item-desc {
+	white-space: pre-wrap;
+}

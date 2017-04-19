@@ -6,13 +6,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.DetailsRequest;
@@ -23,8 +26,6 @@ import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.login.response.LoginStatus;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
-import in.socyal.sc.api.merchant.response.Review;
-import in.socyal.sc.api.merchant.response.User;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
@@ -54,7 +55,7 @@ public class HomeController {
 	ResponseHelper responseHelper;
 	@Autowired
 	JwtTokenHelper jwtHelper;
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(@CookieValue(name = "city", defaultValue = "") String city) {
 		if (StringUtils.isEmpty(city)) {
@@ -207,7 +208,7 @@ public class HomeController {
 		description += response.getName() + " @ " + response.getMerchantName() + "; ";
 		description += resource.getString(ITEM_DETAIL_DESCRIPTION_1);
 		description += " " + response.getName() + " ";
-		description += resource.getString(DETAIL_DESCRIPTION_2);
+		description += resource.getString(ITEM_DETAIL_DESCRIPTION_2);
 		return description;
 	}
 
