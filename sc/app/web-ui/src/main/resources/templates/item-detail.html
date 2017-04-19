@@ -48,8 +48,10 @@
                                         <div class="row padding-left">
                                             <div class="col-xs-12 bold font-2" th:text="${detail.name}">
                                             </div>
-                                             <div class="col-xs-12 light" th:text="'@ ' + ${detail.merchantName} + ', ' + ${detail.merchantShortAddress}">
-                                            </div>                                            
+                                            <a th:href="'/' + ${detail.merchantUrl}">
+	                                            <div class="col-xs-12 light" th:text="'@ ' + ${detail.merchantName} + ', ' + ${detail.merchantShortAddress}">
+	                                            </div>
+                                            </a>                                       
                                         </div>
                                     </div>
                                 </div>

@@ -28,7 +28,7 @@ function loadPopularDishes() {
     				  for (var i=0; i<response.items.length; i++) {
     					  popularItemsHtml += 
     						  '<div class="row">'+
-	    						  '<a class="cursor-pointer" href="/hyderabad/fusion-9-hitech-city/12346">'+
+	    						  '<a class="cursor-pointer" href="'+response.items[i].itemUrl+'">'+
 				                     '<div class="col-xs-12 recommended-item">'+
 				                          '<div class="float-left" style="object-fit: cover;">'+
 				                              '<img class="user-icon" src="'+response.items[i].imageUrl+'" />'+
