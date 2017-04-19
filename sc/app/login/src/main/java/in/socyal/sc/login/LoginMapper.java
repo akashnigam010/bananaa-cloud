@@ -1,5 +1,8 @@
 package in.socyal.sc.login;
 
+import java.util.Calendar;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.stereotype.Component;
 
@@ -34,18 +37,19 @@ public class LoginMapper {
 		user.setUid(firebaseUser.getUser().getUid());
 		user.setFirstName(names.getLeft());
 		user.setLastName(names.getRight());
+		user.setNameId(generateUserNameId(user.getFirstName(), user.getLastName()));
 		user.setImageUrl(firebaseUser.getUser().getPhotoURL());
 		user.setEmail(firebaseUser.getUser().getEmail());
 		return user;
 	}
 
-	private  MutablePair<String, String> parseDisplayName(String displayName) {
+	private MutablePair<String, String> parseDisplayName(String displayName) {
 		MutablePair<String, String> names = new MutablePair<>();
 		String[] nameString = displayName.split(" ");
 		StringBuilder firstName = new StringBuilder();
 		int i;
 		for (i = 0; i < nameString.length - 1; i++) {
-			firstName.append(nameString[i]+" ");
+			firstName.append(nameString[i] + " ");
 		}
 		names.setLeft(firstName.toString().trim());
 		names.setRight(nameString[i]);
@@ -59,5 +63,24 @@ public class LoginMapper {
 		loginUserDto.setLastName(user.getLastName());
 		loginUserDto.setImageUrl(user.getImageUrl());
 		return loginUserDto;
+	}
+
+	/**
+	 * Generates unique nameId for user
+	 * 
+	 * @param dto
+	 * @param cal
+	 * @return
+	 */
+	private String generateUserNameId(String firstName, String lastName) {
+		StringBuilder nameId = new StringBuilder();
+		if (StringUtils.isNotBlank(firstName)) {
+			nameId.append(firstName.toLowerCase().trim() + "-");
+		}
+		if (StringUtils.isNotBlank(lastName)) {
+			nameId.append(lastName.toLowerCase().trim() + "-");
+		}
+		nameId.append(Calendar.getInstance().getTimeInMillis());
+		return nameId.toString();
 	}
 }

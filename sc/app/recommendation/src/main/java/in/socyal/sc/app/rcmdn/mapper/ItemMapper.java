@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
-import in.socyal.sc.api.items.dto.DishDetailsResultDto;
-import in.socyal.sc.api.items.dto.PopularDishesResultDto;
+import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.Review;
 import in.socyal.sc.api.merchant.response.User;
@@ -33,9 +32,9 @@ public class ItemMapper implements Serializable {
 		return items;
 	}
 
-	public ItemsResponse map(List<PopularDishesResultDto> result, ItemsResponse response) {
+	public ItemsResponse map(List<DishResultDto> result, ItemsResponse response) {
 		List<Item> items = new ArrayList<>();
-		for (PopularDishesResultDto dto : result) {
+		for (DishResultDto dto : result) {
 			Item item = new Item();
 			DishDto dish = dto.getDish();
 			item.setId(dish.getId());
@@ -43,8 +42,7 @@ public class ItemMapper implements Serializable {
 			item.setImageUrl(dish.getImageUrl());
 			item.setNameId(dish.getNameId());
 			item.setRecommendations(dto.getRecommendations().intValue());
-			item.setItemUrl(dto.getDish().getMerchant().getAddress().getLocality().getCity() + "/"
-					+ dto.getDish().getMerchant().getNameId() + "/" + dto.getDish().getNameId());
+			item.setItemUrl(dto.getDish().getItemUrl());
 			items.add(item);
 		}
 
@@ -52,17 +50,15 @@ public class ItemMapper implements Serializable {
 		return response;
 	}
 
-	public ItemDetailsResponse map(DishDetailsResultDto dishResult, List<RecommendationDto> rcmdns) {
+	public ItemDetailsResponse map(DishResultDto dishResult, List<RecommendationDto> rcmdns) {
 		ItemDetailsResponse response = new ItemDetailsResponse();
 		DishDto dish = dishResult.getDish();
 		response.setId(dish.getId());
 		response.setImageUrl(dish.getImageUrl());
-		response.setItemUrl(dish.getMerchant().getAddress().getLocality().getCity().toLowerCase() + 
-				"/" + dish.getMerchant().getNameId().toLowerCase() + "/" + dish.getNameId().toLowerCase());
+		response.setItemUrl(dish.getItemUrl());
 		response.setMerchantName(dish.getMerchant().getName());
 		response.setMerchantShortAddress(dish.getMerchant().getAddress().getLocality().getShortAddress());
-		response.setMerchantUrl(dish.getMerchant().getAddress().getLocality().getCity().toLowerCase() + 
-				"/" + dish.getMerchant().getNameId().toLowerCase());
+		response.setMerchantUrl(dish.getMerchant().getMerchantUrl());
 		response.setName(dish.getName());
 		response.setRecommendations(dishResult.getRecommendations().intValue());
 		List<Review> reviews = new ArrayList<>();

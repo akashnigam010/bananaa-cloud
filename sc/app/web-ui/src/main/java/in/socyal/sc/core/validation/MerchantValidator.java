@@ -16,7 +16,7 @@ public class MerchantValidator {
 	}
 
 	public void validateGetMerchantDetailsRequest(DetailsRequest request) throws BusinessException {
-		if (StringUtils.isEmpty(request.getNameId())) {
+		if (StringUtils.isEmpty(request.getMerchantNameId())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

@@ -17,6 +17,7 @@ public class DishDto implements Serializable {
 	private String imageUrl;
 	private Boolean isActive;
 	private Integer initialDump;
+	private String itemUrl;
 
 	public Integer getId() {
 		return id;
@@ -88,5 +89,13 @@ public class DishDto implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public String getItemUrl() {
+		return itemUrl;
+	}
+
+	public void setItemUrl(String itemUrl) {
+		this.itemUrl = itemUrl;
 	}
 }

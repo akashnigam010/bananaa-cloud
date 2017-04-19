@@ -96,4 +96,10 @@ public class UserDto implements Serializable {
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
 	}
+
+	@Override
+	public String toString() {
+		return "UserDto [id=" + id + ", uid=" + uid + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", nameId=" + nameId + ", imageUrl=" + imageUrl + ", email=" + email + "]";
+	}
 }

@@ -102,22 +102,15 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/{city}/{nameId}", method = RequestMethod.GET)
-	public ModelAndView details(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@PathVariable("city") String city, @PathVariable("nameId") String nameId) {
+	public ModelAndView merchantDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@PathVariable("city") String city, @PathVariable("nameId") String nameId) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
 		CityType cityType = CityType.getCity(city);
 		DetailsRequest request = new DetailsRequest();
-		request.setNameId(nameId);
-		MerchantDetailsResponse response;
-		GetPopularItemsRequest itemsRequest;
-		ItemsResponse itemsResponse;
-		try {
-			response = merchantDelegate.getMerchantDetails(request);
-			itemsRequest = new GetPopularItemsRequest(response.getId(), 5, 1);
-			itemsResponse = itemDelegate.getPopularItems(itemsRequest);
-		} catch (BusinessException e) {
-			return new ModelAndView("404");
-		}
+		request.setMerchantNameId(nameId);
+		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
+		GetPopularItemsRequest itemsRequest = new GetPopularItemsRequest(response.getId(), 5, 1);
+		ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
 		ModelAndView modelAndView = new ModelAndView("detail");
 		modelAndView.addObject("loginStatus", loginStatus);
 		modelAndView.addObject("detail", response);
@@ -136,13 +129,9 @@ public class HomeController {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
 		ModelAndView modelAndView = new ModelAndView("item-detail");
 		DetailsRequest detailsRequest = new DetailsRequest();
-		detailsRequest.setNameId(itemNameId);
-		ItemDetailsResponse response = null;
-		try {
-			response = itemDelegate.getItemDetails(detailsRequest);
-		} catch (BusinessException e) {
-			return new ModelAndView("404");
-		}
+		detailsRequest.setItemNameId(itemNameId);
+		detailsRequest.setMerchantNameId(merchantNameId);
+		ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("loginStatus", loginStatus);
 		modelAndView.addObject("description", getItemMetaDescription(response));
@@ -152,64 +141,45 @@ public class HomeController {
 		return modelAndView;
 	}
 
-	private ItemDetailsResponse getItemDetails() {
-		ItemDetailsResponse response = new ItemDetailsResponse();
-		response.setId(1);
-		response.setName("Joojeh Kebab");
-		response.setImageUrl("https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
-		response.setMerchantName("Fusion 9");
-		response.setMerchantShortAddress("Hitech City, Hyderabad");
-		response.setMerchantUrl("hyderabad/12346");
-		response.setRecommendations(23);
-		Review review1 = new Review();
-		User user1 = new User();
-		user1.setId(1);
-		user1.setName("Shubhankar Saxena");
-		user1.setRecommendations(10);
-		user1.setImageUrl(
-				"https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE");
-		review1.setUser(user1);
-		review1.setDescription(
-				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
-		response.getReviews().add(review1);
-
-		Review review2 = new Review();
-		User user2 = new User();
-		user2.setId(2);
-		user2.setName("Deepak Gupta");
-		user2.setRecommendations(14);
-		user2.setImageUrl(
-				"https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16195135_10202582907209226_8892726716716657102_n.jpg?oh=88a1701d79b3ad41916b6dd14fa254a5&oe=5938B99B");
-		review2.setUser(user2);
-		review2.setDescription(
-				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
-		response.getReviews().add(review2);
-
-		Review review3 = new Review();
-		User user3 = new User();
-		user3.setId(3);
-		user3.setName("Subhajoy Laskar");
-		user3.setRecommendations(34);
-		user3.setImageUrl(
-				"https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA");
-		review3.setUser(user3);
-		review3.setDescription(
-				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.");
-		response.getReviews().add(review3);
-
-		Review review4 = new Review();
-		User user4 = new User();
-		user4.setId(4);
-		user4.setName("Ayush Singh");
-		user4.setRecommendations(34);
-		user4.setImageUrl(
-				"https://scontent.xx.fbcdn.net/v/t1.0-1/c27.0.160.160/p160x160/15337536_987021314735785_2690017545352587728_n.jpg?oh=de9c0549fb958af561b3bcd33092776c&oe=592F7F57");
-		review4.setUser(user4);
-		review4.setDescription(
-				"The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T");
-		response.getReviews().add(review4);
-		return response;
-	}
+	/*
+	 * private ItemDetailsResponse getItemDetails() { ItemDetailsResponse
+	 * response = new ItemDetailsResponse(); response.setId(1);
+	 * response.setName("Joojeh Kebab"); response.setImageUrl(
+	 * "https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
+	 * response.setMerchantName("Fusion 9"); response.setMerchantShortAddress(
+	 * "Hitech City, Hyderabad"); response.setMerchantUrl("hyderabad/12346");
+	 * response.setRecommendations(23); Review review1 = new Review(); User
+	 * user1 = new User(); user1.setId(1); user1.setName("Shubhankar Saxena");
+	 * user1.setRecommendations(10); user1.setImageUrl(
+	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE"
+	 * ); review1.setUser(user1); review1.setDescription(
+	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T"
+	 * ); response.getReviews().add(review1);
+	 * 
+	 * Review review2 = new Review(); User user2 = new User(); user2.setId(2);
+	 * user2.setName("Deepak Gupta"); user2.setRecommendations(14);
+	 * user2.setImageUrl(
+	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16195135_10202582907209226_8892726716716657102_n.jpg?oh=88a1701d79b3ad41916b6dd14fa254a5&oe=5938B99B"
+	 * ); review2.setUser(user2); review2.setDescription(
+	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T"
+	 * ); response.getReviews().add(review2);
+	 * 
+	 * Review review3 = new Review(); User user3 = new User(); user3.setId(3);
+	 * user3.setName("Subhajoy Laskar"); user3.setRecommendations(34);
+	 * user3.setImageUrl(
+	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA"
+	 * ); review3.setUser(user3); review3.setDescription(
+	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow."
+	 * ); response.getReviews().add(review3);
+	 * 
+	 * Review review4 = new Review(); User user4 = new User(); user4.setId(4);
+	 * user4.setName("Ayush Singh"); user4.setRecommendations(34);
+	 * user4.setImageUrl(
+	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/c27.0.160.160/p160x160/15337536_987021314735785_2690017545352587728_n.jpg?oh=de9c0549fb958af561b3bcd33092776c&oe=592F7F57"
+	 * ); review4.setUser(user4); review4.setDescription(
+	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T"
+	 * ); response.getReviews().add(review4); return response; }
+	 */
 
 	private String getMerchantMetaDescription(MerchantDetailsResponse response) {
 		String description = response.getName() + "; ";

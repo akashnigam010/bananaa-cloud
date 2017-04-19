@@ -2,7 +2,7 @@ package in.socyal.sc.api.items.dto;
 
 import in.socyal.sc.api.dish.dto.DishDto;
 
-public class DishDetailsResultDto {
+public class DishResultDto {
 	private Long recommendations;
 	private DishDto dish;
 

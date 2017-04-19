@@ -1,10 +1,8 @@
-package in.socyal.sc.api.items.dto;
+package in.socyal.sc.persistence.entity;
 
-import in.socyal.sc.api.dish.dto.DishDto;
-
-public class PopularDishesResultDto {
+public class DishResult {
 	private Long recommendations;
-	private DishDto dish;
+	private DishEntity dish;
 
 	public Long getRecommendations() {
 		return recommendations;
@@ -14,11 +12,11 @@ public class PopularDishesResultDto {
 		this.recommendations = recommendations;
 	}
 
-	public DishDto getDish() {
+	public DishEntity getDish() {
 		return dish;
 	}
 
-	public void setDish(DishDto dish) {
+	public void setDish(DishEntity dish) {
 		this.dish = dish;
 	}
 }

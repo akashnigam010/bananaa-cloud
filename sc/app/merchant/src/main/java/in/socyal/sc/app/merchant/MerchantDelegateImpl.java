@@ -86,7 +86,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public MerchantDetailsResponse getMerchantDetails(DetailsRequest request) throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
-		MerchantDto merchantDto = dao.getMerchantDetailsByNameId(request.getNameId(), filter);
+		MerchantDto merchantDto = dao.getMerchantDetailsByNameId(request.getMerchantNameId(), filter);
 		try {
 			int previousCheckinCount = 0;
 			if (jwtHelper.isUserLoggedIn()) {

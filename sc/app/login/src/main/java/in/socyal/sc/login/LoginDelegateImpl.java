@@ -1,5 +1,7 @@
 package in.socyal.sc.login;
 
+import java.io.IOException;
+
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.helper.aws.S3Helper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
@@ -33,6 +36,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	MerchantDao merchantDao;
 	@Autowired
 	FirebaseAuthHelper firebaseHelper;
+	@Autowired
+	S3Helper s3Helper;
 
 	@Override
 	public LoginResponse skipLogin() throws BusinessException {
@@ -60,63 +65,16 @@ public class LoginDelegateImpl implements LoginDelegate {
 				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 			}
 			UserDto newUser = mapper.mapFirebaseUser(firebaseUser);
+			try {
+				newUser.setImageUrl(s3Helper.saveUserImage(newUser.getImageUrl(), newUser.getNameId()));
+			} catch (IOException e) {
+				LOG.error("Error occurred while saving user image to S3 : " + e.getMessage() + ", USER : "
+						+ newUser.toString());
+				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+			}
 			user = userDao.saveUser(newUser);
 		}
 		loginResponse.setUser(mapper.mapToLoginUserDto(user));
 		return loginResponse;
 	}
-
-	// @Override
-	// @Transactional(propagation = Propagation.REQUIRED, rollbackFor =
-	// BusinessException.class)
-	// public LoginResponse fbLogin(LoginRequest request) throws
-	// BusinessException {
-	// LoginResponse response = new LoginResponse();
-	// try {
-	// User fbUser = fbHelper.getFbUser(request.getFbAccessToken());
-	// if (!fbUser.getId().equals(request.getFbId())) {
-	// throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
-	// }
-	// // Save or update user
-	// UserDto userDetails = userDao.saveOrUpdate(fbUser,
-	// request.getFbAccessToken());
-	// // Sets JWT access token
-	// response.setAccessToken(JwtHelper.createJsonWebTokenForUser(String.valueOf(userDetails.getId())));
-	// Integer userCheckinCount =
-	// checkinDao.getUserCheckinCount(userDetails.getId());
-	// response.setUser(mapper.mapFbUserToUserDto(userDetails,
-	// userCheckinCount));
-	// } catch (FacebookOAuthException e) {
-	// LOG.error("Error while fetching user details from FB " +
-	// e.getErrorMessage());
-	// throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
-	// }
-	// return response;
-	// }
-	//
-	// @Override
-	// @Transactional(propagation = Propagation.REQUIRED, rollbackFor =
-	// BusinessException.class)
-	// public BusinessLoginResponse businessLogin(BusinessLoginRequest request)
-	// throws BusinessException {
-	// BusinessLoginResponse response = new BusinessLoginResponse();
-	// MerchantLoginDto merchantLoginDto =
-	// merchantLoginDao.validateBusinessUser(request.getUsername(),
-	// request.getPassword());
-	// if (merchantLoginDto == null) {
-	// throw new
-	// BusinessException(LoginErrorCodeType.BUSINESS_CREDENTIALS_INVALID);
-	// }
-	// response.setAccessToken(JwtHelper.createJsonWebTokenForMerchant(String.valueOf(merchantLoginDto.getDeviceId()),
-	// String.valueOf(merchantLoginDto.getMerchant().getId())));
-	//
-	// BusinessLoginUserDto loggedInUser = new BusinessLoginUserDto();
-	// MerchantDto merchant = merchantLoginDto.getMerchant();
-	// loggedInUser.setId(merchant.getId());
-	// loggedInUser.setName(merchant.getName());
-	// loggedInUser.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
-	// response.setUser(loggedInUser);
-	// response.setSupportNumber(resource.getString(BANANAA_SUPPORT));
-	// return response;
-	// }
 }

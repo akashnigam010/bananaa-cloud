@@ -4,13 +4,22 @@ import java.io.Serializable;
 
 public class DetailsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String nameId;
+	private String merchantNameId;
+	private String itemNameId;
 
-	public String getNameId() {
-		return nameId;
+	public String getMerchantNameId() {
+		return merchantNameId;
 	}
 
-	public void setNameId(String nameId) {
-		this.nameId = nameId;
+	public void setMerchantNameId(String merchantNameId) {
+		this.merchantNameId = merchantNameId;
+	}
+
+	public String getItemNameId() {
+		return itemNameId;
+	}
+
+	public void setItemNameId(String itemNameId) {
+		this.itemNameId = itemNameId;
 	}
 }

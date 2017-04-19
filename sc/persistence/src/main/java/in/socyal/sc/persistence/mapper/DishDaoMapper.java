@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.dish.dto.DishDto;
-import in.socyal.sc.api.items.dto.DishDetailsResultDto;
-import in.socyal.sc.api.items.dto.PopularDishesResultDto;
+import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
-import in.socyal.sc.persistence.entity.DishDetailsResult;
 import in.socyal.sc.persistence.entity.DishEntity;
-import in.socyal.sc.persistence.entity.PopularDishesResult;
+import in.socyal.sc.persistence.entity.DishResult;
 
 @Component
 public class DishDaoMapper {
@@ -23,6 +21,9 @@ public class DishDaoMapper {
 	public DishDto map(DishEntity entity, MerchantFilterCriteria merchantCriteria) {
 		DishDto dto = new DishDto();
 		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		dto.setNameId(entity.getNameId());
+		dto.setSuggestionId(entity.getSuggestionId());
 		dto.setCuisineId(entity.getCuisineId());
 		dto.setImageUrl(entity.getImageUrl());
 		dto.setInitialDump(entity.getInitialDump());
@@ -31,10 +32,8 @@ public class DishDaoMapper {
 			MerchantDto merchant = new MerchantDto();
 			merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);
 			dto.setMerchant(merchant);
-		}
-		dto.setName(entity.getName());
-		dto.setNameId(entity.getNameId());
-		dto.setSuggestionId(entity.getSuggestionId());
+			dto.setItemUrl(dto.getMerchant().getNameId() + "/" + dto.getNameId());
+		}		
 		return dto;
 	}
 
@@ -45,23 +44,32 @@ public class DishDaoMapper {
 		}
 		return dtos;
 	}
-	
-	public List<PopularDishesResultDto> map(List<PopularDishesResult> result) {
-		List<PopularDishesResultDto> response = new ArrayList<>();
-		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
-		for (PopularDishesResult dish : result) {
-			PopularDishesResultDto dto = new PopularDishesResultDto();
-			dto.setDish(map(dish.getDish(), merchantCriteria));
-			dto.setRecommendations(dish.getRecommendations());
-			response.add(dto);
+
+	/**
+	 * Projection results mapper
+	 * 
+	 * @param result
+	 * @param merchantFilter
+	 * @return
+	 */
+	public List<DishResultDto> mapDishResults(List<DishResult> result, MerchantFilterCriteria merchantFilter) {
+		List<DishResultDto> response = new ArrayList<>();
+		for (DishResult dish : result) {
+			response.add(map(dish, merchantFilter));
 		}
 		return response;
 	}
-	
-	public DishDetailsResultDto map(DishDetailsResult result) {
-		DishDetailsResultDto dto = new DishDetailsResultDto();
-		MerchantFilterCriteria criteria = new MerchantFilterCriteria(true);
-		dto.setDish(map(result.getDish(), criteria));
+
+	/**
+	 * Projection result mapper
+	 * 
+	 * @param result
+	 * @param merchantFilter
+	 * @return
+	 */
+	public DishResultDto map(DishResult result, MerchantFilterCriteria merchantFilter) {
+		DishResultDto dto = new DishResultDto();
+		dto.setDish(map(result.getDish(), merchantFilter));
 		dto.setRecommendations(result.getRecommendations());
 		return dto;
 	}
