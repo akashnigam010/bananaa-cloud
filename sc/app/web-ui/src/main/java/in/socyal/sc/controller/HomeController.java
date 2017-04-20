@@ -6,16 +6,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.DetailsRequest;
@@ -26,10 +23,12 @@ import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.login.response.LoginStatus;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.UserDetailsResponse;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.user.UserDelegate;
 
 @Controller
 public class HomeController {
@@ -49,6 +48,8 @@ public class HomeController {
 	MerchantDelegate merchantDelegate;
 	@Autowired
 	ItemDelegate itemDelegate;
+	@Autowired
+	UserDelegate userDelegate;
 	@Autowired
 	HttpServletResponse httpResponse;
 	@Autowired
@@ -141,46 +142,21 @@ public class HomeController {
 		modelAndView.addObject("url", getItemMetaUrl(response));
 		return modelAndView;
 	}
-
-	/*
-	 * private ItemDetailsResponse getItemDetails() { ItemDetailsResponse
-	 * response = new ItemDetailsResponse(); response.setId(1);
-	 * response.setName("Joojeh Kebab"); response.setImageUrl(
-	 * "https://s3.ap-south-1.amazonaws.com/bananaimages/joojeh-kebab.jpg");
-	 * response.setMerchantName("Fusion 9"); response.setMerchantShortAddress(
-	 * "Hitech City, Hyderabad"); response.setMerchantUrl("hyderabad/12346");
-	 * response.setRecommendations(23); Review review1 = new Review(); User
-	 * user1 = new User(); user1.setId(1); user1.setName("Shubhankar Saxena");
-	 * user1.setRecommendations(10); user1.setImageUrl(
-	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/15826261_1227586443984803_2081423736824561505_n.jpg?oh=c3604ca3d4199d5561c2eb4e2621ee3d&oe=5902B1FE"
-	 * ); review1.setUser(user1); review1.setDescription(
-	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T"
-	 * ); response.getReviews().add(review1);
-	 * 
-	 * Review review2 = new Review(); User user2 = new User(); user2.setId(2);
-	 * user2.setName("Deepak Gupta"); user2.setRecommendations(14);
-	 * user2.setImageUrl(
-	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16195135_10202582907209226_8892726716716657102_n.jpg?oh=88a1701d79b3ad41916b6dd14fa254a5&oe=5938B99B"
-	 * ); review2.setUser(user2); review2.setDescription(
-	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T"
-	 * ); response.getReviews().add(review2);
-	 * 
-	 * Review review3 = new Review(); User user3 = new User(); user3.setId(3);
-	 * user3.setName("Subhajoy Laskar"); user3.setRecommendations(34);
-	 * user3.setImageUrl(
-	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA"
-	 * ); review3.setUser(user3); review3.setDescription(
-	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow."
-	 * ); response.getReviews().add(review3);
-	 * 
-	 * Review review4 = new Review(); User user4 = new User(); user4.setId(4);
-	 * user4.setName("Ayush Singh"); user4.setRecommendations(34);
-	 * user4.setImageUrl(
-	 * "https://scontent.xx.fbcdn.net/v/t1.0-1/c27.0.160.160/p160x160/15337536_987021314735785_2690017545352587728_n.jpg?oh=de9c0549fb958af561b3bcd33092776c&oe=592F7F57"
-	 * ); review4.setUser(user4); review4.setDescription(
-	 * "The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow. T"
-	 * ); response.getReviews().add(review4); return response; }
-	 */
+	
+	@RequestMapping(value = "/user/{userNameId}", method = RequestMethod.GET)
+	public ModelAndView userDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@PathVariable("userNameId") String userNameId) throws BusinessException {
+		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
+		ModelAndView modelAndView = new ModelAndView("user-detail");
+		UserDetailsResponse response = userDelegate.getUserDetails(userNameId);
+		modelAndView.addObject("detail", response);
+		modelAndView.addObject("loginStatus", loginStatus);
+		modelAndView.addObject("description", "");
+		modelAndView.addObject("fbDescription", "");
+		modelAndView.addObject("title", "");
+		modelAndView.addObject("url", "");
+		return modelAndView;
+	}
 
 	private String getMerchantMetaDescription(MerchantDetailsResponse response) {
 		String description = response.getName() + "; ";
@@ -204,21 +180,21 @@ public class HomeController {
 	}
 
 	private String getItemMetaDescription(ItemDetailsResponse response) {
-		String description = response.getName() + "; ";
-		description += response.getName() + " @ " + response.getMerchantName() + "; ";
+		String description = response.getDish().getName() + "; ";
+		description += response.getDish().getName() + " @ " + response.getDish().getMerchant().getName() + "; ";
 		description += resource.getString(ITEM_DETAIL_DESCRIPTION_1);
-		description += " " + response.getName() + " ";
+		description += " " + response.getDish().getName() + " ";
 		description += resource.getString(ITEM_DETAIL_DESCRIPTION_2);
 		return description;
 	}
 
 	private String getItemMetaTitle(ItemDetailsResponse response) {
-		String title = response.getName() + " @ " + response.getMerchantName() + " ";
+		String title = response.getDish().getName() + " @ " + response.getDish().getMerchant().getName() + " ";
 		title += resource.getString(ITEM_DETAIL_TITLE_END);
 		return title;
 	}
 
 	private String getItemMetaUrl(ItemDetailsResponse response) {
-		return resource.getString(HOME_URL) + "/" + response.getItemUrl();
+		return resource.getString(HOME_URL) + "/" + response.getDish().getItemUrl();
 	}
 }

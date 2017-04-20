@@ -1,6 +1,5 @@
 package in.socyal.sc.persistence.mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
-import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 
@@ -40,33 +38,11 @@ public class RecommendationDaoMapper {
 		dto.setRecommendations(entity.getRecommendations());
 	}
 
-	public void map(RecommendationEntity entity, RecommendationDto dto, boolean mapSubDetails) {
+	public void map(RecommendationEntity entity, RecommendationDto dto) {
 		DishDto dish = dishMapper.map(entity.getDish(), null);
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setDescription(entity.getDescription());
 		dto.setIsActive(entity.getIsActive());
-		if (mapSubDetails) {
-			dto.setCreatedDateTime(entity.getCreatedDateTime());
-			dto.setUpdatedDateTime(entity.getUpdatedDateTime());
-			UserDto user = new UserDto();
-			userMapper.map(entity.getUser(), user);
-			dto.setUser(user);			
-		}		
-	}
-	
-	public List<RecommendationDto> map(List<RecommendationEntity> entities, boolean mapReviewDetails) {
-		List<RecommendationDto> dtos = new ArrayList<>();
-		for (RecommendationEntity entity : entities) {
-			RecommendationDto dto = new RecommendationDto();
-			dto.setDescription(entity.getDescription());
-			dto.setCreatedDateTime(entity.getCreatedDateTime());
-			dto.setUpdatedDateTime(entity.getUpdatedDateTime());
-			UserDto user = new UserDto();
-			userMapper.map(entity.getUser(), user);
-			dto.setUser(user);
-			dtos.add(dto);
-		}
-		return dtos;
 	}
 }

@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,7 +26,7 @@ public class RecommendationEntity implements Serializable {
 	@JoinColumn(name = "DISH_ID")
 	private DishEntity dish;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private UserEntity user;
 	

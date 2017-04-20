@@ -79,7 +79,7 @@ public class RecommendationDao {
 		List<RecommendationEntity> result = (List<RecommendationEntity>) criteria.list();
 		for (RecommendationEntity entity : result) {
 			RecommendationDto recommendation = new RecommendationDto();
-			mapper.map(entity, recommendation, false);
+			mapper.map(entity, recommendation);
 			response.add(recommendation);
 		}
 		return response;
@@ -94,7 +94,7 @@ public class RecommendationDao {
 		RecommendationDto dto = null;
 		if (entity != null) {
 			dto = new RecommendationDto();
-			mapper.map(entity, dto, false);
+			mapper.map(entity, dto);
 		}
 		return dto;		
 	}

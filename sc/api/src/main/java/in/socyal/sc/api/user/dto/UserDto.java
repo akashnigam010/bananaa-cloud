@@ -2,6 +2,9 @@ package in.socyal.sc.api.user.dto;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
+
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 
 public class UserDto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +17,9 @@ public class UserDto implements Serializable {
 	private String email;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
+	private String userUrl;
+	private List<RecommendationDto> recommendations;
+	private Integer totalRecommendations;
 
 	public Integer getId() {
 		return id;
@@ -101,5 +107,29 @@ public class UserDto implements Serializable {
 	public String toString() {
 		return "UserDto [id=" + id + ", uid=" + uid + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", nameId=" + nameId + ", imageUrl=" + imageUrl + ", email=" + email + "]";
+	}
+
+	public String getUserUrl() {
+		return userUrl;
+	}
+
+	public void setUserUrl(String userUrl) {
+		this.userUrl = userUrl;
+	}
+
+	public List<RecommendationDto> getRecommendations() {
+		return recommendations;
+	}
+
+	public void setRecommendations(List<RecommendationDto> recommendations) {
+		this.recommendations = recommendations;
+	}
+
+	public Integer getTotalRecommendations() {
+		return totalRecommendations;
+	}
+
+	public void setTotalRecommendations(Integer totalRecommendations) {
+		this.totalRecommendations = totalRecommendations;
 	}
 }

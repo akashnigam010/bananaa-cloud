@@ -1,31 +1,27 @@
 package in.socyal.sc.api.merchant.response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.response.GenericResponse;
+import in.socyal.sc.api.user.dto.UserDto;
 
-public class ItemDetailsResponse extends GenericResponse implements Serializable {
+public class UserDetailsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private DishDto dish;
+	private UserDto user;
 	private List<RecommendationDto> recommendations;
 	private Integer totalRecommendations;
 
-	public DishDto getDish() {
-		return dish;
+	public UserDto getUser() {
+		return user;
 	}
 
-	public void setDish(DishDto dish) {
-		this.dish = dish;
+	public void setUser(UserDto user) {
+		this.user = user;
 	}
 
 	public List<RecommendationDto> getRecommendations() {
-		if (this.recommendations == null) {
-			this.recommendations = new ArrayList<>();
-		}
 		return recommendations;
 	}
 

@@ -1,10 +1,11 @@
 package in.socyal.sc.api.dish.dto;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
+import java.util.ArrayList;
+import java.util.List;
 
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 
 public class DishDto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,6 +19,8 @@ public class DishDto implements Serializable {
 	private Boolean isActive;
 	private Integer initialDump;
 	private String itemUrl;
+	private List<RecommendationDto> recommendations;
+	private Integer totalRecommendations;
 
 	public Integer getId() {
 		return id;
@@ -98,4 +101,24 @@ public class DishDto implements Serializable {
 	public void setItemUrl(String itemUrl) {
 		this.itemUrl = itemUrl;
 	}
+
+	public List<RecommendationDto> getRecommendations() {
+		if (this.recommendations == null) {
+			this.recommendations = new ArrayList<>();
+		}
+		return recommendations;
+	}
+
+	public void setRecommendations(List<RecommendationDto> recommendations) {
+		this.recommendations = recommendations;
+	}
+
+	public Integer getTotalRecommendations() {
+		return totalRecommendations;
+	}
+
+	public void setTotalRecommendations(Integer totalRecommendations) {
+		this.totalRecommendations = totalRecommendations;
+	}
+
 }

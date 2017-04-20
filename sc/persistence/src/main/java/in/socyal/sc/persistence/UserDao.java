@@ -1,13 +1,7 @@
 package in.socyal.sc.persistence;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,9 +13,12 @@ import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
 @Repository
 public class UserDao {
-	@Autowired SessionFactory sessionFactory;
-	@Autowired UserDaoMapper mapper;
-	@Autowired Clock clock;
+	@Autowired
+	SessionFactory sessionFactory;
+	@Autowired
+	UserDaoMapper mapper;
+	@Autowired
+	Clock clock;
 
 	public UserDao() {
 	}
@@ -30,86 +27,18 @@ public class UserDao {
 		this.sessionFactory = sessionFactory;
 	}
 
-	/**
-	 * This method takes userId as request and responds back with UserDto object
-	 * @param userId
-	 * @return
-	 */
-	public UserDto fetchUser(Integer userId) {
+	public UserDto getUserByNameId(String nameId) {
 		UserDto dto = null;
-		UserEntity entity = (UserEntity) sessionFactory.getCurrentSession().get(UserEntity.class, userId);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("nameId", nameId));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
 		if (entity != null) {
 			dto = new UserDto();
-			mapper.map(entity, dto);
+			mapper.map(entity, dto, true);
 		}
 		return dto;
 	}
-	
-	/**
-	 * This method takes list of userIds as request to give Collection of UserDtos as response
-	 * @param userIds
-	 * @return
-	 */
-	public List<UserDto> fetchUsersByIds(List<Integer> userIds) {
-		List<UserDto> userDtos = new ArrayList<>();
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		criteria.add(Restrictions.in("id", userIds));
-		@SuppressWarnings("unchecked")
-		List<UserEntity> users = criteria.list();
-		for (UserEntity user : users) {
-			UserDto dto = new UserDto();
-			mapper.map(user, dto);
-			userDtos.add(dto);
-		}
-		return userDtos;
-	}
-	
-	/**
-	 * This method takes resultsPerPageRequest to respond back with those many user dto objects
-	 * @param resultsPerPage
-	 * @return
-	 */
-	public List<UserDto> fetchUsers(String searchString, Integer resultsPerPage) {
-		List<UserDto> userDtos = new ArrayList<>();
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		Criterion firstNameCriteria = Restrictions.ilike("firstName", searchString, MatchMode.ANYWHERE);
-		Criterion lastNameCriteria = Restrictions.ilike("lastName", searchString, MatchMode.ANYWHERE);
-		criteria.add(Restrictions.or(firstNameCriteria, lastNameCriteria));
-		criteria.setMaxResults(resultsPerPage);
-		@SuppressWarnings("unchecked")
-		List<UserEntity> users = criteria.list();
-		for (UserEntity user : users) {
-			UserDto dto = new UserDto();
-			mapper.map(user, dto);
-			userDtos.add(dto);
-		}
-		return userDtos;
-	}
 
-	/**
-	 * This method is used to search users based on a search string
-	 * @param currentUserId
-	 * @param searchString
-	 * @param resultsPerPage
-	 * @return
-	 */
-	public List<UserDto> discoverOtherUsersBySearchString(Integer currentUserId, String searchString, Integer resultsPerPage) {
-		List<UserDto> userDtos = null;
-		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(discoverNewUsersQuery());
-    	query.addEntity(UserEntity.class);
-    	query.setInteger("current_user_id", currentUserId);
-    	query.setString("search_string", "%"+searchString+"%");
-    	query.setMaxResults(resultsPerPage);
-		@SuppressWarnings("unchecked")
-		List<UserEntity> users = (List<UserEntity>) query.list();
-		if (users != null && !users.isEmpty()) {
-			userDtos = new ArrayList<>();
-			mapper.map(users, userDtos);
-		}
-
-		return userDtos;
-	}
-	
 	public UserDto getUserByUid(String uid) {
 		UserDto dto = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
@@ -117,49 +46,15 @@ public class UserDao {
 		UserEntity entity = (UserEntity) criteria.uniqueResult();
 		if (entity != null) {
 			dto = new UserDto();
-			mapper.map(entity, dto);
+			mapper.map(entity, dto, false);
 		}
 		return dto;
 	}
-	
+
 	public UserDto saveUser(UserDto user) {
 		UserEntity entity = mapper.map(user);
 		Integer id = (Integer) sessionFactory.getCurrentSession().save(entity);
 		user.setId(id);
 		return user;
 	}
-	
-	/**
-	 * Method for forming SQL query for discovering new users
-	 * @return
-	 */
-    private String discoverNewUsersQuery() {
-    	StringBuilder query = new StringBuilder();
-    	query.append("SELECT * FROM Socyal.USER ");
-    	query.append("where (FIRST_NAME LIKE :search_string OR LAST_NAME LIKE :search_string) ");
-    	query.append("AND ID NOT IN ");
-    	query.append("(SELECT USER_ID FROM Socyal.USER_FOLLOWER_MAPPING WHERE FOLLOWER_USER_ID = :current_user_id) ");
-    	query.append("AND ID != :current_user_id ");
-    	return query.toString();
-    }
-
-	
-//	public UserDto saveOrUpdate(User user, String fbAccessToken) {
-//		UserDto userDto = new UserDto();
-//		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-//		criteria.add(Restrictions.eq("facebookId", user.getId()));
-//		UserEntity entity = (UserEntity) criteria.uniqueResult();
-//
-//		if (entity == null) {
-//			entity = new UserEntity();
-//			mapper.map(user, entity, fbAccessToken);
-//			sessionFactory.getCurrentSession().save(entity);
-//		} else if (StringUtils.equals(entity.getFacebookId(), user.getId())) {
-//			entity.setFacebookToken(fbAccessToken);
-//			entity.setUpdatedDateTime(clock.cal());
-//			sessionFactory.getCurrentSession().update(entity);
-//		}
-//		mapper.map(entity, userDto);
-//		return userDto;
-//	}
 }

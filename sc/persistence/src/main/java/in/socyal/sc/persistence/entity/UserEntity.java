@@ -2,12 +2,15 @@ package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -43,6 +46,9 @@ public class UserEntity implements Serializable {
 
 	@Column(name = "UPDATED_DATETIME")
 	private Calendar updatedDateTime;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<RecommendationEntity> recommendations;
 	
 	public UserEntity() {
 		
@@ -122,5 +128,13 @@ public class UserEntity implements Serializable {
 
 	public void setUpdatedDateTime(Calendar updatedDateTime) {
 		this.updatedDateTime = updatedDateTime;
+	}
+
+	public List<RecommendationEntity> getRecommendations() {
+		return recommendations;
+	}
+
+	public void setRecommendations(List<RecommendationEntity> recommendations) {
+		this.recommendations = recommendations;
 	}
 }
