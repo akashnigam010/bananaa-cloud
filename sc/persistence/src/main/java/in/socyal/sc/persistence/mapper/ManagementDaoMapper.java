@@ -27,7 +27,6 @@ public class ManagementDaoMapper {
 		entity.setSuggestionId(request.getSuggestionId());
 		entity.setImageUrl(request.getImageUrl());
 		entity.setIsActive(request.getIsActive());
-		entity.setInitialDump(request.getRecommendations());
 		return entity;
 	}
 

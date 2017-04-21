@@ -17,7 +17,6 @@ public class DishDto implements Serializable {
 	private MerchantDto merchant;
 	private String imageUrl;
 	private Boolean isActive;
-	private Integer initialDump;
 	private String itemUrl;
 	private List<RecommendationDto> recommendations;
 
@@ -75,14 +74,6 @@ public class DishDto implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Integer getInitialDump() {
-		return initialDump;
-	}
-
-	public void setInitialDump(Integer initialDump) {
-		this.initialDump = initialDump;
 	}
 
 	public String getNameId() {

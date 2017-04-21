@@ -68,6 +68,7 @@ public class RecommendationDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.createAlias("dish", "d");
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		criteria.add(Restrictions.eq("d.isActive", Boolean.TRUE));
 		criteria.add(Restrictions.eq("d.merchant.id", merchantId));
 		List<RecommendationEntity> entities = criteria.list();
 		if (entities == null) {

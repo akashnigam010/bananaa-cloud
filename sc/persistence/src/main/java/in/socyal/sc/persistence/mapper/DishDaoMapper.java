@@ -31,7 +31,6 @@ public class DishDaoMapper {
 		dto.setSuggestionId(entity.getSuggestionId());
 		dto.setCuisineId(entity.getCuisineId());
 		dto.setImageUrl(entity.getImageUrl());
-		dto.setInitialDump(entity.getInitialDump());
 		dto.setIsActive(entity.getIsActive());
 		dto.setRecommendations(mapRecommendations(entity));
 		if (merchantCriteria != null) {

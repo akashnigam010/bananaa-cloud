@@ -47,9 +47,6 @@ public class DishEntity implements Serializable {
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 
-	@Column(name = "INITIAL_DUMP")
-	private Integer initialDump;
-
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dish")
 	private List<RecommendationEntity> recommendations;
 
@@ -115,14 +112,6 @@ public class DishEntity implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Integer getInitialDump() {
-		return initialDump;
-	}
-
-	public void setInitialDump(Integer initialDump) {
-		this.initialDump = initialDump;
 	}
 
 	public String getNameId() {
