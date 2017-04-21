@@ -11,9 +11,9 @@ import in.socyal.sc.api.response.GenericResponse;
 public class ItemDetailsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private DishDto dish;
-	private List<RecommendationDto> recommendations;
+	private List<RecommendationDto> reviews;
 	private Integer totalRecommendations;
-
+	
 	public DishDto getDish() {
 		return dish;
 	}
@@ -22,15 +22,15 @@ public class ItemDetailsResponse extends GenericResponse implements Serializable
 		this.dish = dish;
 	}
 
-	public List<RecommendationDto> getRecommendations() {
-		if (this.recommendations == null) {
-			this.recommendations = new ArrayList<>();
+	public List<RecommendationDto> getReviews() {
+		if (this.reviews == null) {
+			this.reviews = new ArrayList<>();
 		}
-		return recommendations;
+		return reviews;
 	}
 
-	public void setRecommendations(List<RecommendationDto> recommendations) {
-		this.recommendations = recommendations;
+	public void setReviews(List<RecommendationDto> reviews) {
+		this.reviews = reviews;
 	}
 
 	public Integer getTotalRecommendations() {
@@ -39,5 +39,9 @@ public class ItemDetailsResponse extends GenericResponse implements Serializable
 
 	public void setTotalRecommendations(Integer totalRecommendations) {
 		this.totalRecommendations = totalRecommendations;
+	}
+
+	public Integer getReviewCount() {
+		return this.getReviews().size();
 	}
 }

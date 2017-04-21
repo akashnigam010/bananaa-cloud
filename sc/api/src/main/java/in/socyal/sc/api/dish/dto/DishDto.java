@@ -20,7 +20,6 @@ public class DishDto implements Serializable {
 	private Integer initialDump;
 	private String itemUrl;
 	private List<RecommendationDto> recommendations;
-	private Integer totalRecommendations;
 
 	public Integer getId() {
 		return id;
@@ -112,13 +111,4 @@ public class DishDto implements Serializable {
 	public void setRecommendations(List<RecommendationDto> recommendations) {
 		this.recommendations = recommendations;
 	}
-
-	public Integer getTotalRecommendations() {
-		return totalRecommendations;
-	}
-
-	public void setTotalRecommendations(Integer totalRecommendations) {
-		this.totalRecommendations = totalRecommendations;
-	}
-
 }

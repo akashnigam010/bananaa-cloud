@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.items.dto.DishResultDto;
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 
 @Component
 public class ItemMapper implements Serializable {
@@ -44,37 +46,22 @@ public class ItemMapper implements Serializable {
 		response.setItems(items);
 		return response;
 	}
+	
+	public List<RecommendationDto> mapReviews(List<RecommendationDto> recommendations) {
+		List<RecommendationDto> dtos = new ArrayList<>();
+		RecommendationDto dto = null;
+		for (RecommendationDto rcmd : recommendations) {
+			if (StringUtils.isNotBlank(rcmd.getDescription())) {
+				dto = new RecommendationDto();
+				dto.setId(rcmd.getId());
+				dto.setUpdatedDateTime(rcmd.getUpdatedDateTime());
+				dto.setDescription(rcmd.getDescription());
+				dto.setDish(rcmd.getDish());
+				dto.setUser(rcmd.getUser());
+				dtos.add(dto);
+			}			
+		}
+		return dtos;
+	}
 
-	// public ItemDetailsResponse map(DishResultDto dishResult,
-	// List<RecommendationDto> rcmdns) {
-	// ItemDetailsResponse response = new ItemDetailsResponse();
-	// DishDto dish = dishResult.getDish();
-	// response.setId(dish.getId());
-	// response.setImageUrl(dish.getImageUrl());
-	// response.setItemUrl(dish.getItemUrl());
-	// response.setMerchantName(dish.getMerchant().getName());
-	// response.setMerchantShortAddress(dish.getMerchant().getAddress().getLocality().getShortAddress());
-	// response.setMerchantUrl(dish.getMerchant().getMerchantUrl());
-	// response.setName(dish.getName());
-	// response.setRecommendations(dishResult.getRecommendations().intValue());
-	// List<Review> reviews = new ArrayList<>();
-	// for (RecommendationDto rcmdn : rcmdns) {
-	// Review review = new Review();
-	// review.setDate(rcmdn.getCreatedDateTime());
-	// review.setDescription(rcmdn.getDescription());
-	// review.setUser(map(rcmdn.getUser()));
-	// reviews.add(review);
-	// }
-	// response.setReviews(reviews);
-	// return response;
-	// }
-	//
-	// public User map(UserDto dto) {
-	// User user = new User();
-	// user.setId(dto.getId());
-	// user.setName(dto.getName());
-	// user.setImageUrl(dto.getImageUrl());
-	// user.setUserUrl(null);
-	// return user;
-	// }
 }

@@ -47,7 +47,6 @@ public class DishDaoMapper {
 		DishDto dto = new DishDto();
 		dto.setName(entity.getName());
 		dto.setImageUrl(entity.getImageUrl());
-		dto.setTotalRecommendations(entity.getRecommendations().size());
 		MerchantDto merchant = new MerchantDto();
 		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
 		merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);
@@ -60,18 +59,34 @@ public class DishDaoMapper {
 		List<RecommendationDto> dtos = new ArrayList<>();
 		RecommendationDto dto = null;
 		for (RecommendationEntity rcmdEntity : entity.getRecommendations()) {
-			dto = new RecommendationDto();
-			dto.setId(rcmdEntity.getId());
-			dto.setDescription(rcmdEntity.getDescription());
-			dto.setIsActive(rcmdEntity.getIsActive());
-			UserDto userDto = new UserDto();
-			userMapper.map(rcmdEntity.getUser(), userDto, false);
-			userDto.setTotalRecommendations(rcmdEntity.getUser().getRecommendations().size());
-			dto.setUser(userDto);
-			dto.setUpdatedDateTime(rcmdEntity.getUpdatedDateTime());
-			dtos.add(dto);
+			if (rcmdEntity.getIsActive()) {
+				dto = new RecommendationDto();
+				dto.setId(rcmdEntity.getId());
+				dto.setDescription(rcmdEntity.getDescription());
+				dto.setIsActive(rcmdEntity.getIsActive());
+				UserDto userDto = new UserDto();
+				userMapper.map(rcmdEntity.getUser(), userDto, false);
+				//FIXME : Result set must be filtered with active recommendations already
+				userDto.setTotalRecommendations(getActiveRecommendations(rcmdEntity.getUser().getRecommendations()));
+				dto.setUser(userDto);
+				dto.setUpdatedDateTime(rcmdEntity.getUpdatedDateTime());
+				dtos.add(dto);
+			}			
 		}
 		return dtos;
+	}
+	
+	/*
+	 * Remove this method once isActive flag is put in query
+	 */
+	private Integer getActiveRecommendations(List<RecommendationEntity> entities) {
+		int activeRcmdCount = 0;
+		for (RecommendationEntity entity : entities) {
+			if (entity.getIsActive()) {
+				activeRcmdCount ++;
+			}
+		}
+		return activeRcmdCount;
 	}
 
 	public List<DishDto> map(List<DishEntity> entities, MerchantFilterCriteria merchantCriteria) {

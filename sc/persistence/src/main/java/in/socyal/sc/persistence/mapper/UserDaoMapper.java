@@ -41,12 +41,14 @@ public class UserDaoMapper {
 			List<RecommendationDto> dtos = new ArrayList<>();
 			RecommendationDto dto = null;
 			for (RecommendationEntity entity : from.getRecommendations()) {
-				dto = new RecommendationDto();
-				dto.setId(entity.getId());
-				dto.setUpdatedDateTime(entity.getUpdatedDateTime());
-				dto.setDescription(entity.getDescription());
-				dto.setDish(dishMapper.miniMap(entity.getDish()));
-				dtos.add(dto);
+				if (entity.getIsActive()) {
+					dto = new RecommendationDto();
+					dto.setId(entity.getId());
+					dto.setUpdatedDateTime(entity.getUpdatedDateTime());
+					dto.setDescription(entity.getDescription());
+					dto.setDish(dishMapper.miniMap(entity.getDish()));
+					dtos.add(dto);
+				}				
 			}
 			to.setRecommendations(dtos);
 		}

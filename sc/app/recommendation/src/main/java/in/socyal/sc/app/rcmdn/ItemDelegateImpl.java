@@ -49,7 +49,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 		DishDto dto = dishDao.getItemDetails(request.getMerchantNameId(), request.getItemNameId());
 		ItemDetailsResponse response = new ItemDetailsResponse();
 		response.setDish(dto);
-		response.setRecommendations(dto.getRecommendations());
+		response.setReviews(mapper.mapReviews(dto.getRecommendations()));
 		response.setTotalRecommendations(dto.getRecommendations().size());
 		return response;
 	}

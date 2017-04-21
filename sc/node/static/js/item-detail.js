@@ -28,6 +28,11 @@ function getMyItemRecommendation() {
     				  $("#recommendation-id").html(response.recommendation.id);
     				  $("#item-id").html(response.recommendation.itemId);
     				  $("#item-name").html(response.recommendation.name);
+    				  if (response.recommendation.description == '') {
+    					  $("#no-review-text").removeClass('hide');
+    				  } else {
+    					  $("#no-review-text").addClass('hide');    					  
+    				  }
     				  $("#recommend-item-desc").html(response.recommendation.description);
     				  $("#addItemRecommendButton").addClass('hide');
     				  $("#recommend-message").addClass('hide');
@@ -36,6 +41,7 @@ function getMyItemRecommendation() {
     				  $("#recommend-item-desc").html('');
     				  $("#addItemRecommendButton").removeClass('hide');
     				  $("#recommend-message").removeClass('hide');
+    				  $("#no-review-text").addClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);

@@ -52,7 +52,8 @@
                                     <hr/>
                                     <div class="padding-3">
                                         <span class="bold font-1-5" th:text="${detail.totalRecommendations}">22</span>
-                                        <span class="bna-color">RECOMMENDATIONS</span> 
+                                        <span class="bna-color" th:if="${detail.totalRecommendations == 1}">RECOMMENDATION</span>
+                                        <span class="bna-color" th:unless="${detail.totalRecommendations == 1}">RECOMMENDATIONS</span> 
                                     </div>
                                 </div>                                              
                             </div>   
@@ -86,8 +87,8 @@
                                                  	<a th:href="'/' + ${recommendation.dish.merchant.merchantUrl}">
                                                  		<span th:text="'@ ' + ${recommendation.dish.merchant.name}">@ Fusion 9</span>
                                                  	</a>                                                    
-                                                    <span> • </span>
-                                                    <span th:text="${recommendation.dish.totalRecommendations} + ' Recommendations'">14 Recommendations</span>
+                                                    <!-- <span> • </span>
+                                                    <span th:text="${recommendation.dish.totalRecommendations} + ' Recommendations'">14 Recommendations</span> -->
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 review-item-desc" th:text="${recommendation.description}">

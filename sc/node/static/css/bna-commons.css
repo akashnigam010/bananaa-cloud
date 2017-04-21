@@ -417,6 +417,6 @@ ul.typeahead.dropdown-menu {
 }
 /*Input placeholder css ENDS*/
 
-.recommend-item-desc, .review-item-desc {
+.recommend-item-desc, #recommend-item-desc, .review-item-desc {
 	white-space: pre-wrap;
 }

@@ -23,9 +23,15 @@ function loadPopularDishes() {
     	})
     	  .done(function(response) {
     		  var popularItemsHtml = '';
+    		  var subText = '';
     		  if (response.result) {
     			  if (response.items.length > 0) {
     				  for (var i=0; i<response.items.length; i++) {
+    					  if (response.items[i].recommendations == 1) {
+    						  subText = response.items[i].recommendations+' person recommends';
+    					  } else {
+    						  subText = response.items[i].recommendations+' people recommend';
+    					  }    					  
     					  popularItemsHtml += 
     						  '<div class="row">'+
 	    						  '<a class="cursor-pointer" href="'+response.items[i].itemUrl+'">'+
@@ -37,8 +43,7 @@ function loadPopularDishes() {
 				                              '<div class="bold item-name">'+
 				                              		response.items[i].name+
 				                              '</div>'+
-				                               '<div>'+
-				                               		response.items[i].recommendations+' people recommended'+
+				                               '<div>'+ subText +
 				                              '</div>'+
 				                          '</div>'+                                                                           
 				                      '</div>'+

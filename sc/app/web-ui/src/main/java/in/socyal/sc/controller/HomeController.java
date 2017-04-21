@@ -43,6 +43,9 @@ public class HomeController {
 	private static final String ITEM_DETAIL_DESCRIPTION_1 = "item.detail.description.1";
 	private static final String ITEM_DETAIL_DESCRIPTION_2 = "item.detail.description.2";
 	private static final String ITEM_DETAIL_TITLE_END = "item.detail.title.end";
+	private static final String USER_DETAIL_DESCRIPTION_1 = "user.detail.description.1";
+	private static final String USER_DETAIL_DESCRIPTION_2 = "user.detail.description.2";
+	private static final String USER_DETAIL_TITLE_END = "user.detail.title.end";
 
 	@Autowired
 	MerchantDelegate merchantDelegate;
@@ -121,6 +124,7 @@ public class HomeController {
 		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
 		modelAndView.addObject("title", getMerchantMetaTitle(response));
 		modelAndView.addObject("url", getMerchantMetaUrl(response, cityType.getName()));
+		modelAndView.addObject("imageUrl", getMerchantMetaImageUrl(response));
 		return modelAndView;
 	}
 
@@ -129,6 +133,7 @@ public class HomeController {
 			@PathVariable("city") String city, @PathVariable("merchantNameId") String merchantNameId,
 			@PathVariable("itemNameId") String itemNameId) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
+		CityType cityType = CityType.getCity(city);
 		ModelAndView modelAndView = new ModelAndView("item-detail");
 		DetailsRequest detailsRequest = new DetailsRequest();
 		detailsRequest.setItemNameId(itemNameId);
@@ -139,7 +144,8 @@ public class HomeController {
 		modelAndView.addObject("description", getItemMetaDescription(response));
 		modelAndView.addObject("fbDescription", getItemMetaDescription(response));
 		modelAndView.addObject("title", getItemMetaTitle(response));
-		modelAndView.addObject("url", getItemMetaUrl(response));
+		modelAndView.addObject("url", getItemMetaUrl(response, cityType.getName()));
+		modelAndView.addObject("imageUrl", getItemMetaImageUrl(response));
 		return modelAndView;
 	}
 	
@@ -151,10 +157,11 @@ public class HomeController {
 		UserDetailsResponse response = userDelegate.getUserDetails(userNameId);
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("loginStatus", loginStatus);
-		modelAndView.addObject("description", "");
-		modelAndView.addObject("fbDescription", "");
-		modelAndView.addObject("title", "");
-		modelAndView.addObject("url", "");
+		modelAndView.addObject("description", getUserMetaDescription(response));
+		modelAndView.addObject("fbDescription", getUserMetaDescription(response));
+		modelAndView.addObject("title", getUserMetaTitle(response));
+		modelAndView.addObject("url", getUserMetaUrl(response));
+		modelAndView.addObject("imageUrl", getUserMetaImageUrl(response));
 		return modelAndView;
 	}
 
@@ -178,12 +185,16 @@ public class HomeController {
 		url += "/" + city + "/" + response.getNameId();
 		return url;
 	}
+	
+	private String getMerchantMetaImageUrl(MerchantDetailsResponse response) {
+		return response.getImageUrl();
+	}
 
 	private String getItemMetaDescription(ItemDetailsResponse response) {
 		String description = response.getDish().getName() + "; ";
 		description += response.getDish().getName() + " @ " + response.getDish().getMerchant().getName() + "; ";
 		description += resource.getString(ITEM_DETAIL_DESCRIPTION_1);
-		description += " " + response.getDish().getName() + " ";
+		description += " " + response.getDish().getName() + " - ";
 		description += resource.getString(ITEM_DETAIL_DESCRIPTION_2);
 		return description;
 	}
@@ -194,7 +205,35 @@ public class HomeController {
 		return title;
 	}
 
-	private String getItemMetaUrl(ItemDetailsResponse response) {
-		return resource.getString(HOME_URL) + "/" + response.getDish().getItemUrl();
+	private String getItemMetaUrl(ItemDetailsResponse response, String city) {
+		String url = resource.getString(HOME_URL);
+		url += "/" + city + "/" + response.getDish().getItemUrl();
+		return url;
+	}
+	
+	private String getItemMetaImageUrl(ItemDetailsResponse response) {
+		return response.getDish().getImageUrl();
+	}
+	
+	private String getUserMetaDescription(UserDetailsResponse response) {
+		String description = response.getUser().getName() + "; ";
+		description += resource.getString(USER_DETAIL_DESCRIPTION_1);
+		description += " " + response.getUser().getName() + " ";
+		description += resource.getString(USER_DETAIL_DESCRIPTION_2);
+		return description;
+	}
+
+	private String getUserMetaTitle(UserDetailsResponse response) {
+		String title = response.getUser().getName() + " @ ";
+		title += resource.getString(USER_DETAIL_TITLE_END);
+		return title;
+	}
+
+	private String getUserMetaUrl(UserDetailsResponse response) {
+		return resource.getString(HOME_URL) + response.getUser().getUserUrl();
+	}
+	
+	private String getUserMetaImageUrl(UserDetailsResponse response) {
+		return response.getUser().getImageUrl();
 	}
 }
