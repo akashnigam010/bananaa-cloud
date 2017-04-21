@@ -60,5 +60,10 @@
 			<artifactId>recommendation</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>user</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
