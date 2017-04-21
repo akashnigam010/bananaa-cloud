@@ -13,10 +13,7 @@ public class MerchantDto implements Serializable {
 	private ContactDto contact;
 	private AddressDto address;
 	private Set<TimingDto> timings;
-	private Double rating;
 	private Double averageCost;
-	private Integer checkins;
-	private List<String> cuisines;
 	private List<String> types;
 	private String merchantUrl;
 
@@ -60,36 +57,12 @@ public class MerchantDto implements Serializable {
 		this.address = address;
 	}
 
-	public Double getRating() {
-		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
-	}
-
-	public Integer getCheckins() {
-		return checkins;
-	}
-
-	public void setCheckins(Integer checkins) {
-		this.checkins = checkins;
-	}
-
 	public Set<TimingDto> getTimings() {
 		return timings;
 	}
 
 	public void setTimings(Set<TimingDto> timings) {
 		this.timings = timings;
-	}
-
-	public List<String> getCuisines() {
-		return cuisines;
-	}
-
-	public void setCuisines(List<String> cuisines) {
-		this.cuisines = cuisines;
 	}
 
 	public List<String> getTypes() {

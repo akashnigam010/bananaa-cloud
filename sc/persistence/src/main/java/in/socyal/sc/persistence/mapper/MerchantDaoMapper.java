@@ -52,17 +52,8 @@ public class MerchantDaoMapper {
 			dto.setTimings(mapTimingDtos(entity.getTimings()));
 		}
 		
-		if (filter.getMapRating()) {
-			dto.setRating(entity.getRating());
-		}
-		
-		if (filter.getMapCheckins()) {
-			dto.setCheckins(entity.getCheckins());
-		}
-		
 		if (filter.getMapOtherDetails()) {
 			dto.setAverageCost(entity.getAverageCost());
-			dto.setCuisines(parseToList(entity.getCuisine()));
 			dto.setTypes(parseToList(entity.getType()));
 			if (entity.getContact() != null) {
 				ContactDto contactDto = new ContactDto();
