@@ -35,8 +35,8 @@
 	</dependencies>
 	<modules>
 		<module>web-ui</module>
-		<!-- <module>user</module>
-		<module>notification</module> -->
+		<module>user</module>
+		<!-- <module>notification</module> -->
 		<module>login</module>
 		<module>merchant</module>
 		<!-- <module>location</module> -->
