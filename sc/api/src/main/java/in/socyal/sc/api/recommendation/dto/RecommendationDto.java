@@ -6,7 +6,7 @@ import java.util.Calendar;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.user.dto.UserDto;
 
-public class RecommendationDto implements Serializable {
+public class RecommendationDto implements Serializable, Comparable<RecommendationDto> {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private DishDto dish;
@@ -15,7 +15,7 @@ public class RecommendationDto implements Serializable {
 	private Boolean isActive;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -70,5 +70,10 @@ public class RecommendationDto implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public int compareTo(RecommendationDto o) {
+		return o.updatedDateTime.compareTo(this.updatedDateTime);
 	}
 }

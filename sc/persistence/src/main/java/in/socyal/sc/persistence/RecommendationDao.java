@@ -131,6 +131,7 @@ public class RecommendationDao {
 			recommendation.setUser(new UserEntity(userId));
 			recommendation.setIsActive(Boolean.TRUE);
 			recommendation.setCreatedDateTime(cal);
+			recommendation.setUpdatedDateTime(cal);
 		} else {
 			if (StringUtils.isBlank(description)) {
 				return;
