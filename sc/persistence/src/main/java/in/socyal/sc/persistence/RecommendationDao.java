@@ -20,7 +20,6 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
-import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
@@ -35,8 +34,6 @@ public class RecommendationDao {
 	SessionFactory sessionFactory;
 	@Autowired
 	RecommendationDaoMapper mapper;
-	@Autowired
-	Clock clock;
 
 	public RecommendationDao() {
 	}

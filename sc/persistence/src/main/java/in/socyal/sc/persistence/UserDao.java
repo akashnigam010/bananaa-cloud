@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
@@ -17,8 +16,6 @@ public class UserDao {
 	SessionFactory sessionFactory;
 	@Autowired
 	UserDaoMapper mapper;
-	@Autowired
-	Clock clock;
 
 	public UserDao() {
 	}

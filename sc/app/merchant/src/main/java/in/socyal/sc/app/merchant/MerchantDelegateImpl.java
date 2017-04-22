@@ -19,7 +19,6 @@ import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.GetMerchantListRequestDto;
-import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
@@ -36,7 +35,6 @@ import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
-import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.date.util.DayUtil;
 import in.socyal.sc.helper.distance.DistanceHelper;
 import in.socyal.sc.helper.distance.DistanceUnitType;
@@ -54,10 +52,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Autowired
 	DayUtil dayUtil;
 	@Autowired
-	Clock clock;
-	@Autowired
 	RecommendationDao rcmdnDao;
-	@Autowired 
+	@Autowired
 	JwtTokenHelper jwtHelper;
 
 	@Override
@@ -152,8 +148,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			merchant.setMerchantUrl(dto.getMerchantUrl());
 			merchant.setIsOpen(isOpen(dto.getTimings()));
 			merchant.setName(dto.getName());
-			//merchant.setRating(dto.getRating());
-			//merchant.setCheckins(dto.getCheckins());
+			// merchant.setRating(dto.getRating());
+			// merchant.setCheckins(dto.getCheckins());
 			merchant.setDistance(calculateDistance(request, dto.getAddress()));
 			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
 			merchantResponse.add(merchant);
@@ -167,7 +163,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private Boolean isOpen(Set<TimingDto> timings) {
-		Calendar today = clock.cal();
+		Calendar today = Calendar.getInstance();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
 				String timeStr = dayUtil.formatDate(today, DateFormatType.DATE_FORMAT_24_HOUR);
@@ -182,7 +178,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private List<String> getOpeningHours(Set<TimingDto> timings) throws ParseException {
-		Calendar today = clock.cal();
+		Calendar today = Calendar.getInstance();
 		List<String> openingHours = new ArrayList<>();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
@@ -200,7 +196,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return openStr + " to " + closeStr;
 	}
 
-	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response, Integer recommendations) throws ParseException {
+	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response,
+			Integer recommendations) throws ParseException {
 		response.setAverageCost(merchantDto.getAverageCost().intValue() + " for 2");
 		response.setId(merchantDto.getId());
 		response.setNameId(merchantDto.getNameId());
