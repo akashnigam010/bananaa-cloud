@@ -1,6 +1,7 @@
 package in.socyal.sc.app.rcmdn;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		}
 		List<RecommendationDto> result = dao.getMyRecommendations(
 				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
+		//FIXME : remove this manual sorting. put in query directly
+		Collections.sort(result);
 		List<Recommendation> rcmdns = new ArrayList<>();
 		//FIXME : Remove multiple calls for each recommendation to db to fetch total recommendation count
 		for (RecommendationDto dto : result) {
