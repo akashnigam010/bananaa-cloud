@@ -77,7 +77,7 @@ public class JwtHelper {
 	 * @return
 	 * @throws BusinessException 
 	 */
-	public static String createJsonWebTokenForUser(String userId, String firstName) throws BusinessException {
+	public static String createJsonWebTokenForUser(String userId, String firstName, String nameId) throws BusinessException {
 		// Current time and signing algorithm
 		Calendar cal = Calendar.getInstance();
 		HmacSHA256Signer signer;
@@ -96,6 +96,7 @@ public class JwtHelper {
 		JsonObject request = new JsonObject();
 		request.addProperty("userId", userId);
 		request.addProperty("firstName", firstName);
+		request.addProperty("nameId", nameId);
 		request.addProperty("role", RoleType.USER.getRole());
 		JsonObject payload = token.getPayloadAsJsonObject();
 		payload.add("info", request);
@@ -208,8 +209,10 @@ public class JwtHelper {
 				if (RoleType.USER == RoleType.getRole(roleString)) {
 					String userIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("userId").getAsString();
 					String firstNameString = payload.getAsJsonObject("info").getAsJsonPrimitive("firstName").getAsString();
+					String nameIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("nameId").getAsString();
 					tokenInfo.setUserId(userIdString);
 					tokenInfo.setFirstName(firstNameString);
+					tokenInfo.setNameId(nameIdString);
 					tokenInfo.setRole(roleString);
 					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
 					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));

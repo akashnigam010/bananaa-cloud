@@ -83,6 +83,7 @@ public class HomeController {
 			loginStatus.setStatus(true);
 			try {
 				loginStatus.setFirstName(jwtHelper.getFirstName());
+				loginStatus.setNameId(jwtHelper.getNameId());
 			} catch (BusinessException e) {
 				LOG.debug("Firstname not found even after checking the login status");
 				loginStatus.setStatus(false);

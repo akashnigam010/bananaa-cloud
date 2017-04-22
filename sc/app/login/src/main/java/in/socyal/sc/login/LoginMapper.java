@@ -62,6 +62,7 @@ public class LoginMapper {
 		loginUserDto.setFirstName(user.getFirstName());
 		loginUserDto.setLastName(user.getLastName());
 		loginUserDto.setImageUrl(user.getImageUrl());
+		loginUserDto.setNameId(user.getNameId());
 		return loginUserDto;
 	}
 

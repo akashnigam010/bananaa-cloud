@@ -70,8 +70,9 @@ public class LoginService {
 	}
 
 	private void addLoginCookie(LoginResponse response) throws BusinessException {
-		Cookie loginCookie = new Cookie("blc", JwtHelper
-				.createJsonWebTokenForUser(response.getUser().getId().toString(), response.getUser().getFirstName()));
+		Cookie loginCookie = new Cookie("blc",
+				JwtHelper.createJsonWebTokenForUser(response.getUser().getId().toString(),
+						response.getUser().getFirstName(), response.getUser().getNameId()));
 		loginCookie.setPath("/");
 		httpResponse.addCookie(loginCookie);
 

@@ -4,6 +4,7 @@ public class LoginUserDto {
 	private Integer id;
 	private String firstName;
 	private String lastName;
+	private String nameId;
 	private String imageUrl;
 
 	public Integer getId() {
@@ -36,5 +37,13 @@ public class LoginUserDto {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

@@ -29,8 +29,10 @@
                                 <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
                             </button>
                             <ul id="login-dropdown" class="dropdown-menu pull-right">
-                                    <li><a href="javascript:logout();">Logout</a></li>
-                                </ul>
+                                <li><a href="javascript:logout();">Logout</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a th:href="'/user/' + ${loginStatus.nameId}">Profile</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>

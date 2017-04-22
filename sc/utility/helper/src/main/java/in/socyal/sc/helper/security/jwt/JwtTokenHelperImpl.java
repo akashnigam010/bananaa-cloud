@@ -59,6 +59,7 @@ public class JwtTokenHelperImpl implements JwtTokenHelper {
 		return Integer.valueOf(userDetails.getUserId());
 	}
 	
+	@Override
 	public String getFirstName() throws BusinessException {
 		if (!isUserLoggedIn()) {
 			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
@@ -66,6 +67,16 @@ public class JwtTokenHelperImpl implements JwtTokenHelper {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();
 		return userDetails.getFirstName();
+	}
+	
+	@Override
+	public String getNameId() throws BusinessException {
+		if (!isUserLoggedIn()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		AuthenticatedUser userDetails = (AuthenticatedUser) authentication.getPrincipal();
+		return userDetails.getNameId();
 	}
 
 	@Override

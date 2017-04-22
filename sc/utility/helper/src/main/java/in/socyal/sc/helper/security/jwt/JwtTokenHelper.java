@@ -7,5 +7,6 @@ public interface JwtTokenHelper {
 	public boolean isGuestLoggedIn();
 	public Integer getUserId() throws BusinessException;
 	public String getFirstName() throws BusinessException;
+	public String getNameId() throws BusinessException;
 	public void setAuthUser(String jwtToken);
 }
