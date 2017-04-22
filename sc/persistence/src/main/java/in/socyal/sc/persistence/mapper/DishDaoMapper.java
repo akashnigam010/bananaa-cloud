@@ -12,6 +12,7 @@ import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.date.util.TimestampHelper;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.DishResult;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
@@ -22,6 +23,8 @@ public class DishDaoMapper {
 	MerchantDaoMapper merchantMapper;
 	@Autowired
 	UserDaoMapper userMapper;
+	@Autowired
+	TimestampHelper timestampHelper;
 
 	public DishDto map(DishEntity entity, MerchantFilterCriteria merchantCriteria) {
 		DishDto dto = new DishDto();
@@ -69,6 +72,7 @@ public class DishDaoMapper {
 				userDto.setTotalRecommendations(getActiveRecommendations(rcmdEntity.getUser().getRecommendations()));
 				dto.setUser(userDto);
 				dto.setUpdatedDateTime(rcmdEntity.getUpdatedDateTime());
+				dto.setTimeDiff(timestampHelper.getTimeDiffString(rcmdEntity.getUpdatedDateTime().getTimeInMillis()));
 				dtos.add(dto);
 			}			
 		}

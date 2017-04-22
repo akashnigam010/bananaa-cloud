@@ -15,6 +15,7 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 	private Boolean isActive;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
+	private String timeDiff;
 
 	public Integer getId() {
 		return id;
@@ -75,5 +76,13 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 	@Override
 	public int compareTo(RecommendationDto o) {
 		return o.updatedDateTime.compareTo(this.updatedDateTime);
+	}
+
+	public String getTimeDiff() {
+		return timeDiff;
+	}
+
+	public void setTimeDiff(String timeDiff) {
+		this.timeDiff = timeDiff;
 	}
 }

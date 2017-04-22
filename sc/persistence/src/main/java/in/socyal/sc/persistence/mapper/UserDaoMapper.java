@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.date.util.TimestampHelper;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 
@@ -17,6 +18,8 @@ import in.socyal.sc.persistence.entity.UserEntity;
 public class UserDaoMapper {
 	@Autowired
 	DishDaoMapper dishMapper;
+	@Autowired
+	TimestampHelper timestampHelper;
 
 	public UserEntity map(UserDto from) {
 		Calendar cal = Calendar.getInstance();
@@ -47,6 +50,7 @@ public class UserDaoMapper {
 					dto = new RecommendationDto();
 					dto.setId(entity.getId());
 					dto.setUpdatedDateTime(entity.getUpdatedDateTime());
+					dto.setTimeDiff(timestampHelper.getTimeDiffString(entity.getUpdatedDateTime().getTimeInMillis()));
 					dto.setDescription(entity.getDescription());
 					dto.setDish(dishMapper.miniMap(entity.getDish()));
 					dtos.add(dto);
