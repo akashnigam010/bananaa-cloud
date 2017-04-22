@@ -235,7 +235,7 @@ function handleReview(desc) {
 
 function removeRecommendation() {
 	$('#recommendModal').modal('hide');
-	$('#recommendModal').on('hidden.bs.modal', function() {
+	setTimeout(function(){
 		$("#alertModal").find('.main-area').show();
 		$("#alertModal").find('.loader').addClass('hide');
 		$("#alertText").html('Are you sure you want to remove ' + rcmdOb.name + ' from your recommendations ?');
@@ -268,6 +268,5 @@ function removeRecommendation() {
         		  }	          		  
           	  });
 		});
-		$('#recommendModal').off('hidden.bs.modal');	
-	})
+	},500);
 }
