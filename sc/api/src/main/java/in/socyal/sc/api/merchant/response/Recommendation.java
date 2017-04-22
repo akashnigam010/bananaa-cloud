@@ -7,6 +7,7 @@ public class Recommendation  {
 	private String description;
 	private Integer totalRcmdns;
 	private String imageUrl;
+	private String timeDiff;
 
 	public Integer getId() {
 		return id;
@@ -54,5 +55,13 @@ public class Recommendation  {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getTimeDiff() {
+		return timeDiff;
+	}
+
+	public void setTimeDiff(String timeDiff) {
+		this.timeDiff = timeDiff;
 	}
 }

@@ -36,12 +36,15 @@ function getMyItemRecommendation() {
     				  $("#recommend-item-desc").html(response.recommendation.description);
     				  $("#addItemRecommendButton").addClass('hide');
     				  $("#recommend-message").addClass('hide');
+    				  $("#recommend-time").html(response.recommendation.timeDiff);
+    				  $("#recommend-time").removeClass('hide');
     				  activateUpdateRcmdModal();
     			  } else {
     				  $("#recommend-item-desc").html('');
     				  $("#addItemRecommendButton").removeClass('hide');
     				  $("#recommend-message").removeClass('hide');
     				  $("#no-review-text").addClass('hide');
+    				  $("#recommend-time").addClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);

@@ -90,6 +90,9 @@ function getMyRecommendations() {
                                                                 '</div>'+
                                                            '</div>'+
                                                            getDescriptionHtml(response.recommendations[i].description)+
+                                                           '<div class="light float-left font-0-8">'+
+                                                           		response.recommendations[i].timeDiff+
+                                                           '</div>'+
                                                        '</div>';
 
     				  }

@@ -121,6 +121,11 @@
                                         </div>
                                     </div>                                
                                 </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p id="recommend-time" class="light font-0-8 hide">just now</p>
+                                    </div>
+                                </div>
                             </div>                            
                         </div>                       
                     </div>
@@ -140,7 +145,7 @@
                                         <div class="col-xs-12 recommended-item light">
                                             No one has added a review yet. 
                                             <br />
-                                            Add a mini review and let others know why <b th:text="${detail.dish.name}">Some Dish</b> stands out as a recommendation.
+                                            Add a mini review and let others know why <b th:text="${detail.dish.name}">Some Dish</b> @ <span th:text="${detail.dish.merchant.name}"></span> stands out to be a recommendation.
                                             <br />
                                             <br />
                                             <!-- Add one now. -->                                            
