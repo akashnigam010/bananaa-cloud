@@ -25,6 +25,10 @@ body {
     font-size: 13px;
 }
 
+.body-color {
+	color: #444;	
+}
+
 @media (max-width: 480px) {
     .loader {
         margin-left: 40%;
