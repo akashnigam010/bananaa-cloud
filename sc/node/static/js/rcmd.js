@@ -70,6 +70,7 @@ function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
 	$("#modal-item-id").val(itemId);
 	$("#modal-item-name").val(name);
 	$("#modal-item-desc").val(desc);
+	$("#merchant-name-title").html(' @ '+ merchantName);
 	if (desc != '') {
 		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
 	} else {
@@ -102,6 +103,7 @@ function openItemRecommendationModal(itemId, name, desc) {
 	$("#modal-item-id").val(itemId);
 	$("#modal-item-name").val(name);
 	$("#modal-item-desc").val(desc);
+	$("#merchant-name-title").html('');
 	if (desc != '') {
 		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
 	} else {

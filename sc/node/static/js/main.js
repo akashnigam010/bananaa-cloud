@@ -2,11 +2,13 @@ var isMobile = false;
 var rcmdOb = {};
 var fs = [];
 var merchantId;
+var merchantName;
 var itemId;
 var itemName;
 var page;
 $(document).ready(function() {
 	merchantId = $('#merchantId').val();
+	merchantName = $('#merchantName').val();
 	itemId = $('#itemId').val();
 	itemName = $('#itemName').val();
 	isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
