@@ -1,3 +1,6 @@
+-- User Default INSERT
+INSERT INTO `bna`.`user` (`UID`, `FIRST_NAME`, `LAST_NAME`, `NAME_ID`) VALUES ('r6adeXdfhIOBU9RoK8Zi4l3XoS92', 'Bananaa', 'User', 'bananaa-user');
+
 -- Locality
 INSERT INTO `bna`.`LOCALITY` (`NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('Gachibowli', 'Hyderabad', '17.445118', '78.351962');
 INSERT INTO `bna`.`LOCALITY` (`NAME`, `CITY`, `LATITUDE`, `LONGITUDE`) VALUES ('Madhapur', 'Hyderabad', '17.441312', '78.390101');

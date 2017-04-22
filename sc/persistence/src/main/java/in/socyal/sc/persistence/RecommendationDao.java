@@ -29,6 +29,7 @@ import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class RecommendationDao {
+	private static final Integer PAGE = 1;
 	private static final Integer RESULTS_PER_PAGE = 5;
 	@Autowired
 	SessionFactory sessionFactory;
@@ -57,6 +58,9 @@ public class RecommendationDao {
 		projList.add(Projections.property("d.merchant").as("merchant"));
 		criteria.setProjection(projList);
 		criteria.addOrder(Order.desc("recommendations"));
+		int firstResult = ((PAGE - 1) * RESULTS_PER_PAGE);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
 		criteria.setResultTransformer(Transformers.aliasToBean(TrendingMerchantResultEntity.class));
 		List<TrendingMerchantResultEntity> result = (List<TrendingMerchantResultEntity>) criteria.list();
 		mapper.map(result, response);
