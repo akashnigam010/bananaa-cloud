@@ -81,6 +81,7 @@ function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
 		$("#recommendSubmit").off('mouseup');
 		$("#recommendSubmit").on('mouseup', updateRecommendation);
 		$('#modal-item-name').prop('disabled', true);
+		$('#modal-item-name').addClass('light');
 		$("#modal-item-name-label").addClass('hide');
 	} else {
 		$("#removeRecommendation").addClass('hide');
@@ -88,6 +89,7 @@ function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
 		$("#recommendSubmit").off('mouseup');
 		$("#recommendSubmit").on('mouseup', addRecommendation);
 		$('#modal-item-name').prop('disabled', false);
+		$('#modal-item-name').removeClass('light');
 		$("#modal-item-name-label").removeClass('hide');
 	}
 	$('#recommendModal').find('.error-label').addClass('hide');
