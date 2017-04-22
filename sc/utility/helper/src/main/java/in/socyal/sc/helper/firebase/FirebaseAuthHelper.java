@@ -2,6 +2,7 @@ package in.socyal.sc.helper.firebase;
 
 import java.io.IOException;
 
+import org.jboss.logging.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Service
 public class FirebaseAuthHelper {
+	private static final Logger LOG = Logger.getLogger(FirebaseAuthHelper.class);
 	private static final String GET_LOGIN_URL = "http://localhost:8443/getUserDetails";
 	private static final String GET_UID_URL = "http://localhost:8443/verifyIdToken";
 
@@ -46,10 +48,10 @@ public class FirebaseAuthHelper {
 			String answer = restTemplate.postForObject(GET_LOGIN_URL, entity, String.class);
 			return mapper.readValue(answer, FirebaseUser.class);
 		} catch (ResourceAccessException e) {
-			System.out.println("************** NODE SERVER DOWN **************");
+			LOG.debug("************** NODE SERVER DOWN **************");
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		} catch (IOException e) {
-			System.out.println("Error occurred while parsing response from Firebase");
+			LOG.debug("Error occurred while parsing response from Firebase");
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
 
@@ -78,10 +80,10 @@ public class FirebaseAuthHelper {
 			String answer = restTemplate.postForObject(GET_UID_URL, entity, String.class);
 			return mapper.readValue(answer, Uid.class);
 		} catch (ResourceAccessException e) {
-			System.out.println("************** NODE SERVER DOWN **************");
+			LOG.debug("************** NODE SERVER DOWN **************");
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		} catch (IOException e) {
-			System.out.println("Error occurred while parsing response from Firebase");
+			LOG.debug("Error occurred while parsing response from Firebase");
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
 

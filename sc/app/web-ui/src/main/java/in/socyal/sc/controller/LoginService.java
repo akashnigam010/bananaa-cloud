@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,14 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.login.dto.LoginUserDto;
 import in.socyal.sc.api.login.request.IdTokenRequest;
-import in.socyal.sc.api.login.request.BusinessLoginRequest;
-import in.socyal.sc.api.login.request.LoginRequest;
-import in.socyal.sc.api.login.response.BusinessLoginResponse;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.core.validation.LoginValidator;
-import in.socyal.sc.helper.JsonHelper;
+import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.LoginDelegate;
 
 @RestController
@@ -35,7 +33,7 @@ public class LoginService {
 	LoginValidator validator;
 	@Autowired
 	HttpServletResponse httpResponse;
-	@Autowired 
+	@Autowired
 	HttpServletRequest httpRequest;
 
 	@RequestMapping(value = "/skipLogin", method = RequestMethod.GET, headers = "Accept=application/json")
@@ -49,44 +47,47 @@ public class LoginService {
 			return helper.failure(response, e);
 		}
 	}
-	
-	@RequestMapping(value = "/businessLogin", method = RequestMethod.POST, headers = "Accept=application/json")
-	public BusinessLoginResponse businessLogin(@RequestBody BusinessLoginRequest request) {
-		BusinessLoginResponse response = new BusinessLoginResponse();
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
+	public LoginResponse login(@RequestBody IdTokenRequest request) {
+		LoginResponse response = new LoginResponse();
 		try {
-			LOG.info("Business login request");
-			validator.validateBusinessLoginRequest(request);
-			response = delegate.businessLogin(request);
+			response = delegate.firebaseLogin(request);
+			addLoginCookie(response);
+			addLocationCookie();
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
 		}
 	}
-	
-	@RequestMapping(value = "/fbLogin", method = RequestMethod.POST, headers = "Accept=application/json")
-	public LoginResponse fbLogin(@RequestBody LoginRequest request) {
-		JsonHelper.logRequest(request, LoginService.class, "/login/fbLogin");
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET, headers = "Accept=application/json")
+	public LoginResponse logout() {
 		LoginResponse response = new LoginResponse();
-		try {
-			validator.validateFbLoginRequest(request);
-			response = delegate.fbLogin(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
+		new SecurityContextLogoutHandler().logout(httpRequest, null, null);
+		removeLoginCookie();
+		return helper.success(response);
 	}
-	
-	@RequestMapping(value = "/loginWithFirebase", method = RequestMethod.POST, headers = "Accept=application/json")
-	public LoginResponse loginWithFirebase(@RequestBody IdTokenRequest request) {
-		LoginResponse response = new LoginResponse();
-		Cookie cookie = new Cookie("bna-login-cookie", "bananaa-auth-token");
-		cookie.setPath("/");
-		httpResponse.addCookie(cookie);
-		try {
-			delegate.firebaseLogin(request);
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
+
+	private void addLoginCookie(LoginResponse response) throws BusinessException {
+		Cookie loginCookie = new Cookie("blc",
+				JwtHelper.createJsonWebTokenForUser(response.getUser().getId().toString(),
+						response.getUser().getFirstName(), response.getUser().getNameId()));
+		loginCookie.setPath("/");
+		httpResponse.addCookie(loginCookie);
+
+	}
+
+	private void addLocationCookie() {
+		Cookie cityCookie = new Cookie("city", CityType.HYDERABAD.getName());
+		cityCookie.setPath("/");
+		httpResponse.addCookie(cityCookie);
+	}
+
+	private void removeLoginCookie() {
+		Cookie loginCookie = new Cookie("blc", "");
+		loginCookie.setPath("/");
+		httpResponse.addCookie(loginCookie);
+
 	}
 }

@@ -4,35 +4,35 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head th:replace="fragments/head :: head"></head>
-<link href="/css/item-detail.css" rel="stylesheet"></link>
-<link href="/css/item-detail-mini.css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
+<link href="http://cdn.bananaa.in/css/item-detail.css" type="text/css" rel="stylesheet"></link>
+<link href="http://cdn.bananaa.in/css/item-detail-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
 
 <body>
-	<script type="text/javascript" src="/js/login.js"></script>
-	<script type="text/javascript">
-		window.onload = function() {
-			initApp();
-		};
-	</script>
+	<script type="text/javascript" src="http://cdn.bananaa.in/js/login.js"></script>
 	<div class="container-fluid">
-
-		<div class="hide" id="primaryImageTemp" th:text="${detail.imageUrl}"></div>
+		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
+		<div class="hide" id="primaryImageTemp" th:text="${detail.dish.imageUrl}"></div>
         <div class="row primary-image-banner">
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-6">
-                        <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p>
+                        <p class="simpson header-icon cursor-pointer">
+                            <img src="http://cdn.bananaa.in/img/arrow_back.svg" onclick="window.history.back()" />
+                            <span onclick="location.href='/'" style="margin-left: 5%;">bananaa</span>
+                        </p>
                     </div>
                     <div class="col-xs-6">
                         <div class="btn-group login-info pull-right">
                             <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <span id="login-info">Login</span> <span class="caret"></span>                        
+                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
                             </button>
                             <ul id="login-dropdown" class="dropdown-menu pull-right">
-                                    <li><a href="javascript:logout();">Logout</a></li>
-                                </ul>
+                                <li><a href="javascript:logout();">Logout</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a th:href="'/user/' + ${loginStatus.nameId}">Profile</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -48,10 +48,12 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="row padding-left">
-                                            <div class="col-xs-12 bold font-2" th:text="${detail.name}">
+                                            <div class="col-xs-12 bold font-2" th:text="${detail.dish.name}">
                                             </div>
-                                             <div class="col-xs-12 light" th:text="'@ ' + ${detail.merchantName} + ', ' + ${detail.merchantShortAddress}">
-                                            </div>                                            
+                                            <a th:href="'/' + ${detail.dish.merchant.merchantUrl}">
+	                                            <div class="col-xs-12 light" th:text="'@ ' + ${detail.dish.merchant.name} + ', ' + ${detail.dish.merchant.address.locality.shortAddress}">
+	                                            </div>
+                                            </a>                                       
                                         </div>
                                     </div>
                                 </div>
@@ -60,12 +62,15 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="row padding-left" style="padding-top: 2%;">
-                                            <div class="col-xs-12 bold font-1-5" th:text="${detail.recommendations}">
+                                            <div class="col-xs-12 bold font-1-5" th:text="${detail.totalRecommendations}">
                                                 
                                             </div>
-                                             <div class="col-xs-12 bna-color">
+                                            <div class="col-xs-12 bna-color" th:if="${detail.totalRecommendations == 1}">
+                                                RECOMMENDATION
+                                            </div>
+                                            <div class="col-xs-12 bna-color" th:unless="${detail.totalRecommendations == 1}">
                                                 RECOMMENDATIONS
-                                            </div>                                            
+                                            </div>                                
                                         </div>
                                     </div>
                                 </div>
@@ -76,8 +81,9 @@
                                         <div class="row padding-left">
                                             <div class="col-xs-12 padding-top">
                                                 <hr />
-                                                <span class="bold font-1-5" th:text="${detail.recommendations}"></span>
-                                            <span class="bna-color">RECOMMENDATIONS</span> 
+                                                <span class="bold font-1-5" th:text="${detail.totalRecommendations}"></span>
+                                            	<span class="bna-color" th:if="${detail.totalRecommendations == 1}">RECOMMENDATION</span>
+                                            	<span class="bna-color" th:unless="${detail.totalRecommendations == 1}">RECOMMENDATIONS</span> 
                                             </div>
                                         </div>
                                     </div>
@@ -90,51 +96,86 @@
 
                 <div class="row">
                     <div class="col-xs-12 col-sm-4 col-sm-push-8 white-background details-wrapper" style="margin-top: 10px;">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12 my-item-recommendation-wrapper">
                             <div class="row" style="padding: 2%;">
-                                <div class="col-xs-12 detail-type-padding">
-                                    <div class="detail-type-2">If it soothes your taste buds, let us know..</div>
-                                </div>                                
+                                <div class="col-xs-12 font-1-5 bna-color padding-3">
+                                    I recommend &nbsp; <img src="http://cdn.bananaa.in/img/smiley_love.svg" />
+                                </div>                               
                             </div>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="row align-center addRecommendButtonDiv">
-                                        <button id="addRecommendButton" class="bna-button recommend-button">Add a recommendation</button>
+                            <div class="loader"></div>
+                            <div class="my-item-recommendation-section hide">
+                                <div class="my-item-recommendation row" style="padding: 2%;">
+                                    <div class="col-xs-12 detail-type-padding">
+                                    	<span id="recommendation-id" class="hide">21</span>
+                                        <span id="item-id" class="hide">11</span>
+                                        <span id="item-name" class="hide">Joojeh Kebab</span>
+                                        <div id="recommend-item-desc" class="detail-type-2"></div>
+                                        <div id="no-review-text" class="detail-type-2 hide">You recommend this! Click to add a mini review.</div>
+                                        <div id="recommend-message" class="detail-type-2">If it soothes your taste buds, let us know..</div>
+                                    </div>                                
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row align-center addRecommendButtonDiv">
+                                            <button id="addItemRecommendButton" class="bna-button recommend-button">Add recommendation</button>
+                                        </div>
+                                    </div>                                
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p id="recommend-time" class="light font-0-8 hide">just now</p>
                                     </div>
-                                </div>                                
-                            </div>
-                        </div>                        
+                                </div>
+                            </div>                            
+                        </div>                       
                     </div>
                     <div class="detail-about">
                         <div class="col-xs-12 col-sm-8 col-sm-pull-4 white-background details-wrapper" style="margin-top: 10px;">
-                            <div class="col-xs-12">
-                                <div class="row">
+                            <div class="row">
+                                <div class="col-xs-12">
                                     <div class="col-xs-12 font-1-5 bna-color padding-3">
                                         Reviews
                                     </div>    
-                                </div>
-                                <div class="row recommended-wrapper">
-                                    <div class="col-xs-12 reviews">
-                                        <div class="row" th:each="review, iterStat : ${detail.reviews}">
-                                            <div class="col-xs-12 review-item-top">
-                                                <div class="float-left" style="object-fit: cover;">
-                                                    <img class="user-icon" th:src="${review.user.imageUrl}" />
-                                                </div>
-                                                <div class="float-left item-desc-wrapper">
-                                                    <div class="bold item-name" th:text="${review.user.name}">
-                                                        
-                                                    </div>
-                                                     <div class="light" th:text="${review.user.recommendations} + ' recommendations'">
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 review-item-desc" th:text="${review.desc}">
-                                            </div>
+                                </div>                                   
+                            </div>
+                            <hr />
+                            <div class="row recommended-wrapper">
+                                <div class="col-xs-12">
+                                	<div class="my-recommendations" th:if="${detail.reviewCount == 0}">
+                                        <div class="col-xs-12 recommended-item light">
+                                            No one has added a review yet. 
+                                            <br />
+                                            Add a mini review and let others know why <b th:text="${detail.dish.name}">Some Dish</b> @ <span th:text="${detail.dish.merchant.name}"></span> stands out to be a recommendation.
+                                            <br />
+                                            <br />
+                                            <!-- Add one now. -->                                            
                                         </div>
                                     </div>
-                                </div>                                              
-                            </div>                        
+                                    <div class="my-recommendations" th:unless="${detail.reviewCount == 0}">                                    
+                                        <div class="col-xs-12 recommended-item" th:each="review, iterStat : ${detail.reviews}">
+                                            <div class="float-left" style="object-fit: cover;">
+                                                <a th:href="${review.user.userUrl}">
+                                                	<img class="user-icon" th:src="${review.user.imageUrl}" />
+                                                </a>
+                                            </div>
+                                            <div class="float-left item-desc-wrapper">
+                                                <div class="bold item-name">
+                                                	<a th:href="${review.user.userUrl}" th:text="${review.user.name}"></a>
+                                                </div>
+                                                <div class="light" th:if="${review.user.totalRecommendations == 1}" th:text="${review.user.totalRecommendations} + ' Recommendation'">
+                                                </div>
+                                                <div class="light" th:unless="${review.user.totalRecommendations == 1}" th:text="${review.user.totalRecommendations} + ' Recommendations'">                                                    
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 review-item-desc" th:text="${review.description}">                                                
+                                            </div>
+                                            <div class="light float-left font-0-8" th:text="${review.timeDiff}">
+                                                just now
+                                            </div>
+                                        </div>                                                                                                                     
+                                    </div>                                   
+                                </div>
+                            </div>                      
                         </div>                                               
                     </div> 
                 </div>
@@ -150,8 +191,11 @@
 		<div lang="en" th:replace="fragments/footer :: footer"></div>
 
 	</div>
-	<input type="hidden" id="accessToken" th:value='${accessToken}' />
-	<script src="/js/detail.js"></script>
+	<input type="hidden" id="itemId" th:value='${detail.dish.id}' />
+	<input type="hidden" id="itemName" th:value='${detail.dish.name}' />
+	<input type="hidden" id="merchantName" th:value='${detail.dish.merchant.name}' />
+	<script src="http://cdn.bananaa.in/js/item-detail.js"></script>
+	<script src="http://cdn.bananaa.in/js/rcmd.js"></script>
 </body>
 
 </html>

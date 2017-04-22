@@ -1,63 +1,63 @@
 package in.socyal.sc.persistence.mapper;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.restfb.types.User;
-
+import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.date.util.Clock;
+import in.socyal.sc.date.util.TimestampHelper;
+import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 
 @Component
 public class UserDaoMapper {
-	@Autowired Clock clock;
+	@Autowired
+	DishDaoMapper dishMapper;
+	@Autowired
+	TimestampHelper timestampHelper;
 
-	public void map(UserEntity from, UserDto to) {
+	public UserEntity map(UserDto from) {
+		Calendar cal = Calendar.getInstance();
+		UserEntity to = new UserEntity();
+		to.setUid(from.getUid());
+		to.setFirstName(from.getFirstName());
+		to.setLastName(from.getLastName());
+		to.setNameId(from.getNameId());
 		to.setEmail(from.getEmail());
-		to.setFirstName(from.getFirstName());
-		to.setLastName(from.getLastName());
-		to.setId(from.getId());
 		to.setImageUrl(from.getImageUrl());
-		to.setRegistrationId(from.getRegistrationId());
+		to.setCreatedDateTime(cal);
+		to.setUpdatedDateTime(cal);
+		return to;
 	}
 
-	public void map(User from, UserEntity to, String fbAccessToken) {
-		if (StringUtils.isNotEmpty(from.getEmail())) {
-			to.setEmail(from.getEmail());
-		}
-		to.setFacebookId(from.getId());
-		to.setFacebookLink(from.getLink());
-		to.setFirstName(from.getFirstName());
-		to.setLastName(from.getLastName());
-		to.setGender(from.getGender());
-		to.setImageUrl(from.getPicture().getUrl());
-		to.setFacebookToken(fbAccessToken);
-		to.setCreatedDateTime(clock.cal());
-	}
-
-	public void map(UserDto from, UserEntity to, String fbAccessToken) {
+	public void map(UserEntity from, UserDto to, Boolean mapRecommendations) {
 		to.setId(from.getId());
-		if (StringUtils.isNotEmpty(from.getEmail())) {
-			to.setEmail(from.getEmail());
-		}
-		to.setFacebookId(from.getFacebookId());
-		to.setFacebookLink(from.getFacebookLink());
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
-		to.setGender(from.getGender());
 		to.setImageUrl(from.getImageUrl());
-		to.setFacebookToken(fbAccessToken);
-	}
-
-	public void map(List<UserEntity> users, List<UserDto> userDtos) {
-		for (UserEntity user : users) {
-			UserDto userDto = new UserDto();
-			map(user, userDto);
-			userDtos.add(userDto);
+		to.setUserUrl("/user/" + from.getNameId());
+		to.setNameId(from.getNameId());
+		if (mapRecommendations) {
+			List<RecommendationDto> dtos = new ArrayList<>();
+			RecommendationDto dto = null;
+			for (RecommendationEntity entity : from.getRecommendations()) {
+				if (entity.getIsActive()) {
+					dto = new RecommendationDto();
+					dto.setId(entity.getId());
+					dto.setUpdatedDateTime(entity.getUpdatedDateTime());
+					dto.setTimeDiff(timestampHelper.getTimeDiffString(entity.getUpdatedDateTime().getTimeInMillis()));
+					dto.setDescription(entity.getDescription());
+					dto.setDish(dishMapper.miniMap(entity.getDish()));
+					dtos.add(dto);
+				}				
+			}
+			Collections.sort(dtos);
+			to.setRecommendations(dtos);
 		}
 	}
 }

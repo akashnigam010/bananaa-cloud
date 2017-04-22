@@ -18,4 +18,13 @@ public enum CityType {
 	public String getName() {
 		return name;
 	}
+
+	public static CityType getCity(String name) {
+		for (CityType type : CityType.values()) {
+			if (type.getName().equalsIgnoreCase(name)) {
+				return type;
+			}
+		}
+		return null;
+	}
 }

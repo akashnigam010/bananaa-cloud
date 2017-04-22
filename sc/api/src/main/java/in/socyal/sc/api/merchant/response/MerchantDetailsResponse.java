@@ -3,7 +3,6 @@ package in.socyal.sc.api.merchant.response;
 import java.io.Serializable;
 import java.util.List;
 
-import in.socyal.sc.api.merchant.dto.Location;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class MerchantDetailsResponse extends GenericResponse implements Serializable {
@@ -12,19 +11,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private String nameId;
 	private String name;
 	private String shortAddress;
-	private Integer checkins;
 	private String imageUrl;
-	private Double rating;
-	private Boolean isOpen;
-	private Double distance;
 	private List<String> openingHours;
-	private List<String> cuisines;
 	private List<String> type;
 	private String averageCost;
 	private String longAddress;
-	private Location location;
-	private Integer previousCheckinCount;
 	private String phone;
+	private Integer recommendations;
 
 	public Integer getId() {
 		return id;
@@ -50,52 +43,12 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.shortAddress = shortAddress;
 	}
 
-	public Integer getCheckins() {
-		return checkins;
-	}
-
-	public void setCheckins(Integer checkins) {
-		this.checkins = checkins;
-	}
-
 	public String getImageUrl() {
 		return imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public Double getRating() {
-		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
-	}
-
-	public Boolean getIsOpen() {
-		return isOpen;
-	}
-
-	public void setIsOpen(Boolean isOpen) {
-		this.isOpen = isOpen;
-	}
-
-	public Double getDistance() {
-		return distance;
-	}
-
-	public void setDistance(Double distance) {
-		this.distance = distance;
-	}
-
-	public List<String> getCuisines() {
-		return cuisines;
-	}
-
-	public void setCuisines(List<String> cuisines) {
-		this.cuisines = cuisines;
 	}
 
 	public List<String> getType() {
@@ -122,28 +75,12 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.longAddress = longAddress;
 	}
 
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
 	public List<String> getOpeningHours() {
 		return openingHours;
 	}
 
 	public void setOpeningHours(List<String> openingHours) {
 		this.openingHours = openingHours;
-	}
-
-	public Integer getPreviousCheckinCount() {
-		return previousCheckinCount;
-	}
-
-	public void setPreviousCheckinCount(Integer previousCheckinCount) {
-		this.previousCheckinCount = previousCheckinCount;
 	}
 
 	public String getPhone() {
@@ -160,5 +97,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public Integer getRecommendations() {
+		return recommendations;
+	}
+
+	public void setRecommendations(Integer recommendations) {
+		this.recommendations = recommendations;
 	}
 }

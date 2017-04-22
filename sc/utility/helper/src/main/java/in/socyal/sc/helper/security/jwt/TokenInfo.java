@@ -4,6 +4,8 @@ import org.joda.time.DateTime;
 
 public class TokenInfo {
 	private String userId;
+	private String firstName;
+	private String nameId;
 	private DateTime issueDate;
 	private DateTime expires;
 	private String features;
@@ -75,9 +77,19 @@ public class TokenInfo {
 		this.merchantId = merchantId;
 	}
 
-	@Override
-	public String toString() {
-		return "TokenInfo [userId=" + userId + ", features=" + features + ", issued=" + issueDate + ", expires="
-				+ expires + "]";
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

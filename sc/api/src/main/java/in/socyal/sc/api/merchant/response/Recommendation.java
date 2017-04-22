@@ -1,10 +1,13 @@
 package in.socyal.sc.api.merchant.response;
 
-public class Recommendation {
+public class Recommendation  {
 	private Integer id;
 	private Integer itemId;
 	private String name;
 	private String description;
+	private Integer totalRcmdns;
+	private String imageUrl;
+	private String timeDiff;
 
 	public Integer getId() {
 		return id;
@@ -26,8 +29,8 @@ public class Recommendation {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescription(String review) {
+		this.description = review;
 	}
 
 	public Integer getItemId() {
@@ -36,5 +39,29 @@ public class Recommendation {
 
 	public void setItemId(Integer dishId) {
 		this.itemId = dishId;
+	}
+
+	public Integer getTotalRcmdns() {
+		return totalRcmdns;
+	}
+
+	public void setTotalRcmdns(Integer totalRcmdns) {
+		this.totalRcmdns = totalRcmdns;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String getTimeDiff() {
+		return timeDiff;
+	}
+
+	public void setTimeDiff(String timeDiff) {
+		this.timeDiff = timeDiff;
 	}
 }

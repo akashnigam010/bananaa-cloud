@@ -35,6 +35,7 @@ public class MerchantDaoMapper {
 		dto.setId(entity.getId());
 		dto.setNameId(entity.getNameId());
 		dto.setName(entity.getName());
+		dto.setMerchantUrl(entity.getAddress().getLocality().getCity().toLowerCase() + "/" + entity.getNameId());
 		if (filter.getMapImage()) {
 			dto.setImageUrl(entity.getImageUrl());
 		}
@@ -51,17 +52,8 @@ public class MerchantDaoMapper {
 			dto.setTimings(mapTimingDtos(entity.getTimings()));
 		}
 		
-		if (filter.getMapRating()) {
-			dto.setRating(entity.getRating());
-		}
-		
-		if (filter.getMapCheckins()) {
-			dto.setCheckins(entity.getCheckins());
-		}
-		
 		if (filter.getMapOtherDetails()) {
 			dto.setAverageCost(entity.getAverageCost());
-			dto.setCuisines(parseToList(entity.getCuisine()));
 			dto.setTypes(parseToList(entity.getType()));
 			if (entity.getContact() != null) {
 				ContactDto contactDto = new ContactDto();
@@ -104,13 +96,9 @@ public class MerchantDaoMapper {
 	public void map(AddressEntity from, AddressDto to) {
 		to.setAddress(from.getAddress());
 		to.setLocality(map(from.getLocality()));
-		to.setCity(from.getCity());
-		to.setCountry(from.getCountry());
 		to.setId(from.getId());
 		to.setLatitude(from.getLatitude());
 		to.setLongitude(from.getLongitude());
-		to.setState(from.getState());
-		to.setZip(from.getZip());
 	}
 
 	private LocalityDto map(LocalityEntity from) {

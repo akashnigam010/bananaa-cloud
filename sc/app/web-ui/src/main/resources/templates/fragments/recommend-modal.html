@@ -7,19 +7,19 @@
                     <div class="main-area">
                         <div class="modal-header align-center">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
+                                <img src="http://cdn.bananaa.in/img/clear.svg" />
                             </button>
-                            <h4 class="modal-title bold">My recommendation</h4>
+                            <h4 class="modal-title bold">My recommendation <span id="merchant-name-title"></span></h4>
                         </div>
                         <div class="modal-body align-center" style="padding-top: 7%;">
                             <div>
-                                <form>
+                                <form onsubmit="return false">
                                     <div class="group">
                                       <p class="hide" id="modal-recommendation-id"></p>
                                       <p class="hide" id="modal-item-id"></p>
-                                      <input class="bold" type="text" data-provide="typeahead" id="modal-item-name" required="required" autocomplete="off" />
+                                      <input class="bold white-background body-color" type="text" data-provide="typeahead" id="modal-item-name" required="required" autocomplete="off" />
                                       <span class="bar"></span>
-                                      <label>Food or drink name</label>
+                                      <label id="modal-item-name-label">Food or drink name</label>
                                     </div>
                                     <div class="error-label error-label-name font-0-8 red align-left hide">
                                         Please select the food or drink item
@@ -27,7 +27,7 @@
                                     <div class="group">
                                       <textarea class="recommend-desc-area" id="modal-item-desc" maxlength="200"></textarea>
                                       <span class="bar"></span>
-                                      <label>Add a mini food review</label>
+                                      <label id="modal-item-desc-label">Add a mini review (optional)</label>
                                     </div>
 									<div class="error-label error-label-review font-0-8 red align-left hide">
                                         Your review needs to be minimum 50 and maximum 200 characters long
@@ -39,7 +39,7 @@
                                   </form>
                             </div>
                         </div>
-                        <div id="recommendSubmit" class="modal-footer cursor-pointer align-center recommendSubmit" onclick="submitRecommendation();">
+                        <div id="recommendSubmit" class="modal-footer cursor-pointer align-center recommendSubmit">
                             Add recommendation
                         </div>
                     </div>

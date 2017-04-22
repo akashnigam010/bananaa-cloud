@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
-import in.socyal.sc.date.util.Clock;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.SuggestionDaoMapper;
 
@@ -23,8 +22,6 @@ public class SuggestionDao {
 	SessionFactory sessionFactory;
 	@Autowired
 	SuggestionDaoMapper mapper;
-	@Autowired
-	Clock clock;
 
 	public SuggestionDao() {
 	}
