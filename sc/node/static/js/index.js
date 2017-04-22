@@ -95,7 +95,7 @@ function getTrendingRestaurants() {
 			                                          '<br />'+
 			                                          '<span class="light">'+response.merchants[i].shortAddress+'</span>'+
 			                                      '</p>'+
-			                                      '<span>'+response.merchants[i].recommendations+' Recommendations</span>'+
+			                                      '<span>'+response.merchants[i].recommendations+' Food Recommendations</span>'+
 			                                  '</div>'+
 			                              '</div>'+
 			                          '</div>'+
