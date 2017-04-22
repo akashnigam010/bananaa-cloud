@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
 <body>
-	<script type="text/javascript" src="http://cdn.bananaa.in/js/login.js"></script>
+	<script type="text/javascript" th:src="'http://cdn.bananaa.in/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<div class="container-fluid">
 		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
 		<!-- Top Banner STARTS -->
