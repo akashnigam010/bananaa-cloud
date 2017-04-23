@@ -9,7 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
 
 <body>
-	<script type="text/javascript" src="http://cdn.bananaa.in/js/login.js"></script>
+	<script type="text/javascript" th:src="'http://cdn.bananaa.in/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<div class="container-fluid">
 		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
         <div class="row">
