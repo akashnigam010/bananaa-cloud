@@ -35,6 +35,7 @@ public class DishDaoMapper {
 		dto.setSuggestionId(entity.getSuggestionId());
 		dto.setCuisineId(entity.getCuisineId());
 		dto.setImageUrl(entity.getImageUrl());
+		dto.setThumbnail(entity.getThumbnail());
 		dto.setIsActive(entity.getIsActive());
 		dto.setRecommendations(mapRecommendations(entity));
 		if (merchantCriteria != null) {
@@ -49,7 +50,7 @@ public class DishDaoMapper {
 	public DishDto miniMap(DishEntity entity) {
 		DishDto dto = new DishDto();
 		dto.setName(entity.getName());
-		dto.setImageUrl(entity.getImageUrl());
+		dto.setThumbnail(entity.getThumbnail());
 		MerchantDto merchant = new MerchantDto();
 		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
 		merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);

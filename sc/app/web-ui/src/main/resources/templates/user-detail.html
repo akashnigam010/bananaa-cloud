@@ -79,7 +79,7 @@
                                     <div class="my-recommendations">
                                         <div class="col-xs-12 recommended-item" th:each="recommendation, iterStat : ${detail.recommendations}">
                                             <div class="float-left" style="object-fit: cover;">
-                                                <img class="user-icon" th:src="${recommendation.dish.imageUrl}" />
+                                                <img class="user-icon" th:src="${recommendation.dish.thumbnail}" />
                                             </div>
                                             <div class="float-left item-desc-wrapper">
                                                 <div class="bold item-name" th:text="${recommendation.dish.name}">

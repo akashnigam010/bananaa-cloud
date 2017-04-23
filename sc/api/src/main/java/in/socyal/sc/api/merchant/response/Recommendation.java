@@ -6,7 +6,7 @@ public class Recommendation  {
 	private String name;
 	private String description;
 	private Integer totalRcmdns;
-	private String imageUrl;
+	private String thumbnail;
 	private String timeDiff;
 
 	public Integer getId() {
@@ -49,12 +49,12 @@ public class Recommendation  {
 		this.totalRcmdns = totalRcmdns;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public String getThumbnail() {
+		return thumbnail;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setThumbnail(String imageUrl) {
+		this.thumbnail = imageUrl;
 	}
 
 	public String getTimeDiff() {

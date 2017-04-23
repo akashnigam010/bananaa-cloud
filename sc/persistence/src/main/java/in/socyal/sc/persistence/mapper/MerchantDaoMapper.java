@@ -38,6 +38,7 @@ public class MerchantDaoMapper {
 		dto.setMerchantUrl(entity.getAddress().getLocality().getCity().toLowerCase() + "/" + entity.getNameId());
 		if (filter.getMapImage()) {
 			dto.setImageUrl(entity.getImageUrl());
+			dto.setThumbnail(entity.getThumbnail());
 		}
 		
 		if (filter.getMapAddress()) {
