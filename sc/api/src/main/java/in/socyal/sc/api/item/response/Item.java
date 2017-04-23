@@ -4,7 +4,7 @@ public class Item {
 	private Integer id;
 	private String nameId;
 	private String name;
-	private String imageUrl;
+	private String thumbnail;
 	private Integer recommendations;
 	private String itemUrl;
 
@@ -32,12 +32,12 @@ public class Item {
 		this.name = name;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public String getThumbnail() {
+		return thumbnail;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setThumbnail(String imageUrl) {
+		this.thumbnail = imageUrl;
 	}
 
 	public Integer getRecommendations() {

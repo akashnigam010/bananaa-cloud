@@ -10,6 +10,7 @@ public class MerchantDto implements Serializable {
 	private String nameId;
 	private String name;
 	private String imageUrl;
+	private String thumbnail;
 	private ContactDto contact;
 	private AddressDto address;
 	private Set<TimingDto> timings;
@@ -95,5 +96,13 @@ public class MerchantDto implements Serializable {
 
 	public void setMerchantUrl(String merchantUrl) {
 		this.merchantUrl = merchantUrl;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }

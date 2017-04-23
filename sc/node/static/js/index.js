@@ -87,7 +87,7 @@ function getTrendingRestaurants() {
     						  '<div class="trending-item">'+
 			                              '<a href="/'+response.merchants[i].merchantUrl+'">'+
 			                          '<div>'+
-			                              '<img class="trend-image" src="'+response.merchants[i].imageUrl+'" alt=""/>'+
+			                              '<img class="trend-image" src="'+response.merchants[i].thumbnail+'" alt=""/>'+
 			                              '<div class="trending-item-desc">'+
 			                                  '<div style="padding: 4%;">'+
 			                                      '<p>'+

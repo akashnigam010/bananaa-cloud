@@ -36,7 +36,7 @@ public class ItemMapper implements Serializable {
 			DishDto dish = dto.getDish();
 			item.setId(dish.getId());
 			item.setName(dish.getName());
-			item.setImageUrl(dish.getImageUrl());
+			item.setThumbnail(dish.getThumbnail());
 			item.setNameId(dish.getNameId());
 			item.setRecommendations(dto.getRecommendations().intValue());
 			item.setItemUrl(dto.getDish().getItemUrl());
