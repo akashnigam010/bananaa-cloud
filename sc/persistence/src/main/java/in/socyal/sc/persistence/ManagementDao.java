@@ -32,7 +32,7 @@ import in.socyal.sc.persistence.mapper.ManagementDaoMapper;
 
 @Repository
 public class ManagementDao {
-	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private ResourceBundle resource = ResourceBundle.getBundle("environment");
 	private static final String BNA_USER_ID = "user.id";
 	private static final String NAME = "name";
 	@Autowired
