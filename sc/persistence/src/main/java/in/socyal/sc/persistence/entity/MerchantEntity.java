@@ -7,9 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -17,60 +14,38 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "MERCHANT", schema = "bna")
-public class MerchantEntity implements Serializable {
+public class MerchantEntity extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
-	
-	@Column(name = "NAME_ID")
-	private String nameId;
 
 	@Column(name = "NAME")
 	private String name;
-
-	@Column(name = "IMAGE_URL")
-	private String imageUrl;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "CONTACT_ID")
-	private ContactEntity contact;
+	
+	@Column(name = "NAME_ID")
+	private String nameId;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
 	private AddressEntity address;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "MERCHANT_ID", referencedColumnName = "ID")
-	private Set<TimingEntity> timings;
-
-	@Column(name = "RATING")
-	private Double rating;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "CONTACT_ID")
+	private ContactEntity contact;
+	
+	@Column(name = "IMAGE_URL")
+	private String imageUrl;
+	
+	@Column(name = "THUMBNAIL")
+	private String thumbnail;
 
 	@Column(name = "AVERAGE_COST")
 	private Double averageCost;
 
-	@Column(name = "CHECKINS")
-	private Integer checkins;
-
-	@Column(name = "CUISINE")
-	private String cuisine;
-
 	@Column(name = "TYPE")
 	private String type;
 	
-	@Column(name = "PROMOTION")
-	private Integer promotion;
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "MERCHANT_ID", referencedColumnName = "ID")
+	private Set<TimingEntity> timings;
 
 	public String getName() {
 		return name;
@@ -80,20 +55,12 @@ public class MerchantEntity implements Serializable {
 		this.name = name;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public String getNameId() {
+		return nameId;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public ContactEntity getContact() {
-		return contact;
-	}
-
-	public void setContact(ContactEntity contact) {
-		this.contact = contact;
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 
 	public AddressEntity getAddress() {
@@ -104,44 +71,28 @@ public class MerchantEntity implements Serializable {
 		this.address = address;
 	}
 
-	public Double getRating() {
-		return rating;
+	public ContactEntity getContact() {
+		return contact;
 	}
 
-	public void setRating(Double rating) {
-		this.rating = rating;
+	public void setContact(ContactEntity contact) {
+		this.contact = contact;
 	}
 
-	public Integer getCheckins() {
-		return checkins;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setCheckins(Integer checkins) {
-		this.checkins = checkins;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
-	public String getCuisine() {
-		return cuisine;
+	public String getThumbnail() {
+		return thumbnail;
 	}
 
-	public void setCuisine(String cuisine) {
-		this.cuisine = cuisine;
-	}
-
-	public Set<TimingEntity> getTimings() {
-		return timings;
-	}
-
-	public void setTimings(Set<TimingEntity> timings) {
-		this.timings = timings;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 
 	public Double getAverageCost() {
@@ -152,19 +103,19 @@ public class MerchantEntity implements Serializable {
 		this.averageCost = averageCost;
 	}
 
-	public Integer getPromotion() {
-		return promotion;
+	public String getType() {
+		return type;
 	}
 
-	public void setPromotion(Integer promotion) {
-		this.promotion = promotion;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getNameId() {
-		return nameId;
+	public Set<TimingEntity> getTimings() {
+		return timings;
 	}
 
-	public void setNameId(String nameId) {
-		this.nameId = nameId;
+	public void setTimings(Set<TimingEntity> timings) {
+		this.timings = timings;
 	}
 }
