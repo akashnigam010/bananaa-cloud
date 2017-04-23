@@ -37,7 +37,7 @@ function loadPopularDishes() {
 	    						  '<a class="cursor-pointer" href="'+response.items[i].itemUrl+'">'+
 				                     '<div class="col-xs-12 recommended-item">'+
 				                          '<div class="float-left" style="object-fit: cover;">'+
-				                              '<img class="user-icon" src="'+response.items[i].imageUrl+'" />'+
+				                              '<img class="user-icon" src="'+response.items[i].thumbnail+'" />'+
 				                          '</div>'+
 				                          '<div class="float-left item-desc-wrapper">'+
 				                              '<div class="bold item-name">'+
@@ -79,7 +79,7 @@ function getMyRecommendations() {
     				  for (var i=0; i<response.recommendations.length; i++) {
     					  myRecommendationsHtml +=   '<div class="col-xs-12 recommended-item cursor-pointer my-recommended-item">'+
                                                            '<div class="float-left" style="object-fit: cover;">'+
-                                                               '<img class="user-icon" src="'+response.recommendations[i].imageUrl+'" />'+
+                                                               '<img class="user-icon" src="'+response.recommendations[i].thumbnail+'" />'+
                                                            '</div>'+
                                                            '<div class="float-left item-desc-wrapper">'+
                                                                 '<span class="hide recommendation-id">'+response.recommendations[i].id+'</span>'+

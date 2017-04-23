@@ -16,6 +16,7 @@ public class DishDto implements Serializable {
 	private Integer cuisineId;
 	private MerchantDto merchant;
 	private String imageUrl;
+	private String thumbnail;
 	private Boolean isActive;
 	private String itemUrl;
 	private List<RecommendationDto> recommendations;
@@ -101,5 +102,13 @@ public class DishDto implements Serializable {
 
 	public void setRecommendations(List<RecommendationDto> recommendations) {
 		this.recommendations = recommendations;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }

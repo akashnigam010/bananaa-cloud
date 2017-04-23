@@ -67,7 +67,7 @@ public class ManagementDaoMapper {
 			dto = new ItemImageDto();
 			dto.setId(entity.getId());
 			dto.setName(entity.getName());
-			dto.setUrl(entity.getUrl());
+			dto.setUrl(entity.getImageUrl());
 			dtos.add(dto);
 		}
 		return dtos;

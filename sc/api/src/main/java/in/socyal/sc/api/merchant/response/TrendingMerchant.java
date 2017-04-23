@@ -10,7 +10,7 @@ public class TrendingMerchant  implements Serializable {
 	private String nameId;
 	private String shortAddress;
 	private Long recommendations;
-	private String imageUrl;
+	private String thumbnail;
 	private String merchantUrl;
 
 	public Integer getId() {
@@ -45,12 +45,12 @@ public class TrendingMerchant  implements Serializable {
 		this.recommendations = recommendations;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public String getThumbnail() {
+		return thumbnail;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setThumbnail(String imageUrl) {
+		this.thumbnail = imageUrl;
 	}
 
 	public String getNameId() {

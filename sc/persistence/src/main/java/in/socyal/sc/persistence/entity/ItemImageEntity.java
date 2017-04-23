@@ -4,34 +4,21 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ITEM_IMAGE", schema = "bna")
-public class ItemImageEntity implements Serializable {
+public class ItemImageEntity extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
 
 	@Column(name = "NAME")
 	private String name;
 
-	@Column(name = "URL")
-	private String url;
+	@Column(name = "IMAGE_URL")
+	private String imageUrl;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	@Column(name = "THUMBNAIL")
+	private String thumbnail;
 
 	public String getName() {
 		return name;
@@ -41,11 +28,19 @@ public class ItemImageEntity implements Serializable {
 		this.name = name;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getImageUrl() {
+		return imageUrl;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }

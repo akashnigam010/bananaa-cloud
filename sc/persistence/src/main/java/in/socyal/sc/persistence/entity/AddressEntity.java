@@ -4,22 +4,14 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ADDRESS", schema = "bna")
-public class AddressEntity implements Serializable {
+public class AddressEntity extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
 
 	@Column(name = "ADDRESS")
 	private String address;
@@ -33,14 +25,6 @@ public class AddressEntity implements Serializable {
 
 	@Column(name = "LONGITUDE")
 	private Double longitude;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public Double getLatitude() {
 		return latitude;
