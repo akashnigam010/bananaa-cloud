@@ -80,12 +80,14 @@ public class ManagementDao {
 	public void addCuisine(AddRequest request) {
 		CuisineEntity entity = new CuisineEntity();
 		entity.setName(request.getName());
+		entity.setNameId(generateNameId(request.getName()));
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
 	public void addSuggestion(AddRequest request) {
 		SuggestionEntity entity = new SuggestionEntity();
 		entity.setName(request.getName());
+		entity.setNameId(generateNameId(request.getName()));
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
@@ -119,5 +121,23 @@ public class ManagementDao {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
 		}
 		return merchant;
+	}
+	
+	/**
+	 * Generates unique nameId cuisine and suggestion names
+	 * 
+	 * @param dto
+	 * @param cal
+	 * @return
+	 */
+	private String generateNameId(String name) {
+		String[] nameArr = name.split(" ");
+		StringBuilder nameId = new StringBuilder();
+		int i;
+		for (i=0; i<nameArr.length-1; i++) {
+			nameId.append(nameArr[i].toLowerCase().trim() + "-");
+		}
+		nameId.append(nameArr[i].toLowerCase().trim());
+		return nameId.toString();
 	}
 }

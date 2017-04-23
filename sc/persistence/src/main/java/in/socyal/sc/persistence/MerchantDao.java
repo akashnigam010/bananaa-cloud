@@ -137,16 +137,6 @@ public class MerchantDao {
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
-	public void updateMerchantCheckinCountDetails(Integer merchantId) {
-		Session session = sessionFactory.getCurrentSession();
-		MerchantEntity entity = (MerchantEntity) session.get(MerchantEntity.class, merchantId);
-		if (entity != null) {
-			Integer checkinCount = entity.getCheckins();
-			entity.setCheckins(checkinCount + 1);
-			session.saveOrUpdate(entity);
-		}
-	}
-
 	private String sortMerchantsByDistanceQuery() {
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT * ");
