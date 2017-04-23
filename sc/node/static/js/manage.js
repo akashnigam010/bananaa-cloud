@@ -105,6 +105,7 @@ $(document).ready(function() {
         },
         updater:function (item) {
             $("#imageUrl").val(item.url);
+            $("#thumbnailUrl").val(item.thumbnail);
             return item;
         }
     });   
@@ -121,6 +122,7 @@ function addItem() {
 	var $cuisineId = '';
 	var $cuisineName = '';
 	var $imageUrl = $("#image").val().trim();
+	var $thumbnail = $("#thumbnail").val().trim();
 	var $recommendations = 0;
 	var $isActive = ($("#isActive:checked").val() == 'true') ? true : false;
 
@@ -151,9 +153,18 @@ function addItem() {
 			if ($itemName === '') {
 				alertMessage('Enter an item name');
 				return;
-			}		
+			}
+			if ($imageUrl == '') {
+				alertMessage('Please enter item image url');
+				return;
+			}
+
+			if ($thumbnail == '') {
+				alertMessage('Please enter item thumbnail url');
+				return;
+			}
 			if (!currentItem || (currentItem && currentItem.name != $itemName)) {
-				var input = confirm('Confirm Action \nName                              : '+$itemName+'\nRestaurant                      : '+$merchantName+'\nSuggestion Name            : '+$suggestionName+'\nCuisine Name                  : '+$cuisineName+'\nRecommendation Count : '+$recommendations+'\nImage Url                         : '+$imageUrl+'\nIs Active                           : '+$isActive);
+				var input = confirm('Confirm Action \nName                              : '+$itemName+'\nRestaurant                      : '+$merchantName+'\nSuggestion Name            : '+$suggestionName+'\nCuisine Name                  : '+$cuisineName+'\nRecommendation Count : '+$recommendations+'\nImage Url                         : '+$imageUrl+'\nThumbnail                        : '+$thumbnail+'\nIs Active                           : '+$isActive);
 				if (input == true) {
 					var dataOb = {
 							name : $itemName,
@@ -161,6 +172,7 @@ function addItem() {
 							cuisineId : $cuisineId,
 							suggestionId : $suggestionId,
 							imageUrl : $imageUrl,
+							thumbnail : $thumbnail,
 							isActive : $isActive,
 							recommendations : $recommendations
 			    	};
@@ -178,6 +190,7 @@ function addItem() {
 			      			  $("#cuisineName").val('');
 			      			  $("#suggestionName").val('');
 			      			  $("#image").val('');
+			      			  $("#thumbnail").val('');
 			      		  } else {
 			    			  handleErrorCallback(response);
 			    		  }	          		  

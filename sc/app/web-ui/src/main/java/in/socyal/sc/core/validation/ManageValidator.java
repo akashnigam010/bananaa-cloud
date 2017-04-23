@@ -18,7 +18,8 @@ public class ManageValidator {
 
 	public void validateAddItemRequest(AddItemRequest request) throws BusinessException {
 		if (StringUtils.isBlank(request.getName()) || request.getMerchantId() == null || request.getIsActive() == null
-				|| request.getRecommendations() == null) {
+				|| request.getRecommendations() == null || StringUtils.isBlank(request.getImageUrl())
+				|| StringUtils.isBlank(request.getThumbnail())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
