@@ -6,6 +6,7 @@ public class AddItemRequest {
 	private Integer cuisineId;
 	private Integer suggestionId;
 	private String imageUrl;
+	private String thumbnail;
 	private Boolean isActive;
 	private Integer recommendations;
 	private String nameId;
@@ -72,5 +73,13 @@ public class AddItemRequest {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }

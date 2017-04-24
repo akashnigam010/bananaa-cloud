@@ -8,6 +8,7 @@ public class ItemImageDto implements Serializable {
 	private Integer id;
 	private String name;
 	private String url;
+	private String thumbnail;
 
 	public Integer getId() {
 		return id;
@@ -31,5 +32,13 @@ public class ItemImageDto implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getThumbnail() {
+		return thumbnail;
+	}
+
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
 	}
 }
