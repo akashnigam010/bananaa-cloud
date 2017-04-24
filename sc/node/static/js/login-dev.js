@@ -12,6 +12,8 @@ function googleSignIn() {
 	$("#loginModal").find(".loader").removeClass('hide');
 	$("#loginModal").find(".modal-body").addClass('hide');
     var provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
     firebase.auth().signInWithPopup(provider).then(function(result) {
       loginWithIdToken();
     }).catch(function(error) {
@@ -35,6 +37,7 @@ function fbSignIn() {
 	$("#loginModal").find(".loader").removeClass('hide');
 	$("#loginModal").find(".modal-body").addClass('hide');
     var provider = new firebase.auth.FacebookAuthProvider();
+    provider.addScope('email');
     firebase.auth().signInWithPopup(provider).then(function(result) {
     	loginWithIdToken();
     }).catch(function(error) {

@@ -47,6 +47,18 @@ public class UserDao {
 		}
 		return dto;
 	}
+	
+	public UserDto getUserByEmail(String email) {
+		UserDto dto = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("email", email));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		if (entity != null) {
+			dto = new UserDto();
+			mapper.map(entity, dto, false);
+		}
+		return dto;
+	}
 
 	public UserDto saveUser(UserDto user) {
 		UserEntity entity = mapper.map(user);
