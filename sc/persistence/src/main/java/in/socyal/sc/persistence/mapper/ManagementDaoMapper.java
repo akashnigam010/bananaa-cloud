@@ -26,6 +26,7 @@ public class ManagementDaoMapper {
 		entity.setCuisineId(request.getCuisineId());
 		entity.setSuggestionId(request.getSuggestionId());
 		entity.setImageUrl(request.getImageUrl());
+		entity.setThumbnail(request.getThumbnail());
 		entity.setIsActive(request.getIsActive());
 		return entity;
 	}
@@ -68,6 +69,7 @@ public class ManagementDaoMapper {
 			dto.setId(entity.getId());
 			dto.setName(entity.getName());
 			dto.setUrl(entity.getImageUrl());
+			dto.setThumbnail(entity.getThumbnail());
 			dtos.add(dto);
 		}
 		return dtos;

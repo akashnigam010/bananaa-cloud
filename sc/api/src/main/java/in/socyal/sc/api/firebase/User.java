@@ -22,7 +22,7 @@ public class User {
 	}
 
 	public String getEmail() {
-		return email;
+		return providerData.get(0).getEmail();
 	}
 
 	public void setEmail(String email) {
