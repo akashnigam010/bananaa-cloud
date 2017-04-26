@@ -1,5 +1,15 @@
 package in.socyal.sc.app.merchant;
 
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +20,7 @@ import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
+import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
@@ -74,5 +85,37 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 		}
 		nameId.append(nameSegments[i].toLowerCase());
 		return nameId.toString();
+	}
+
+	@Override
+	public void contactUsMessage(MessageRequest request) throws BusinessException {
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.gmail.com");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+
+		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication("akashnigam020@gmail.com", "Akash123!");
+			}
+		});
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("akashnigam020@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("bananaa@bananaa.in"));
+			message.setSubject("Contact request from : " + request.getName());
+			message.setText("Phone : " + request.getPhone() +", Email : " + request.getEmail() + ", Message : " + request.getMessage());
+
+			Transport.send(message);
+
+			System.out.println("Done");
+
+		} catch (MessagingException e) {
+			throw new BusinessException();
+		}
 	}
 }

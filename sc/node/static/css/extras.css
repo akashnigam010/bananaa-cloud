@@ -33,7 +33,12 @@
         border-radius: 6px;
         color: #fff; 
         font-size: 2em;
-        padding-top: 15%;
+        padding-top: 10%;
+    }
+
+    .error-label {
+        margin-top: -10%;
+        margin-bottom: 10%;
     }
 }
 
@@ -68,6 +73,11 @@
         border-radius: 6px;
         color: #fff; 
         font-size: 3em;
-        padding-top: 8%;
+        padding-top: 10%;
+    }
+
+    .error-label {
+        margin-top: -5%;
+        margin-bottom: 5%;
     }
 }
