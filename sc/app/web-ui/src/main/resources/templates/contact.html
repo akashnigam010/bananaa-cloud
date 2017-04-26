@@ -5,17 +5,19 @@
 
 <head th:replace="fragments/head :: head(title = 'Contact | Bananaa')"></head>
 <link href="http://cdn.bananaa.in/css/extras.css" type="text/css" rel="stylesheet"></link>
+<style type="text/css">
+    .hero-image::after {
+        content: "We love to hear from you!"
+    }
+</style>
 <body>
 	<div class="container-fluid">
 		<div th:replace="fragments/plain-header :: plain-header"></div>
         
         <div class="row grey-background document-area">
-            <div align="center" style="position: relative;">
-                <img class="section-img" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.png" />
-                <div class="section-text">
-                    <p>We would love to hear from you!</p>
-                </div>
-            </div>         
+            <div class="hero-image" align="center">
+                <img class="section-img" src="http://cdn.bananaa.in/img/contact.jpg" />                
+            </div>       
         
             <div class="col-xs-12 white-background document-area" style="margin-top: 2%">
                 <address>
