@@ -11,10 +11,12 @@ import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
+import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.response.AddResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
+import in.socyal.sc.api.response.GenericResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
 import in.socyal.sc.core.validation.ManageValidator;
 
@@ -91,5 +93,17 @@ public class ManagementService {
 			response = delegate.getItemImages(request);
 		}
 		return helper.success(response);
+	}
+	
+	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GenericResponse sendMessage(@RequestBody MessageRequest request) {
+		GenericResponse response = new GenericResponse();
+		try {
+			validator.validateSendMessageRequest(request);
+			delegate.contactUsMessage(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}		
 	}
 }

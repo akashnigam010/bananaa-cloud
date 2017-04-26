@@ -23,12 +23,22 @@
         border-radius: 6px;
     }
 
-    .section-text {
-        position: absolute; 
-        top: 25%; 
-        color: #fff; 
+    .hero-image::after {
+        display: block;
+        position: relative;
+        background-image: radial-gradient(at top, rgba(255, 255, 255, 0) 0, #000 200%);
+        margin-top: -150px;
+        height: 150px;
         width: 100%;
+        border-radius: 6px;
+        color: #fff; 
         font-size: 2em;
+        padding-top: 10%;
+    }
+
+    .error-label {
+        margin-top: -10%;
+        margin-bottom: 10%;
     }
 }
 
@@ -53,11 +63,21 @@
         border-radius: 6px;
     }
 
-    .section-text {
-        position: absolute; 
-        top: 35%; 
-        color: #fff; 
+    .hero-image::after {
+        display: block;
+        position: relative;
+        background-image: radial-gradient(at top, rgba(255, 255, 255, 0) 0, #000 200%);
+        margin-top: -250px;
+        height: 250px;
         width: 100%;
+        border-radius: 6px;
+        color: #fff; 
         font-size: 3em;
+        padding-top: 10%;
+    }
+
+    .error-label {
+        margin-top: -5%;
+        margin-bottom: 5%;
     }
 }
