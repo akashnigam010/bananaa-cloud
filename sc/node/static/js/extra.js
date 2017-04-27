@@ -24,6 +24,8 @@ function submitMessage() {
     } else {
         $(".error-label-message").addClass('hide');
     }
+    
+    $("#loadingModal").modal('show');
 
     var dataOb = {
         name : $name,
@@ -38,8 +40,13 @@ function submitMessage() {
           data: JSON.stringify(dataOb)
         })
           .done(function(response) {
+        	  $("#loadingModal").modal('hide');
               if (response.result) {
-                  alert('Thanks for your message. We will get back to you shortly.')
+            	  $("#name").val('');
+            	  $("#phone").val('');
+            	  $("#email").val('');
+            	  $("#message").val('');
+            	  $(".success-label-message").removeClass('hide');
               } else {
                   handleErrorCallback(response);
               }                       
