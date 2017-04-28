@@ -1,6 +1,7 @@
 package in.socyal.sc.app.merchant;
 
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -28,6 +29,11 @@ import in.socyal.sc.persistence.ManagementDao;
 
 @Service
 public class ManagementDelegateImpl implements ManagementDelegate {
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String EMAIL_USERNAME = "email.username";
+	private static final String EMAIL_PASSWORD = "email.password";
+	private static final String EMAIL_SUBJECT = "email.subject";
+	private static final String EMAIL_TO = "email.to";
 
 	@Autowired
 	ManagementDao dao;
@@ -89,6 +95,10 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 
 	@Override
 	public void contactUsMessage(MessageRequest request) throws BusinessException {
+		sendEmail(request);
+	}
+
+	private void sendEmail(MessageRequest request) throws BusinessException {
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -98,22 +108,20 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("akashnigam020@gmail.com", "Akash123!");
+				return new PasswordAuthentication(resource.getString(EMAIL_USERNAME),
+						resource.getString(EMAIL_PASSWORD));
 			}
 		});
 
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("akashnigam020@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("bananaa@bananaa.in"));
-			message.setSubject("Contact request from : " + request.getName());
-			message.setText("Phone : " + request.getPhone() +", Email : " + request.getEmail() + ", Message : " + request.getMessage());
-
+			message.setFrom(new InternetAddress(resource.getString(EMAIL_USERNAME)));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(resource.getString(EMAIL_TO)));
+			message.setSubject(resource.getString(EMAIL_SUBJECT));
+			message.setText("Name : " + request.getName() + ", Phone : " + request.getPhone() + ", Email : "
+					+ request.getEmail() + ", Message : " + request.getMessage());
 			Transport.send(message);
-
-			System.out.println("Done");
-
 		} catch (MessagingException e) {
 			throw new BusinessException();
 		}

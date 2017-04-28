@@ -91,12 +91,20 @@ public class HomeController {
 		}
 		return loginStatus;
 	}
+	
+	private CityType cityHandler(String city) {
+		CityType cityType = CityType.getCity(city);
+		if (cityType == null) {
+			cityType = CityType.HYDERABAD;
+		}
+		return cityType;
+	}
 
 	@RequestMapping(value = "/{city}", method = RequestMethod.GET)
 	public ModelAndView cityHome(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
 			@PathVariable("city") String city) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = CityType.getCity(city);
+		CityType cityType = cityHandler(city);
 		ModelAndView modelAndView = new ModelAndView("index");
 		modelAndView.addObject("loginStatus", loginStatus);
 		modelAndView.addObject("city", cityType.getName());
@@ -111,7 +119,7 @@ public class HomeController {
 	public ModelAndView merchantDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
 			@PathVariable("city") String city, @PathVariable("nameId") String nameId) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = CityType.getCity(city);
+		CityType cityType = cityHandler(city);
 		DetailsRequest request = new DetailsRequest();
 		request.setMerchantNameId(nameId);
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
@@ -134,7 +142,7 @@ public class HomeController {
 			@PathVariable("city") String city, @PathVariable("merchantNameId") String merchantNameId,
 			@PathVariable("itemNameId") String itemNameId) throws BusinessException {
 		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = CityType.getCity(city);
+		CityType cityType = cityHandler(city);
 		ModelAndView modelAndView = new ModelAndView("item-detail");
 		DetailsRequest detailsRequest = new DetailsRequest();
 		detailsRequest.setItemNameId(itemNameId);

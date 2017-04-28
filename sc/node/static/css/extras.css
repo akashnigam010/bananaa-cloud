@@ -40,6 +40,18 @@
         margin-top: -10%;
         margin-bottom: 10%;
     }
+
+    .section-heading {
+        padding: 4% 0%;
+    }
+
+    .section {
+        padding: 2% 0%;
+    }
+
+    .mini {
+        text-align: center;
+    }
 }
 
 @media (min-width: 480px) {
@@ -79,5 +91,13 @@
     .error-label {
         margin-top: -5%;
         margin-bottom: 5%;
+    }
+
+    .section-heading {
+        padding: 4% 0%;
+    }
+
+    .section {
+        padding: 2% 0%;
     }
 }

@@ -16,7 +16,7 @@ import in.socyal.sc.api.manage.response.AddResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
-import in.socyal.sc.api.response.GenericResponse;
+import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
 import in.socyal.sc.core.validation.ManageValidator;
 
@@ -96,8 +96,8 @@ public class ManagementService {
 	}
 	
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST, headers = "Accept=application/json")
-	public GenericResponse sendMessage(@RequestBody MessageRequest request) {
-		GenericResponse response = new GenericResponse();
+	public StatusResponse sendMessage(@RequestBody MessageRequest request) {
+		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateSendMessageRequest(request);
 			delegate.contactUsMessage(request);
