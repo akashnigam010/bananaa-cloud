@@ -8,7 +8,6 @@ public class AddItemRequest {
 	private String imageUrl;
 	private String thumbnail;
 	private Boolean isActive;
-	private Integer recommendations;
 	private String nameId;
 
 	public String getName() {
@@ -57,14 +56,6 @@ public class AddItemRequest {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
-	}
-
-	public Integer getRecommendations() {
-		return recommendations;
-	}
-
-	public void setRecommendations(Integer recommendations) {
-		this.recommendations = recommendations;
 	}
 
 	public String getNameId() {

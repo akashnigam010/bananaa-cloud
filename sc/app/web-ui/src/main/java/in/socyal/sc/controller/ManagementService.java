@@ -10,6 +10,7 @@ import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
+import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.response.AddResponse;
@@ -38,6 +39,18 @@ public class ManagementService {
 		try {
 			validator.validateAddItemRequest(request);
 			delegate.addItem(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/addRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
+	public AddResponse addRecommendations(@RequestBody AddRecommendationsRequest request) {
+		AddResponse response = new AddResponse();
+		try {
+			validator.validateAddRecommendationsRequest(request);
+			delegate.addRecommendations(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

@@ -19,7 +19,6 @@ import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
-import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
@@ -52,18 +51,17 @@ public class ManagementDao {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());
 		DishEntity entity = mapper.map(request, merchant);
 		sessionFactory.getCurrentSession().save(entity);
-		saveBatchRecommendations(entity, request.getRecommendations());
 	}
-
-	private void saveBatchRecommendations(DishEntity dish, Integer initialDump) throws BusinessException {
+	
+	public void addRecommendations(Integer id, Integer rcmdCount) throws BusinessException {
 		try {
 			sessionFactory.getCurrentSession().doWork(new Work() {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					PreparedStatement st = con.prepareStatement(
 							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `IS_ACTIVE`) VALUES (?, ?, ?)");
-					for (int i = 1; i <= initialDump; i++) {
-						st.setInt(1, dish.getId());
+					for (int i = 1; i <= rcmdCount; i++) {
+						st.setInt(1, id);
 						st.setInt(2, Integer.parseInt(resource.getString(BNA_USER_ID)));
 						st.setBoolean(3, Boolean.TRUE);
 						st.addBatch();
