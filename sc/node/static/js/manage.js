@@ -1,31 +1,19 @@
 var timeout;
 $(document).ready(function() {
-	$("#recommendations").val(0);
+	$("#rcmd-recommendations").val(0);
     $('#restaurantName').typeahead({
     	minLength: 2,
     	autoSelect: true,
     	source: function(query, process) {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(function() {
-            	var dataOb = {
-            			searchString : query
-            	};
-                return $.ajax({
-              	  method: "POST",
-              	  url: "/socyal/merchant/searchMerchant",
-              	  contentType : "application/json",
-              	  data: JSON.stringify(dataOb)
-              	})
-              	  .done(function(response) {
-              		  if (response.result) {
-              			  return process(response.merchants);              			
-              		  } else {
-            			  handleErrorCallback(response);
-            		  }	          		  
-              	  });
-            }, 500);
+    		merchantSource(query, process);
+        }
+    });
+    
+    $('#rcmd-restaurantName').typeahead({
+    	minLength: 2,
+    	autoSelect: true,
+    	source: function(query, process) {
+    		merchantSource(query, process);
         }
     });
     
@@ -61,41 +49,17 @@ $(document).ready(function() {
     	minLength: 2,
     	autoSelect: true,
     	source: function(query, process) {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(function() {
-            	var merchant = $('#restaurantName');
-            	var $merchantName = merchant.val();
-            	var current = merchant.typeahead("getActive");
-            	if (current) {
-            		if (current.name === $merchantName) {
-	            		var dataOb = {
-	            			searchString : query,
-	            			merchantId : current.id
-		            	};
-		                return $.ajax({
-		              	  method: "POST",
-		              	  url: "/socyal/item/searchItems",
-		              	  contentType : "application/json",
-		              	  data: JSON.stringify(dataOb)
-		              	})
-		              	  .done(function(response) {
-		              		  if (response.result) {
-		              			  return process(response.items);              			
-		              		  } else {
-		            			  handleErrorCallback(response);
-		            		  }	          		  
-		              	  });
-	            	} else {
-	            		alertMessage('Please select a restaurant');	
-	            	}
-            	} else {
-            		alertMessage('Please select a restaurant');
-            	}          	           	
-            }, 500);
-        }
-    });  
+    		itemSource(query, process, $('#restaurantName'));
+	    }
+    });
+    
+    $('#rcmd-itemName').typeahead({
+    	minLength: 2,
+    	autoSelect: true,
+    	source: function(query, process) {
+    		itemSource(query, process, $('#rcmd-restaurantName'));
+	    }
+    });
 
     $('#imageSearch').typeahead({
         minLength: 2,
@@ -123,23 +87,16 @@ function addItem() {
 	var $cuisineName = '';
 	var $imageUrl = $("#image").val().trim();
 	var $thumbnail = $("#thumbnail").val().trim();
-	var $recommendations = 0;
 	var $isActive = ($("#isActive:checked").val() == 'true') ? true : false;
 
-	if ($("#recommendations").val() == '' || $("#recommendations").val() < 0) {
-		alertMessage('Incorrect recommendations count');
-		return;
-	}	
-	$recommendations = $("#recommendations").val();
-
 	var currentCuisine = $('#cuisineName').typeahead("getActive");
-	if (currentCuisine != undefined) {
+	if (currentCuisine != undefined && currentCuisine.name == $('#cuisineName').val()) {
 		$cuisineId = currentCuisine.id;
 		$cuisineName = currentCuisine.name;
 	}
 
 	var currentSuggestion = $('#suggestionName').typeahead("getActive");
-	if (currentSuggestion != undefined) {
+	if (currentSuggestion != undefined && currentSuggestion.name == $('#suggestionName').val()) {
 		$suggestionId = currentSuggestion.id;
 		$suggestionName = currentSuggestion.name;
 	}
@@ -164,7 +121,7 @@ function addItem() {
 				return;
 			}
 			if (!currentItem || (currentItem && currentItem.name != $itemName)) {
-				var input = confirm('Confirm Action \nName                              : '+$itemName+'\nRestaurant                      : '+$merchantName+'\nSuggestion Name            : '+$suggestionName+'\nCuisine Name                  : '+$cuisineName+'\nRecommendation Count : '+$recommendations+'\nImage Url                         : '+$imageUrl+'\nThumbnail                        : '+$thumbnail+'\nIs Active                           : '+$isActive);
+				var input = confirm('Confirm Action \nName                              : '+$itemName+'\nRestaurant                      : '+$merchantName+'\nSuggestion Name            : '+$suggestionName+'\nCuisine Name                  : '+$cuisineName+'\nImage Url                         : '+$imageUrl+'\nThumbnail                        : '+$thumbnail+'\nIs Active                           : '+$isActive);
 				if (input == true) {
 					var dataOb = {
 							name : $itemName,
@@ -173,8 +130,7 @@ function addItem() {
 							suggestionId : $suggestionId,
 							imageUrl : $imageUrl,
 							thumbnail : $thumbnail,
-							isActive : $isActive,
-							recommendations : $recommendations
+							isActive : $isActive
 			    	};
 			        return $.ajax({
 			      	  method: "POST",
@@ -185,12 +141,13 @@ function addItem() {
 			      	  .done(function(response) {
 			      		  if (response.result) {
 			      			  alertMessage($itemName + ' successfully added');
-			      			  $("#itemName").val('');
-			      			  $("#recommendations").val(0);
-			      			  $("#cuisineName").val('');
-			      			  $("#suggestionName").val('');
-			      			  $("#image").val('');
-			      			  $("#thumbnail").val('');
+							  $("#itemName").val('');
+							  $("#cuisineName").val('');
+							  $("#suggestionName").val('');
+							  $("#image").val('');
+							  $("#thumbnail").val('');
+							  $('#suggestionName').val('');
+							  $('#cuisineName').val('');
 			      		  } else {
 			    			  handleErrorCallback(response);
 			    		  }	          		  
@@ -207,6 +164,57 @@ function addItem() {
 	} else {
 		alertMessage('Restaurant not selected');
 	}
+}
+
+function addRecommendations() {
+	var merchant = $('#rcmd-restaurantName');
+	var currentMerchant = merchant.typeahead("getActive");
+	var $merchantName = merchant.val();
+	var item = $('#rcmd-itemName');
+	var currentItem = item.typeahead("getActive");
+	var $itemName = item.val();
+	var $recommendations = $("#rcmd-recommendations").val();
+
+	if (currentMerchant) {
+		if (currentMerchant.name == $merchantName) {
+			if (currentItem) {
+				if (currentItem.name == $itemName) {
+					if ($recommendations == '' || $recommendations <= 0) {
+						alertMessage('Recommendations count should be more than 0');
+						return;
+					}
+
+					var dataOb = {
+			    			itemId : currentItem.id,
+			    			rcmdCount : $recommendations
+			    	};
+			        return $.ajax({
+			      	  method: "POST",
+			      	  url: "/socyal/management/addRecommendations",
+			      	  contentType : "application/json",
+			      	  data: JSON.stringify(dataOb)
+			      	})
+			      	  .done(function(response) {
+			      		  if (response.result) {
+			      			  alertMessage('Successfully added recommendations for item : ' + $itemName);
+			      			  $("#rcmd-recommendations").val(0);
+			      		  } else {
+			    			  handleErrorCallback(response);
+			    		  }	          		  
+			      	  });
+				} else {
+					alert('Please select an item to update');	
+				}				
+			} else {
+				alert('Please select an item to update');	
+			}
+		} else {
+			alert('Please select a restaurant');
+		}	
+	} else {
+		alert('Please select a restaurant');
+	}
+	return;
 }
 
 function addCuisine() {
@@ -340,6 +348,66 @@ function imageSource(query, process) {
             handleErrorCallback(response);
           }                 
           });
+    }, 500);
+}
+
+function merchantSource(query, process) {
+  if (timeout) {
+	  clearTimeout(timeout);
+  }
+  timeout = setTimeout(function() {
+  	var dataOb = {
+  			searchString : query
+  	};
+      return $.ajax({
+    	  method: "POST",
+    	  url: "/socyal/merchant/searchMerchant",
+    	  contentType : "application/json",
+    	  data: JSON.stringify(dataOb)
+    	})
+    	  .done(function(response) {
+    		  if (response.result) {
+    			  return process(response.merchants);              			
+    		  } else {
+  			  handleErrorCallback(response);
+  		  }	          		  
+    	  });
+  }, 500);
+}
+
+function itemSource(query, process, merchant) {
+	if (timeout) {
+        clearTimeout(timeout);
+    }
+	timeout = setTimeout(function() {
+    	//var merchant = $('#restaurantName');
+    	var $merchantName = merchant.val();
+    	var current = merchant.typeahead("getActive");
+    	if (current) {
+    		if (current.name === $merchantName) {
+        		var dataOb = {
+        			searchString : query,
+        			merchantId : current.id
+            	};
+                return $.ajax({
+              	  method: "POST",
+              	  url: "/socyal/item/searchItems",
+              	  contentType : "application/json",
+              	  data: JSON.stringify(dataOb)
+              	})
+              	  .done(function(response) {
+              		  if (response.result) {
+              			  return process(response.items);              			
+              		  } else {
+            			  handleErrorCallback(response);
+            		  }	          		  
+              	  });
+        	} else {
+        		alertMessage('Please select a restaurant');	
+        	}
+    	} else {
+    		alertMessage('Please select a restaurant');
+    	}          	           	
     }, 500);
 }
 
