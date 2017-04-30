@@ -3,36 +3,72 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
-<head th:replace="fragments/head :: head(pageTitle = 'About | Bananaa')"></head>
+<head th:replace="fragments/head :: head(title = 'About | Bananaa')"></head>
+<link href="http://cdn.bananaa.in/css/extras.css" type="text/css" rel="stylesheet"></link>
+<style type="text/css">
+    .hero-image::after {
+        content: "About"
+    }
+</style>
 <body>
 	<div class="container-fluid">
-		<div th:replace="fragments/header :: header"></div>
-		
-		<!-- POLICY STARTS -->
-		<div class="row grey-background document-area">
-		    <div class="primary-heading">
-		        <h2>About Us</h2>
-		    </div>          
-		
-		    <div class="col-xs-12 white-background document-area">
-	            <h4>
-	                Bananaa is your best buddy to hangout and discover great places to eat. 
-	            </h4>
-	            <h4>
-	                It helps to serve you better and keeps the excitement with great rewards when you check in.
-	            </h4>
-	            <h3>
-	                Your one true love - BANANAA !
-	            </h3>
-	            <br /><br />
-	            <p>
-	                More information coming right up.
-	            </p>
+        <div th:replace="fragments/plain-header :: plain-header"></div>
+        
+        <div class="row grey-background document-area">
+            <div class="hero-image" align="center">
+                <img class="section-img" src="http://cdn.bananaa.in/img/about.jpg" />                
+            </div>          
+        	<div class="col-xs-12 white-background document-area mini" style="margin-top: 2%;">
+                <div class="section-heading font-2 bna-color">
+                    Why are we ?
+                </div>
+                <div class="section font-1-3">
+                    <p>Good food ... something that never makes us full, something that we always want more, but something that is never easy to get.</p>
+                    <br/>
+                    <p>A lipsmacking and a delicious food is our one true source of happiness, and we believe that everyone must have it.</p>
+                    <br/>
+                    <p>Which is why we created Bananaa.</p>
+                </div>
+                <hr/>
+                <div class="section-heading font-2 bna-color">
+                    What we do ?
+                </div>
+                <div class="section font-1-3">
+                    <p>Think of it as your personal food assistant that promises to never let you down, when it comes to food.</p>
+                    <br/>
+                    <p>Bananaa is here to cheer up those unhappy faces.</p>
+                    <br/>
+                    <p>From helping you decide the best picks at a restaurant, to letting you know which place serves your favourite food around, bananaa takes takes care of it all.</p>
+                </div>
+                <hr/>
+                <div class="section-heading font-2 bna-color">
+                    And how ?
+                </div>
+                <div class="section font-1-3">
+                    <p>Well, it brings together people's choice, what they recommend and love eating around you, does some little tech jugglery and gets it back in the form of food recommendations.</p>
+                    <br/>
+                    <p>These recommendations are driven by the people themselves. We built it the way it is because we believe in the power of community and the collective wisdom.</p>
+                </div>
+                <hr/>
+                <div class="section-heading font-2 bna-color">
+                    Our mission
+                </div>
+                <div class="section font-1-3">
+                    <p>We have pledged to make this world a better place to eat.</p>
+                    <br/>
+                    <p>And you have a part to play.</p>
+                    <br/>
+                    <p>So go on and recommend your favourite food on bananaa and we promise to bring your effort to the best cause.</p>
+                </div>
+                <hr />
+                <div style="padding: 5% 0%;">
+                    <blockquote class="blockquote bna-color">
+                        <p>Making the world, a better place to eat - one step at a time.</p>
+                    </blockquote>    
+                </div>
             </div>
-		</div>
+        </div>
 				
-		<!-- POLICY ENDSS -->
-		
 		<div lang="en" th:replace="fragments/footer :: footer"></div>
 	</div>
 </body>
