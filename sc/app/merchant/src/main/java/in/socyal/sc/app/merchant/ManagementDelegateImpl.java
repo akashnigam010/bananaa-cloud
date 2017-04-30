@@ -41,7 +41,7 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addItem(AddItemRequest request) throws BusinessException {
-		request.setName(WordUtils.capitalizeFully(request.getName()));
+		request.setName(WordUtils.capitalizeFully(request.getName().trim()));
 		request.setNameId(createNameId(request.getName()));
 		dao.addItem(request);
 	}
@@ -49,13 +49,13 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addCuisine(AddRequest request) {
-		dao.addCuisine(request);
+		dao.addCuisine(WordUtils.capitalizeFully(request.getName().trim()));
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addSuggestion(AddRequest request) {
-		dao.addSuggestion(request);
+		dao.addSuggestion(WordUtils.capitalizeFully(request.getName().trim()));
 	}
 
 	@Override
