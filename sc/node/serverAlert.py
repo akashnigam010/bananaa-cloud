@@ -8,26 +8,23 @@ from subprocess import check_output
 to = ['contact@bananaa.in', 'akashnigam010@gmail.com']
 gmail_user = 'akashnigam020@gmail.com'
 gmail_pwd = 'Akash123!'
-subject = 'Alerts from Server - dev.bananaa.in'
+subject = 'Important alert from Server - dev.bananaa.in is down'
 
-def get_pid(name):
+def check_pid(name):
     try:
         pidstr = check_output(["pidof","-s",name])
-        return int(pidstr)
+        pid = int(pidstr)
+        try:
+            os.kill(pid, 0)
+        except OSError:
+            return False
+        else:
+            return True
     except:
-        return -999;
-
-
-def check_pid(pid):
-    try:
-        os.kill(pid, 0)
-    except OSError:
         return False
-    else:
-        return True
 
 while True:
-    if check_pid(get_pid('java')) == False:
+    if check_pid('java') == False:
         print('wildfly stopped, sending alert notification!')
         try:
                 smtpserver = smtplib.SMTP_SSL('smtp.gmail.com', 465)
