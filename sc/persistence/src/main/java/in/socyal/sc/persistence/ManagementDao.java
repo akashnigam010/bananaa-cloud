@@ -77,17 +77,17 @@ public class ManagementDao {
 		}
 	}
 
-	public void addCuisine(AddRequest request) {
+	public void addCuisine(String name) {
 		CuisineEntity entity = new CuisineEntity();
-		entity.setName(request.getName());
-		entity.setNameId(generateNameId(request.getName()));
+		entity.setName(name);
+		entity.setNameId(generateNameId(name));
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
-	public void addSuggestion(AddRequest request) {
+	public void addSuggestion(String name) {
 		SuggestionEntity entity = new SuggestionEntity();
-		entity.setName(request.getName());
-		entity.setNameId(generateNameId(request.getName()));
+		entity.setName(name);
+		entity.setNameId(generateNameId(name));
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
