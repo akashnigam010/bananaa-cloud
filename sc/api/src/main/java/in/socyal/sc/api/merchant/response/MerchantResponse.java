@@ -8,9 +8,7 @@ public class MerchantResponse implements Serializable {
 	private String nameId;
 	private String name;
 	private String shortAddress;
-	private Integer checkins;
 	private String imageUrl;
-	private Double rating;
 	private Boolean isOpen;
 	private Double distance;
 	private String merchantUrl;
@@ -39,28 +37,12 @@ public class MerchantResponse implements Serializable {
 		this.shortAddress = shortAddress;
 	}
 
-	public Integer getCheckins() {
-		return checkins;
-	}
-
-	public void setCheckins(Integer checkins) {
-		this.checkins = checkins;
-	}
-
 	public String getImageUrl() {
 		return imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public Double getRating() {
-		return rating;
-	}
-
-	public void setRating(Double rating) {
-		this.rating = rating;
 	}
 
 	public Boolean getIsOpen() {

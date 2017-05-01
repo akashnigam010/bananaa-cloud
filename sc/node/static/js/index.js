@@ -16,55 +16,68 @@ $(document).ready(function() {
                 $(".search-box-suggestion").html('');
             }
         });
-    }   
-	
-    var timerid;
-    $("#search-field").on("input",function(e){
-        var value = $(this).val();
-        if($(this).data("lastval")!= value){
-
-            $(this).data("lastval",value);        
-            clearTimeout(timerid);
-
-            timerid = setTimeout(function() {
-                //change action
+    }
+    
+    var timeout;
+    $('#search-field').typeahead({
+    	minLength: 2,
+    	autoSelect: true,
+    	fitToElement: true,
+    	matcher: function(merchant) {
+            if (merchant.name.toLowerCase().includes(this.query.trim().toLowerCase())) {
+                return true;
+            } else {
+                this.query = 'No match found';
+                return true;
+            }
+        },
+    	displayText: function(merchant) {
+	        return '<div style="padding: 2%;"><span>' + 
+	                  merchant.name + 
+	                  '</span> <br /><span class="font-0-8">' +
+	                  merchant.shortAddress + 
+	                  '</span></div>';
+		},
+		afterSelect: function(merchant) {
+			if (merchant.id != -999) {
+                $('#search-field').val(merchant.name);
+            } else {
+                $('#search-field').val('');
+            }
+        },
+    	source: function(query, process) {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function() {
             	var dataOb = {
-            			searchString : $("#search-field").val()
+            			searchString : query
             	};
-                $.ajax({
-                	  method: "POST",
-                	  url: "/socyal/merchant/searchMerchant",
-                	  contentType : "application/json",
-                	  data: JSON.stringify(dataOb)
-                	})
-                	  .done(function(response) {
-                		  if (response.result) {
-                			  var sugestionHtml = '';
-                    		  if (response.merchants.length == 0) {
-                    			  sugestionHtml += 	'<div class="col-xs-12 suggestion-wrapper">'+
-    	                			'<p class="suggestion" align="left">'+
-    	                			'<b>Oops, no results found</b>'+
-    	                			'</p></div>';
-                    		  } else {
-                    			  for (var i=0; i < response.merchants.length; i++) {
-                        			  sugestionHtml += 	'<div class="col-xs-12 suggestion-wrapper">'+
-        					                			'<a href="/'+ response.merchants[i].merchantUrl +'" >'+
-        					                			'<p class="suggestion" align="left">';
-                        			  sugestionHtml += '<b>' + response.merchants[i].name + "</b>, " + response.merchants[i].shortAddress;
-                        			  if ( i == (response.merchants.length*1)-1) {
-                        				  sugestionHtml += '</p></a></div>';
-                        			  } else {
-                        				  sugestionHtml += '</p></a><hr /></div>';
-                        			  }
-                        		  }
-                    		  }    
-                    		  $('.search-box-suggestion').html(sugestionHtml);
-                		  } else {
-                			  handleErrorCallback(response);
-                		  }                		  
-                	  });
-            },500);
-        };
+                return $.ajax({
+                	method: "POST",
+					url: "/socyal/merchant/searchMerchant",
+					contentType : "application/json",
+					data: JSON.stringify(dataOb)
+              	})
+              	  .done(function(response) {
+              		  if (response.result) {
+              			  if (response.merchants.length == 0) {
+              				alert('Something went wrong. Please try again after refreshing the page');
+              			  } else {
+              				return process(response.merchants);
+              			  }              			
+              		  } else {
+            			  handleErrorCallback(response);
+            		  }	          		  
+              	  });
+            }, 500);
+        },
+        updater:function (merchant) {
+        	if (merchant.id != -999) {
+                window.location.href = "/" + merchant.merchantUrl;
+            }
+            return merchant;
+        }
     });
     
     getTrendingRestaurants();
