@@ -15,6 +15,7 @@ import in.socyal.sc.api.merchant.request.SaveMerchantDetailsRequest;
 import in.socyal.sc.api.merchant.response.GetMerchantListResponse;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.app.merchant.MerchantDelegate;
@@ -67,6 +68,13 @@ public class MerchantService {
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = delegate.searchMerchant(request);
+				if (response.getMerchants().size() == 0) {
+					MerchantResponse noMatchFound = new MerchantResponse();
+					noMatchFound.setId(-999);
+					noMatchFound.setName("No match found");
+					noMatchFound.setShortAddress("");
+					response.getMerchants().add(noMatchFound);
+				}
 			}
 			return responseHelper.success(response);
 		} catch (BusinessException e) {

@@ -43,7 +43,8 @@ body {
 }
 
 .item-desc-wrapper {
-	margin-left: 4%
+	margin-left: 4%;
+	width: 80%;
 }
 
 .recommend-item-name {
