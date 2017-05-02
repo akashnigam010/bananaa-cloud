@@ -202,6 +202,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setId(merchantDto.getId());
 		response.setNameId(merchantDto.getNameId());
 		response.setImageUrl(merchantDto.getImageUrl());
+		response.setThumbnail(merchantDto.getThumbnail());
 		response.setLongAddress(merchantDto.getAddress().getAddress());
 		response.setName(merchantDto.getName());
 		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
