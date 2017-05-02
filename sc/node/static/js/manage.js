@@ -72,7 +72,20 @@ $(document).ready(function() {
             $("#thumbnailUrl").val(item.thumbnail);
             return item;
         }
-    });   
+    });
+    
+    $("#imageSearch-add").typeahead({
+    	minLength: 2,
+        autoSelect: true,
+        source: function(query, process) {
+          imageSource(query, process);
+        },
+        updater:function (item) {
+            $("#image").val(item.url);
+            $("#thumbnail").val(item.thumbnail);
+            return item;
+        }
+    });
 });
 
 function addItem() {
