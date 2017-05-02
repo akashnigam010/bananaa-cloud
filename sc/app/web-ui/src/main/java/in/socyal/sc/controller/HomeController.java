@@ -196,7 +196,7 @@ public class HomeController {
 	}
 	
 	private String getMerchantMetaImageUrl(MerchantDetailsResponse response) {
-		return response.getImageUrl();
+		return response.getThumbnail();
 	}
 
 	private String getItemMetaDescription(ItemDetailsResponse response) {
