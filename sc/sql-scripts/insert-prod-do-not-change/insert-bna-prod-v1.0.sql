@@ -44,7 +44,7 @@ INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (14, 'Plot 1
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (15, '2nd & 3rd Floor, Inorbit Mall, Hitech City, Hyderabad', 1);
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (16, '8-3-293/82/A/70, 4th Floor, Anshu Colours, Near TV5 Office, Jubilee Hills, Hyderabad', 2);
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (17, '8-2-293/82/A/1217, Plot 1217, Shreshta Aura, Road 36, Jubilee Hills, Hyderabad', 2);
-INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (18, 'Plot 15/1, 1st Floor, Sector 2, Opposite Cyber Gateway, Hitech City, Hyderabad', 2);
+INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (18, 'Plot 15/1, 1st Floor, Sector 2, Opposite Cyber Gateway, Hitech City, Hyderabad', 1);
 
 -- merchant
 INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID`, `TYPE`, `AVERAGE_COST`, `IMAGE_URL`, `THUMBNAIL`) VALUES (1, 'Fusion 9', 'fusion-9-hitech-city', 1, 1, 'Roof Top', 1200.00, 'http://cdn.bananaa.in/rest-img/fusion-9-hitech-city.jpg', 'http://cdn.bananaa.in/rest-img/t/fusion-9-hitech-city.jpg');
