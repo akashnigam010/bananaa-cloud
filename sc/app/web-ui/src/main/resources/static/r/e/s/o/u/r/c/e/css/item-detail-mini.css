@@ -15,8 +15,7 @@
 }
 
 .header-icon {
-    color: #fff;
-    font-size: 1.5em;
+    font-size: 1.5em; 
     padding-top: 7%; 
 }
 
@@ -27,7 +26,16 @@ body {
 /* Common mini-CSS ENDS */
 
 .primary-image-banner {
-	height: 180px;
+    height: 150px;
+    border-radius: 0px;
+}
+
+.primary-image-wrapper {
+  padding-top: 0%;
+}
+
+.sub-section {
+    padding: 0%;
 }
 
 .details-wrapper {
@@ -36,19 +44,6 @@ body {
 
 .details-top-wrapper {
 	border-radius: 0px 0px 6px 6px;
-}
-
-.recommended-item {
-	padding: 3%;
-}
-
-.item-desc-wrapper {
-	margin-left: 4%;
-	width: 80%;
-}
-
-.recommend-item-name {
-	padding-top: 1%;
 }
 
 .detail-type-padding {
@@ -70,9 +65,17 @@ hr {
     margin-bottom: 2px; 
 }
 
+.recommend-desc-area {
+	height: 90px;
+}
+
 .recommend-button {
     width: 90%;
     height: 45px;
+}
+
+.my-recommendations {
+	padding-bottom: 5%;
 }
 
 .error-label {
@@ -80,6 +83,14 @@ hr {
     margin-bottom: 10%;
 }
 
-.recommend-item-desc {
+.recommended-item {
+    padding: 3%;
+}
+
+.item-desc-wrapper {
+    margin-left: 4%
+}
+
+.review-item-desc {
     padding: 3% 0%;
 }
