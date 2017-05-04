@@ -1,0 +1,70 @@
+<div class="row" th:fragment="top-header">
+	<script type="text/javascript" th:src="'http://cdn.bananaa.in/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
+	<script type="text/javascript">
+		function openSearchModal() {
+			$('#searchModal').modal('show');
+			$("#modalSearchInput").focus();
+		}
+	</script>
+    <div class="col-xs-12">
+        <div class="row top-header">
+            <div class="col-xs-6">
+                <p class="simpson header-icon bna-color">
+                    <img class="cursor-pointer" src="http://cdn.bananaa.in/img/arrow_back_black.svg" onclick="window.history.back()" />
+                    <span class="cursor-pointer" onclick="location.href='/'" style="margin-left: 5%;">bananaa</span>
+                </p>
+            </div>
+            <div class="col-xs-6">
+                <div class="hidden-sm hidden-md hidden-lg" style="padding-top: 6%;">
+                    <div class="col-xs-4 col-xs-offset-4">
+                        <img src="http://cdn.bananaa.in/img/ic_search_black.svg" onclick="openSearchModal();" />
+                    </div>
+                    <div class="btn-group col-xs-4">
+                        <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="http://cdn.bananaa.in/img/ic_person_black.svg" />                                
+                        <ul class="dropdown-menu pull-right" id="login-dropdown-mini">
+                            <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="javascript:logout();">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="hidden-xs">
+                    <div class="col-xs-9">
+                        <input id="topSearchInput" class="search-box" type="text" placeholder="Search for restaurants" />
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="btn-group login-info pull-right">
+                            <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
+                            </button>
+                            <ul class="dropdown-menu pull-right" id="login-dropdown">
+                                <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="javascript:logout();">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>                        
+            </div>                    
+        </div>
+    </div>
+    <!-- Full screen Modal STARTS -->
+    <div class="modal fade" id="searchModal" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog search-modal-dialog">
+            <div class="modal-content search-modal-content">                    
+                <div class="modal-header align-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <img src="http://cdn.bananaa.in/img/clear.svg" />
+                    </button>
+                    <h4 class="modal-title bold">Search</h4>
+                </div>
+                <div class="modal-body align-center" style="padding: 7%;">
+                    <input id="modalSearchInput" class="padding" type="text" data-provide="typeahead" placeholder="Search for restaurants" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Full screen Modal ENDS -->         
+</div>

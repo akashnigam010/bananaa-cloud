@@ -4,42 +4,23 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
 <head th:replace="fragments/head :: head"></head>
-<link href="http://cdn.bananaa.in/css/detail.css" type="text/css" rel="stylesheet"></link>
-<link href="http://cdn.bananaa.in/css/detail-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
+<link href="/r/e/s/o/u/r/c/e/css/detail.css" type="text/css" rel="stylesheet"></link>
+<link href="/r/e/s/o/u/r/c/e/css/detail-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
 <script src="https://www.gstatic.com/firebasejs/3.7.2/firebase.js"></script>
 
 <body>
-	<script type="text/javascript" th:src="'http://cdn.bananaa.in/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<div class="container-fluid">
 		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
 		<div class="hide" id="primaryImageTemp" th:text="${detail.imageUrl}"></div>
-        <div class="row primary-image-banner">
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <p class="simpson header-icon cursor-pointer">
-                            <img src="http://cdn.bananaa.in/img/arrow_back.svg" onclick="window.history.back()" />
-                            <span onclick="location.href='/'" style="margin-left: 5%;">bananaa</span>
-                        </p>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="btn-group login-info pull-right">
-                            <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
-                            </button>
-                            <ul id="login-dropdown" class="dropdown-menu pull-right">
-                                <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="javascript:logout();">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>          
-        </div>
+        
+        <div lang="en" th:replace="fragments/top-header :: top-header"></div>
+        
+        <div class="row blue-white-background primary-image-wrapper">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 primary-image-banner">
+            </div>    
+        </div> 
 
-        <div class="row merchant-detail-background blue-white-background">
+        <div class="row blue-white-background sub-section">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 merchant-detail-main">
                 <div class="row white-background details-wrapper details-top-wrapper">
                     <div class="col-xs-12">
@@ -184,7 +165,7 @@
 		                               		<div class="my-recommendations">
 			                              		<!-- <div class="col-xs-12 recommended-item cursor-pointer my-recommended-item">
 			                                       <div class="float-left" style="object-fit: cover;">
-			                                           <img class="user-icon" src="https://scontent.xx.fbcdn.net/v/t1.0-1/p160x160/16729123_1425749337455860_4273798065565020914_n.jpg?oh=471bd266f6bf7f77846dd96a74d66337&oe=592F48FA" />
+			                                           <img class="user-icon" src="someimage2F48FA" />
 			                                       </div>
 			                                       <div class="float-left item-desc-wrapper">
 			                                           <span class="hide recommendation-id">12</span>
@@ -228,8 +209,8 @@
 	</div>
 	<input type="hidden" id="merchantId" th:value='${detail.id}' />
 	<input type="hidden" id="merchantName" th:value='${detail.name}' />
-	<script src="http://cdn.bananaa.in/js/detail.js"></script>
-	<script src="http://cdn.bananaa.in/js/rcmd.js"></script>
+	<script src="/r/e/s/o/u/r/c/e/js/detail.js"></script>
+	<script src="/r/e/s/o/u/r/c/e/js/rcmd.js"></script>
 </body>
 
 </html>

@@ -1,11 +1,13 @@
 $(document).ready(function() {
 	page = 'item-detail';
     var primaryImage = $("#primaryImageTemp").html();
-    var background = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0)),url("+primaryImage+")";
+    var background = "url("+primaryImage+")";
     $(".primary-image-banner").css("background", background);
     $(".primary-image-banner").css("background-repeat", "no-repeat");
     $(".primary-image-banner").css("background-position", "center");
     $(".primary-image-banner").css("background-size", "cover");
+    $('#topSearchInput').typeahead(searchConfig($('#topSearchInput')));
+    $('#modalSearchInput').typeahead(searchConfig($('#modalSearchInput')));
     getMyItemRecommendation();
 });
 

@@ -219,7 +219,7 @@ body .slick-next, body .slick-prev{
     background-color: #333333;
     color: #adb0b6;
     height: 20%;
-    background-image: url("../img/footer-graphic.png");
+    background-image: url("http://cdn.bananaa.in/img/footer-graphic.png");
     background-repeat: no-repeat;
     background-position: left bottom;
     padding: 10% 0%;
@@ -372,38 +372,6 @@ ul.typeahead.dropdown-menu {
     outline: none;
 }
 
-/*Full screen modal css STARTS*/
-/*.overlay {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #FFF;
-    overflow-x: hidden;
-}
-
-.overlay-content {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.overlay .closebtn {
-    position: absolute;
-    top: 20px;
-    right: 45px;
-    font-size: 20px;
-}
-
-@media screen and (max-height: 450px) {
-  .overlay .closebtn {
-    top: 15px;
-    right: 35px;
-  }
-}*/
-/*Full screen modal css ENDS*/
-
 /*Input placeholder css STARTS*/
 ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
     color:    #939393;
@@ -424,3 +392,27 @@ ul.typeahead.dropdown-menu {
 .recommend-item-desc, #recommend-item-desc, .review-item-desc {
 	white-space: pre-wrap;
 }
+
+/*Top Header CSS STARTS*/
+.top-header {
+  background: #FFFFFE; 
+  border-bottom: solid 1px #e7e7e6;
+}
+
+.search-box {
+  padding: 15px 0px 10px 0px;
+}
+
+.search-modal-dialog {
+  width: 100%; 
+  height: 100%; 
+  margin: 0; 
+  padding: 0;
+}
+
+.search-modal-content {
+  height: auto; 
+  min-height: 100%; 
+  border-radius: 0;
+}
+/*Top Header CSS ENDS*/
