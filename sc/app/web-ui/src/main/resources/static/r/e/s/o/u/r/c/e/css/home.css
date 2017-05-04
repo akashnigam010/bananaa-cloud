@@ -1,0 +1,280 @@
+/* Hero Banner CSS - START */
+
+.logo-round {
+    object-fit: cover;
+    height: 100px;
+    width: 100px;
+    border: 3px solid;
+    border-radius: 100px;
+    border-color: white;
+}
+
+.logo-wrapper {
+    height: 150px;
+}
+
+.logo {
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.tagline {
+    color: #FFF;
+    font-family: bna-simpson;
+    font-size: 4em;
+}
+
+.home-banner {
+    background: linear-gradient(
+                     rgba(20,20,20, .2), 
+                     rgba(20,20,20, .5)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.icon-search {
+    background-image: url("http://cdn.bananaa.in/img/search_icon.png");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.search-box-wrapper {
+    height: 100px;
+    padding-top: 2%;
+}
+
+.search-box-wrapper>.form-horizontal>.form-group-lg>input {
+    font-size: 1.2em;
+}
+
+.search-box-suggestion {
+    z-index: 1; 
+    position: absolute; 
+    background: white; 
+    color: black; 
+    width: 100%; 
+    border-radius: 5px;
+    -webkit-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+    -moz-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+    box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+}
+
+.suggestion {
+    padding: 2% 2% 0% 2%;
+}
+
+/* Hero Banner CSS - END */
+
+/* Feature Banner CSS - START */
+
+.feature {
+    padding-top: 100px;
+}
+
+.feature-details {
+    padding-top: 30px;
+}
+
+.feature-heading {
+    text-transform: uppercase;
+    font-family: bna-bold;
+    font-size: 20px;
+}
+
+ .feature-description {
+    color: #808080;
+    font-size: 16px;
+ }
+
+/* Feature Banner CSS - END */
+
+/* Word Cloud CSS - START */
+
+.word-cloud-wrapper {
+    padding-top: 50px;
+}
+
+.wc-custom-class-1 {
+    text-transform: uppercase;
+    font-family: bna-bold !important;
+    padding: 10px !important;
+}
+
+.wc-custom-class-2 {
+    text-transform: uppercase;
+    font-family: bna-bold !important;
+    padding: 10px !important;
+}
+
+.wc-custom-class-3 {
+    text-transform: uppercase;
+    font-family: bna-web !important;
+    padding: 10px !important;
+}
+
+.extra-padding {
+    padding-top: 50px;
+}
+
+/* Word Cloud CSS - END */
+
+/* Trending CSS - START */
+
+.trending {
+    background: #E6E9EE;
+}
+
+.trending-heading {
+    padding: 5% 3% 1% 11%;
+    text-transform: uppercase;  
+}
+
+.trending-restaurant-wrapper, .trending-food-wrapper {
+    padding-left: 3%;
+    padding-right: 3%;
+}
+
+.trending-item {
+    margin-right: 10px;
+}
+
+.trend-image {
+    object-fit: cover;
+    width:100%;
+    height:180px;
+    overflow:hidden;
+    vertical-align:top;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.trending-item-desc {
+    background-color: #FFFFFF;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.desc-top {
+    font-family: bna-bold;
+    padding: 0px 5px 0px 5px;
+}
+
+.desc-bottom {
+    padding: 10px 5px 0px 5px;
+    color: #808080;
+}
+
+.rating-gear {
+    background-color: #9932CC;
+    color: #FFFFFF;
+    height: 25px;
+    width: 50px;
+    border-radius: 4px;
+}
+
+.checkins-gear {
+    height: 25px;
+    width: 50px;
+}
+
+.icon-rating {
+    height: 15px;
+    width: 15px;
+}
+
+.icon-bananaa {
+    height: 15px;
+    width: 20px;
+}
+
+.rating-value {
+    vertical-align: middle;
+}
+
+.checkin-value {
+    vertical-align: middle;
+}
+
+/* Trending CSS - END */
+
+/* App Info CSS - START */
+
+.app-info {
+    background-color: #FFFFFF;
+    padding: 10% 15% 10% 15%;
+}
+
+.download-heading {
+    padding : 20% 0% 5% 0%;
+    font-family: bna-bold;
+    font-size: 2.5em;
+    text-align: left;
+}
+
+.download-link-image {
+    padding-top: 5%;
+}
+
+/* App Info CSS - END */
+
+/* ERROR PAGE CSS - START*/
+
+.error-message-primary {
+    padding: 5% 0% 3% 0%;
+    color: #9932CC;
+}
+
+.error-message-secondary {
+    padding-bottom: 3%;
+}
+
+.back-home-button {
+    color: #ffffff;
+    background-color: #9932CC;
+}
+
+/* ERROR PAGE CSS - END*/
+
+/* PLACEHOLDER CSS - START*/
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+:-ms-input-placeholder {  
+   text-align: center; 
+}
+
+hr {
+    margin-top: 2px;
+    margin-bottom: 2px; 
+}
+/* PLACEHOLDER CSS - END*/
+
+/* Login Button CSS starts */
+.login-info {
+    cursor: pointer; 
+    color: white; 
+    padding-right: 3%; 
+    padding-top: 2%;    
+}
+/* Login Button CSS ends */
+
+/*Home Icon CSS Starts*/
+.header-icon {
+    color: #fff;
+    font-size: 2em;
+    padding-left: 3%; 
+    padding-top: 2%; 
+}
+/*Home Icon CSS ends*/

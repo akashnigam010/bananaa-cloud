@@ -1,0 +1,93 @@
+/* Common mini-CSS STARTS */
+.login-info {
+    cursor: pointer; 
+    color: white; 
+    padding-right: 5%; 
+    padding-top: 5%;    
+}
+
+.login-info>.btn {
+    font-size: 10px;
+}
+
+.dropdown-menu {
+    font-size: 10px;
+}
+
+.header-icon {
+    font-size: 1.5em;
+    padding-top: 7%; 
+}
+
+body {
+    font-size: 12px;
+}
+
+/* Common mini-CSS ENDS */
+
+.primary-image-banner {
+    height: 150px;
+    border-radius: 0px;
+}
+
+.primary-image-wrapper {
+  padding-top: 0%;
+}
+
+.sub-section {
+    padding: 0%;
+}
+
+.details-wrapper {
+	border-radius: 6px;
+}
+
+.details-top-wrapper {
+	border-radius: 0px 0px 6px 6px;
+}
+
+.recommended-item {
+	padding: 3%;
+}
+
+.item-desc-wrapper {
+	margin-left: 4%;
+    width: 80%;
+}
+
+.recommend-item-name {
+	padding-top: 1%;
+}
+
+.detail-type-padding {
+	padding: 3%;
+}
+
+.user-icon {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	text-align: center;
+	background-position: center;
+	background-repeat: no-repeat;
+	object-fit: cover;
+}
+
+hr {
+    margin-top: 2px;
+    margin-bottom: 2px; 
+}
+
+.recommend-button {
+    width: 90%;
+    height: 45px;
+}
+
+.error-label {
+    margin-top: -10%;
+    margin-bottom: 10%;
+}
+
+.recommend-item-desc {
+    padding: 3% 0%;
+}
