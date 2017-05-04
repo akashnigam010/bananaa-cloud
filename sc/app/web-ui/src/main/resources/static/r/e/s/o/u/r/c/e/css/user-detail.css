@@ -2,11 +2,10 @@
 .login-info {
     cursor: pointer; 
     color: white; 
-    padding-right: 3%; 
-    padding-top: 2%;    
+    padding-top: 10%;    
 }
+
 .header-icon {
-    color: #fff;
     font-size: 2em;
     padding-top: 2%; 
 }
@@ -21,7 +20,7 @@
 /* Media Queries CSS - ENDS */
 
 .details-wrapper {
-	border-radius: 6px;
+	border-radius: 4px;
 }
 
 .user-icon {

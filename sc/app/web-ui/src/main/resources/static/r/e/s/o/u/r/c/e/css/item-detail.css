@@ -2,36 +2,16 @@
 .login-info {
     cursor: pointer; 
     color: white; 
-    padding-right: 3%; 
-    padding-top: 2%;    
+    padding-top: 10%;    
 }
+
 .header-icon {
-    color: #fff;
     font-size: 2em;
     padding-top: 2%; 
 }
 /* Common CSS ENDS */
 
 /* Media Queries CSS - STARTS */
-@media (min-width: 500px) {
-    .merchant-detail-main {
-    	top: -8vh;
-    }
-    .merchant-detail-background {
-    	margin-bottom: -3vh;
-    }
-}
-
-@media (min-width: 1090px) {
-    .merchant-detail-main {
-    	top: -12vh;
-    }
-    .merchant-detail-background {
-    	margin-bottom: -7vh;
-    }
-
-}
-
 @media (min-width: 768px) {
 	.detail-about > .col-sm-8 {
 	    width: 65.666667%;
@@ -40,11 +20,20 @@
 /* Media Queries CSS - ENDS */
 
 .primary-image-banner {
-	height: 350px;
+	height: 250px;
+    border-radius: 4px;
+}
+
+.primary-image-wrapper {
+  padding-top: 1%;
+}
+
+.sub-section {
+    padding: 1% 0%;
 }
 
 .details-wrapper {
-	border-radius: 6px;
+	border-radius: 4px;
 }
 
 .detail-type-padding {
