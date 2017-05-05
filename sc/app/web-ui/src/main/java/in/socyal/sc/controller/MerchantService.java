@@ -18,6 +18,8 @@ import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SaveMerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
+import in.socyal.sc.api.merchant.response.StoriesResponse;
+import in.socyal.sc.api.merchant.response.Story;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.validation.MerchantValidator;
 import in.socyal.sc.helper.JsonHelper;
@@ -92,6 +94,12 @@ public class MerchantService {
 			return responseHelper.failure(response, e);
 		}
 	}
+	
+	@RequestMapping(value = "/getStories", method = RequestMethod.GET, headers = "Accept=application/json")
+	public StoriesResponse getStories() {
+		StoriesResponse response = createStories();
+		return responseHelper.success(response);
+	}
 
 	// Testing purpose
 	@RequestMapping(value = "/saveMerchantDetails", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -104,5 +112,25 @@ public class MerchantService {
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		}
+	}
+	
+	private StoriesResponse createStories() {
+		StoriesResponse response = new StoriesResponse();
+		Story story1 = new Story();
+		story1.setName("Bananaa - What the Fuzz!");
+		story1.setImageUrl("http://cdn.bananaa.in/img/what-mini.jpg");
+		story1.setUrl("/about");
+		response.getStories().add(story1);
+		Story story2 = new Story();
+		story2.setName("Recommendations. How ?");
+		story2.setImageUrl("http://cdn.bananaa.in/img/how-mini.jpg");
+		story2.setUrl("/how");
+		response.getStories().add(story2);
+		Story story3 = new Story();
+		story3.setName("Where are we headed ?");
+		story3.setImageUrl("http://cdn.bananaa.in/img/next.jpg");
+		story3.setUrl("/next");
+		response.getStories().add(story3);
+		return response;
 	}
 }

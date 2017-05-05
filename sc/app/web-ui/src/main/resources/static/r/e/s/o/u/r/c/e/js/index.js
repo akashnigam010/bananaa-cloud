@@ -19,8 +19,8 @@ $(document).ready(function() {
     }
     
     $('#search-field').typeahead(searchConfig($('#search-field')));
-    addSlick($('.diary-wrapper')); 
     getTrendingRestaurants();
+    getStories();
     
 });
 
@@ -57,6 +57,39 @@ function getTrendingRestaurants() {
     				  $('.trending-restaurant-wrapper').html(trendingRestaurantHtml);
     				  addSlick($('.trending-restaurant-wrapper'));
     				  $('.trending-restaurants').find('.loader').hide();
+    			  }
+    		  } else {
+    			  handleErrorCallback(response);
+    		  }
+    	  });
+}
+
+function getStories() {
+	$.ajax({
+    	  method: "GET",
+    	  url: "/socyal/merchant/getStories",
+    	  contentType : "application/json"
+    	})
+    	  .done(function(response) {
+    		  var storiesHtml = '';
+    		  if (response.result) {
+    			  if (response.stories.length > 0) {
+    				  for (var i=0; i<response.stories.length; i++) {
+    					  storiesHtml += 
+    						  '<div class="trending-item">'+
+			                              '<a href="'+response.stories[i].url+'">'+
+			                          '<div class="diary-sec">'+
+			                              '<img class="trend-image diary-img" src="'+response.stories[i].imageUrl+'" alt="" />'+
+			                              '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
+			                                  '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
+			                              '</div>'+
+			                          '</div>'+
+			                      '</a>'+
+			                  '</div>';
+    				  }
+    				  $('.diary-wrapper').html(storiesHtml);
+    				  addSlick($('.diary-wrapper'));
+    				  $('.stories').find('.loader').hide();
     			  }
     		  } else {
     			  handleErrorCallback(response);
