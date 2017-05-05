@@ -278,3 +278,17 @@ hr {
     padding-top: 2%; 
 }
 /*Home Icon CSS ends*/
+
+/*Our diary css STARTS*/
+
+.diary-sec {
+    position: relative; 
+    border-radius: 6px; 
+    background: linear-gradient(white, purple);
+}
+
+.diary-img {
+    opacity: 0.8;
+}
+
+/*Our diary css ENDS*/

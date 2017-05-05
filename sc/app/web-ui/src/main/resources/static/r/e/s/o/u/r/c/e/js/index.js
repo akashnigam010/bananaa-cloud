@@ -19,9 +19,8 @@ $(document).ready(function() {
     }
     
     $('#search-field').typeahead(searchConfig($('#search-field')));
-    
+    addSlick($('.diary-wrapper')); 
     getTrendingRestaurants();
-    getTrendingFood();
     
 });
 
@@ -63,10 +62,6 @@ function getTrendingRestaurants() {
     			  handleErrorCallback(response);
     		  }
     	  });
-}
-
-function getTrendingFood() {
-	addSlick($('.trending-food-wrapper'));
 }
 
 function addSlick(slickElement) {
