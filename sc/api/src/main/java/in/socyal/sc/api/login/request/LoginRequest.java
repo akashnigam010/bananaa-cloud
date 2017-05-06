@@ -1,22 +1,22 @@
 package in.socyal.sc.api.login.request;
 
 public class LoginRequest {
-	private String fbId;
-	private String fbAccessToken;
+	private ClientType client;
+	private String accessToken;
 
-	public String getFbId() {
-		return fbId;
+	public ClientType getClient() {
+		return client;
 	}
 
-	public void setFbId(String fbId) {
-		this.fbId = fbId;
+	public void setClient(ClientType client) {
+		this.client = client;
 	}
 
-	public String getFbAccessToken() {
-		return fbAccessToken;
+	public String getAccessToken() {
+		return accessToken;
 	}
 
-	public void setFbAccessToken(String fbAccessToken) {
-		this.fbAccessToken = fbAccessToken;
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
 	}
 }

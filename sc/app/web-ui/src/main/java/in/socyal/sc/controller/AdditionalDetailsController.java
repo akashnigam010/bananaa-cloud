@@ -31,4 +31,16 @@ public class AdditionalDetailsController {
 		ModelAndView modelAndView = new ModelAndView("terms");
 		return modelAndView;
 	}
+	
+	@RequestMapping(value = "/how", method = RequestMethod.GET)
+	public ModelAndView how() {
+		ModelAndView modelAndView = new ModelAndView("how");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/next", method = RequestMethod.GET)
+	public ModelAndView next() {
+		ModelAndView modelAndView = new ModelAndView("next");
+		return modelAndView;
+	}
 }

@@ -12,13 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 import in.socyal.sc.api.firebase.FirebaseUser;
 import in.socyal.sc.api.firebase.Uid;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.login.request.ClientType;
 import in.socyal.sc.api.login.request.IdTokenRequest;
+import in.socyal.sc.api.login.request.LoginRequest;
+import in.socyal.sc.api.login.response.FederatedUser;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.aws.S3Helper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
+import in.socyal.sc.helper.google.OAuth2GoogleHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.UserDao;
@@ -33,6 +37,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	LoginMapper mapper;
 	@Autowired
 	OAuth2FbHelper fbHelper;
+	@Autowired
+	OAuth2GoogleHelper googleHelper;
 	@Autowired
 	MerchantDao merchantDao;
 	@Autowired
@@ -88,11 +94,56 @@ public class LoginDelegateImpl implements LoginDelegate {
 		loginResponse.setUser(mapper.mapToLoginUserDto(user));
 		return loginResponse;
 	}
-	
-	public static void main(String[] args) throws BusinessException {
-		LoginDelegateImpl impl = new LoginDelegateImpl();
-		IdTokenRequest idTokenRequest = new IdTokenRequest();
-		idTokenRequest.setIdToken("eyJhbGciOiJSUzI1NiIsImtpZCI6IjJiOTkyYjgyMGQzZWZlNTA0ODAzZDMyZDE4NmY2YmY0NjRiYWI1MGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdGVzdHNpZ25pbi0xNjA2MTEiLCJuYW1lIjoiQWthc2ggTmlnYW0iLCJwaWN0dXJlIjoiaHR0cHM6Ly9zY29udGVudC54eC5mYmNkbi5uZXQvdi90MS4wLTEvczEwMHgxMDAvMTY5OTg4MzVfMTI1NDIyMTk3NDYzMzE4M184NzcwMzMyODMxMjgzMzc2MDI1X24uanBnP29oPTIzZTQ3ZTQ2NTg4ODJiY2I2YzJjMDIxMTdlZGRmYjlmJm9lPTU5Nzg4MUQzIiwiYXVkIjoidGVzdHNpZ25pbi0xNjA2MTEiLCJhdXRoX3RpbWUiOjE0OTMwNTIxNDgsInVzZXJfaWQiOiJ2TEFlVVdXM2JoTVRpZEFuUmJTNklnUFJZUHkxIiwic3ViIjoidkxBZVVXVzNiaE1UaWRBblJiUzZJZ1BSWVB5MSIsImlhdCI6MTQ5MzA1MjE0OSwiZXhwIjoxNDkzMDU1NzQ5LCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImZhY2Vib29rLmNvbSI6WyIxMTU4MjE4NTkwOTAwMTg5Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiZmFjZWJvb2suY29tIn19.HX35n2IZhwpsP3wYBh73wdwf-305Gw1od2PXBlpMtFp23V5gZX5aCcxuoCoQ4bkJoUnvuC7yZneMFYAjFc-Ms66X1re7s83iSR8UppPzDYBYgftQSPovuWati11sAm9uRkIjIiYQCMX56Cjk-dTMgQFXyo-491RPUJqa-d02G1dzaIvB9uE-Z8HFUEqQGbvMv6aPIdygQjXZEBQC3rKSPRTFsPrT4wgB1foo5qmJeymbtMcTVIzwQiqYyBSihXEvECzJCFvOWSJ7L3LO_39gVGhQsBi7HHAamlK3_4LQzadtPW1ONEOozCtC9vYWv5JW_eCncrW_oc1lyRRYhh5IPg");
-		impl.firebaseLogin(idTokenRequest);
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public LoginResponse federatedLogin(LoginRequest request) throws BusinessException {
+		LoginResponse loginResponse = new LoginResponse();
+		FederatedUser federatedUser = getFederatedUser(request);
+		UserDto user = null;
+		if (StringUtils.isNotBlank(federatedUser.getEmail())) {
+			// email id passed
+			user = userDao.getUserByEmail(federatedUser.getEmail());
+			if (user == null) {
+				//new user with email
+				user = saveNewUser(federatedUser);
+			}
+		} else {
+			// email id not passed
+			user = userDao.getUserByUid(federatedUser.getId());
+			if (user == null) {
+				// user did not login with this client earlier, save new user without email
+				user = saveNewUser(federatedUser);
+			}
+		}
+		
+		loginResponse.setUser(mapper.mapToLoginUserDto(user));
+		return loginResponse;
+	}
+
+	private UserDto saveNewUser(FederatedUser federatedUser) throws BusinessException {
+		UserDto newUser = mapper.mapFederatedUser(federatedUser);
+		try {
+			newUser.setImageUrl(s3Helper.saveUserImage(newUser.getImageUrl(), newUser.getNameId()));
+		} catch (IOException e) {
+			LOG.error("Error occurred while saving user image to S3 : " + e.getMessage() + ", USER : "
+					+ newUser.toString());
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		newUser = userDao.saveUser(newUser);
+		return newUser;
+	}
+
+	private FederatedUser getFederatedUser(LoginRequest request) throws BusinessException {
+		FederatedUser federatedUser = null;
+		if (request.getClient() == ClientType.GOOGLE) {
+			federatedUser = mapper.mapGoogleUser(googleHelper.getGoogleUser(request.getAccessToken()));
+			//googleHelper.revokeToken(request.getAccessToken());
+		} else if (request.getClient() == ClientType.FACEBOOK) {
+			federatedUser = mapper.mapFacebookUser(fbHelper.getFbUser(request.getAccessToken()));
+		} else {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		return federatedUser;
 	}
 }

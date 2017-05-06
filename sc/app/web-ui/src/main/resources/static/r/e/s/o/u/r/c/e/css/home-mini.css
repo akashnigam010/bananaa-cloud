@@ -135,7 +135,7 @@ body {
     text-transform: uppercase;  
 }
 
-.trending-restaurant-wrapper, .trending-food-wrapper {
+.trending-restaurant-wrapper, .diary-wrapper {
     padding-left: 3%;
     padding-right: 3%;
 }
@@ -311,3 +311,17 @@ hr {
     padding-top: 7%; 
 }
 /*Home Icon CSS ends*/
+
+/*Our diary css STARTS*/
+
+.diary-sec {
+    position: relative; 
+    border-radius: 6px; 
+    background: linear-gradient(white, purple);
+}
+
+.diary-img {
+    opacity: 0.8;
+}
+
+/*Our diary css ENDS*/
