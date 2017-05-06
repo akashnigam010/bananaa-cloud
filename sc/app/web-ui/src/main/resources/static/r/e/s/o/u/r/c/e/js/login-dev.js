@@ -36,13 +36,10 @@ window.fbAsyncInit = function() {
 function fbSignIn() {
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
-      console.log('already logged in, uid : ' + response.authResponse.userID);
-      var uid = response.authResponse.userID;
-      var accessToken = response.authResponse.accessToken;
+      loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
     } else {
       FB.login(function(response) {
         if (response.authResponse) {
-              console.log('Login with fb');
               loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
         } else {
            console.log('User cancelled login or did not fully authorize.');
@@ -86,7 +83,6 @@ function onLoadCallback() {
 
 function loginCallback(result) {
 	if (result['status']['signed_in']) {
-		console.log('Login with google');
 		loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
 	} else {
 		alert('Something is not right. Please try again after refreshing the page');

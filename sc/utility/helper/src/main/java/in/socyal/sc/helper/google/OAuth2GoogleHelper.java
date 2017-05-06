@@ -21,11 +21,13 @@ public class OAuth2GoogleHelper {
 	private ResourceBundle resource = ResourceBundle.getBundle("environment");
 	private static final String GET_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=";
 	private static final String VERIFY_ACCESS_TOKEN_URL = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
+	private static final String REVOKE_ACCESS_TOKEN_URL = "https://accounts.google.com/o/oauth2/revoke?token=";
 	private static final String GOOGLE_CLIENT_ID = "bna.google.client.id";
 
 	/**
 	 * First checks for the validity/authenticity of the passed access token.
 	 * Then hits google api to get token information
+	 * 
 	 * @param accessToken
 	 * @return
 	 * @throws BusinessException
@@ -54,6 +56,7 @@ public class OAuth2GoogleHelper {
 
 	/**
 	 * Gets user info using the passed access token
+	 * 
 	 * @param accessToken
 	 * @return
 	 * @throws BusinessException
@@ -70,6 +73,16 @@ public class OAuth2GoogleHelper {
 		} catch (Exception e) {
 			LOG.error("Error occurred while getting google user details. Access Token : " + accessToken, e);
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+	}
+
+	public void revokeToken(String accessToken) {
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+			restTemplate.getForObject(REVOKE_ACCESS_TOKEN_URL + accessToken, String.class);
+		} catch (Exception e) {
+			LOG.error(
+					"***** Exception occurred while revoking google access token.*****. Access Token : " + accessToken);
 		}
 	}
 }
