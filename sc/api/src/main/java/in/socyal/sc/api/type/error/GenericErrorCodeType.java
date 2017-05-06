@@ -7,6 +7,7 @@ public enum GenericErrorCodeType implements BusinessErrorCode {
 	REQUEST_VALIDATION_FAILED(90002),
 	JWT_TOKEN_EXPIRED(90003),
 	LOGIN_REQUIRED(90004),
+	INVALID_TOKEN(90005),
 	GENERIC_ERROR(99999);
 
 	private int value;
