@@ -34,19 +34,21 @@ window.fbAsyncInit = function() {
 // ********************* facebook login *********************
 
 function fbSignIn() {
-  FB.getLoginStatus(function(response) {
-    if (response.status === 'connected') {
-      loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
-    } else {
-      FB.login(function(response) {
-        if (response.authResponse) {
-              loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
-        } else {
-           console.log('User cancelled login or did not fully authorize.');
-        }
-      },{scope: 'email'});
-    }
-  });
+	$("#loginModal").find(".loader").removeClass('hide');
+	$("#loginModal").find(".modal-body").addClass('hide');
+	  FB.getLoginStatus(function(response) {
+	    if (response.status === 'connected') {
+		  loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
+	    } else {
+	      FB.login(function(response) {
+	        if (response.authResponse) {
+	              loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
+	        } else {
+	           console.log('User cancelled login or did not fully authorize.');
+	        }
+	      },{scope: 'email'});
+	    }
+	  });
 }
 
 //function fbLogout() {
@@ -64,16 +66,19 @@ function logout() {
 
 // ********************* google login *********************
 
-function googleSignIn() 
-{
-  var myParams = {
-    'clientid' : gClientId,
-    'cookiepolicy' : 'single_host_origin',
-    'callback' : 'loginCallback',
-    'approvalprompt':'force',
-    'scope' : 'profile email'
-  };
-  gapi.auth.signIn(myParams);
+function googleSignIn() {
+	
+	$("#loginModal").find(".loader").removeClass('hide');
+	$("#loginModal").find(".modal-body").addClass('hide');
+	var myParams = {
+		'clientid' : gClientId,
+		'cookiepolicy' : 'single_host_origin',
+		'callback' : 'loginCallback',
+		'approvalprompt' : 'force',
+		'accessType' : 'online',
+		'scope' : 'profile email'
+	};
+	gapi.auth.signIn(myParams);
 }
 
 function onLoadCallback() {
