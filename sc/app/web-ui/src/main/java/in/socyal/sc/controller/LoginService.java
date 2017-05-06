@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.IdTokenRequest;
+import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.core.validation.LoginValidator;
@@ -49,10 +50,11 @@ public class LoginService {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
-	public LoginResponse login(@RequestBody IdTokenRequest request) {
+	public LoginResponse login(@RequestBody LoginRequest request) {
 		LoginResponse response = new LoginResponse();
 		try {
-			response = delegate.firebaseLogin(request);
+			validator.validateLoginRequest(request);
+			response = delegate.federatedLogin(request);
 			addLoginCookie(response);
 			addLocationCookie();
 			return helper.success(response);

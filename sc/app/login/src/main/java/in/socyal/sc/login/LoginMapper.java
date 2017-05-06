@@ -6,7 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.stereotype.Component;
 
+import com.restfb.types.User;
+
 import in.socyal.sc.api.firebase.FirebaseUser;
+import in.socyal.sc.api.google.GoogleUser;
+import in.socyal.sc.api.login.response.FederatedUser;
 import in.socyal.sc.api.login.response.LoginUserDto;
 import in.socyal.sc.api.user.dto.UserDto;
 
@@ -43,6 +47,47 @@ public class LoginMapper {
 		return user;
 	}
 
+	public UserDto mapFederatedUser(FederatedUser federatedUser) {
+		UserDto user = new UserDto();
+		MutablePair<String, String> names = parseDisplayName(federatedUser.getName());
+		user.setUid(federatedUser.getId().toString());
+		user.setFirstName(names.getLeft());
+		user.setLastName(names.getRight());
+		user.setNameId(generateUserNameId(user.getFirstName(), user.getLastName()));
+		user.setImageUrl(federatedUser.getPhotoUrl());
+		user.setEmail(federatedUser.getEmail() != null ? federatedUser.getEmail() : null);
+		return user;
+	}
+
+	public LoginUserDto mapToLoginUserDto(UserDto user) {
+		LoginUserDto loginUserDto = new LoginUserDto();
+		loginUserDto.setId(user.getId());
+		loginUserDto.setFirstName(user.getFirstName());
+		loginUserDto.setLastName(user.getLastName());
+		loginUserDto.setImageUrl(user.getImageUrl());
+		loginUserDto.setNameId(user.getNameId());
+		return loginUserDto;
+	}
+
+	public FederatedUser mapGoogleUser(GoogleUser googleUser) {
+		FederatedUser user = new FederatedUser();
+		user.setId(googleUser.getId());
+		user.setEmail(googleUser.getEmail());
+		user.setName(googleUser.getName());
+		user.setPhotoUrl(googleUser.getPicture());
+		return user;
+	}
+
+	public FederatedUser mapFacebookUser(User fbUser) {
+		FederatedUser user = new FederatedUser();
+		user.setId(fbUser.getId());
+		user.setEmail(fbUser.getEmail());
+		user.setName(fbUser.getFirstName() + " " + fbUser.getLastName());
+		user.setPhotoUrl(fbUser.getPicture().getUrl());
+		return user;
+
+	}
+
 	private MutablePair<String, String> parseDisplayName(String displayName) {
 		MutablePair<String, String> names = new MutablePair<>();
 		String[] nameString = displayName.split(" ");
@@ -54,16 +99,6 @@ public class LoginMapper {
 		names.setLeft(firstName.toString().trim());
 		names.setRight(nameString[i]);
 		return names;
-	}
-
-	public LoginUserDto mapToLoginUserDto(UserDto user) {
-		LoginUserDto loginUserDto = new LoginUserDto();
-		loginUserDto.setId(user.getId());
-		loginUserDto.setFirstName(user.getFirstName());
-		loginUserDto.setLastName(user.getLastName());
-		loginUserDto.setImageUrl(user.getImageUrl());
-		loginUserDto.setNameId(user.getNameId());
-		return loginUserDto;
 	}
 
 	/**

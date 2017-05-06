@@ -2,6 +2,7 @@ package in.socyal.sc.helper.facebook;
 
 import java.util.ResourceBundle;
 
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
 
 import com.restfb.DefaultFacebookClient;
@@ -13,10 +14,14 @@ import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.FacebookType;
 import com.restfb.types.User;
 
+import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
+
 @Service
 public class OAuth2FbHelper {
-	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
-	private static final String BANANAA_APP_TOKEN = "bananaa.fb.app.token";
+	private static final Logger LOG = Logger.getLogger(OAuth2FbHelper.class);
+	private ResourceBundle resource = ResourceBundle.getBundle("environment");
+	private static final String BANANAA_APP_TOKEN = "bna.fb.app.token";
 
 	/**
 	 * Gets following user details from FB for the access token<br>
@@ -65,19 +70,23 @@ public class OAuth2FbHelper {
 	 * 
 	 * The FacebookClient object is build using <b>BANANAA</b> APP token.<br>
 	 * 
-	 * An APP token is a special token which is used to inspect User/Page tokens
-	 * tied with app (whose APP token is being used to inspect)
+	 * An APP token is used to inspect User/Page tokens tied with app (whose APP
+	 * token is being used to inspect)
 	 * 
 	 * @param accessToken
 	 *            - access token to be inspected for validity
-	 * @throws FacebookOAuthException
+	 * @throws BusinessException
 	 *             - If the passed access token does not belong to the app whose
 	 *             APP token is being used to inspect
-	 * @return Is token valid
 	 */
-	public boolean checkForTokenValidity(String accessToken) throws FacebookOAuthException {
+	public void checkForTokenValidity(String accessToken) throws BusinessException {
 		FacebookClient fbClient = new DefaultFacebookClient(resource.getString(BANANAA_APP_TOKEN), Version.VERSION_2_8);
 		DebugTokenInfo tokenInfo = fbClient.debugToken(accessToken);
-		return tokenInfo.isValid();
+		if (!tokenInfo.isValid()) {
+			LOG.error(
+					"***** Invalid facebook access token being passed. Security breach detected.*****. Access Token : "
+							+ accessToken);
+			throw new BusinessException(GenericErrorCodeType.INVALID_TOKEN);
+		}
 	}
 }
