@@ -44,18 +44,14 @@ function fbSignIn() {
 	        if (response.authResponse) {
 	              loginWithAccessToken(response.authResponse.accessToken, 'FACEBOOK');
 	        } else {
-	           console.log('User cancelled login or did not fully authorize.');
+	        	$("#loginModal").find(".loader").addClass('hide');
+	  			$("#loginModal").find(".modal-body").removeClass('hide');
+	  			alert('Please signin by Facebook. Or try with Google signin.');
 	        }
 	      },{scope: 'email'});
 	    }
 	  });
 }
-
-//function fbLogout() {
-//	FB.logout(function() {
-//		logout();
-//	});
-//}
 
 function logout() {
 	gapi.auth.signOut();
@@ -74,7 +70,7 @@ function googleSignIn() {
 		'clientid' : gClientId,
 		'cookiepolicy' : 'single_host_origin',
 		'callback' : 'loginCallback',
-		'approvalprompt' : 'force',
+		'approvalprompt' : 'auto',
 		'accessType' : 'online',
 		'scope' : 'profile email'
 	};
@@ -90,7 +86,9 @@ function loginCallback(result) {
 	if (result['status']['signed_in']) {
 		loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
 	} else {
-		alert('Something is not right. Please try again after refreshing the page');
+		$("#loginModal").find(".loader").addClass('hide');
+		$("#loginModal").find(".modal-body").removeClass('hide');
+		alert('Something is not right. Please retry or use Facebook signin.');
 	}
 }
 
