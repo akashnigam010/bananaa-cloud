@@ -25,6 +25,7 @@ INSERT INTO `bna`.`CONTACT` (`ID`, `PHONE1`) VALUES ('19', '09100920233 ');
 INSERT INTO `bna`.`CONTACT` (`ID`, `PHONE1`) VALUES ('20', '09966132307');
 INSERT INTO `bna`.`CONTACT` (`ID`, `PHONE1`) VALUES ('21', '04069000258');
 INSERT INTO `bna`.`CONTACT` (`ID`, `PHONE1`) VALUES ('22', '04023116606');
+INSERT INTO `bna`.`CONTACT` (`ID`, `PHONE1`) VALUES ('23', '09000911122');
 
 -- address
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (1, '5th Floor, Inorbit Mall, Hitech City, Hyderabad', 1);
@@ -45,6 +46,7 @@ INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (15, '2nd & 
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (16, '8-3-293/82/A/70, 4th Floor, Anshu Colours, Near TV5 Office, Jubilee Hills, Hyderabad', 2);
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (17, '8-2-293/82/A/1217, Plot 1217, Shreshta Aura, Road 36, Jubilee Hills, Hyderabad', 2);
 INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (18, 'Plot 15/1, 1st Floor, Sector 2, Opposite Cyber Gateway, Hitech City, Hyderabad', 1);
+INSERT INTO `bna`.`ADDRESS` (`ID`, `ADDRESS`, `LOCALITY_ID`) VALUES (19, 'Adityaram Square, 5th Floor, Door 8-2-293/82A646/A Road 36, Jubilee Hills, Hyderabad', 2);
 
 -- merchant
 INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID`, `TYPE`, `AVERAGE_COST`, `IMAGE_URL`, `THUMBNAIL`) VALUES (1, 'Fusion 9', 'fusion-9-hitech-city', 1, 1, 'Roof Top', 1200.00, 'http://cdn.bananaa.in/rest-img/fusion-9-hitech-city.jpg', 'http://cdn.bananaa.in/rest-img/t/fusion-9-hitech-city.jpg');
@@ -61,6 +63,7 @@ INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID
 INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID`, `TYPE`, `AVERAGE_COST`, `IMAGE_URL`, `THUMBNAIL`) VALUES (21, 'Desi Klub', 'desiklub-jubilee-hills', 17, 21, 'Casual Dining, Bar', 1500.00, 'http://cdn.bananaa.in/rest-img/desiklub-jubilee-hills.jpg', 'http://cdn.bananaa.in/rest-img/t/desiklub-jubilee-hills.jpg');
 INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID`, `TYPE`, `AVERAGE_COST`, `IMAGE_URL`, `THUMBNAIL`) VALUES (22, 'Tabla Sapphire', 'tabla-sapphire-hitech-city', 14, 14, 'Lounge, Bar', 900.00, 'http://cdn.bananaa.in/rest-img/tabla-sapphire-hitech-city.jpg', 'http://cdn.bananaa.in/rest-img/t/tabla-sapphire-hitech-city.jpg');
 INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID`, `TYPE`, `AVERAGE_COST`, `IMAGE_URL`, `THUMBNAIL`) VALUES (23, 'Whiteboard Cafe', 'whiteboard-cafe-hitech-city', 18, 22, 'Cafe', 600.00, 'http://cdn.bananaa.in/rest-img/whiteboard-cafe-hitech-city.jpg', 'http://cdn.bananaa.in/rest-img/t/whiteboard-cafe-hitech-city.jpg');
+INSERT INTO `bna`.`MERCHANT` (`ID`, `NAME`, `NAME_ID`, `ADDRESS_ID`, `CONTACT_ID`, `TYPE`, `AVERAGE_COST`, `IMAGE_URL`, `THUMBNAIL`) VALUES (24, 'Area Ten - Seventy', 'area-ten-seventy-jubilee-hills', 19, 23, 'Cafe', 650.00, 'http://cdn.bananaa.in/rest-img/area-ten-seventy-jubilee-hills.jpg', 'http://cdn.bananaa.in/rest-img/t/area-ten-seventy-jubilee-hills.jpg');
 
 -- timings
 INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (1, 'MONDAY', '1200', '2400');
@@ -216,4 +219,12 @@ INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (23, '
 INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (23, 'FRIDAY', '0800', '2230');
 INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (23, 'SATURDAY', '0800', '2230');
 INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (23, 'SUNDAY', '0800', '2230');
+
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'MONDAY', '1030', '2300');
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'TUESDAY', '1030', '2300');
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'WEDNESDAY', '1030', '2300');
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'THURSDAY', '1030', '2300');
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'FRIDAY', '1030', '2300');
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'SATURDAY', '1030', '2300');
+INSERT INTO `bna`.`TIMING` (`MERCHANT_ID`, `DAY`, `OPEN`, `CLOSE`) VALUES (24, 'SUNDAY', '1030', '2300');
 

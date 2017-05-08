@@ -39,7 +39,7 @@ function getTrendingRestaurants() {
     						  '<div class="trending-item">'+
 			                              '<a href="/'+response.merchants[i].merchantUrl+'">'+
 			                          '<div>'+
-			                              '<img class="trend-image" src="'+response.merchants[i].thumbnail+'" alt=""/>'+
+			                              '<img class="trend-image" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa"/>'+
 			                              '<div class="trending-item-desc">'+
 			                                  '<div style="padding: 4%;">'+
 			                                      '<p>'+
@@ -79,7 +79,7 @@ function getStories() {
     						  '<div class="trending-item">'+
 			                              '<a href="'+response.stories[i].url+'">'+
 			                          '<div class="diary-sec">'+
-			                              '<img class="trend-image diary-img" src="'+response.stories[i].imageUrl+'" alt="" />'+
+			                              '<img class="trend-image diary-img" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
 			                              '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
 			                                  '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
 			                              '</div>'+
