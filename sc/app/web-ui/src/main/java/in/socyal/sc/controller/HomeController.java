@@ -37,6 +37,7 @@ public class HomeController {
 	private static final String HOME_URL = "home.url";
 	private static final String HOME_TITLE = "home.title";
 	private static final String HOME_DESCRIPTION = "home.description";
+	private static final String HOME_IMAGE = "home.image";
 	private static final String DETAIL_DESCRIPTION_1 = "detail.description.1";
 	private static final String DETAIL_DESCRIPTION_2 = "detail.description.2";
 	private static final String DETAIL_TITLE_END = "detail.title.end";
@@ -112,6 +113,7 @@ public class HomeController {
 		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("title", resource.getString(HOME_TITLE));
 		modelAndView.addObject("url", resource.getString(HOME_URL) + "/" + cityType.getName());
+		modelAndView.addObject("imageUrl", resource.getString(HOME_IMAGE));
 		return modelAndView;
 	}
 

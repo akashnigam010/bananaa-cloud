@@ -1,6 +1,6 @@
-var fbClientId = '232637110490690';
-var gApiKey = 'AIzaSyCWEn4qyHStxlVn2BF9EO9JfhxMsCRsMR4';
-var gClientId = '504868894775-jbme613s3rdb80jf95o44cmpeut11q9c.apps.googleusercontent.com';
+var fbClientId = '1631840747117125';
+var gApiKey = 'AIzaSyAPyju_fHuku2M9U7pG6GQMGG50lrqhvXE';
+var gClientId = '462561363632-rp9iig0kisflbged8sagpkqdjnuo6n5j.apps.googleusercontent.com';
 
 window.fbAsyncInit = function() {
 	FB.init({
@@ -85,24 +85,23 @@ function onLoadCallback() {
 }
 
 function loginCallback(result) {
-	console.log(result);
 	if (result['status']['signed_in']) {
 		loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
 	} else if (result['error'] == "immediate_failed") {
-//        gapi.auth.authorize({
-//        	'clientid' : gClientId,
-////    		'cookiepolicy' : 'single_host_origin',
-////    		'callback' : 'loginCallback',
-////    		'approvalprompt' : 'auto',
-////    		'accessType' : 'online',
-//    		'scope' : 'profile email',
-//            'immediate' : true
-//        }, function (authRes) {
-//            if (authRes['status']['signed_in']) {
-//            	loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
-//            }
-//        });
-    } else {
+	//      gapi.auth.authorize({
+	//    	'clientid' : gClientId,
+	////		'cookiepolicy' : 'single_host_origin',
+	////		'callback' : 'loginCallback',
+	////		'approvalprompt' : 'auto',
+	////		'accessType' : 'online',
+	//		'scope' : 'profile email',
+	//        'immediate' : true
+	//    }, function (authRes) {
+	//        if (authRes['status']['signed_in']) {
+	//        	loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
+	//        }
+	//    });
+	} else {
 		$("#loginModal").find(".loader").addClass('hide');
 		$("#loginModal").find(".modal-body").removeClass('hide');
 		alert('Something is not right. Please retry or use Facebook signin.');
