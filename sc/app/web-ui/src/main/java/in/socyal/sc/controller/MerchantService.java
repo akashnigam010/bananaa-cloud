@@ -121,11 +121,11 @@ public class MerchantService {
 		story1.setImageUrl("http://cdn.bananaa.in/img/what-mini.jpg");
 		story1.setUrl("/about");
 		response.getStories().add(story1);
-//		Story story2 = new Story();
-//		story2.setName("Recommendations. How ?");
-//		story2.setImageUrl("http://cdn.bananaa.in/img/how-mini.jpg");
-//		story2.setUrl("/how");
-//		response.getStories().add(story2);
+		Story story2 = new Story();
+		story2.setName("Recommendations. But wait..how ?");
+		story2.setImageUrl("http://cdn.bananaa.in/img/next.jpg");
+		story2.setUrl("/how");
+		response.getStories().add(story2);
 //		Story story3 = new Story();
 //		story3.setName("Where are we headed ?");
 //		story3.setImageUrl("http://cdn.bananaa.in/img/next.jpg");
