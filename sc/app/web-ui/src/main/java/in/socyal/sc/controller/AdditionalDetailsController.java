@@ -11,6 +11,11 @@ public class AdditionalDetailsController {
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
 	public ModelAndView about() {
 		ModelAndView modelAndView = new ModelAndView("about");
+		modelAndView.addObject("description", "About Bananaa");
+		modelAndView.addObject("fbDescription", "About Bananaa");
+		modelAndView.addObject("title", "About | Bananaa");
+		modelAndView.addObject("url", "http://www.bananaa.in/about");
+		modelAndView.addObject("imageUrl", "http://cdn.bananaa.in/img/what-mini.jpg");
 		return modelAndView;
 	}
 
@@ -35,6 +40,11 @@ public class AdditionalDetailsController {
 	@RequestMapping(value = "/how", method = RequestMethod.GET)
 	public ModelAndView how() {
 		ModelAndView modelAndView = new ModelAndView("how");
+		modelAndView.addObject("description", "Recommendations. But wait..how ?");
+		modelAndView.addObject("fbDescription", "Recommendations. But wait..how ?");
+		modelAndView.addObject("title", "Recommendations. But wait..how ? | Bananaa");
+		modelAndView.addObject("url", "http://www.bananaa.in/how");
+		modelAndView.addObject("imageUrl", "http://cdn.bananaa.in/img/next.jpg");
 		return modelAndView;
 	}
 	
