@@ -162,7 +162,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 				address.getLatitude(), address.getLongitude(), DistanceUnitType.KM.getCode());
 	}
 
-	private Boolean isOpen(Set<TimingDto> timings) {
+	private Boolean isOpen(List<TimingDto> timings) {
 		Calendar today = Calendar.getInstance();
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
@@ -177,7 +177,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return Boolean.FALSE;
 	}
 
-	private List<String> getOpeningHours(Set<TimingDto> timings) throws ParseException {
+	private List<String> getOpeningHours(List<TimingDto> timings) throws ParseException {
 		Calendar today = Calendar.getInstance();
 		List<String> openingHours = new ArrayList<>();
 		for (TimingDto dto : timings) {
