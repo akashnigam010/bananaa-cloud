@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import in.socyal.sc.api.type.DayType;
 
-public class TimingDto implements Serializable {
+public class TimingDto implements Serializable, Comparable<TimingDto> {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
@@ -51,5 +51,10 @@ public class TimingDto implements Serializable {
 
 	public void setClose(String close) {
 		this.close = close;
+	}
+
+	@Override
+	public int compareTo(TimingDto o) {
+		return this.id.compareTo(o.getId());
 	}
 }
