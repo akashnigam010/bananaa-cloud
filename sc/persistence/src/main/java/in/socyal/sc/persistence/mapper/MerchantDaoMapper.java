@@ -2,7 +2,7 @@ package in.socyal.sc.persistence.mapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -64,11 +64,12 @@ public class MerchantDaoMapper {
 		}
 	}
 
-	public Set<TimingDto> mapTimingDtos(Set<TimingEntity> entities) {
-		Set<TimingDto> dtos = new HashSet<>();
+	public List<TimingDto> mapTimingDtos(Set<TimingEntity> entities) {
+		List<TimingDto> dtos = new ArrayList<>();
 		for (TimingEntity entity : entities) {
 			dtos.add(mapTimingDto(entity));
 		}
+		Collections.sort(dtos);
 		return dtos;
 	}
 

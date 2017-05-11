@@ -13,7 +13,7 @@ public class MerchantDto implements Serializable {
 	private String thumbnail;
 	private ContactDto contact;
 	private AddressDto address;
-	private Set<TimingDto> timings;
+	private List<TimingDto> timings;
 	private Double averageCost;
 	private List<String> types;
 	private String merchantUrl;
@@ -58,11 +58,11 @@ public class MerchantDto implements Serializable {
 		this.address = address;
 	}
 
-	public Set<TimingDto> getTimings() {
+	public List<TimingDto> getTimings() {
 		return timings;
 	}
 
-	public void setTimings(Set<TimingDto> timings) {
+	public void setTimings(List<TimingDto> timings) {
 		this.timings = timings;
 	}
 
