@@ -24,6 +24,12 @@ public class AdditionalDetailsController {
 		ModelAndView modelAndView = new ModelAndView("contact");
 		return modelAndView;
 	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public ModelAndView test() {
+		ModelAndView modelAndView = new ModelAndView("test");
+		return modelAndView;
+	}
 
 	@RequestMapping(value = "/privacy", method = RequestMethod.GET)
 	public ModelAndView privacy() {
