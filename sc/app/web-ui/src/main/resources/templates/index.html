@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
 <body>
-	<script type="text/javascript" th:src="'http://cdn.bananaa.in/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
+	<script type="text/javascript" th:src="'https://bna-s3.s3.amazonaws.com/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<div class="container-fluid">
 		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
 		<!-- Top Banner STARTS -->
@@ -104,7 +104,7 @@
                             <!-- <div class="trending-item">
                                 <a href="/about">
                                     <div class="diary-sec">
-                                        <img class="trend-image diary-img" src="http://cdn.bananaa.in/img/what-mini.jpg" alt="" />
+                                        <img class="trend-image diary-img" src="https://bna-s3.s3.amazonaws.com/img/what-mini.jpg" alt="" />
                                         <div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">
                                             <p class="bold font-1-3">Bananaa - What the Fuzz!</p>
                                         </div>

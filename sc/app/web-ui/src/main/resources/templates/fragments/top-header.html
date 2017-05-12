@@ -1,5 +1,5 @@
 <div class="row" th:fragment="top-header">
-	<script type="text/javascript" th:src="'http://cdn.bananaa.in/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
+	<script type="text/javascript" th:src="'https://bna-s3.s3.amazonaws.com/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<script type="text/javascript">
 		function openSearchModal() {
 			$('#searchModal').modal('show');
@@ -10,17 +10,17 @@
         <div class="row top-header">
             <div class="col-xs-6">
                 <p class="simpson header-icon bna-color">
-                    <img class="cursor-pointer" src="http://cdn.bananaa.in/img/arrow_back_black.svg" onclick="window.history.back()" />
+                    <img class="cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/arrow_back_black.svg" onclick="window.history.back()" />
                     <span class="cursor-pointer" onclick="location.href='/'" style="margin-left: 5%;">bananaa</span>
                 </p>
             </div>
             <div class="col-xs-6">
                 <div class="hidden-sm hidden-md hidden-lg" style="padding-top: 6%;">
                     <div class="col-xs-4 col-xs-offset-4">
-                        <img src="http://cdn.bananaa.in/img/ic_search_black.svg" onclick="openSearchModal();" />
+                        <img src="https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg" onclick="openSearchModal();" />
                     </div>
                     <div class="btn-group col-xs-4">
-                        <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="http://cdn.bananaa.in/img/ic_person_black.svg" />                                
+                        <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="https://bna-s3.s3.amazonaws.com/img/ic_person_black.svg" />                                
                         <ul class="dropdown-menu pull-right" id="login-dropdown-mini">
                             <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
                                 <li role="separator" class="divider"></li>
@@ -55,7 +55,7 @@
             <div class="modal-content search-modal-content">                    
                 <div class="modal-header align-center">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <img src="http://cdn.bananaa.in/img/clear.svg" />
+                        <img src="https://bna-s3.s3.amazonaws.com/img/clear.svg" />
                     </button>
                     <h4 class="modal-title bold">Search</h4>
                 </div>

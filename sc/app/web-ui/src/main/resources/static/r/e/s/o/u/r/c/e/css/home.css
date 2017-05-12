@@ -28,14 +28,14 @@
     background: linear-gradient(
                      rgba(20,20,20, .2), 
                      rgba(20,20,20, .5)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.png");
+                     url("https://bna-s3.s3.amazonaws.com/commons/home-bg.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
 .icon-search {
-    background-image: url("http://cdn.bananaa.in/img/search_icon.png");
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/search_icon.png");
     background-repeat: no-repeat;
     background-position: center;
 }

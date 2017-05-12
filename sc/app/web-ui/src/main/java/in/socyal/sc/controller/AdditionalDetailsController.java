@@ -15,7 +15,7 @@ public class AdditionalDetailsController {
 		modelAndView.addObject("fbDescription", "About Bananaa");
 		modelAndView.addObject("title", "About | Bananaa");
 		modelAndView.addObject("url", "http://www.bananaa.in/about");
-		modelAndView.addObject("imageUrl", "http://cdn.bananaa.in/img/what-mini.jpg");
+		modelAndView.addObject("imageUrl", "https://bna-s3.s3.amazonaws.com/img/what-mini.jpg");
 		return modelAndView;
 	}
 
@@ -44,7 +44,7 @@ public class AdditionalDetailsController {
 		modelAndView.addObject("fbDescription", "Recommendations. But wait..how ?");
 		modelAndView.addObject("title", "Recommendations. But wait..how ? | Bananaa");
 		modelAndView.addObject("url", "http://www.bananaa.in/how");
-		modelAndView.addObject("imageUrl", "http://cdn.bananaa.in/img/next.jpg");
+		modelAndView.addObject("imageUrl", "https://bna-s3.s3.amazonaws.com/img/next.jpg");
 		return modelAndView;
 	}
 	
