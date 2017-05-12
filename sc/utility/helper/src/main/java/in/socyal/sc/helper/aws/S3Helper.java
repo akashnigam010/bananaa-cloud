@@ -30,7 +30,7 @@ public class S3Helper {
 		File file = new File(nameId);
 		ImageIO.write(img, "jpg", file);
 
-		s3Client.setEndpoint("http://s3.amazonaws.com");
+		s3Client.setEndpoint("https://s3.amazonaws.com");
 		s3Client.putObject(new PutObjectRequest(resource.getString(BUCKET_NAME), nameId + ".jpg", file)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 		return s3Client.getResourceUrl(resource.getString(BUCKET_NAME), nameId + ".jpg");
