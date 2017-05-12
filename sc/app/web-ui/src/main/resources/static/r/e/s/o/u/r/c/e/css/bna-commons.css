@@ -1,21 +1,16 @@
 @font-face {
     font-family: bna-web;
-    src: url('http://cdn.bananaa.in/fonts/bna-web-regular.woff') format('woff');
+    src: url('/r/e/s/o/u/r/c/e/fonts/bna-web-regular.woff') format('woff');
 }
 
 @font-face {
     font-family: bna-bold;
-    src: url('http://cdn.bananaa.in/fonts/bna-web-bold.woff') format('woff');
-}
-
-@font-face {
-    font-family: bna-icon;
-    src: url('http://cdn.bananaa.in/fonts/bna-icon-font.woff') format('woff');
+    src: url('/r/e/s/o/u/r/c/e/fonts/bna-web-bold.woff') format('woff');
 }
 
 @font-face {
     font-family: bna-simpson;
-    src: url('http://cdn.bananaa.in/fonts/bna-simpson-font.ttf') format('truetype');
+    src: url('/r/e/s/o/u/r/c/e/fonts/bna-simpson-font.ttf') format('truetype');
 }
 
 body {
@@ -219,7 +214,7 @@ body .slick-next, body .slick-prev{
     background-color: #333333;
     color: #adb0b6;
     height: 20%;
-    background-image: url("http://cdn.bananaa.in/img/footer-graphic.png");
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/footer-graphic.png");
     background-repeat: no-repeat;
     background-position: left bottom;
     padding: 10% 0%;
