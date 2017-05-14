@@ -17,9 +17,13 @@ import in.socyal.sc.api.manage.response.AddResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
+import in.socyal.sc.api.merchant.response.MerchantResponse;
+import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
+import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.validation.ManageValidator;
+import in.socyal.sc.helper.JsonHelper;
 
 @RestController
 @RequestMapping(value = "/socyal/management")
@@ -32,6 +36,29 @@ public class ManagementService {
 	ManagementDelegate delegate;
 	@Autowired
 	ManageValidator validator;
+	@Autowired
+	MerchantDelegate merchantDelegate;
+	
+	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
+	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/searchMerchant");
+		SearchMerchantResponse response = new SearchMerchantResponse();
+		try {
+			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
+				response = merchantDelegate.searchMerchant(request);
+				if (response.getMerchants().size() == 0) {
+					MerchantResponse noMatchFound = new MerchantResponse();
+					noMatchFound.setId(-999);
+					noMatchFound.setName("No match found");
+					noMatchFound.setShortAddress("");
+					response.getMerchants().add(noMatchFound);
+				}
+			}
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
 	
 	@RequestMapping(value = "/addItem", method = RequestMethod.POST, headers = "Accept=application/json")
 	public AddResponse addItem(@RequestBody AddItemRequest request) {

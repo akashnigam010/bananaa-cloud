@@ -12,9 +12,9 @@ import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
 
 public interface ManagementDelegate {
 	public void addItem(AddItemRequest request) throws BusinessException;
-	
+
 	public void addRecommendations(AddRecommendationsRequest request) throws BusinessException;
-	
+
 	public void addCuisine(AddRequest request);
 
 	public void addSuggestion(AddRequest request);
@@ -22,8 +22,8 @@ public interface ManagementDelegate {
 	public GetCuisinesResponse getCuisines(SearchRequest request);
 
 	public GetSuggestionsResponse getSuggestions(SearchRequest request);
-	
+
 	public GetItemImagesResponse getItemImages(SearchRequest request);
-	
+
 	public void contactUsMessage(MessageRequest request) throws BusinessException;
 }

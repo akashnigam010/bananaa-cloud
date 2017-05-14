@@ -8,9 +8,6 @@ public class MerchantResponse implements Serializable {
 	private String nameId;
 	private String name;
 	private String shortAddress;
-	private String imageUrl;
-	private Boolean isOpen;
-	private Double distance;
 	private String merchantUrl;
 
 	public Integer getId() {
@@ -36,31 +33,7 @@ public class MerchantResponse implements Serializable {
 	public void setShortAddress(String shortAddress) {
 		this.shortAddress = shortAddress;
 	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-
-	public Boolean getIsOpen() {
-		return isOpen;
-	}
-
-	public void setIsOpen(Boolean isOpen) {
-		this.isOpen = isOpen;
-	}
-
-	public Double getDistance() {
-		return distance;
-	}
-
-	public void setDistance(Double distance) {
-		this.distance = distance;
-	}
-
+	
 	public String getNameId() {
 		return nameId;
 	}
