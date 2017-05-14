@@ -46,6 +46,9 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "MERCHANT_ID", referencedColumnName = "ID")
 	private Set<TimingEntity> timings;
+	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
 
 	public String getName() {
 		return name;
@@ -117,5 +120,13 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 
 	public void setTimings(Set<TimingEntity> timings) {
 		this.timings = timings;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }
