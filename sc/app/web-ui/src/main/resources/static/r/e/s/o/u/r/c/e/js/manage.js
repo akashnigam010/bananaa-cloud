@@ -374,7 +374,7 @@ function merchantSource(query, process) {
   	};
       return $.ajax({
     	  method: "POST",
-    	  url: "/socyal/merchant/searchMerchant",
+    	  url: "/socyal/management/searchMerchant",
     	  contentType : "application/json",
     	  data: JSON.stringify(dataOb)
     	})
