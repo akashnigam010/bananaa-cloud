@@ -8,6 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class AdditionalDetailsController {
 
+	@RequestMapping(value = "/google6f82628d4ebc8d30.html", method = RequestMethod.GET)
+	public ModelAndView googleWebmasterVerify() {
+		ModelAndView modelAndView = new ModelAndView("google6f82628d4ebc8d30");
+		return modelAndView;
+	}
+	
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
 	public ModelAndView about() {
 		ModelAndView modelAndView = new ModelAndView("about");

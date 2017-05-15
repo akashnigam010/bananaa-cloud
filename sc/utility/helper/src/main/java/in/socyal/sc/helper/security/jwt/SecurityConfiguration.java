@@ -20,8 +20,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Order(2)
     public static class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
-		@Autowired
-		private SecurityProperties securityProperties;
+//		@Autowired
+//		private SecurityProperties securityProperties;
 
 //		@Override
 //		protected void configure(HttpSecurity http) throws Exception {
@@ -36,9 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			if (securityProperties.isRequireSsl()) {
-				http.requiresChannel().anyRequest().requiresSecure();
-			}
+//			if (securityProperties.isRequireSsl()) {
+//				http.requiresChannel().anyRequest().requiresSecure();
+//			}
 			http.authorizeRequests()
 				.antMatchers("/", "/index.html","/login/skipLogin", "/login/fbLogin").permitAll()
 				.antMatchers("/manage/login").permitAll()
