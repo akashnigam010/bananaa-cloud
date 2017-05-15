@@ -1,6 +1,7 @@
 package in.socyal.sc.helper.security.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +19,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Configuration
     @Order(2)
     public static class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+		
+		@Autowired
+		private SecurityProperties securityProperties;
+
+//		@Override
+//		protected void configure(HttpSecurity http) throws Exception {
+//			if (securityProperties.isRequireSsl())
+//				http.requiresChannel().anyRequest().requiresSecure();
+//		}
+		
 		@Override
 		protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
 			auth.inMemoryAuthentication().withUser("user").password("password").roles("ADMIN");
@@ -25,6 +36,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
+			if (securityProperties.isRequireSsl()) {
+				http.requiresChannel().anyRequest().requiresSecure();
+			}
 			http.authorizeRequests()
 				.antMatchers("/", "/index.html","/login/skipLogin", "/login/fbLogin").permitAll()
 				.antMatchers("/manage/login").permitAll()
