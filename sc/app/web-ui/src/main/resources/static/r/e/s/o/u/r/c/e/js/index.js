@@ -1,20 +1,10 @@
 $(document).ready(function() {
 	page = 'index';
-    if (isMobile) {
-//        $('#search-field').on('touchstart', function (e) {
-//            var minusHeight = $(".search-box-wrapper").height()+15;
-//            $("html, body").animate({ scrollTop: ($('.home-banner').height()-minusHeight) }, 300);    
-//        });
-        $(document).on('touchstart', function (e) {
-            if ($(e.target).closest(".search-box-suggestion").length === 0 && $('.search-box-suggestion').html() != '') {
-                $(".search-box-suggestion").html('');
-            }
-        });
-    } else {
-        $(document).on('mousedown', function (e) {
-            if ($(e.target).closest(".search-box-suggestion").length === 0 && $('.search-box-suggestion').html() != '') {
-                $(".search-box-suggestion").html('');
-            }
+	if (isMobile) {
+        $('#search-field').on('mousedown', function (e) {
+            $('html, body').animate({
+                scrollTop: $("#search-field").offset().top - 18
+            }, 200);
         });
     }
     
