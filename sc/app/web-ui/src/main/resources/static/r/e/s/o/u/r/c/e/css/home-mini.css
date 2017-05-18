@@ -6,8 +6,8 @@ body {
 
 .logo-round {
     object-fit: cover;
-    height: 70px;
-    width: 70px;
+    height: 85px;
+    width: 85px;
     border: 3px solid;
     border-radius: 100px;
     border-color: white;
@@ -23,9 +23,9 @@ body {
 }
 
 .tagline {
-    color: #FFF;
-    font-family: bna-simpson;
-    font-size: 3em;
+    font-size: 1.5em;
+    padding-top: 5%;
+    padding-bottom: 4%;
 }
 
 .home-banner {

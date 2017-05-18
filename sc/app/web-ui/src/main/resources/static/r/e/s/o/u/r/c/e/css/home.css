@@ -2,8 +2,8 @@
 
 .logo-round {
     object-fit: cover;
-    height: 100px;
-    width: 100px;
+    height: 120px;
+    width: 120px;
     border: 3px solid;
     border-radius: 100px;
     border-color: white;
@@ -19,9 +19,8 @@
 }
 
 .tagline {
-    color: #FFF;
-    font-family: bna-simpson;
-    font-size: 4em;
+    font-size: 2em;
+    padding-top: 2%;
 }
 
 .home-banner {
