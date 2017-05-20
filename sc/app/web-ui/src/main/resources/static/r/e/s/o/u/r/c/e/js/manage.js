@@ -1,4 +1,6 @@
 var timeout;
+var suggestions = [];
+var cuisines = [];
 $(document).ready(function() {
 	$("#rcmd-recommendations").val(0);
     $('#restaurantName').typeahead({
@@ -28,7 +30,18 @@ $(document).ready(function() {
     	minLength: 2,
     	source: function(query, process) {
     		suggestionSource(query, process);
-        }
+        },
+        updater:function (item) {
+        	var sName = $("#suggestion-name-display").html();
+        	if (sName == '') {
+        		sName = item.name;
+        	} else {
+        		sName = sName + ', ' + item.name;	
+        	}
+        	suggestions.push(item.id);      	
+        	$("#suggestion-name-display").html(sName);
+	        return item;
+	    }
     });
 
     $('#cuisineNameAdd').typeahead({
@@ -42,7 +55,18 @@ $(document).ready(function() {
     	minLength: 2,
     	source: function(query, process) {
     		cuisineSource(query, process);
-        }
+        },
+        updater:function (item) {
+        	var cName = $("#cuisine-name-display").html();
+        	if (cName == '') {
+        		cName = item.name;
+        	} else {
+        		cName = cName + ', ' + item.name;	
+        	}
+        	cuisines.push(item.id);      	
+        	$("#cuisine-name-display").html(cName);
+	        return item;
+	    }
     });
 
     $('#itemName').typeahead({
@@ -94,25 +118,9 @@ function addItem() {
 	var $merchantName = merchant.val();
 	var $merchantId = '';
 	var $itemName = '';
-	var $suggestionId = '';
-	var $suggestionName = '';
-	var $cuisineId = '';
-	var $cuisineName = '';
 	var $imageUrl = $("#image").val().trim();
 	var $thumbnail = $("#thumbnail").val().trim();
 	var $isActive = ($("#isActive:checked").val() == 'true') ? true : false;
-
-	var currentCuisine = $('#cuisineName').typeahead("getActive");
-	if (currentCuisine != undefined && currentCuisine.name == $('#cuisineName').val()) {
-		$cuisineId = currentCuisine.id;
-		$cuisineName = currentCuisine.name;
-	}
-
-	var currentSuggestion = $('#suggestionName').typeahead("getActive");
-	if (currentSuggestion != undefined && currentSuggestion.name == $('#suggestionName').val()) {
-		$suggestionId = currentSuggestion.id;
-		$suggestionName = currentSuggestion.name;
-	}
 
 	if (currentMerchant) {
 		if (currentMerchant.name == $merchantName) {
@@ -134,13 +142,13 @@ function addItem() {
 				return;
 			}
 			if (!currentItem || (currentItem && currentItem.name != $itemName)) {
-				var input = confirm('Confirm Action \nName                              : '+$itemName+'\nRestaurant                      : '+$merchantName+'\nSuggestion Name            : '+$suggestionName+'\nCuisine Name                  : '+$cuisineName+'\nImage Url                         : '+$imageUrl+'\nThumbnail                        : '+$thumbnail+'\nIs Active                           : '+$isActive);
+				var input = confirm('Confirm Action \nName                              : '+$itemName+'\nRestaurant                      : '+$merchantName+'\nSuggestions                : '+suggestions+'\nCuisines                      : '+cuisines+'\nImage Url                         : '+$imageUrl+'\nThumbnail                        : '+$thumbnail+'\nIs Active                           : '+$isActive);
 				if (input == true) {
 					var dataOb = {
 							name : $itemName,
 							merchantId : $merchantId,
-							cuisineId : $cuisineId,
-							suggestionId : $suggestionId,
+							cuisineIds : cuisines,
+							suggestionIds : suggestions,
 							imageUrl : $imageUrl,
 							thumbnail : $thumbnail,
 							isActive : $isActive
@@ -154,9 +162,13 @@ function addItem() {
 			      	  .done(function(response) {
 			      		  if (response.result) {
 			      			  alertMessage($itemName + ' successfully added');
+			      			  cuisines = [];
+			      			  suggestions = [];
 							  $("#itemName").val('');
 							  $("#cuisineName").val('');
+							  $("#cuisine-name-display").html('');
 							  $("#suggestionName").val('');
+							  $("#suggestion-name-display").html('');
 							  $("#image").val('');
 							  $("#thumbnail").val('');
 							  $('#suggestionName').val('');
