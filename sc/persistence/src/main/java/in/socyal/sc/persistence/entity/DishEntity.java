@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,11 +26,15 @@ public class DishEntity extends BaseEntity implements Serializable {
 	@Column(name = "NAME_ID")
 	private String nameId;
 
-	@Column(name = "SUGGESTION_ID")
-	private Integer suggestionId;
-
-	@Column(name = "CUISINE_ID")
-	private Integer cuisineId;
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "DISH_SUGGESTION_MAPPING", joinColumns = { @JoinColumn(name = "DISH_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "SUGGESTION_ID") })
+	private List<SuggestionEntity> suggestions;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "DISH_CUISINE_MAPPING", joinColumns = { @JoinColumn(name = "DISH_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "CUISINE_ID") })
+	private List<CuisineEntity> cuisines;
 
 	@ManyToOne
 	@JoinColumn(name = "MERCHANT_ID")
@@ -67,22 +74,6 @@ public class DishEntity extends BaseEntity implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
-	}
-
-	public Integer getSuggestionId() {
-		return suggestionId;
-	}
-
-	public void setSuggestionId(Integer suggestionId) {
-		this.suggestionId = suggestionId;
-	}
-
-	public Integer getCuisineId() {
-		return cuisineId;
-	}
-
-	public void setCuisineId(Integer cuisineId) {
-		this.cuisineId = cuisineId;
 	}
 
 	public MerchantEntity getMerchant() {
@@ -126,5 +117,27 @@ public class DishEntity extends BaseEntity implements Serializable {
 
 	public void setRecommendations(List<RecommendationEntity> recommendations) {
 		this.recommendations = recommendations;
+	}
+
+	public List<SuggestionEntity> getSuggestions() {
+		if (this.suggestions == null) {
+			this.suggestions = new ArrayList<>();
+		}
+		return suggestions;
+	}
+
+	public void setSuggestions(List<SuggestionEntity> suggestions) {
+		this.suggestions = suggestions;
+	}
+
+	public List<CuisineEntity> getCuisines() {
+		if (this.cuisines == null) {
+			this.cuisines = new ArrayList<>();
+		}
+		return cuisines;
+	}
+
+	public void setCuisines(List<CuisineEntity> cuisines) {
+		this.cuisines = cuisines;
 	}
 }

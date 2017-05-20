@@ -7,16 +7,20 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
+import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.DishResult;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
+import in.socyal.sc.persistence.entity.SuggestionEntity;
 
 @Component
 public class DishDaoMapper {
@@ -32,8 +36,8 @@ public class DishDaoMapper {
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setNameId(entity.getNameId());
-		dto.setSuggestionId(entity.getSuggestionId());
-		dto.setCuisineId(entity.getCuisineId());
+		dto.setSuggestions(mapSuggestions(entity.getSuggestions()));
+		dto.setCuisines(mapCuisines(entity.getCuisines()));
 		dto.setImageUrl(entity.getImageUrl());
 		dto.setThumbnail(entity.getThumbnail());
 		dto.setIsActive(entity.getIsActive());
@@ -44,6 +48,36 @@ public class DishDaoMapper {
 			dto.setMerchant(merchant);
 			dto.setItemUrl(dto.getMerchant().getNameId() + "/" + dto.getNameId());
 		}
+		return dto;
+	}
+	
+	public List<SuggestionDto> mapSuggestions(List<SuggestionEntity> entites) {
+		List<SuggestionDto> dtos = new ArrayList<>();
+		for (SuggestionEntity entity : entites) {
+			dtos.add(mapSuggestion(entity));
+		}
+		return dtos;
+	}
+	
+	public SuggestionDto mapSuggestion(SuggestionEntity entity) {
+		SuggestionDto dto = new SuggestionDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		return dto;
+	}
+	
+	public List<CuisineDto> mapCuisines(List<CuisineEntity> entites) {
+		List<CuisineDto> dtos = new ArrayList<>();
+		for (CuisineEntity entity : entites) {
+			dtos.add(mapCuisine(entity));
+		}
+		return dtos;
+	}
+	
+	public CuisineDto mapCuisine(CuisineEntity entity) {
+		CuisineDto dto = new CuisineDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
 		return dto;
 	}
 
