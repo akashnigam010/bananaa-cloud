@@ -3,7 +3,29 @@ $(document).ready(function() {
     $('#modal-item-name').typeahead({
     	minLength: 2,
     	autoSelect: true,
+    	fitToElement: true,
+    	matcher: function(item) {
+            if (item.name.toLowerCase().includes(this.query.trim().toLowerCase())) {
+                return true;
+            } else {
+                this.query = 'No match found';
+                return true;
+            }
+        },
+        displayText: function(item) {
+	        return '<div style="padding: 2%;"><span>' + 
+	        			item.name + 
+	                  '</span> </div>';
+		},
+		afterSelect: function(item) {
+			if (item.id != -999) {
+				$('#modal-item-name').val(item.name);
+            } else {
+            	$('#modal-item-name').val('');
+            }
+        },
     	source: function(query, process) {
+    		var that = this;
             if (timeout) {
                 clearTimeout(timeout);
             }
@@ -13,10 +35,18 @@ $(document).ready(function() {
             			merchantId : merchantId
             	};
                 return $.ajax({
-              	  method: "POST",
-              	  url: "/socyal/item/searchItems",
-              	  contentType : "application/json",
-              	  data: JSON.stringify(dataOb)
+				  method: "POST",
+				  url: "/socyal/item/searchItems",
+				  contentType : "application/json",
+				  data: JSON.stringify(dataOb),
+				  beforeSend: function() {
+						that.$element.addClass('loading');
+						that.$element.removeClass('noloading');
+				  },
+				  complete: function() {
+						that.$element.removeClass('loading');
+						that.$element.addClass('noloading');
+				  }
               	})
               	  .done(function(response) {
               		  if (response.result) {
@@ -31,7 +61,7 @@ $(document).ready(function() {
             			  handleErrorCallback(response);
             		  }	          		  
               	  });
-            }, 500);
+            }, 300);
         }
     });
         

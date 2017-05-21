@@ -30,7 +30,10 @@
                 </div>
                 <div class="hidden-xs">
                     <div class="col-xs-9">
-                        <input id="topSearchInput" class="search-box" type="text" placeholder="Find a restaurants" />
+                        <input id="topSearchInput" class="global-search search-box noloading" type="text" placeholder="Find a restaurants" />
+                        <div class="input-loader-animation-div" style="width: 85%;">
+                            <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                        </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="btn-group login-info pull-right">
@@ -60,7 +63,10 @@
                     <h4 class="modal-title bold">Search</h4>
                 </div>
                 <div class="modal-body align-center" style="padding: 7%;">
-                    <input id="modalSearchInput" class="padding" type="text" data-provide="typeahead" placeholder="Search for restaurants" />
+                    <input id="modalSearchInput" class="global-search padding noloading" type="text" data-provide="typeahead" placeholder="Search for restaurants" />
+                    <div class="input-loader-animation-div" style="width: 80%; height: 100%;">
+                        <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                    </div>
                 </div>
             </div>
 

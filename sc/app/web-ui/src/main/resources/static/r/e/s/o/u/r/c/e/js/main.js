@@ -108,6 +108,7 @@ function searchConfig(element) {
             }
         },
     	source: function(query, process) {
+    		var that = this;
             if (timeout) {
                 clearTimeout(timeout);
             }
@@ -119,7 +120,15 @@ function searchConfig(element) {
                 	method: "POST",
 					url: "/socyal/merchant/searchMerchant",
 					contentType : "application/json",
-					data: JSON.stringify(dataOb)
+					data: JSON.stringify(dataOb),
+					beforeSend: function() {
+						that.$element.addClass('loading');
+						that.$element.removeClass('noloading');
+			        },
+			        complete: function() {
+			        	that.$element.removeClass('loading');
+			        	that.$element.addClass('noloading');
+			        }
               	})
               	  .done(function(response) {
               		  if (response.result) {
@@ -132,7 +141,7 @@ function searchConfig(element) {
             			  handleErrorCallback(response);
             		  }	          		  
               	  });
-            }, 500);
+            }, 300);
         },
         updater:function (merchant) {
         	if (merchant.id != -999) {
