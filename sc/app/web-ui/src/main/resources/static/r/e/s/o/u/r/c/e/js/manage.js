@@ -41,6 +41,9 @@ $(document).ready(function() {
         	suggestions.push(item.id);      	
         	$("#suggestion-name-display").html(sName);
 	        return item;
+	    },
+	    afterSelect: function(item) {
+	    	$("#suggestionName").val('');
 	    }
     });
 
@@ -66,6 +69,9 @@ $(document).ready(function() {
         	cuisines.push(item.id);      	
         	$("#cuisine-name-display").html(cName);
 	        return item;
+	    },
+	    afterSelect: function(item) {
+	    	$("#cuisineName").val('');
 	    }
     });
 

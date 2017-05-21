@@ -85,24 +85,23 @@ function onLoadCallback() {
 }
 
 function loginCallback(result) {
-	console.log(result);
 	if (result['status']['signed_in']) {
 		loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
 	} else if (result['error'] == "immediate_failed") {
-//        gapi.auth.authorize({
-//        	'clientid' : gClientId,
-////    		'cookiepolicy' : 'single_host_origin',
-////    		'callback' : 'loginCallback',
-////    		'approvalprompt' : 'auto',
-////    		'accessType' : 'online',
-//    		'scope' : 'profile email',
-//            'immediate' : true
-//        }, function (authRes) {
-//            if (authRes['status']['signed_in']) {
-//            	loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
-//            }
-//        });
-    } else {
+	//      gapi.auth.authorize({
+	//    	'clientid' : gClientId,
+	////		'cookiepolicy' : 'single_host_origin',
+	////		'callback' : 'loginCallback',
+	////		'approvalprompt' : 'auto',
+	////		'accessType' : 'online',
+	//		'scope' : 'profile email',
+	//        'immediate' : true
+	//    }, function (authRes) {
+	//        if (authRes['status']['signed_in']) {
+	//        	loginWithAccessToken(gapi.auth.getToken().access_token, 'GOOGLE');
+	//        }
+	//    });
+	} else {
 		$("#loginModal").find(".loader").addClass('hide');
 		$("#loginModal").find(".modal-body").removeClass('hide');
 		alert('Something is not right. Please retry or use Facebook signin.');
