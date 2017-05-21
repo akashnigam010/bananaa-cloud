@@ -10,12 +10,12 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
@@ -56,7 +56,8 @@ public class DishDao {
 		@SuppressWarnings("unchecked")
 		List<DishEntity> dishes = (List<DishEntity>) criteria.list();
 		if (dishes != null && !dishes.isEmpty()) {
-			dishDtos = mapper.map(dishes, null);
+			DishFilterCriteria dishCriteria = new DishFilterCriteria(Boolean.FALSE);
+			dishDtos = mapper.map(dishes, null, dishCriteria);
 			return dishDtos;
 		}
 		return Collections.emptyList();
@@ -80,23 +81,23 @@ public class DishDao {
 		criteria.setMaxResults(resultsPerPage);
 		criteria.setResultTransformer(Transformers.aliasToBean(DishResult.class));
 		List<DishResult> result = (List<DishResult>) criteria.list();
-		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
-		return mapper.mapDishResults(result, filterCriteria);
+		MerchantFilterCriteria merchantFilter = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
+		DishFilterCriteria dishFilter = new DishFilterCriteria(false, false, false, true);
+		return mapper.mapDishResults(result, merchantFilter, dishFilter);
 	}
 
 	public DishDto getItemDetails(String merchantNameId, String dishNameId) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.createAlias("merchant", "m");
-		//criteria.createAlias("recommendations", "r", JoinType.LEFT_OUTER_JOIN);//.add(Restrictions.eq("r.isActive", Boolean.TRUE));
 		criteria.add(Restrictions.eq("m.nameId", merchantNameId));
 		criteria.add(Restrictions.eq("nameId", dishNameId));
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
-		//criteria.add(Restrictions.eq("r.isActive", Boolean.TRUE));
 		DishEntity entity = (DishEntity) criteria.uniqueResult();
 		if (entity == null) {
 			throw new BusinessException(DishErrorCodeType.DISH_DETAILS_NOT_FOUND);
 		}
 		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
-		return mapper.map(entity, filterCriteria);
+		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
+		return mapper.map(entity, filterCriteria, dishCriteria);
 	}
 }

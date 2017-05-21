@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
@@ -35,6 +36,12 @@ public class ItemService {
 			if (StringUtils.isNotEmpty(request.getSearchString())) {
 				if (request.getSearchString().length() >= 2) {
 					response = delegate.searchItems(request);
+					if (response.getItems().size() == 0) {
+						Item noMatchFound = new Item();
+						noMatchFound.setId(-999);
+						noMatchFound.setName("No such item found");
+						response.getItems().add(noMatchFound);
+					}
 				}
 			}
 			return helper.success(response);

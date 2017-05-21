@@ -1,10 +1,12 @@
 package in.socyal.sc.api.manage.request;
 
+import java.util.List;
+
 public class AddItemRequest {
 	private String name;
 	private Integer merchantId;
-	private Integer cuisineId;
-	private Integer suggestionId;
+	private List<Integer> cuisineIds;
+	private List<Integer> suggestionIds;
 	private String imageUrl;
 	private String thumbnail;
 	private Boolean isActive;
@@ -26,20 +28,20 @@ public class AddItemRequest {
 		this.merchantId = merchantId;
 	}
 
-	public Integer getCuisineId() {
-		return cuisineId;
+	public List<Integer> getCuisineIds() {
+		return cuisineIds;
 	}
 
-	public void setCuisineId(Integer cuisineId) {
-		this.cuisineId = cuisineId;
+	public void setCuisineIds(List<Integer> cuisineIds) {
+		this.cuisineIds = cuisineIds;
 	}
 
-	public Integer getSuggestionId() {
-		return suggestionId;
+	public List<Integer> getSuggestionIds() {
+		return suggestionIds;
 	}
 
-	public void setSuggestionId(Integer suggestionId) {
-		this.suggestionId = suggestionId;
+	public void setSuggestionIds(List<Integer> suggestionIds) {
+		this.suggestionIds = suggestionIds;
 	}
 
 	public String getImageUrl() {

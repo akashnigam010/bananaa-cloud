@@ -24,6 +24,37 @@ body {
 	color: #444;	
 }
 
+/* Loader CSS STARTS */
+.global-search.loading ~ .input-loader-animation-div { 
+    display: block;
+}
+
+.global-search.noloading ~ .input-loader-animation-div { 
+    display: none;
+}
+
+.input-loader-animation-div {
+    position: absolute; 
+    margin-top: 1%;
+    height: 200%;
+    z-index: 1; 
+    background: white; 
+    color: black; 
+    width: 100%; 
+    border-radius: 3px;
+    -webkit-box-shadow: 4px 7px 11px 1px grey;
+    -moz-box-shadow: 4px 7px 11px 1px grey;
+    box-shadow: 4px 7px 7px grey;
+}
+
+.input-loader-animation {
+    position: absolute;
+    height: 50%;
+    left: 47%; 
+    top: 25%;   
+}
+/* Loader CSS ENDS */
+
 @media (max-width: 480px) {
     .loader {
         margin-left: 40%;
@@ -39,6 +70,26 @@ body {
     input, textarea {
         -moz-user-select: text;
     }
+    /* Loader CSS STARTS */
+	.input-loader-animation-div {
+	    position: absolute; 
+	    margin-top: 2%;
+	    height: 150%;
+	    z-index: 1; 
+	    background: white; 
+	    border-radius: 3px;
+	    -webkit-box-shadow: 4px 7px 11px 1px grey;
+	    -moz-box-shadow: 4px 7px 11px 1px grey;
+	    box-shadow: 4px 7px 7px grey;
+	}
+	
+	.input-loader-animation {
+	    position: absolute; 
+	    height: 50%;
+	    left: 42%; 
+	    top: 25%;   
+	}
+	/* Loader CSS ENDS */
 }
 
 @media (min-width: 481px) {

@@ -26,7 +26,9 @@ import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.ItemImageEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
+import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
+import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.ManagementDaoMapper;
 
 @Repository
@@ -39,6 +41,9 @@ public class ManagementDao {
 
 	@Autowired
 	ManagementDaoMapper mapper;
+	
+	@Autowired
+	DishDaoMapper dishDaoMapper;
 
 	public ManagementDao() {
 	}
@@ -47,9 +52,16 @@ public class ManagementDao {
 		this.sessionFactory = sessionFactory;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void addItem(AddItemRequest request) throws BusinessException {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());
+		Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
+		suggestionCriteria.add(Restrictions.in("id", request.getSuggestionIds()));
+		Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
+		cuisineCriteria.add(Restrictions.in("id", request.getCuisineIds()));
 		DishEntity entity = mapper.map(request, merchant);
+		entity.setSuggestions(suggestionCriteria.list());
+		entity.setCuisines(cuisineCriteria.list());
 		sessionFactory.getCurrentSession().save(entity);
 	}
 	
@@ -94,7 +106,7 @@ public class ManagementDao {
 		criteria.add(Restrictions.ilike(NAME, request.getSearchString(), MatchMode.ANYWHERE));
 		@SuppressWarnings("unchecked")
 		List<CuisineEntity> entities = criteria.list();
-		return mapper.mapCuisine(entities);
+		return dishDaoMapper.mapCuisines(entities);
 	}
 
 	public List<SuggestionDto> getSuggestions(SearchRequest request) {
@@ -102,7 +114,7 @@ public class ManagementDao {
 		criteria.add(Restrictions.ilike(NAME, request.getSearchString(), MatchMode.ANYWHERE));
 		@SuppressWarnings("unchecked")
 		List<SuggestionEntity> entities = criteria.list();
-		return mapper.mapSuggestion(entities);
+		return dishDaoMapper.mapSuggestions(entities);
 	}
 
 	public List<ItemImageDto> getItemImages(SearchRequest request) {
