@@ -7,16 +7,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
+import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.DishResult;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
+import in.socyal.sc.persistence.entity.SuggestionEntity;
 
 @Component
 public class DishDaoMapper {
@@ -27,23 +32,65 @@ public class DishDaoMapper {
 	@Autowired
 	TimestampHelper timestampHelper;
 
-	public DishDto map(DishEntity entity, MerchantFilterCriteria merchantCriteria) {
+	public DishDto map(DishEntity entity, MerchantFilterCriteria merchantCriteria, DishFilterCriteria dishCriteria) {
 		DishDto dto = new DishDto();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setNameId(entity.getNameId());
-		dto.setSuggestionId(entity.getSuggestionId());
-		dto.setCuisineId(entity.getCuisineId());
-		dto.setImageUrl(entity.getImageUrl());
-		dto.setThumbnail(entity.getThumbnail());
+		if (dishCriteria.getMapSuggestions()) {
+			dto.setSuggestions(mapSuggestions(entity.getSuggestions()));
+		}
+
+		if (dishCriteria.getMapCuisines()) {
+			dto.setCuisines(mapCuisines(entity.getCuisines()));
+		}
+
+		if (dishCriteria.getMapImages()) {
+			dto.setImageUrl(entity.getImageUrl());
+			dto.setThumbnail(entity.getThumbnail());
+		}
+
+		if (dishCriteria.getMapRecommendations()) {
+			dto.setRecommendations(mapRecommendations(entity));
+		}
+
 		dto.setIsActive(entity.getIsActive());
-		dto.setRecommendations(mapRecommendations(entity));
 		if (merchantCriteria != null) {
 			MerchantDto merchant = new MerchantDto();
 			merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);
 			dto.setMerchant(merchant);
 			dto.setItemUrl(dto.getMerchant().getNameId() + "/" + dto.getNameId());
 		}
+		return dto;
+	}
+
+	public List<SuggestionDto> mapSuggestions(List<SuggestionEntity> entites) {
+		List<SuggestionDto> dtos = new ArrayList<>();
+		for (SuggestionEntity entity : entites) {
+			dtos.add(mapSuggestion(entity));
+		}
+		return dtos;
+	}
+
+	public SuggestionDto mapSuggestion(SuggestionEntity entity) {
+		SuggestionDto dto = new SuggestionDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
+		return dto;
+	}
+
+	public List<CuisineDto> mapCuisines(List<CuisineEntity> entites) {
+		List<CuisineDto> dtos = new ArrayList<>();
+		for (CuisineEntity entity : entites) {
+			dtos.add(mapCuisine(entity));
+		}
+		return dtos;
+	}
+
+	public CuisineDto mapCuisine(CuisineEntity entity) {
+		CuisineDto dto = new CuisineDto();
+		dto.setId(entity.getId());
+		dto.setName(entity.getName());
 		return dto;
 	}
 
@@ -70,35 +117,37 @@ public class DishDaoMapper {
 				dto.setIsActive(rcmdEntity.getIsActive());
 				UserDto userDto = new UserDto();
 				userMapper.map(rcmdEntity.getUser(), userDto, false);
-				//FIXME : Result set must be filtered with active recommendations already
+				// FIXME : Result set must be filtered with active
+				// recommendations already
 				userDto.setTotalRecommendations(getActiveRecommendations(rcmdEntity.getUser().getRecommendations()));
 				dto.setUser(userDto);
 				dto.setUpdatedDateTime(rcmdEntity.getUpdatedDateTime());
 				dto.setTimeDiff(timestampHelper.getTimeDiffString(rcmdEntity.getUpdatedDateTime().getTimeInMillis()));
 				dtos.add(dto);
-			}			
+			}
 		}
 		Collections.sort(dtos);
 		return dtos;
 	}
-	
+
 	/*
-	 * Remove this method once isActive flag is put in query
+	 * FIXME: Remove this method once isActive flag is put in query
 	 */
 	private Integer getActiveRecommendations(List<RecommendationEntity> entities) {
 		int activeRcmdCount = 0;
 		for (RecommendationEntity entity : entities) {
 			if (entity.getIsActive()) {
-				activeRcmdCount ++;
+				activeRcmdCount++;
 			}
 		}
 		return activeRcmdCount;
 	}
 
-	public List<DishDto> map(List<DishEntity> entities, MerchantFilterCriteria merchantCriteria) {
+	public List<DishDto> map(List<DishEntity> entities, MerchantFilterCriteria merchantCriteria,
+			DishFilterCriteria dishCriteria) {
 		List<DishDto> dtos = new ArrayList<>();
 		for (DishEntity entity : entities) {
-			dtos.add(map(entity, merchantCriteria));
+			dtos.add(map(entity, merchantCriteria, dishCriteria));
 		}
 		return dtos;
 	}
@@ -110,10 +159,11 @@ public class DishDaoMapper {
 	 * @param merchantFilter
 	 * @return
 	 */
-	public List<DishResultDto> mapDishResults(List<DishResult> result, MerchantFilterCriteria merchantFilter) {
+	public List<DishResultDto> mapDishResults(List<DishResult> result, MerchantFilterCriteria merchantFilter,
+			DishFilterCriteria dishFilter) {
 		List<DishResultDto> response = new ArrayList<>();
 		for (DishResult dish : result) {
-			response.add(map(dish, merchantFilter));
+			response.add(map(dish, merchantFilter, dishFilter));
 		}
 		return response;
 	}
@@ -125,9 +175,9 @@ public class DishDaoMapper {
 	 * @param merchantFilter
 	 * @return
 	 */
-	public DishResultDto map(DishResult result, MerchantFilterCriteria merchantFilter) {
+	public DishResultDto map(DishResult result, MerchantFilterCriteria merchantFilter, DishFilterCriteria dishFilter) {
 		DishResultDto dto = new DishResultDto();
-		dto.setDish(map(result.getDish(), merchantFilter));
+		dto.setDish(map(result.getDish(), merchantFilter, dishFilter));
 		dto.setRecommendations(result.getRecommendations());
 		return dto;
 	}

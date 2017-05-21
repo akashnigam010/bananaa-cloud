@@ -4,16 +4,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 
 public class DishDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
 	private String nameId;
-	private Integer suggestionId;
-	private Integer cuisineId;
+	private List<SuggestionDto> suggestions;
+	private List<CuisineDto> cuisines;
 	private MerchantDto merchant;
 	private String imageUrl;
 	private String thumbnail;
@@ -35,22 +37,6 @@ public class DishDto implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getSuggestionId() {
-		return suggestionId;
-	}
-
-	public void setSuggestionId(Integer suggestionId) {
-		this.suggestionId = suggestionId;
-	}
-
-	public Integer getCuisineId() {
-		return cuisineId;
-	}
-
-	public void setCuisineId(Integer cuisineId) {
-		this.cuisineId = cuisineId;
 	}
 
 	public MerchantDto getMerchant() {
@@ -110,5 +96,27 @@ public class DishDto implements Serializable {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public List<SuggestionDto> getSuggestions() {
+		if (this.suggestions == null) {
+			this.suggestions = new ArrayList<>();
+		}
+		return suggestions;
+	}
+
+	public void setSuggestions(List<SuggestionDto> suggestions) {
+		this.suggestions = suggestions;
+	}
+
+	public List<CuisineDto> getCuisines() {
+		if (this.cuisines == null) {
+			this.cuisines = new ArrayList<>();
+		}
+		return cuisines;
+	}
+
+	public void setCuisines(List<CuisineDto> cuisines) {
+		this.cuisines = cuisines;
 	}
 }
