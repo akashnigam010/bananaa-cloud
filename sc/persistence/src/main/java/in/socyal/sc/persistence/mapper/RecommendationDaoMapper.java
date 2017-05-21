@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
@@ -39,7 +40,8 @@ public class RecommendationDaoMapper {
 	}
 
 	public void map(RecommendationEntity entity, RecommendationDto dto) {
-		DishDto dish = dishMapper.map(entity.getDish(), null);
+		DishFilterCriteria dishFilter = new DishFilterCriteria(false, false, false, true);
+		DishDto dish = dishMapper.map(entity.getDish(), null, dishFilter);
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setDescription(entity.getDescription());
