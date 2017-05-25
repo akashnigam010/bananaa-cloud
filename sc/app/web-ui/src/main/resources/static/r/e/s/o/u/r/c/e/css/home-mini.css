@@ -47,25 +47,15 @@ body {
 }
 
 .location-wrapper {
+    width: 90%;
     padding-top: 2%;
     padding-bottom: 2%;
 }
 
-.global-search-wrapper {
-    padding-left: 15px;
-    padding-bottom: 8%;
-}
-
-.location-wrapper>.form-horizontal>.form-group-lg>input, .global-search-wrapper>.form-horizontal>.form-group-lg>input {
-    font-size: 1.2em;
-}
-
-.home-input-location {
-    width: 100%;
-}
-
-.home-input-search {
-    width: 100%;
+.search-wrapper {
+    width: 90%;
+    margin-left: 0px;
+    padding-bottom: 5%;
 }
 
 /* Hero Banner CSS - END */

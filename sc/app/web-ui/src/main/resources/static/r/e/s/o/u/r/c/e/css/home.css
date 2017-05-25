@@ -50,6 +50,15 @@
     font-size: 1em;
 }
 
+.location-wrapper {
+    width: 180px;
+}
+
+.search-wrapper {
+    width: 400px;
+    margin-left: 5px;
+}
+
 .i-height {
     height: 40px !important;
 }
