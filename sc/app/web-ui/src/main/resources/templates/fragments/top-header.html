@@ -45,7 +45,7 @@
             	<div class="form-horizontal">
                     <div class="form-group-lg has-feedback" style="float: left; display: inline; width: 140px; margin-left: 8%;">
                         <input id="topSearchLocation" data-provide="typeahead" class="cursor-pointer header-search-input" type="text" 
-                        placeholder="Type your location" value="Hyderabad" />
+                        placeholder="Type your location" th:value="${location}" />
                         <i class="glyphicon icon-location form-control-feedback" style="width: 15px; height: 40px;"></i>
                     </div>    
                 </div>
@@ -77,7 +77,7 @@
                 <div class="modal-body align-center" style="padding: 7%;">
                     <div class="form-horizontal">
                         <div class="form-group-lg has-feedback">
-                            <input id="modalSearchLocation" class="cursor-pointer header-search-input" type="text" placeholder="Type your location" value="Hyderabad" />
+                            <input id="modalSearchLocation" class="cursor-pointer header-search-input" type="text" placeholder="Type your location" th:value="${location}" />
                             <i class="glyphicon icon-location form-control-feedback" style="width: 15px; height: 40px;"></i>
                         </div>    
                     </div>

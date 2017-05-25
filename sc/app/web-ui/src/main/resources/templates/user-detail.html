@@ -13,24 +13,27 @@
         
         <div lang="en" th:replace="fragments/top-header :: top-header"></div>
 
-        <div class="row blue-white-background sub-section">
+        <div class="row bna-bg sub-section">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                 <div class="row" style="margin-top: 3%;">
                     <div class="detail-about">
                         <div class="col-xs-12 col-sm-10 col-sm-offset-1 white-background details-wrapper details-top-wrapper">
                             <div class="col-xs-12">
-                                <div class="row align-center">
-                                    <div style="object-fit: cover;">
-                                        <img class="primary-image" th:src="${detail.user.imageUrl}" />
+                                <div class="row align-center padding">
+                                    <div class="col-sm-6">
+                                        <div style="object-fit: cover;">
+                                            <img class="primary-image" th:src="${detail.user.imageUrl}" />
+                                        </div>    
                                     </div>
-                                    <div class="bold font-2 padding-3" th:text="${detail.user.name}">
-                                        Some Name
-                                    </div>
-                                    <hr/>
-                                    <div class="padding-3">
-                                        <span class="bold font-1-5" th:text="${detail.totalRecommendations}">22</span>
-                                        <span class="bna-color" th:if="${detail.totalRecommendations == 1}">RECOMMENDATION</span>
-                                        <span class="bna-color" th:unless="${detail.totalRecommendations == 1}">RECOMMENDATIONS</span> 
+                                    <div class="col-sm-6 padding">
+                                        <div class="bold font-2" th:text="${detail.user.name}">
+                                            Some Name
+                                        </div>
+                                        <div>
+                                            <span class="bold font-1-5" th:text="${detail.totalRecommendations}">22</span>
+                                            <span class="bna-color" th:if="${detail.totalRecommendations == 1}">RECOMMENDATION</span>
+                                        	<span class="bna-color" th:unless="${detail.totalRecommendations == 1}">RECOMMENDATIONS</span> 
+                                        </div> 
                                     </div>
                                 </div>                                              
                             </div>   

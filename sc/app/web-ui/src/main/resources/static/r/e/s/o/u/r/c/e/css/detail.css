@@ -1,14 +1,3 @@
-/* Common CSS STARTS */
-.login-info {
-    cursor: pointer; 
-    color: white; 
-}
-
-.header-icon {
-    font-size: 2em;
-}
-/* Common CSS ENDS */
-
 /* Media Queries CSS - STARTS */
 @media (min-width: 768px) {
 	.detail-about > .col-sm-8 {
@@ -28,11 +17,6 @@
 
 .sub-section {
     padding: 1% 0%;
-}
-
-.details-wrapper {
-	border-radius: 3px;
-    border: solid 1px #D3D3D3;
 }
 
 .recommended-item {
