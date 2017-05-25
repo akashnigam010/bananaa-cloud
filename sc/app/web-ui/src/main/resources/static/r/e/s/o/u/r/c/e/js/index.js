@@ -9,6 +9,7 @@ $(document).ready(function() {
     }
     
     $('#search-field').typeahead(searchConfig($('#search-field')));
+    loadLocations($('#search-location'));
     getTrendingRestaurants();
     getStories();
     

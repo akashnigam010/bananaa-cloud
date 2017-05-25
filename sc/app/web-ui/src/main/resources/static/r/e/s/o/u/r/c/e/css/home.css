@@ -13,11 +13,6 @@
     height: 150px;
 }
 
-.logo {
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 .tagline {
     font-size: 2em;
     padding-top: 2%;
@@ -33,35 +28,34 @@
     background-size: cover;
 }
 
-.icon-search {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/search_icon.png");
+.icon-search-home {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.search-box-wrapper {
-    height: 100px;
+.icon-location-home {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25px;
+}
+
+.home-search-wrapper {
     padding-top: 2%;
+    padding-bottom: 2%;
 }
 
-.search-box-wrapper>.form-horizontal>.form-group-lg>input {
-    font-size: 1.2em;
+.home-search-wrapper>.form-horizontal>.form-group-lg>input {
+    font-size: 1em;
 }
 
-.search-box-suggestion {
-    z-index: 1; 
-    position: absolute; 
-    background: white; 
-    color: black; 
-    width: 100%; 
-    border-radius: 5px;
-    -webkit-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-    -moz-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-    box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+.i-height {
+    height: 40px !important;
 }
 
-.suggestion {
-    padding: 2% 2% 0% 2%;
+.i-width {
+    width: 20px !important;
 }
 
 /* Hero Banner CSS - END */
@@ -236,29 +230,10 @@
 
 /* ERROR PAGE CSS - END*/
 
-/* PLACEHOLDER CSS - START*/
-
-::-webkit-input-placeholder {
-   text-align: center;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-   text-align: center;  
-}
-
-::-moz-placeholder {  /* Firefox 19+ */
-   text-align: center;  
-}
-
-:-ms-input-placeholder {  
-   text-align: center; 
-}
-
 hr {
     margin-top: 2px;
     margin-bottom: 2px; 
 }
-/* PLACEHOLDER CSS - END*/
 
 /* Login Button CSS starts */
 .login-info {

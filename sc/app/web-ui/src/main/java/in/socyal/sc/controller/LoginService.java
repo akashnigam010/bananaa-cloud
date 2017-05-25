@@ -16,8 +16,11 @@ import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
+import in.socyal.sc.api.login.request.SetLocationRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.CityType;
+import in.socyal.sc.api.type.LocalityType;
 import in.socyal.sc.core.validation.LoginValidator;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.LoginDelegate;
@@ -56,7 +59,7 @@ public class LoginService {
 			validator.validateLoginRequest(request);
 			response = delegate.federatedLogin(request);
 			addLoginCookie(response);
-			addLocationCookie();
+			addCityCookie();
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
@@ -70,6 +73,12 @@ public class LoginService {
 		removeLoginCookie();
 		return helper.success(response);
 	}
+	
+	@RequestMapping(value = "/setLocation", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse setLocation(@RequestBody SetLocationRequest request) {
+		addLocationCookie(request.getLocalityId());
+		return helper.success(new StatusResponse());
+	}
 
 	private void addLoginCookie(LoginResponse response) throws BusinessException {
 		Cookie loginCookie = new Cookie("blc",
@@ -80,10 +89,19 @@ public class LoginService {
 
 	}
 
-	private void addLocationCookie() {
+	private void addCityCookie() {
 		Cookie cityCookie = new Cookie("city", CityType.HYDERABAD.getName());
 		cityCookie.setPath("/");
 		httpResponse.addCookie(cityCookie);
+	}
+	
+	private void addLocationCookie(Integer id) {
+		LocalityType localityType = LocalityType.getCityById(id);
+		if (localityType != null) {
+			Cookie localityCookie = new Cookie("loc", localityType.getId().toString());
+			localityCookie.setPath("/");
+			httpResponse.addCookie(localityCookie);
+		}
 	}
 
 	private void removeLoginCookie() {

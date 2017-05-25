@@ -153,3 +153,62 @@ function searchConfig(element) {
 	
 	return config;
 }
+
+function loadLocations(e) {
+	var isLocationUpdated = false;
+    var defaultSelected = e.val();
+    e.typeahead({
+        fitToElement: true,
+        showHintOnFocus: "all",
+        items: 4,
+        displayText: function(location) {
+              return '<div style="padding: 2%; font-size: 0.9em;"><span>' + 
+                        location.name + 
+                        '</span></div>';
+        },
+        afterSelect: function(location) {
+            e.val(location.name);
+        },
+        source: [
+            {id: "1", cityId: 1, localityId: null, name: "All of Hyderabad"},
+            {id: "2", cityId: 1, localityId: 1,  name: "Hitech City"},
+            {id: "3", cityId: 1, localityId: 2,  name: "Jubilee Hills"},
+            {id: "4", cityId: 1, localityId: 3,  name: "Banjara Hills"},
+            {id: "5", cityId: 1, localityId: 4,  name: "Gachibowli"},
+            {id: "6", cityId: 1, localityId: 5,  name: "Kondapur"}
+        ],
+        updater: function(location) {
+            isLocationUpdated = true;
+            defaultSelected = location.name;
+            if (location.localityId != null) {
+            	var dataOb = {
+                		localityId : location.localityId
+            	};
+            	$.ajax({
+              	  method: "POST",
+              	  url: "/socyal/login/setLocation",
+              	  contentType : "application/json",
+              	  data: JSON.stringify(dataOb)
+              	})
+              	  .done(function(response) {
+              		  if (!response.result) {
+              			location.reload();
+              		  }		
+              	  });
+            }
+            return location;
+        }
+    });
+
+    e.on('mousedown', function() {
+        e.val('');
+        e.typeahead('lookup');
+    });
+
+    e.on('focusout', function() {
+        if (!isLocationUpdated) {
+            e.val(defaultSelected);
+            isLocationUpdated = false;
+        }
+    });
+}

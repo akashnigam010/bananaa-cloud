@@ -2,12 +2,10 @@
 .login-info {
     cursor: pointer; 
     color: white; 
-    padding-top: 10%;    
 }
 
 .header-icon {
     font-size: 2em;
-    padding-top: 2%; 
 }
 /* Common CSS ENDS */
 
@@ -33,7 +31,8 @@
 }
 
 .details-wrapper {
-	border-radius: 4px;
+	border-radius: 3px;
+    border: solid 1px #D3D3D3;
 }
 
 .recommended-item {

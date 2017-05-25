@@ -131,6 +131,10 @@ body {
     color: red;
 }
 
+.white {
+    color: white;
+}
+
 a {
     color: inherit;
     text-decoration : none
@@ -211,6 +215,10 @@ a:hover {
 
 .blue-white-background {
   background: #E6E9EE;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 @-webkit-keyframes spin {
@@ -441,8 +449,19 @@ ul.typeahead.dropdown-menu {
 
 /*Top Header CSS STARTS*/
 .top-header {
-  background: #FFFFFE; 
-  border-bottom: solid 1px #e7e7e6;
+  background: #FAFAFA; 
+  border-bottom: solid 1px #d3d3d3;
+}
+
+.header-search-input {
+  border: solid 1px #D3D3D3;
+  border-radius: 3px;
+  width: 100%;
+  padding-left: 10px;
+}
+
+.bna-bg {
+  background: #EFEFEF;
 }
 
 .search-box {
@@ -461,4 +480,23 @@ ul.typeahead.dropdown-menu {
   min-height: 100%; 
   border-radius: 0;
 }
+
+.icon-location {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 15px;
+}
+
+.icon-search {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 15px;
+}
 /*Top Header CSS ENDS*/
+
+.form-input {
+  border: none;
+  border-radius: 3px !important;
+}

@@ -1,55 +1,67 @@
 <div class="row" th:fragment="top-header">
 	<script type="text/javascript" th:src="'https://bna-s3.s3.amazonaws.com/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
-	<script type="text/javascript">
-		function openSearchModal() {
-			$('#searchModal').modal('show');
-			$("#modalSearchInput").focus();
-		}
-	</script>
-    <div class="col-xs-12">
-        <div class="row top-header">
-            <div class="col-xs-6">
-                <p class="simpson header-icon bna-color">
-                    <img class="cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/arrow_back_black.svg" onclick="window.history.back()" />
+	<!-- script for this fragment is present in the footer -->
+	<div class="col-xs-12">
+        <div class="row top-header" style="padding: 2%;">
+            <div class="simpson header-icon bna-color">
+                <div style="float: left; display: inline; padding-top: 0.5%;">
+                    <img class="cursor-pointer float-left" src="https://bna-s3.s3.amazonaws.com/img/arrow_back_black.svg" onclick="window.history.back()" />
+                </div>
+                <div style="float: left; display: inline;">
                     <span class="cursor-pointer" onclick="location.href='/'" style="margin-left: 5%;">bananaa</span>
-                </p>
+                </div>
             </div>
-            <div class="col-xs-6">
-                <div class="hidden-sm hidden-md hidden-lg" style="padding-top: 6%;">
-                    <div class="col-xs-4 col-xs-offset-4">
-                        <img src="https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg" onclick="openSearchModal();" />
-                    </div>
-                    <div class="btn-group col-xs-4">
-                        <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="https://bna-s3.s3.amazonaws.com/img/ic_person_black.svg" />                                
-                        <ul class="dropdown-menu pull-right" id="login-dropdown-mini">
+            
+            <!-- mobile screen -->
+            <div class="hidden-sm hidden-md hidden-lg" style="padding-top: 6%;">
+                <div class="col-xs-4 col-xs-offset-4">
+                    <img src="https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg" onclick="openSearchModal();" />
+                </div>
+                <div class="btn-group col-xs-4">
+                    <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="https://bna-s3.s3.amazonaws.com/img/ic_person_black.svg" />                                
+                    <ul class="dropdown-menu pull-right" id="login-dropdown-mini">
+                        <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript:logout();">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- desktop/tablet screen -->
+            <div class="hidden-xs">
+            	<div class="pull-right">
+            		<div class="btn-group login-info">
+                        <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
+                        </button>
+                        <ul class="dropdown-menu pull-right" id="login-dropdown">
                             <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="javascript:logout();">Logout</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript:logout();">Logout</a></li>
                         </ul>
                     </div>
+            	</div>
+            	<div class="form-horizontal">
+                    <div class="form-group-lg has-feedback" style="float: left; display: inline; width: 140px; margin-left: 5%;">
+                        <input id="topSearchLocation" data-provide="typeahead" class="cursor-pointer header-search-input" type="text" 
+                        placeholder="Type your location" value="Hyderabad" />
+                        <i class="glyphicon icon-location form-control-feedback" style="width: 15px; height: 40px;"></i>
+                    </div>    
                 </div>
-                <div class="hidden-xs">
-                    <div class="col-xs-9">
-                        <input id="topSearchInput" class="global-search search-box noloading" type="text" placeholder="Find a restaurants" />
-                        <div class="input-loader-animation-div" style="width: 85%;">
-                            <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="btn-group login-info pull-right">
-                            <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
-                            </button>
-                            <ul class="dropdown-menu pull-right" id="login-dropdown">
-                                <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="javascript:logout();">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>                        
-            </div>                    
+                <div class="form-horizontal">
+                    <div class="form-group-lg has-feedback" style="float: left; display: inline; width: 35%; margin-left: 0.5%;">
+                        <input id="topSearchInput" class="global-search header-search-input noloading" type="text" placeholder="Search for a restaurant, cuisine or dish" />
+                        <i class="glyphicon icon-search form-control-feedback" style="width: 15px; height: 40px;"></i>
+                        <div class="input-loader-animation-div" style="width: 100%;">
+		                	<img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+		                </div>
+                    </div>    
+                </div>
+                <div style="float: left; display: inline; margin-left: 0.5%;">
+                    <button class="bna-button" style="margin: 0px; line-height: inherit;">Search</button>
+                </div>
+            </div>                        
         </div>
     </div>
     <!-- Full screen Modal STARTS -->
