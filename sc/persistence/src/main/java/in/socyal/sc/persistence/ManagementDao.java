@@ -60,8 +60,12 @@ public class ManagementDao {
 		Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
 		cuisineCriteria.add(Restrictions.in("id", request.getCuisineIds()));
 		DishEntity entity = mapper.map(request, merchant);
-		entity.setSuggestions(suggestionCriteria.list());
-		entity.setCuisines(cuisineCriteria.list());
+		if (request.getSuggestionIds().size() > 0) {
+			entity.setSuggestions(suggestionCriteria.list());
+		}
+		if (request.getCuisineIds().size() > 0) {
+			entity.setCuisines(cuisineCriteria.list());
+		}
 		sessionFactory.getCurrentSession().save(entity);
 	}
 	
