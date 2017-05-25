@@ -29,7 +29,7 @@ public enum LocalityType {
 		return cityId;
 	}
 
-	public static LocalityType getCityByName(String name) {
+	public static LocalityType getLocalityByName(String name) {
 		for (LocalityType type : LocalityType.values()) {
 			if (type.getName().equalsIgnoreCase(name)) {
 				return type;
@@ -38,7 +38,7 @@ public enum LocalityType {
 		return null;
 	}
 
-	public static LocalityType getCityById(Integer id) {
+	public static LocalityType getLocalityById(Integer id) {
 		for (LocalityType type : LocalityType.values()) {
 			if (type.getId().equals(id)) {
 				return type;

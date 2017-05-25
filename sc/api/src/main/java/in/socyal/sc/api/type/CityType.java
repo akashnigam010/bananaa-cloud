@@ -1,7 +1,7 @@
 package in.socyal.sc.api.type;
 
 public enum CityType {
-	HYDERABAD("HYDERABAD", "hyderabad");
+	HYDERABAD("HYDERABAD", "Hyderabad");
 
 	private String label;
 	private String name;

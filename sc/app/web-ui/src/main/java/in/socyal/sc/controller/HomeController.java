@@ -25,6 +25,7 @@ import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
 import in.socyal.sc.api.merchant.response.UserDetailsResponse;
 import in.socyal.sc.api.type.CityType;
+import in.socyal.sc.api.type.LocalityType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
@@ -60,9 +61,10 @@ public class HomeController {
 	ResponseHelper responseHelper;
 	@Autowired
 	JwtTokenHelper jwtHelper;
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(@CookieValue(name = "city", defaultValue = "") String city) {
+	public String home(@CookieValue(name = "city", defaultValue = "") String city,
+			@CookieValue(name = "loc", defaultValue = "") String loc) {
 		if (StringUtils.isEmpty(city)) {
 			Cookie cityCookie = new Cookie("city", CityType.HYDERABAD.getName());
 			cityCookie.setPath("/");
@@ -71,10 +73,84 @@ public class HomeController {
 		return "redirect:hyderabad";
 	}
 
-	@RequestMapping(value = "/bna/manage/managementConsole", method = RequestMethod.GET)
-	public ModelAndView managementConsole() {
-		ModelAndView modelAndView = new ModelAndView("manage");
+	@RequestMapping(value = "/{city}", method = RequestMethod.GET)
+	public ModelAndView cityHome(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city)
+			throws BusinessException {
+		ModelAndView modelAndView = new ModelAndView("index");
+		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+		modelAndView.addObject("description", resource.getString(HOME_DESCRIPTION));
+		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
+		modelAndView.addObject("title", resource.getString(HOME_TITLE));
+		modelAndView.addObject("url", resource.getString(HOME_URL) + "/" + cityType.getName());
+		modelAndView.addObject("imageUrl", resource.getString(HOME_IMAGE));
 		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{city}/{nameId}", method = RequestMethod.GET)
+	public ModelAndView merchantDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city,
+			@PathVariable("nameId") String nameId) throws BusinessException {
+		DetailsRequest request = new DetailsRequest();
+		request.setMerchantNameId(nameId);
+		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
+		GetPopularItemsRequest itemsRequest = new GetPopularItemsRequest(response.getId(), 5, 1);
+		ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
+		ModelAndView modelAndView = new ModelAndView("detail");
+		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+		modelAndView.addObject("detail", response);
+		modelAndView.addObject("popularDishes", itemsResponse);
+		modelAndView.addObject("description", getMerchantMetaDescription(response));
+		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
+		modelAndView.addObject("title", getMerchantMetaTitle(response));
+		modelAndView.addObject("url", getMerchantMetaUrl(response, cityType.getName()));
+		modelAndView.addObject("imageUrl", getMerchantMetaImageUrl(response));
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/{city}/{merchantNameId}/{itemNameId}", method = RequestMethod.GET)
+	public ModelAndView foodDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city,
+			@PathVariable("merchantNameId") String merchantNameId, @PathVariable("itemNameId") String itemNameId)
+			throws BusinessException {
+		ModelAndView modelAndView = new ModelAndView("item-detail");
+		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+		DetailsRequest detailsRequest = new DetailsRequest();
+		detailsRequest.setItemNameId(itemNameId);
+		detailsRequest.setMerchantNameId(merchantNameId);
+		ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
+		modelAndView.addObject("detail", response);
+		modelAndView.addObject("description", getItemMetaDescription(response));
+		modelAndView.addObject("fbDescription", getItemMetaDescription(response));
+		modelAndView.addObject("title", getItemMetaTitle(response));
+		modelAndView.addObject("url", getItemMetaUrl(response, cityType.getName()));
+		modelAndView.addObject("imageUrl", getItemMetaImageUrl(response));
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/user/{userNameId}", method = RequestMethod.GET)
+	public ModelAndView userDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String loc, 
+			@PathVariable("userNameId") String userNameId) throws BusinessException {
+		ModelAndView modelAndView = new ModelAndView("user-detail");
+		setCommonModelData(modelAndView, bnaLoginCookie, CityType.HYDERABAD.getName(), loc);
+		UserDetailsResponse response = userDelegate.getUserDetails(userNameId);
+		modelAndView.addObject("detail", response);
+		modelAndView.addObject("description", getUserMetaDescription(response));
+		modelAndView.addObject("fbDescription", getUserMetaDescription(response));
+		modelAndView.addObject("title", getUserMetaTitle(response));
+		modelAndView.addObject("url", getUserMetaUrl(response));
+		modelAndView.addObject("imageUrl", getUserMetaImageUrl(response));
+		return modelAndView;
+	}
+
+	private CityType setCommonModelData(ModelAndView modelAndView, String bnaLoginCookie, String city, String loc) {
+		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
+		CityType cityType = cityHandler(city);
+		LocalityType localityType = localityHandler(loc);
+		modelAndView.addObject("loginStatus", loginStatus);
+		modelAndView.addObject("location", localityType == null ? cityType.getName() : localityType.getName());
+		return cityType;
 	}
 
 	private LoginStatus loginHandler(String bnaLoginCookie) {
@@ -92,7 +168,7 @@ public class HomeController {
 		}
 		return loginStatus;
 	}
-	
+
 	private CityType cityHandler(String city) {
 		CityType cityType = CityType.getCity(city);
 		if (cityType == null) {
@@ -101,79 +177,12 @@ public class HomeController {
 		return cityType;
 	}
 
-	@RequestMapping(value = "/{city}", method = RequestMethod.GET)
-	public ModelAndView cityHome(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@PathVariable("city") String city) throws BusinessException {
-		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = cityHandler(city);
-		ModelAndView modelAndView = new ModelAndView("index");
-		modelAndView.addObject("loginStatus", loginStatus);
-		modelAndView.addObject("city", cityType.getName());
-		modelAndView.addObject("description", resource.getString(HOME_DESCRIPTION));
-		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
-		modelAndView.addObject("title", resource.getString(HOME_TITLE));
-		modelAndView.addObject("url", resource.getString(HOME_URL) + "/" + cityType.getName());
-		modelAndView.addObject("imageUrl", resource.getString(HOME_IMAGE));
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/{city}/{nameId}", method = RequestMethod.GET)
-	public ModelAndView merchantDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@PathVariable("city") String city, @PathVariable("nameId") String nameId) throws BusinessException {
-		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = cityHandler(city);
-		DetailsRequest request = new DetailsRequest();
-		request.setMerchantNameId(nameId);
-		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
-		GetPopularItemsRequest itemsRequest = new GetPopularItemsRequest(response.getId(), 5, 1);
-		ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
-		ModelAndView modelAndView = new ModelAndView("detail");
-		modelAndView.addObject("loginStatus", loginStatus);
-		modelAndView.addObject("detail", response);
-		modelAndView.addObject("popularDishes", itemsResponse);
-		modelAndView.addObject("description", getMerchantMetaDescription(response));
-		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
-		modelAndView.addObject("title", getMerchantMetaTitle(response));
-		modelAndView.addObject("url", getMerchantMetaUrl(response, cityType.getName()));
-		modelAndView.addObject("imageUrl", getMerchantMetaImageUrl(response));
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/{city}/{merchantNameId}/{itemNameId}", method = RequestMethod.GET)
-	public ModelAndView foodDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@PathVariable("city") String city, @PathVariable("merchantNameId") String merchantNameId,
-			@PathVariable("itemNameId") String itemNameId) throws BusinessException {
-		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		CityType cityType = cityHandler(city);
-		ModelAndView modelAndView = new ModelAndView("item-detail");
-		DetailsRequest detailsRequest = new DetailsRequest();
-		detailsRequest.setItemNameId(itemNameId);
-		detailsRequest.setMerchantNameId(merchantNameId);
-		ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
-		modelAndView.addObject("detail", response);
-		modelAndView.addObject("loginStatus", loginStatus);
-		modelAndView.addObject("description", getItemMetaDescription(response));
-		modelAndView.addObject("fbDescription", getItemMetaDescription(response));
-		modelAndView.addObject("title", getItemMetaTitle(response));
-		modelAndView.addObject("url", getItemMetaUrl(response, cityType.getName()));
-		modelAndView.addObject("imageUrl", getItemMetaImageUrl(response));
-		return modelAndView;
-	}
-	
-	@RequestMapping(value = "/user/{userNameId}", method = RequestMethod.GET)
-	public ModelAndView userDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@PathVariable("userNameId") String userNameId) throws BusinessException {
-		LoginStatus loginStatus = loginHandler(bnaLoginCookie);
-		ModelAndView modelAndView = new ModelAndView("user-detail");
-		UserDetailsResponse response = userDelegate.getUserDetails(userNameId);
-		modelAndView.addObject("detail", response);
-		modelAndView.addObject("loginStatus", loginStatus);
-		modelAndView.addObject("description", getUserMetaDescription(response));
-		modelAndView.addObject("fbDescription", getUserMetaDescription(response));
-		modelAndView.addObject("title", getUserMetaTitle(response));
-		modelAndView.addObject("url", getUserMetaUrl(response));
-		modelAndView.addObject("imageUrl", getUserMetaImageUrl(response));
-		return modelAndView;
+	private LocalityType localityHandler(String localityId) {
+		LocalityType localityType = null;
+		if (StringUtils.isNotBlank(localityId)) {
+			localityType = LocalityType.getLocalityById(Integer.parseInt(localityId));
+		}
+		return localityType;
 	}
 
 	private String getMerchantMetaDescription(MerchantDetailsResponse response) {
@@ -196,7 +205,7 @@ public class HomeController {
 		url += "/" + city + "/" + response.getNameId();
 		return url;
 	}
-	
+
 	private String getMerchantMetaImageUrl(MerchantDetailsResponse response) {
 		return response.getThumbnail();
 	}
@@ -221,11 +230,11 @@ public class HomeController {
 		url += "/" + city + "/" + response.getDish().getItemUrl();
 		return url;
 	}
-	
+
 	private String getItemMetaImageUrl(ItemDetailsResponse response) {
 		return response.getDish().getThumbnail();
 	}
-	
+
 	private String getUserMetaDescription(UserDetailsResponse response) {
 		String description = response.getUser().getName() + "; ";
 		description += resource.getString(USER_DETAIL_DESCRIPTION_1);
@@ -243,7 +252,7 @@ public class HomeController {
 	private String getUserMetaUrl(UserDetailsResponse response) {
 		return resource.getString(HOME_URL) + response.getUser().getUserUrl();
 	}
-	
+
 	private String getUserMetaImageUrl(UserDetailsResponse response) {
 		return response.getUser().getImageUrl();
 	}

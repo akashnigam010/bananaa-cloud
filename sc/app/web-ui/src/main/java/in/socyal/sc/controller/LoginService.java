@@ -96,7 +96,7 @@ public class LoginService {
 	}
 	
 	private void addLocationCookie(Integer id) {
-		LocalityType localityType = LocalityType.getCityById(id);
+		LocalityType localityType = LocalityType.getLocalityById(id);
 		if (localityType != null) {
 			Cookie localityCookie = new Cookie("loc", localityType.getId().toString());
 			localityCookie.setPath("/");
