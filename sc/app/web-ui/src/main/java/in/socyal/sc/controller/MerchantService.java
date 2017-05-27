@@ -15,7 +15,6 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.merchant.response.StoriesResponse;
 import in.socyal.sc.api.merchant.response.Story;
 import in.socyal.sc.app.merchant.MerchantDelegate;
-import in.socyal.sc.core.validation.MerchantValidator;
 import in.socyal.sc.helper.JsonHelper;
 
 @RestController
@@ -27,8 +26,6 @@ public class MerchantService {
 	MerchantDelegate delegate;
 	@Autowired
 	ResponseHelper responseHelper;
-	@Autowired
-	MerchantValidator validator;
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {

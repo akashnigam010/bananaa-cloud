@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.request.SetLocationRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
