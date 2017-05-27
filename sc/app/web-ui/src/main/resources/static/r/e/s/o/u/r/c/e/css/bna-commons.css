@@ -141,6 +141,14 @@ a:hover {
     text-decoration : none
 }
 
+.full-width {
+	width: 100%;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
 .bna-color {
   color: #9932CC;
 }
