@@ -229,6 +229,10 @@ a:hover {
 	width: 100%;
 }
 
+.inline-block {
+	display: inline-block;
+}
+
 .bna-color {
 	color: #9932CC;
 }
@@ -299,10 +303,6 @@ a:hover {
 
 .blue-white-background {
 	background: #E6E9EE;
-}
-
-.inline-block {
-	display: inline-block;
 }
 
 @

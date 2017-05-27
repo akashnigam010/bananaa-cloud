@@ -57,7 +57,8 @@ hr {
 }
 
 .item-desc-wrapper {
-    margin-left: 4%
+    margin-left: 4%;
+    width: 80%;
 }
 
 .review-item-desc {

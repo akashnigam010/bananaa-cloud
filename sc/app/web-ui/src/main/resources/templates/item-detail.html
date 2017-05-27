@@ -14,7 +14,7 @@
         
         <div lang="en" th:replace="fragments/top-header :: top-header"></div>
         
-        <div class="row bna-bg primary-image-wrapper">
+        <div class="row bna-bg primary-image-wrapper cursor-pointer" onclick="imageView();">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 primary-image-banner">
             </div>    
         </div>
@@ -28,10 +28,10 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="row padding-left">
-                                            <div class="col-xs-12 bold font-2" th:text="${detail.dish.name}">
+                                            <div class="primary-detail col-xs-12 bold font-2" th:text="${detail.dish.name}">
                                             </div>
                                             <a th:href="'/' + ${detail.dish.merchant.merchantUrl}">
-	                                            <div class="col-xs-12 light" th:text="'@ ' + ${detail.dish.merchant.name} + ', ' + ${detail.dish.merchant.address.locality.shortAddress}">
+	                                            <div class="secondary-detail col-xs-12 light" th:text="'@ ' + ${detail.dish.merchant.name} + ', ' + ${detail.dish.merchant.address.locality.shortAddress}">
 	                                            </div>
                                             </a>                                       
                                         </div>
@@ -165,6 +165,8 @@
         <div lang="en" th:replace="fragments/recommend-modal :: recommend-modal"></div>
         
         <div lang="en" th:replace="fragments/alert-modal :: alert-modal"></div>
+        
+        <div lang="en" th:replace="fragments/image-viewer :: image-viewer"></div>
         
         <div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
 
