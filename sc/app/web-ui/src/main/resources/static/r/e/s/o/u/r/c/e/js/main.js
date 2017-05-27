@@ -66,6 +66,16 @@ function activateLogin() {
 	}
 }
 
+function imageView() {
+    var primaryImage = $("#primaryImageTemp").html();
+    var primaryDetail = $(".primary-detail").html();
+    var secondaryDetail = $(".secondary-detail").html();
+    $("#imageViewModal").find('.detail-image').attr('src', primaryImage);
+    $("#imageViewModal").find('.primary-detail').html(primaryDetail);
+    $("#imageViewModal").find('.secondary-detail').html(secondaryDetail);
+    $("#imageViewModal").modal('show');
+}
+
 function handleErrorCallback(response) {
 	if (response.statusCodes != null) {
 		  if (response.statusCodes.statusCode[0].code == '90004' ) {
