@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.date.type.DateFormatType;
 
 @Component
-public class DayUtil {
+public class DateTimeUtil {
 
 	public String formatDate(Calendar unFormattedDate, DateFormatType format) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format.getValue());
