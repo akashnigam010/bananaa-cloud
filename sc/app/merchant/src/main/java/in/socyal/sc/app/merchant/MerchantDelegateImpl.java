@@ -26,7 +26,7 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
-import in.socyal.sc.date.util.DayUtil;
+import in.socyal.sc.date.util.DateTimeUtil;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.RecommendationDao;
@@ -38,7 +38,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Autowired
 	MerchantDelegateMapper mapper;
 	@Autowired
-	DayUtil dayUtil;
+	DateTimeUtil dateTimeUtil;
 	@Autowired
 	RecommendationDao rcmdnDao;
 	@Autowired
@@ -127,16 +127,16 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		for (TimingDto dto : timings) {
 			if (today.get(Calendar.DAY_OF_WEEK) == dto.getDay().getValue()) {
 				openingHours.add(createTimingString(
-						dayUtil.parseDate(dto.getOpen().toString(), DateFormatType.DATE_FORMAT_24_HOUR),
-						dayUtil.parseDate(dto.getClose().toString(), DateFormatType.DATE_FORMAT_24_HOUR)));
+						dateTimeUtil.parseDate(dto.getOpen().toString(), DateFormatType.DATE_FORMAT_24_HOUR),
+						dateTimeUtil.parseDate(dto.getClose().toString(), DateFormatType.DATE_FORMAT_24_HOUR)));
 			}
 		}
 		return openingHours;
 	}
 
 	private String createTimingString(Date open, Date close) {
-		String openStr = dayUtil.formatDate(open, DateFormatType.TIME_FORMAT_AM_PM);
-		String closeStr = dayUtil.formatDate(close, DateFormatType.TIME_FORMAT_AM_PM);
+		String openStr = dateTimeUtil.formatDate(open, DateFormatType.TIME_FORMAT_AM_PM);
+		String closeStr = dateTimeUtil.formatDate(close, DateFormatType.TIME_FORMAT_AM_PM);
 		return openStr + " to " + closeStr;
 	}
 

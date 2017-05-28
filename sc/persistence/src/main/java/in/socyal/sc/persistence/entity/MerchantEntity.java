@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -49,6 +50,14 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
+	
+	public MerchantEntity() {
+
+	}
+
+	public MerchantEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
+	}
 
 	public String getName() {
 		return name;

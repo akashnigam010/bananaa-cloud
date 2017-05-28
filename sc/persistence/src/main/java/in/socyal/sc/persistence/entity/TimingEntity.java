@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,14 @@ public class TimingEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "CLOSE")
 	private String close;
+	
+	public TimingEntity() {
+
+	}
+
+	public TimingEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
+	}
 
 	public Integer getMerchantId() {
 		return merchantId;

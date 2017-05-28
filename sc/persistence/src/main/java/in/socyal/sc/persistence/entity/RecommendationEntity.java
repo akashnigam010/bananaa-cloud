@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +27,14 @@ public class RecommendationEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	public RecommendationEntity() {
+
+	}
+
+	public RecommendationEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
+	}
 
 	public DishEntity getDish() {
 		return dish;

@@ -23,15 +23,13 @@ public class UserDaoMapper {
 
 	public UserEntity map(UserDto from) {
 		Calendar cal = Calendar.getInstance();
-		UserEntity to = new UserEntity();
+		UserEntity to = new UserEntity(cal, cal);
 		to.setUid(from.getUid());
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
 		to.setNameId(from.getNameId());
 		to.setEmail(from.getEmail());
 		to.setImageUrl(from.getImageUrl());
-		to.setCreatedDateTime(cal);
-		to.setUpdatedDateTime(cal);
 		return to;
 	}
 

@@ -3,6 +3,9 @@ package in.socyal.sc.persistence;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -26,7 +29,6 @@ import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.ItemImageEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
-import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.ManagementDaoMapper;
@@ -60,22 +62,29 @@ public class ManagementDao {
 		Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
 		cuisineCriteria.add(Restrictions.in("id", request.getCuisineIds()));
 		DishEntity entity = mapper.map(request, merchant);
-		entity.setSuggestions(suggestionCriteria.list());
-		entity.setCuisines(cuisineCriteria.list());
+		if (request.getSuggestionIds().size() > 0) {
+			entity.setSuggestions(suggestionCriteria.list());
+		}
+		if (request.getCuisineIds().size() > 0) {
+			entity.setCuisines(cuisineCriteria.list());
+		}
 		sessionFactory.getCurrentSession().save(entity);
 	}
 	
 	public void addRecommendations(Integer id, Integer rcmdCount) throws BusinessException {
+		Date date = Calendar.getInstance().getTime();
 		try {
 			sessionFactory.getCurrentSession().doWork(new Work() {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					PreparedStatement st = con.prepareStatement(
-							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `IS_ACTIVE`) VALUES (?, ?, ?)");
+							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `IS_ACTIVE`, `CREATED_DATETIME`, `UPDATED_DATETIME`) VALUES (?, ?, ?, ?, ?)");
 					for (int i = 1; i <= rcmdCount; i++) {
 						st.setInt(1, id);
 						st.setInt(2, Integer.parseInt(resource.getString(BNA_USER_ID)));
 						st.setBoolean(3, Boolean.TRUE);
+						st.setTimestamp(4, new Timestamp(date.getTime()));
+						st.setTimestamp(5, new Timestamp(date.getTime()));
 						st.addBatch();
 					}
 
@@ -88,14 +97,16 @@ public class ManagementDao {
 	}
 
 	public void addCuisine(String name) {
-		CuisineEntity entity = new CuisineEntity();
+		Calendar cal = Calendar.getInstance();
+		CuisineEntity entity = new CuisineEntity(cal, cal);
 		entity.setName(name);
 		entity.setNameId(generateNameId(name));
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
 	public void addSuggestion(String name) {
-		SuggestionEntity entity = new SuggestionEntity();
+		Calendar cal = Calendar.getInstance();
+		SuggestionEntity entity = new SuggestionEntity(cal, cal);
 		entity.setName(name);
 		entity.setNameId(generateNameId(name));
 		sessionFactory.getCurrentSession().save(entity);

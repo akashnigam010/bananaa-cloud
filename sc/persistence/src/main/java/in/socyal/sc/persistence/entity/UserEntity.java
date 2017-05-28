@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -41,6 +42,11 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	public UserEntity(Integer id) {
 		super.setId(id);
+	}
+	
+
+	public UserEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
 	}
 
 	public String getFirstName() {
