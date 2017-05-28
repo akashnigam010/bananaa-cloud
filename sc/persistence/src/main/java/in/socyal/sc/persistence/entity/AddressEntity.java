@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +26,14 @@ public class AddressEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "LONGITUDE")
 	private Double longitude;
+	
+	public AddressEntity() {
+
+	}
+
+	public AddressEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
+	}
 
 	public Double getLatitude() {
 		return latitude;

@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,14 @@ public class ContactEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "EMAIL")
 	private String email;
+	
+	public ContactEntity() {
+
+	}
+
+	public ContactEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
+	}
 
 	public String getPhone1() {
 		return phone1;

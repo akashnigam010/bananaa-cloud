@@ -2,6 +2,7 @@ package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -58,6 +59,10 @@ public class DishEntity extends BaseEntity implements Serializable {
 
 	public DishEntity(Integer id) {
 		super.setId(id);
+	}
+	
+	public DishEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
 	}
 
 	public String getName() {
