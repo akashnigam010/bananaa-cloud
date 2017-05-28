@@ -98,6 +98,7 @@ public class ManagementDao {
 
 	public void addCuisine(String name) {
 		Calendar cal = Calendar.getInstance();
+		System.out.println("adding cuisine: Date = " + cal.getTime().toString());
 		CuisineEntity entity = new CuisineEntity(cal, cal);
 		entity.setName(name);
 		entity.setNameId(generateNameId(name));
