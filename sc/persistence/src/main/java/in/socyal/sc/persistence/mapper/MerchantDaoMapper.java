@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.merchant.dto.AddressDto;
@@ -23,6 +24,10 @@ import in.socyal.sc.persistence.entity.TimingEntity;
 
 @Component
 public class MerchantDaoMapper {
+	
+	@Autowired
+	LocationDaoMapper mapper;
+	
 	public void map(List<MerchantEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
@@ -35,7 +40,7 @@ public class MerchantDaoMapper {
 		dto.setId(entity.getId());
 		dto.setNameId(entity.getNameId());
 		dto.setName(entity.getName());
-		dto.setMerchantUrl(entity.getAddress().getLocality().getCity().toLowerCase() + "/" + entity.getNameId());
+		dto.setMerchantUrl(entity.getAddress().getLocality().getCity().getNameId() + "/" + entity.getNameId());
 		if (filter.getMapImage()) {
 			dto.setImageUrl(entity.getImageUrl());
 			dto.setThumbnail(entity.getThumbnail());
@@ -97,76 +102,11 @@ public class MerchantDaoMapper {
 
 	public void map(AddressEntity from, AddressDto to) {
 		to.setAddress(from.getAddress());
-		to.setLocality(map(from.getLocality()));
+		to.setLocality(mapper.map(from.getLocality()));
 		to.setId(from.getId());
 		to.setLatitude(from.getLatitude());
 		to.setLongitude(from.getLongitude());
 	}
-
-	private LocalityDto map(LocalityEntity from) {
-		LocalityDto to = new LocalityDto();
-		to.setId(from.getId());
-		to.setCity(from.getCity());
-		to.setLatitude(from.getLatitude());
-		to.setLongitude(from.getLongitude());
-		to.setName(from.getName());
-		return to;
-	}
-
-	// public void map(MerchantDto from, MerchantEntity to) {
-	// to.setId(from.getId());
-	// to.setImageUrl(from.getImageUrl());
-	// to.setName(from.getName());
-	// to.setTimings(mapTimingEntities(from.getTimings()));
-	// to.setRating(from.getRating());
-	// if (from.getAddress() != null) {
-	// AddressEntity address = new AddressEntity();
-	// map(from.getAddress(), address);
-	// to.setAddress(address);
-	// }
-	//
-	// if (from.getContact() != null) {
-	// ContactEntity contact = new ContactEntity();
-	// map(from.getContact(), contact);
-	// to.setContact(contact);
-	// }
-	// to.setCheckins(from.getCheckins());
-	// to.setCuisine(parseToList(from.getCuisines()));
-	// }
-
-	// private void map(ContactDto from, ContactEntity to) {
-	// to.setEmail(from.getEmail());
-	// to.setId(from.getId());
-	// to.setPhone1(from.getPhone1());
-	// if (StringUtils.isNotEmpty(from.getPhone2())) {
-	// to.setPhone2(from.getPhone2());
-	// }
-	// if (StringUtils.isNotEmpty(from.getEmail())) {
-	// to.setEmail(from.getEmail());
-	// }
-	// }
-	//
-	// private void map(AddressDto from, AddressEntity to) {
-	// to.setAddress(from.getAddress());
-	// to.setLocality(map(from.getLocality()));
-	// to.setCity(from.getCity());
-	// to.setCountry(from.getCountry());
-	// to.setId(from.getId());
-	// to.setLatitude(from.getLatitude());
-	// to.setLongitude(from.getLongitude());
-	// to.setState(from.getState());
-	// to.setZip(from.getZip());
-	// }
-
-	// private LocalityEntity map(LocalityDto from) {
-	// LocalityEntity to = new LocalityEntity();
-	// to.setId(from.getId());
-	// to.setCity(from.getCity());
-	// to.setLatitude(from.getLatitude());
-	// to.setLongitude(from.getLongitude());
-	// to.setName(from.getName());
-	// return to;
-	// }
 
 	/**
 	 * This method parses a comma separated string splits the string on a
