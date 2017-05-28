@@ -10,13 +10,18 @@
 	</parent>
 	<artifactId>persistence</artifactId>
 	<name>Bananaa Persistence Module</name>
-	
+
 	<properties>
-        <hibernate.version>4.3.6.Final</hibernate.version>
-        <spring.version>4.2.1.RELEASE</spring.version>
-    </properties>
-	
+		<hibernate.version>4.3.6.Final</hibernate.version>
+		<spring.version>4.2.1.RELEASE</spring.version>
+	</properties>
+
 	<dependencies>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.40</version>
+		</dependency>
 		<dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
