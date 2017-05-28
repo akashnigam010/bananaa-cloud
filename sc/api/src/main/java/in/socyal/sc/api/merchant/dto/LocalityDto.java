@@ -7,7 +7,8 @@ public class LocalityDto implements Serializable {
 
 	private Integer id;
 	private String name;
-	private String city;
+	private String nameId;
+	private CityDto city;
 	private Double latitude;
 	private Double longitude;
 
@@ -27,14 +28,6 @@ public class LocalityDto implements Serializable {
 		this.name = name;
 	}
 
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
 	public Double getLatitude() {
 		return latitude;
 	}
@@ -50,8 +43,24 @@ public class LocalityDto implements Serializable {
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	
+
 	public String getShortAddress() {
-		return this.name + ", " + this.city;
+		return this.name + ", " + this.city.getName();
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
+	}
+
+	public CityDto getCity() {
+		return city;
+	}
+
+	public void setCity(CityDto city) {
+		this.city = city;
 	}
 }

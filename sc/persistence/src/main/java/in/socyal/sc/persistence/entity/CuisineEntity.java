@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,14 @@ public class CuisineEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "NAME_ID")
 	private String nameId;
+	
+	public CuisineEntity() {
+
+	}
+
+	public CuisineEntity(Calendar createdDateTime, Calendar updatedDateTime) {
+		super(createdDateTime, updatedDateTime);
+	}
 
 	public String getName() {
 		return name;
