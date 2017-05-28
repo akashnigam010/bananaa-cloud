@@ -1,6 +1,7 @@
 package in.socyal.sc.persistence.mapper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,8 @@ public class ManagementDaoMapper {
 	DishDaoMapper dishDaoMapper;
 
 	public DishEntity map(AddItemRequest request, MerchantEntity merchant) {
-		DishEntity entity = new DishEntity();
+		Calendar cal = Calendar.getInstance();
+		DishEntity entity = new DishEntity(cal, cal);
 		entity.setName(request.getName());
 		entity.setNameId(request.getNameId());
 		entity.setMerchant(merchant);

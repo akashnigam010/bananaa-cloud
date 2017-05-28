@@ -123,12 +123,10 @@ public class RecommendationDao {
 		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
 		Calendar cal = Calendar.getInstance();
 		if (recommendation == null) {
-			recommendation = new RecommendationEntity();
+			recommendation = new RecommendationEntity(cal, cal);
 			recommendation.setDish(new DishEntity(dishId));
 			recommendation.setUser(new UserEntity(userId));
 			recommendation.setIsActive(Boolean.TRUE);
-			recommendation.setCreatedDateTime(cal);
-			recommendation.setUpdatedDateTime(cal);
 		} else {
 			if (StringUtils.isBlank(description)) {
 				return;
