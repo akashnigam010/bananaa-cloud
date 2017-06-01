@@ -1,6 +1,7 @@
 var rcmdOb = {};
 var revItem = {};
 var selectedRating = 0;
+var flashTime = 150;
 var rateVal = new Array();
 var star_e = "https://bna-s3.s3.amazonaws.com/img/rate-e.png";
 var star_f = "https://bna-s3.s3.amazonaws.com/img/rate-f.png";
@@ -168,15 +169,15 @@ function flashStars() {
 									$("#s2").attr("src", star_e);
 									setTimeout(function(){
 										$("#s1").attr("src", star_e);
-								    },50);
-							    },50);
-						    },50);
-					    },50);
-				    },50);
-			    },50);
-		    },50);
-	    },50);
-    },50);
+								    },flashTime);
+							    },flashTime);
+						    },flashTime);
+					    },flashTime);
+				    },flashTime);
+			    },flashTime);
+		    },flashTime);
+	    },flashTime);
+    },flashTime);
 }
 
 function activateRatingWidget() {
