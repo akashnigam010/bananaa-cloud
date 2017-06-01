@@ -38,20 +38,9 @@ hr {
     margin-bottom: 2px; 
 }
 
-.recommendSubmit {
-    background-color: #9932CC;
-    color: #fff;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
 .recommend-button {
     width: 90%;
     height: 45px;
-}
-
-.recommend-desc-area {
-    height: 100px;
 }
 
 .error-label {

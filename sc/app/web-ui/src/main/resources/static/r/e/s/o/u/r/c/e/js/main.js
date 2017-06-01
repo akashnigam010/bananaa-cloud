@@ -1,5 +1,4 @@
 var isMobile = false;
-var rcmdOb = {};
 var fs = [];
 var merchantId;
 var merchantName;
@@ -33,7 +32,7 @@ $(document).ready(function() {
         var modal = $(this),
             dialog = modal.find('.modal-dialog');
         modal.css('display', 'block');
-        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 4));
     }
     $('.modal').on('show.bs.modal', repositionModal);
     $(window).on('resize', function() {

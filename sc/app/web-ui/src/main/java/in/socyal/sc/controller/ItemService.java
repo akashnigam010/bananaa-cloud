@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.item.response.SearchItem;
+import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.core.validation.ItemValidator;
@@ -29,15 +30,15 @@ public class ItemService {
 	ItemValidator validator;
 
 	@RequestMapping(value = "/searchItems", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ItemsResponse searchItems(@RequestBody SearchRequest request) {
-		ItemsResponse response = new ItemsResponse();
+	public SearchItemsResponse searchItems(@RequestBody SearchRequest request) {
+		SearchItemsResponse response = new SearchItemsResponse();
 		try {
 			validator.validateSearchItemsRequest(request);
 			if (StringUtils.isNotEmpty(request.getSearchString())) {
 				if (request.getSearchString().length() >= 2) {
 					response = delegate.searchItems(request);
 					if (response.getItems().size() == 0) {
-						Item noMatchFound = new Item();
+						SearchItem noMatchFound = new SearchItem();
 						noMatchFound.setId(-999);
 						noMatchFound.setName("No such item found");
 						response.getItems().add(noMatchFound);

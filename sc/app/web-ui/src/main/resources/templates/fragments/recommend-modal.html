@@ -1,54 +1,76 @@
 <div th:fragment="recommend-modal">
 <!-- Recommendation Modal STARTS -->
-	<div class="modal fade" id="recommendModal" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="loader hide"></div>
-                    <div class="main-area">
-                        <div class="modal-header align-center">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <img src="https://bna-s3.s3.amazonaws.com/img/clear.svg" />
-                            </button>
-                            <h4 class="modal-title bold">My recommendation <span id="merchant-name-title"></span></h4>
-                        </div>
-                        <div class="modal-body align-center" style="padding-top: 7%;">
-                            <div>
-                                <form onsubmit="return false">
-                                    <div class="group">
-                                      <p class="hide" id="modal-recommendation-id"></p>
-                                      <p class="hide" id="modal-item-id"></p>
-                                      <input class="global-search noloading bold white-background body-color" type="text" data-provide="typeahead" id="modal-item-name" required="required" autocomplete="off" />
-                                      <span class="bar"></span>
-                                      <div class="input-loader-animation-div" style="width: 90%;">
-										<img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
-		                              </div>
-                                      <label id="modal-item-name-label">Food or drink name</label>
+	<div class="modal fade" id="recommendModal" role="dialog" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	         <div class="modal-header align-center">
+	             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                 <img src="https://bna-s3.s3.amazonaws.com/img/clear.svg" />
+	             </button>
+	             <div>
+	                    <div class="rcmd-title bna-color padding-1">
+	                        ADD FOOD RATING
+	                    </div>
+	                    <div class="hide error-review padding-1">
+	                        Sorry, only 50 to 200 characters in a bite please.
+	                    </div>
+	                    <div class="hide success-rating padding-1">
+	                        Thank you ! Your rating has been saved.
+	                    </div>
+	                </div>                            
+	                <ul class="nav hide">
+	                  <li class="active"><a data-toggle="tab" href="#ratingTab"></a></li>
+	                  <li><a data-toggle="tab" href="#reviewTab"></a></li>
+	                </ul>
+	         </div>
+	         <div class="modal-body align-center">
+                        <div class="tab-content">
+                            <div class="ratingTab tab-pane fade in active">
+                                <div class="group">
+                                    <div class="inline-block">
+                                        <input class="align-center rcmd-width" type="text" data-provide="typeahead" id="modal-item-name" required="required" autocomplete="off" placeholder="Type a few characters of the food or drink here" />
+                                        <span class="bar rcmd-width"></span>
+                                    </div>                                      
+                                </div>
+                                <div class="rating-widget group">
+                                    <div class="rating-section inline-block padding-2">
+                                        <img id="s1" class="rate-star cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/rate-e.png" />
+                                        <img id="s2" class="rate-star cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/rate-e.png" />
+                                        <img id="s3" class="rate-star cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/rate-e.png" />
+                                        <img id="s4" class="rate-star cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/rate-e.png" />
+                                        <img id="s5" class="rate-star cursor-pointer" src="https://bna-s3.s3.amazonaws.com/img/rate-e.png" />
                                     </div>
-                                    <div class="error-label error-label-name font-0-8 red align-left hide">
-                                        Please select the food or drink item
+                                    <div style="margin-top: 6%;">
+                                        <span class="rating-txt bold font-1-5 simpson light">ADD YOUR RATING</span>
+                                    </div>                                        
+                                </div>
+                                <div class="group hide goto-review align-center">
+                                    <span class="cursor-pointer bna-color bold" onclick="navigateToReview()">BITE PLEASE</span>
+                                </div>                                   
+                            </div>
+                            <div class="reviewTab tab-pane fade in">
+                                <form>
+                                    <div class="rTitle padding-2 light"></div>
+                                    <div class="padding-2">
+                                        <span class="rRating simpson font-1-5"></span>
                                     </div>
-                                    <div class="group">
-                                      <textarea class="recommend-desc-area" id="modal-item-desc" maxlength="200"></textarea>
-                                      <span class="bar"></span>
-                                      <label id="modal-item-desc-label">Add a mini review (optional)</label>
+                                    <div class="inline-block">
+                                        <textarea class="recommend-desc-area rcmd-width" id="modal-item-desc" maxlength="200" placeholder="Share a bite! Write a mini review about this dish or drink and help the fellow foodies pick the best picks. Just remember to keep it short, a minimum of 50 and a maximum of 200 characters only :)"></textarea>
+                                        <span class="bar rcmd-width"></span>
+                                        <div class="font-0-8" style="padding-top: 1%;">
+                                            <span class="char-count pull-right">22/200</span>    
+                                        </div>                                                
+                                    </div>                                  
+                                    <div>
+                                        <button type="button" class="bna-button-light" onclick="navigateToRate();">Back</button>
+                                        <button type="button" class="bna-button" onclick="addRecommendation()">Submit</button>    
                                     </div>
-									<div class="error-label error-label-review font-0-8 red align-left hide">
-                                        Your review needs to be minimum 50 and maximum 200 characters long
-                                    </div>
-                                    <div id="removeRecommendation" onclick="removeRecommendation();">
-                                        <p class="cursor-pointer light">Remove this recommendation</p>
-                                    </div>
-                                    
-                                  </form>
+                                </form>
                             </div>
                         </div>
-                        <div id="recommendSubmit" class="modal-footer cursor-pointer align-center recommendSubmit">
-                            Add recommendation
-                        </div>
                     </div>
-                </div>
-
-            </div>
-        </div>
+	        </div>
+	    </div>
+    </div>
 	<!-- Recommendation Modal ENDS -->
 </div>

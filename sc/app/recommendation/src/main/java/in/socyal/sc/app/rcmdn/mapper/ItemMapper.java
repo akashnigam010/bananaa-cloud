@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.item.response.SearchItem;
 import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 
@@ -17,13 +18,14 @@ import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 public class ItemMapper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public List<Item> map(List<DishDto> dtos) {
-		List<Item> items = new ArrayList<>();
-		Item item = null;
+	public List<SearchItem> map(List<DishDto> dtos) {
+		List<SearchItem> items = new ArrayList<>();
+		SearchItem item = null;
 		for (DishDto dto : dtos) {
-			item = new Item();
+			item = new SearchItem();
 			item.setId(dto.getId());
 			item.setName(dto.getName());
+			item.setMerchantName(dto.getMerchant().getName());
 			items.add(item);
 		}
 		return items;

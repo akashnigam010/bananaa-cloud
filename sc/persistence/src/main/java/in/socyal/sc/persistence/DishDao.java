@@ -57,7 +57,8 @@ public class DishDao {
 		List<DishEntity> dishes = (List<DishEntity>) criteria.list();
 		if (dishes != null && !dishes.isEmpty()) {
 			DishFilterCriteria dishCriteria = new DishFilterCriteria(Boolean.FALSE);
-			dishDtos = mapper.map(dishes, null, dishCriteria);
+			MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE);
+			dishDtos = mapper.map(dishes, merchantCriteria, dishCriteria);
 			return dishDtos;
 		}
 		return Collections.emptyList();

@@ -12,6 +12,7 @@ import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.items.request.GetPopularItemsRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
@@ -27,8 +28,8 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public ItemsResponse searchItems(SearchRequest request) {
-		ItemsResponse response = new ItemsResponse();
+	public SearchItemsResponse searchItems(SearchRequest request) {
+		SearchItemsResponse response = new SearchItemsResponse();
 		response.setItems(
 				mapper.map(dishDao.searchDishAtARestaurant(request.getSearchString(), request.getMerchantId())));
 		return response;
