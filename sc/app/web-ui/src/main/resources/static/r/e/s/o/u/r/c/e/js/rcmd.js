@@ -123,12 +123,9 @@ $(document).ready(function() {
 function resetModal() {
 	$(".rating-section").css('pointer-events', 'none');
 	$('#modal-item-name').val('');
-	removeStars();            	
+	removeStars();
+	navigateToRate();
 	$(".goto-review").addClass('hide');
-	if (!$(".ratingTab").hasClass('active')) {
-		$(".ratingTab").addClass('active');
-		$(".reviewTab").removeClass('active');
-	}
 }
 
 function tapItemDropdown(item) {
@@ -211,7 +208,7 @@ function navigateToReview() {
 	} else {
 		$('.char-count').html('0/200');
 	}
-	$('.recommend-desc-area').focus();
+	//$('.recommend-desc-area').focus();
 }
 
 function navigateToRate() {
@@ -304,7 +301,7 @@ function openRecommendationModal(rcmdOb) {
 		tapItemDropdown(rcmdOb);
 	} else {
 		resetModal();
-		$('#modal-item-name').focus();
+		//$('#modal-item-name').focus();
 	}
 }
 
