@@ -98,9 +98,7 @@ $(document).ready(function() {
             if (item.id != -999) {
             	tapItemDropdown(item);
             } else {
-            	$(".rating-section").css('pointer-events', 'none');
-            	removeStars();            	
-            	$(".goto-review").addClass('hide');
+            	resetModal();
             }
             return item;
         }
@@ -121,6 +119,17 @@ $(document).ready(function() {
 
     handleReviewCount();
 });
+
+function resetModal() {
+	$(".rating-section").css('pointer-events', 'none');
+	$('#modal-item-name').val('');
+	removeStars();            	
+	$(".goto-review").addClass('hide');
+	if (!$(".ratingTab").hasClass('active')) {
+		$(".ratingTab").addClass('active');
+		$(".reviewTab").removeClass('active');
+	}
+}
 
 function tapItemDropdown(item) {
 	$(".rating-section").css('pointer-events', '');
@@ -294,6 +303,7 @@ function openRecommendationModal(rcmdOb) {
 		$("#modal-item-name").val(rcmdOb.name);
 		tapItemDropdown(rcmdOb);
 	} else {
+		resetModal();
 		$('#modal-item-name').focus();
 	}
 }
