@@ -131,7 +131,9 @@ function resetModal() {
 
 function tapItemDropdown(item) {
 	$(".rating-section").css('pointer-events', '');
-	$('#modal-item-name').blur();
+	setTimeout(function(){
+		$('#modal-item-name').blur();
+	}, 100);
     revItem = item;
     if (item.rating == '' || item.rating == null) {
     	activateRatingWidget();
