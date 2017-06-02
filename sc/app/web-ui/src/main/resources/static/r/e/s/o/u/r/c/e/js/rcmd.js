@@ -1,7 +1,7 @@
 var rcmdOb = {};
 var revItem = {};
 var selectedRating = 0;
-var flashTime = 150;
+var flashTime = 50;
 var rateVal = new Array();
 var star_e = "https://bna-s3.s3.amazonaws.com/img/rate-e.png";
 var star_f = "https://bna-s3.s3.amazonaws.com/img/rate-f.png";
@@ -181,7 +181,9 @@ function flashStars() {
 }
 
 function activateRatingWidget() {
-	flashStars();
+	setTimeout(function() {
+		flashStars();
+	}, 300);
 	$(".rating-section").hover(function(){
     	$(".rate-star").hover(function(){
 	    	fillStars(getStarId(this.id));
