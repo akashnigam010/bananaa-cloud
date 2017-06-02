@@ -306,7 +306,7 @@ function openRecommendationModal(rcmdOb) {
 		tapItemDropdown(rcmdOb);
 	} else {
 		resetModal();
-		//$('#modal-item-name').focus();
+		$('#modal-item-name').focus();
 	}
 }
 
