@@ -1,9 +1,9 @@
 $(document).ready(function() {
 	page = 'index';
 	if (isMobile) {
-        $('#search-field').on('mousedown', function (e) {
-            $('html, body').animate({
-                scrollTop: $("#search-field").offset().top - 18
+        $('#search-field, #search-location').on('mousedown', function (e) {
+        	$('html, body').animate({
+                scrollTop: $("#search-field").offset().top - 65
             }, 200);
         });
     }

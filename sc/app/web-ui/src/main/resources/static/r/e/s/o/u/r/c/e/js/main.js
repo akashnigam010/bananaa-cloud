@@ -205,6 +205,9 @@ function loadLocations(e) {
               		  }		
               	  });
             }
+            setTimeout(function() {
+            	$('.global-search').focus();
+            }, 100);
             return location;
         }
     });

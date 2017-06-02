@@ -47,13 +47,13 @@ body {
 }
 
 .location-wrapper {
-    width: 90%;
+    width: 100%;
     padding-top: 2%;
     padding-bottom: 2%;
 }
 
 .search-wrapper {
-    width: 90%;
+    width: 100%;
     margin-left: 0px;
     padding-bottom: 5%;
 }
