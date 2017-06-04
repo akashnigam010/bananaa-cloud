@@ -71,20 +71,21 @@ public class ManagementDao {
 		sessionFactory.getCurrentSession().save(entity);
 	}
 	
-	public void addRecommendations(Integer id, Integer rcmdCount) throws BusinessException {
-		Date date = Calendar.getInstance().getTime();
+	public void addRecommendations(Integer id, Integer rating, Integer rcmdCount) throws BusinessException {
+		Timestamp ts = new Timestamp(Calendar.getInstance().getTime().getTime());
 		try {
 			sessionFactory.getCurrentSession().doWork(new Work() {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					PreparedStatement st = con.prepareStatement(
-							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `IS_ACTIVE`, `CREATED_DATETIME`, `UPDATED_DATETIME`) VALUES (?, ?, ?, ?, ?)");
+							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `RATING`, `IS_ACTIVE`, `CREATED_DATETIME`, `UPDATED_DATETIME`) VALUES (?, ?, ?, ?, ?, ?)");
 					for (int i = 1; i <= rcmdCount; i++) {
 						st.setInt(1, id);
 						st.setInt(2, Integer.parseInt(resource.getString(BNA_USER_ID)));
-						st.setBoolean(3, Boolean.TRUE);
-						st.setTimestamp(4, new Timestamp(date.getTime()));
-						st.setTimestamp(5, new Timestamp(date.getTime()));
+						st.setInt(3, rating);
+						st.setBoolean(4, Boolean.TRUE);
+						st.setTimestamp(5, ts);
+						st.setTimestamp(6, ts);
 						st.addBatch();
 					}
 

@@ -52,6 +52,7 @@ $(document).ready(function() {
             $('.modal').modal('hide');
         }
     });
+    $('[data-toggle="popover"]').popover();
 });
 
 function activateLogin() {

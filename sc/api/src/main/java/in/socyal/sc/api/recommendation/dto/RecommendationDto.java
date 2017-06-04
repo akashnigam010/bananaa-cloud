@@ -11,6 +11,7 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 	private Integer id;
 	private DishDto dish;
 	private UserDto user;
+	private Float rating;
 	private String description;
 	private Boolean isActive;
 	private Calendar createdDateTime;
@@ -84,5 +85,13 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 
 	public void setTimeDiff(String timeDiff) {
 		this.timeDiff = timeDiff;
+	}
+
+	public Float getRating() {
+		return rating;
+	}
+
+	public void setRating(Float rating) {
+		this.rating = rating;
 	}
 }

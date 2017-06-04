@@ -19,27 +19,12 @@
 	padding: 3%;
 }
 
-.item-desc-wrapper {
-	margin-left: 4%;
-    width: 80%;
-}
-
 .recommend-item-name {
 	padding-top: 1%;
 }
 
 .detail-type-padding {
 	padding: 3%;
-}
-
-.user-icon {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	text-align: center;
-	background-position: center;
-	background-repeat: no-repeat;
-	object-fit: cover;
 }
 
 hr {
@@ -55,8 +40,4 @@ hr {
 .error-label {
     margin-top: -10%;
     margin-bottom: 10%;
-}
-
-.recommend-item-desc {
-    padding: 3% 0%;
 }

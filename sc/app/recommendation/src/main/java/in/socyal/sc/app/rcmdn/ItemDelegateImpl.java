@@ -35,11 +35,20 @@ public class ItemDelegateImpl implements ItemDelegate {
 		return response;
 	}
 
+//	@Override
+//	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+//	public ItemsResponse getPopularItemsOfMerchant(GetPopularItemsRequest request) throws BusinessException {
+//		ItemsResponse response = new ItemsResponse();
+//		List<DishResultDto> result = dishDao.getPopularDishesOfMerchant(request.getMerchantId(), request.getPage(),
+//				request.getResultsPerPage());
+//		return mapper.map(result, response);
+//	}
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException {
 		ItemsResponse response = new ItemsResponse();
-		List<DishResultDto> result = dishDao.getPopularDishesOfMerchant(request.getMerchantId(), request.getPage(),
+		List<DishDto> result = dishDao.getPopularItems(request.getMerchantId(), request.getPage(),
 				request.getResultsPerPage());
 		return mapper.map(result, response);
 	}

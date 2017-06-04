@@ -41,11 +41,13 @@ public class RecommendationDaoMapper {
 
 	public void map(RecommendationEntity entity, RecommendationDto dto) {
 		DishFilterCriteria dishFilter = new DishFilterCriteria(false, false, false, true);
-		DishDto dish = dishMapper.map(entity.getDish(), null, dishFilter);
+		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(false);
+		DishDto dish = dishMapper.map(entity.getDish(), merchantCriteria, dishFilter);
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setDescription(entity.getDescription());
 		dto.setIsActive(entity.getIsActive());
+		dto.setRating(entity.getRating());
 		dto.setUpdatedDateTime(entity.getUpdatedDateTime());
 	}
 }

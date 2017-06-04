@@ -14,6 +14,7 @@ public class DishDto implements Serializable {
 	private Integer id;
 	private String name;
 	private String nameId;
+	private Float rating;
 	private List<SuggestionDto> suggestions;
 	private List<CuisineDto> cuisines;
 	private MerchantDto merchant;
@@ -118,5 +119,13 @@ public class DishDto implements Serializable {
 
 	public void setCuisines(List<CuisineDto> cuisines) {
 		this.cuisines = cuisines;
+	}
+
+	public Float getRating() {
+		return rating;
+	}
+
+	public void setRating(Float rating) {
+		this.rating = rating;
 	}
 }

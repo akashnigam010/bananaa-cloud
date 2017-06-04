@@ -31,24 +31,41 @@ public class ItemMapper implements Serializable {
 		return items;
 	}
 
-	public ItemsResponse map(List<DishResultDto> result, ItemsResponse response) {
+//	public ItemsResponse map(List<DishResultDto> result, ItemsResponse response) {
+//		List<Item> items = new ArrayList<>();
+//		for (DishResultDto dto : result) {
+//			Item item = new Item();
+//			DishDto dish = dto.getDish();
+//			item.setId(dish.getId());
+//			item.setName(dish.getName());
+//			item.setThumbnail(dish.getThumbnail());
+//			item.setNameId(dish.getNameId());
+//			item.setRecommendations(dto.getRecommendations().intValue());
+//			item.setItemUrl(dto.getDish().getItemUrl());
+//			items.add(item);
+//		}
+//
+//		response.setItems(items);
+//		return response;
+//	}
+
+	public ItemsResponse map(List<DishDto> dtos, ItemsResponse response) {
 		List<Item> items = new ArrayList<>();
-		for (DishResultDto dto : result) {
+		for (DishDto dto : dtos) {
 			Item item = new Item();
-			DishDto dish = dto.getDish();
-			item.setId(dish.getId());
-			item.setName(dish.getName());
-			item.setThumbnail(dish.getThumbnail());
-			item.setNameId(dish.getNameId());
-			item.setRecommendations(dto.getRecommendations().intValue());
-			item.setItemUrl(dto.getDish().getItemUrl());
+			item.setId(dto.getId());
+			item.setName(dto.getName());
+			item.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
+			item.setThumbnail(dto.getThumbnail());
+			item.setNameId(dto.getNameId());
+			item.setRecommendations(dto.getRecommendations().size());
+			item.setItemUrl(dto.getItemUrl());
 			items.add(item);
 		}
 
 		response.setItems(items);
 		return response;
 	}
-	
 	public List<RecommendationDto> mapReviews(List<RecommendationDto> recommendations) {
 		List<RecommendationDto> dtos = new ArrayList<>();
 		RecommendationDto dto = null;
@@ -66,5 +83,4 @@ public class ItemMapper implements Serializable {
 		}
 		return dtos;
 	}
-
 }

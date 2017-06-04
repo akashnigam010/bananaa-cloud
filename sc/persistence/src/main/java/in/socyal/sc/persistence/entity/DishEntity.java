@@ -52,6 +52,17 @@ public class DishEntity extends BaseEntity implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dish")
 	private List<RecommendationEntity> recommendations;
+	
+	@Column(name = "RATING")
+	private Float rating;
+
+	public Float getRating() {
+		return rating;
+	}
+
+	public void setRating(Float rating) {
+		this.rating = rating;
+	}
 
 	public DishEntity() {
 

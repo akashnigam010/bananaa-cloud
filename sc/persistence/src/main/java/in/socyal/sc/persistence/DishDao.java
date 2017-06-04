@@ -87,6 +87,25 @@ public class DishDao {
 		return mapper.mapDishResults(result, merchantFilter, dishFilter);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<DishDto> getPopularItems(Integer merchantId, Integer page, Integer resultsPerPage) {
+		List<DishDto> dishDtos = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.addOrder(Order.desc("rating"));
+		int firstResult = ((page - 1) * resultsPerPage);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(resultsPerPage);
+		List<DishEntity> dishes = criteria.list();
+		if (dishes != null && !dishes.isEmpty()) {
+			DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
+			MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE);
+			dishDtos = mapper.map(dishes, merchantCriteria, dishCriteria);
+			return dishDtos;
+		}
+		return Collections.emptyList();
+	}
+
 	public DishDto getItemDetails(String merchantNameId, String dishNameId) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.createAlias("merchant", "m");

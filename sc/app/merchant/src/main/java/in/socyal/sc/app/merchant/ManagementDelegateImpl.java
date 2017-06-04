@@ -50,7 +50,7 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addRecommendations(AddRecommendationsRequest request) throws BusinessException {
-		dao.addRecommendations(request.getItemId(), request.getRcmdCount());
+		dao.addRecommendations(request.getItemId(), request.getRating(), request.getRcmdCount());
 	}
 
 	@Override

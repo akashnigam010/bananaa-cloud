@@ -2,6 +2,7 @@ package in.socyal.sc.api.manage.request;
 
 public class AddRecommendationsRequest {
 	private Integer itemId;
+	private Integer rating;
 	private Integer rcmdCount;
 
 	public Integer getItemId() {
@@ -18,5 +19,13 @@ public class AddRecommendationsRequest {
 
 	public void setRcmdCount(Integer rcmdCount) {
 		this.rcmdCount = rcmdCount;
+	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
 	}
 }

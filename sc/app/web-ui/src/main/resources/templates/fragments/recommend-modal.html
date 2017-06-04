@@ -12,7 +12,7 @@
 	                        ADD FOOD RATING
 	                    </div>
 	                    <div class="hide error-review padding-1">
-	                        Sorry, only 50 to 200 characters in a bite please.
+	                        Sorry, only 50 to 200 characters in a foodview please.
 	                    </div>
 	                    <div class="hide success-rating padding-1">
 	                        Thank you ! Your rating has been saved.
@@ -48,7 +48,7 @@
                                     </div>                                        
                                 </div>
                                 <div class="group hide goto-review align-center">
-                                    <span class="cursor-pointer bna-color bold" onclick="navigateToReview()">BITE PLEASE</span>
+                                    <button class="bna-button rcmd-width" style="line-height: 2;" onclick="navigateToReview()">ADD A FOODVIEW</button>
                                 </div>                                   
                             </div>
                             <div class="reviewTab tab-pane fade in">
@@ -58,8 +58,9 @@
                                         <span class="rRating simpson font-1-5"></span>
                                     </div>
                                     <div class="inline-block">
-                                        <textarea class="recommend-desc-area rcmd-width" id="modal-item-desc" maxlength="200" placeholder="Share a bite! Write a mini review about this dish or drink and help the fellow foodies pick the best picks. Just remember to keep it short, a minimum of 50 and a maximum of 200 characters only :)"></textarea>
-                                        <span class="bar rcmd-width"></span>
+									<textarea class="recommend-desc-area rcmd-width" id="modal-item-desc" maxlength="200"
+										placeholder="Share a foodview ! A tiny review about this dish to help others know how it tastes and if they should give it a try. Just remember to keep it short, a minimum of 50 and a maximum of 200 characters only :)"></textarea>
+									<span class="bar rcmd-width"></span>
                                         <div class="font-0-8" style="padding-top: 1%;">
                                             <span class="char-count pull-right">22/200</span>    
                                         </div>                                                

@@ -16,6 +16,8 @@ import in.socyal.sc.api.merchant.response.RecommendationResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
+import in.socyal.sc.api.recommendation.request.RatingRequest;
+import in.socyal.sc.api.recommendation.request.ReviewRequest;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.UserErrorCodeType;
 import in.socyal.sc.app.rcmdn.mapper.RecommendationMapper;
@@ -36,6 +38,24 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void saveRating(RatingRequest request) throws BusinessException {
+		if (!dishDao.isDishExists(request.getId())) {
+			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
+		}
+		dao.saveRating(request, jwtHelper.getUserId());
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void saveReview(ReviewRequest request) throws BusinessException {
+		if (!dishDao.isDishExists(request.getId())) {
+			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
+		}
+		dao.saveReview(request, jwtHelper.getUserId());
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public RecommendationResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException {
 		RecommendationResponse response = new RecommendationResponse();
 		if (!jwtHelper.isUserLoggedIn()) {
@@ -43,8 +63,6 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		}
 		List<RecommendationDto> result = dao.getMyRecommendations(
 				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
-		//FIXME : remove this manual sorting. put in query directly
-		Collections.sort(result);
 		List<Recommendation> rcmdns = new ArrayList<>();
 		//FIXME : Remove multiple calls for each recommendation to db to fetch total recommendation count
 		for (RecommendationDto dto : result) {
@@ -52,6 +70,9 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 			rcmdns.add(mapper.map(dto, dishRcmdnCount));
 		}
 		response.setRecommendations(rcmdns);
+		if (result.size() > 0) {
+			response.setMerchantName(result.get(0).getDish().getMerchant().getName());
+		}		
 		return response;
 	}
 	

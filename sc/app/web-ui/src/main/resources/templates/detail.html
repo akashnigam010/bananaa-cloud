@@ -106,43 +106,51 @@
                             <div class="row white-background details-wrapper">
                             	<div class="col-xs-12">
                             		<div class="col-xs-12">
-		                                <div class="row">
-		                                    <div class="col-xs-12 font-1-5 bna-color padding-3">
-		                                        What people love here
-		                                    </div>    
-		                                </div>
-		                                <hr />
+										<div class="row">
+											<div class="col-xs-12 font-1-5 bna-color padding-3">
+												Most tempting and loved food here &nbsp; <a
+													style="font-size: 70%; color: #444;" href="#"
+													data-placement="bottom" data-toggle="popover"
+													data-trigger="hover"
+													data-content="Based on weighted average of most recent ratings and number of times people have tried a dish"
+													onclick="event.preventDefault();">&#9432;</a>
+											</div>
+										</div>
+										<hr />
 		                                <div class="row recommended-wrapper">
 		                                    <div class="col-xs-12">
 		                                        <div class="row" th:each="item, iterStat : ${popularDishes.items}">
 		                                        	<a class="cursor-pointer" th:href="${item.itemUrl}">
 			                                            <div class="col-xs-12 recommended-item">
-			                                                <div class="float-left" style="object-fit: cover;">
+			                                                <div class="float-left" style="object-fit: cover; width: 15%;">
 			                                                    <img class="user-icon" th:src="${item.thumbnail}" />
 			                                                </div>
 			                                                <div class="float-left item-desc-wrapper">
 			                                                    <div class="bold item-name" th:text="${item.name}">
 			                                                        <!-- Joojeh Kebab -->
 			                                                    </div>
-			                                                    <div th:if="${item.recommendations == 1}" th:text="${item.recommendations} + ' person recommends'">
+			                                                    <div th:if="${item.recommendations == 1}" th:text="${item.recommendations} + ' person rated'">
 			                                                        <!-- 1 person recommended -->
 			                                                    </div>
-			                                                    <div th:unless="${item.recommendations == 1}" th:text="${item.recommendations} + ' people recommend'">
+			                                                    <div th:unless="${item.recommendations == 1}" th:text="${item.recommendations} + ' people rated'">
 			                                                        <!-- 22 people recommended -->
 			                                                    </div>
-			                                                </div>                                                                           
+			                                                </div>
+			                                                <div class="float-right" style="width: 10%; padding-top: 2.5%">
+                                                                <span th:if="${item.rating != ''}" style="padding: 0 20%;" th:class="${item.ratingClass} + ' float-right rating-rcmd'" th:text="${item.rating}"></span>
+                                                                <span th:unless="${item.rating != ''}" style="padding: 0 20%;" th:class="${item.ratingClass} + ' float-right rating-rcmd'" th:text="'-.-'"></span>
+                                                            </div>
 			                                            </div>
 		                                            </a>
 		                                        </div>
 		                                    </div>
 		                                </div>
-		                                <div class="row padding-top">
-		                                    <hr />
-		                                    <div class="pull-right bna-color padding-3 cursor-pointer" onclick="loadPopularDishes();">
-		                                        <a>See more</a>
-		                                    </div>                                    
-		                                </div>                                               
-		                            </div>
+										<div class="row padding-top">
+											<hr />
+											<button type="button" class="bna-button-light pull-right"
+												onclick="loadPopularDishes();">See More</button>
+										</div>
+									</div>
                             	</div>
                             </div>
                             <div class="row white-background details-wrapper" style="margin-top: 10px;">
@@ -150,44 +158,25 @@
                             		<div class="row">
 		                                <div class="col-xs-12">
 		                                    <div class="col-xs-12 font-1-5 bna-color padding-3">
-		                                        My recommendations &nbsp; <img src="https://bna-s3.s3.amazonaws.com/img/smiley_love.svg" />
+		                                        My Foodview
 		                                    </div>
-		                                    <div class="col-xs-12 light padding-3">
-		                                        Food or drinks that you simply love having at <span class="bold" th:text="${detail.name}"></span>
+		                                    <div class="col-xs-12 light padding-3" style="padding-top: 0%;">
+		                                        My ratings and foodviews at <span th:text="${detail.name}"></span>
 		                                    </div>    
 		                                </div>                                   
 		                            </div>
 		                            <hr />
-		                           <div class="row recommended-wrapper">
-		                               <div class="col-xs-12">
-		                               		<div class="loader"></div>
-		                               		<div class="my-recommendations">
-			                              		<!-- <div class="col-xs-12 recommended-item cursor-pointer my-recommended-item">
-			                                       <div class="float-left" style="object-fit: cover;">
-			                                           <img class="user-icon" src="someimage2F48FA" />
-			                                       </div>
-			                                       <div class="float-left item-desc-wrapper">
-			                                           <span class="hide recommendation-id">12</span>
-		                                               <span class="hide item-id">12</span>
-			                                           <div class="bold item-name">
-			                                               Joojey Kebab
-			                                           </div>
-			                                            <div class="light">
-			                                               You and 34 others recommend this
-			                                           </div>
-			                                       </div>
-			                                       <div class="col-xs-12 review-item-desc recommend-item-desc">
-			                                           The smell is awesome, plus it tastes like meadow. The smell is awesome, plus it tastes like meadow.
-			                                       </div>
-			                                   </div> -->
-		                                   </div>
-		                                   <div class="row align-center addRecommendButtonDiv">
-		                                       <hr />
-		                                       <button id="addRecommendButton" class="bna-button recommend-button">Add a recommendation</button>
-		                                   </div>
-		                               </div>
-		                           </div>
-                            	</div>
+									<div class="row recommended-wrapper">
+										<div class="col-xs-12">
+											<div class="loader"></div>
+											<div class="my-recommendations"></div>
+											<div class="row align-center addRecommendButtonDiv">
+												<hr />
+												<button id="addRecommendButton" class="bna-button recommend-button">Rate and Foodview</button>
+											</div>
+										</div>
+									</div>
+								</div>
                             </div>                       
                         </div>                       
                     </div> 

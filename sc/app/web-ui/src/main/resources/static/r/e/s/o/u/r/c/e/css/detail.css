@@ -23,27 +23,12 @@
 	padding: 3%;
 }
 
-.item-desc-wrapper {
-	margin-left: 3%;
-	width: 80%;
-}
-
 .recommend-item-name {
 	padding-top: 2%;
 }
 
 .detail-type-padding {
 	padding: 5%;
-}
-
-.user-icon {
-	width: 50px;
-    height: 50px;
-	border-radius: 50%;
-	text-align: center;
-	background-position: center;
-	background-repeat: no-repeat;
-	object-fit: cover;
 }
 
 hr {

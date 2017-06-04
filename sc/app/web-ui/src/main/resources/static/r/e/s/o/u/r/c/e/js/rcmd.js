@@ -139,7 +139,12 @@ function tapItemDropdown(item) {
     	activateRatingWidget();
     	$('.reviewTab').find('.recommend-desc-area').val('');
     } else {
+    	if (!$(".ratingTab").hasClass('active')) {
+			$(".ratingTab").addClass('active');
+			$(".reviewTab").removeClass('active');
+		}
     	addRating(item.rating, false);
+    	$('.reviewTab').find('.recommend-desc-area').val(item.review);
     }
 }
 
@@ -230,14 +235,29 @@ function addRating(id, saveRating) {
 	if (selectedRating != id && saveRating) {
 		selectedRating = id;
 		revItem.rating = id;
-		// make ajax call to save the rating	
-		$(".rcmd-title").addClass('hide');
-    	$('.success-rating').removeClass('hide');
-    	setTimeout(function(){
-    		$(".rcmd-title").removeClass('hide');
-    		$('.success-rating').addClass('hide');
-    	}, 2000);
-		
+		var dataOb = {
+			id: revItem.id,
+			rating: revItem.rating
+		};
+		return $.ajax({
+      	  method: "POST",
+      	  url: "/socyal/recommendation/saveRating",
+      	  contentType : "application/json",
+      	  data: JSON.stringify(dataOb)
+      	})
+      	.done(function(response) {
+      		if (response.result) {
+      			$(".rcmd-title").addClass('hide');
+            	$('.success-rating').removeClass('hide');
+            	setTimeout(function(){
+            		$(".rcmd-title").removeClass('hide');
+            		$('.success-rating').addClass('hide');
+            	}, 2000);
+            	getMyRecommendations();
+      		} else {
+      			handleErrorCallback(response);
+      		}
+      	});
 	}
 }
 
@@ -247,7 +267,7 @@ function resetHeading(to) {
 	if (to == 'rate') {
 		$(".rcmd-title").html('ADD FOOD RATING');	
 	} else {
-		$(".rcmd-title").html('ADD A BITE');
+		$(".rcmd-title").html('ADD FOODVIEW');
 	}
 	$('.rcmd-title').removeClass('hide');
 }
@@ -311,18 +331,21 @@ function openRecommendationModal(rcmdOb) {
 }
 
 function addRecommendation() {
-	var dataOb = revItem;
-	if (handleReview(dataOb.review)) {	
+	var dataOb = {
+		id: revItem.id,
+		description: revItem.review
+	};
+	if (handleReview(dataOb.description)) {
         return $.ajax({
       	  method: "POST",
-      	  url: "/socyal/recommendation/addRecommendation",
+      	  url: "/socyal/recommendation/saveReview",
       	  contentType : "application/json",
       	  data: JSON.stringify(dataOb)
       	})
       	  .done(function(response) {
       		$('#recommendModal').modal('hide');
       		  if (response.result) {
-      			  getMyRecommendations()             			
+      			  getMyRecommendations();
       		  } else {
     			  handleErrorCallback(response);
     		  }	          		  

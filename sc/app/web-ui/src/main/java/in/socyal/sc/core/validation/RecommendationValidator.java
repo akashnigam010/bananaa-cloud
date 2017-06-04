@@ -1,5 +1,6 @@
 package in.socyal.sc.core.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
+import in.socyal.sc.api.recommendation.request.RatingRequest;
+import in.socyal.sc.api.recommendation.request.ReviewRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 
@@ -16,6 +19,24 @@ public class RecommendationValidator extends Validator {
 	@Autowired
 	JwtTokenHelper jwtTokenHelper;
 
+	public void validateRatingRequest(RatingRequest request, String authToken)
+			throws BusinessException {
+		validateUserAndThrowException(authToken);
+		if (request.getId() == null || request.getRating() == null) {
+			LOG.error("Dish Id or rating value not found while validating save rating request request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateReviewRequest(ReviewRequest request, String authToken)
+			throws BusinessException {
+		validateUserAndThrowException(authToken);
+		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
+			LOG.error("Dish Id or review desc not found while validating save rating request request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
 	public void validateAddRecommendationRequest(EditRecommendationRequest request, String authToken)
 			throws BusinessException {
 		validateUserAndThrowException(authToken);

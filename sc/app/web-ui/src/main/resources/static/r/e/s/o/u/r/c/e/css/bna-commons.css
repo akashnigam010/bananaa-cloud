@@ -78,6 +78,10 @@ body {
 	background: #EFEFEF;
 }
 
+.bna-bg-primary {
+  background: #9932CC;
+}
+
 .icon-location {
 	background-image:
 		url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
@@ -143,6 +147,21 @@ body {
 
 .rcmd-width {
   width: 350px;
+}
+
+.user-icon {
+  width: 100%;
+  border-radius: 50%;
+  text-align: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  object-fit: cover;
+}
+
+.item-desc-wrapper {
+  margin-left: 3%;
+  width: 70%;
+  padding-top: 2%;
 }
 
 /* Rate and Bite modal CSS ENDS */
@@ -216,6 +235,11 @@ body {
 	.rcmd-width {
       width: 300px;
     }
+    .item-desc-wrapper {
+      margin-left: 4%;
+        width: 70%;
+        padding-top: 1%;
+    }
 }
 
 @media ( min-width : 481px) {
@@ -276,6 +300,10 @@ a:hover {
 
 .inline-block {
 	display: inline-block;
+}
+
+.inline {
+  display: inline;
 }
 
 .bna-color {
@@ -596,4 +624,43 @@ input:focus ~ .highlight, textarea:focus ~ .highlight {
 .form-input {
 	border: none;
 	border-radius: 3px !important;
+}
+
+.popover {
+  color: #939393;
+}
+
+.rating-rcmd {
+  color: white; 
+  padding: 0 1%; 
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+.r50 {
+  background-color: #305D02;
+}
+.r45 {
+  background-color: #3F7E00;
+}
+.r40 {
+  background-color: #5BA829;
+}
+.r35 {
+  background-color: #9ACD32;
+}
+.r30 {
+  background-color: #CDD614;
+}
+.r25 {
+  background-color: #FFBA00;
+}
+.r20 {
+  background-color: #FF7800;
+}
+.r15 {
+  background-color: #DE1D05;
+}
+.r10 {
+  background-color: #CD1C26;
 }
