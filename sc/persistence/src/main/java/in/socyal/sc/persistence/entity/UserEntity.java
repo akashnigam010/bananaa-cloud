@@ -26,6 +26,9 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "NAME_ID")
 	private String nameId;
+	
+	@Column(name = "CREDIBILITY")
+	private Float credibility;
 
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
@@ -71,6 +74,14 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public Float getCredibility() {
+		return credibility;
+	}
+
+	public void setCredibility(Float credibility) {
+		this.credibility = credibility;
 	}
 
 	public String getImageUrl() {

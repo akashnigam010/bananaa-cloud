@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
+import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
@@ -53,7 +53,7 @@ public class ManagementDao {
 	public ManagementDao(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public void addItem(AddItemRequest request) throws BusinessException {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());

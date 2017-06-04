@@ -11,7 +11,6 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItem;
-import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 
 @Component
@@ -30,24 +29,6 @@ public class ItemMapper implements Serializable {
 		}
 		return items;
 	}
-
-//	public ItemsResponse map(List<DishResultDto> result, ItemsResponse response) {
-//		List<Item> items = new ArrayList<>();
-//		for (DishResultDto dto : result) {
-//			Item item = new Item();
-//			DishDto dish = dto.getDish();
-//			item.setId(dish.getId());
-//			item.setName(dish.getName());
-//			item.setThumbnail(dish.getThumbnail());
-//			item.setNameId(dish.getNameId());
-//			item.setRecommendations(dto.getRecommendations().intValue());
-//			item.setItemUrl(dto.getDish().getItemUrl());
-//			items.add(item);
-//		}
-//
-//		response.setItems(items);
-//		return response;
-//	}
 
 	public ItemsResponse map(List<DishDto> dtos, ItemsResponse response) {
 		List<Item> items = new ArrayList<>();

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
-import in.socyal.sc.api.items.dto.DishResultDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
@@ -19,7 +18,6 @@ import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
-import in.socyal.sc.persistence.entity.DishResult;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 
@@ -151,35 +149,5 @@ public class DishDaoMapper {
 			dtos.add(map(entity, merchantCriteria, dishCriteria));
 		}
 		return dtos;
-	}
-
-	/**
-	 * Projection results mapper
-	 * 
-	 * @param result
-	 * @param merchantFilter
-	 * @return
-	 */
-	public List<DishResultDto> mapDishResults(List<DishResult> result, MerchantFilterCriteria merchantFilter,
-			DishFilterCriteria dishFilter) {
-		List<DishResultDto> response = new ArrayList<>();
-		for (DishResult dish : result) {
-			response.add(map(dish, merchantFilter, dishFilter));
-		}
-		return response;
-	}
-
-	/**
-	 * Projection result mapper
-	 * 
-	 * @param result
-	 * @param merchantFilter
-	 * @return
-	 */
-	public DishResultDto map(DishResult result, MerchantFilterCriteria merchantFilter, DishFilterCriteria dishFilter) {
-		DishResultDto dto = new DishResultDto();
-		dto.setDish(map(result.getDish(), merchantFilter, dishFilter));
-		dto.setRecommendations(result.getRecommendations());
-		return dto;
 	}
 }

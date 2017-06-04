@@ -13,6 +13,7 @@ public class UserDto implements Serializable {
 	private String firstName;
 	private String lastName;
 	private String nameId;
+	private Float credibility;
 	private String imageUrl;
 	private String email;
 	private Calendar createdDateTime;
@@ -131,5 +132,13 @@ public class UserDto implements Serializable {
 
 	public void setTotalRecommendations(Integer totalRecommendations) {
 		this.totalRecommendations = totalRecommendations;
+	}
+
+	public Float getCredibility() {
+		return credibility;
+	}
+
+	public void setCredibility(Float credibility) {
+		this.credibility = credibility;
 	}
 }

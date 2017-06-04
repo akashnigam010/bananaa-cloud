@@ -40,6 +40,7 @@ public class UserDaoMapper {
 		to.setImageUrl(from.getImageUrl());
 		to.setUserUrl("/user/" + from.getNameId());
 		to.setNameId(from.getNameId());
+		to.setCredibility(from.getCredibility());
 		if (mapRecommendations) {
 			List<RecommendationDto> dtos = new ArrayList<>();
 			RecommendationDto dto = null;
