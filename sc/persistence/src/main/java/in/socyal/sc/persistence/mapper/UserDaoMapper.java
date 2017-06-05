@@ -30,6 +30,7 @@ public class UserDaoMapper {
 		to.setNameId(from.getNameId());
 		to.setEmail(from.getEmail());
 		to.setImageUrl(from.getImageUrl());
+		to.setCredibility(from.getCredibility());
 		return to;
 	}
 

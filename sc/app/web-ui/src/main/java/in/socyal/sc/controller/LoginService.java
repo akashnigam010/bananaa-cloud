@@ -4,7 +4,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +26,6 @@ import in.socyal.sc.login.LoginDelegate;
 @RestController
 @RequestMapping(value = "/socyal/login")
 public class LoginService {
-	private static final Logger LOG = Logger.getLogger(LoginService.class);
 	@Autowired
 	LoginDelegate delegate;
 	@Autowired
@@ -38,18 +36,6 @@ public class LoginService {
 	HttpServletResponse httpResponse;
 	@Autowired
 	HttpServletRequest httpRequest;
-
-	@RequestMapping(value = "/skipLogin", method = RequestMethod.GET, headers = "Accept=application/json")
-	public LoginResponse skipLogin() {
-		LoginResponse response = new LoginResponse();
-		try {
-			LOG.info("Skip login request");
-			response = delegate.skipLogin();
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public LoginResponse login(@RequestBody LoginRequest request) {
@@ -72,7 +58,7 @@ public class LoginService {
 		removeLoginCookie();
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/setLocation", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse setLocation(@RequestBody SetLocationRequest request) {
 		addLocationCookie(request.getLocalityId());
@@ -93,7 +79,7 @@ public class LoginService {
 		cityCookie.setPath("/");
 		httpResponse.addCookie(cityCookie);
 	}
-	
+
 	private void addLocationCookie(Integer id) {
 		LocalityType localityType = LocalityType.getLocalityById(id);
 		if (localityType != null) {

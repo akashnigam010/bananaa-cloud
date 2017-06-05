@@ -23,7 +23,6 @@ import in.socyal.sc.helper.aws.S3Helper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
 import in.socyal.sc.helper.google.OAuth2GoogleHelper;
-import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.UserDao;
 
@@ -45,15 +44,6 @@ public class LoginDelegateImpl implements LoginDelegate {
 	FirebaseAuthHelper firebaseHelper;
 	@Autowired
 	S3Helper s3Helper;
-
-	@Override
-	public LoginResponse skipLogin() throws BusinessException {
-		LoginResponse response = new LoginResponse();
-		// Sets JWT access token
-		response.setAccessToken(JwtHelper.createJsonWebTokenForGuest());
-		response.setUser(mapper.mapGuestUser());
-		return response;
-	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -105,18 +95,19 @@ public class LoginDelegateImpl implements LoginDelegate {
 			// email id passed
 			user = userDao.getUserByEmail(federatedUser.getEmail());
 			if (user == null) {
-				//new user with email
+				// new user with email
 				user = saveNewUser(federatedUser);
 			}
 		} else {
 			// email id not passed
 			user = userDao.getUserByUid(federatedUser.getId());
 			if (user == null) {
-				// user did not login with this client earlier, save new user without email
+				// user did not login with this client earlier, save new user
+				// without email
 				user = saveNewUser(federatedUser);
 			}
 		}
-		
+
 		loginResponse.setUser(mapper.mapToLoginUserDto(user));
 		return loginResponse;
 	}
@@ -138,7 +129,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 		FederatedUser federatedUser = null;
 		if (request.getClient() == ClientType.GOOGLE) {
 			federatedUser = mapper.mapGoogleUser(googleHelper.getGoogleUser(request.getAccessToken()));
-			//googleHelper.revokeToken(request.getAccessToken());
+			// googleHelper.revokeToken(request.getAccessToken());
 		} else if (request.getClient() == ClientType.FACEBOOK) {
 			federatedUser = mapper.mapFacebookUser(fbHelper.getFbUser(request.getAccessToken()));
 		} else {
