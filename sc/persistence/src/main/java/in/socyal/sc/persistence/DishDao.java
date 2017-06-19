@@ -104,7 +104,7 @@ public class DishDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Tag> getPopularCuisines(Integer merchantId, Integer page, Integer resultsPerPage) {
+	public List<Tag> getPopularCuisines(Integer merchantId, Integer page, Integer resultsPerPage) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		criteria.addOrder(Order.desc("rating"));
@@ -115,7 +115,7 @@ public class DishDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Tag> getPopularSuggestions(Integer merchantId, Integer page, Integer resultsPerPage) {
+	public List<Tag> getPopularSuggestions(Integer merchantId, Integer page, Integer resultsPerPage) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		criteria.addOrder(Order.desc("rating"));

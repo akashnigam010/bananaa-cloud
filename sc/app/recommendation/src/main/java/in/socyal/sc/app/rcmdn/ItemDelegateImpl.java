@@ -62,10 +62,12 @@ public class ItemDelegateImpl implements ItemDelegate {
 	public TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException {
 		TagResponse response = new TagResponse();
 		List<Tag> tags = dishDao.getPopularCuisines(request.getMerchantId(), request.getPage(), request.getResultsPerPage());
-		List<DishCount> dishCount = dishDao.getCuisineDishCount(request.getMerchantId(), mapper.getCuisineIds(tags));
-		response.setTags(tags);
-		//FIXME: make use of map rather than list
-		mapper.mapDishCount(tags, dishCount);
+		if (!tags.isEmpty()) {
+			List<DishCount> dishCount = dishDao.getCuisineDishCount(request.getMerchantId(), mapper.getCuisineIds(tags));
+			response.setTags(tags);
+			//FIXME: make use of map rather than list
+			mapper.mapDishCount(tags, dishCount);
+		}		
 		return response;
 	}
 

@@ -109,19 +109,19 @@ public class RecommendationDao {
 		return response;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Integer getMerchantRecommendationCount(Integer merchantId) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
-		criteria.createAlias("dish", "d");
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
-		criteria.add(Restrictions.eq("d.isActive", Boolean.TRUE));
-		criteria.add(Restrictions.eq("d.merchant.id", merchantId));
-		List<RecommendationEntity> entities = criteria.list();
-		if (entities == null) {
-			return 0;
-		}
-		return entities.size();
-	}
+//	@SuppressWarnings("unchecked")
+//	public Integer getMerchantRecommendationCount(Integer merchantId) {
+//		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+//		criteria.createAlias("dish", "d");
+//		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+//		criteria.add(Restrictions.eq("d.isActive", Boolean.TRUE));
+//		criteria.add(Restrictions.eq("d.merchant.id", merchantId));
+//		List<RecommendationEntity> entities = criteria.list();
+//		if (entities == null) {
+//			return 0;
+//		}
+//		return entities.size();
+//	}
 
 	@SuppressWarnings("unchecked")
 	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
