@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.items.request.GetPopularItemsRequest;
+import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
@@ -19,7 +19,7 @@ public class ItemValidator extends Validator {
 		}
 	}
 	
-	public void validateGetPopularItemsRequest(GetPopularItemsRequest request) throws BusinessException {
+	public void validateGetPopularItemsRequest(TrendingRequest request) throws BusinessException {
 		if (request.getMerchantId() == null) {
 			LOG.error("Merchant Id not found while validating get popular items request");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);

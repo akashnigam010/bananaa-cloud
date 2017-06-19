@@ -14,7 +14,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItem;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
-import in.socyal.sc.api.items.request.GetPopularItemsRequest;
+import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.core.validation.ItemValidator;
 
@@ -52,7 +52,7 @@ public class ItemService {
 	}
 	
 	@RequestMapping(value = "/getPopularItems", method = RequestMethod.POST, headers = "Accept=application/json")
-	public ItemsResponse getPopularItems(@RequestBody GetPopularItemsRequest request) {
+	public ItemsResponse getPopularItems(@RequestBody TrendingRequest request) {
 		ItemsResponse response = new ItemsResponse();
 		try {
 			validator.validateGetPopularItemsRequest(request);

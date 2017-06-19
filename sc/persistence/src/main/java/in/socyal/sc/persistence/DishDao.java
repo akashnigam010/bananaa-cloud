@@ -7,16 +7,23 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
+import in.socyal.sc.persistence.entity.DishCount;
 import in.socyal.sc.persistence.entity.DishEntity;
+import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
+import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
@@ -94,5 +101,44 @@ public class DishDao {
 		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
 		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
 		return mapper.map(entity, filterCriteria, dishCriteria);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Tag> getPopularCuisines(Integer merchantId, Integer page, Integer resultsPerPage) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.addOrder(Order.desc("rating"));
+		int firstResult = ((page - 1) * resultsPerPage);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(resultsPerPage);
+		return mapper.map(criteria.list());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Tag> getPopularSuggestions(Integer merchantId, Integer page, Integer resultsPerPage) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.addOrder(Order.desc("rating"));
+		int firstResult = ((page - 1) * resultsPerPage);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(resultsPerPage);
+		return mapper.map(criteria.list());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DishCount> getCuisineDishCount(Integer merchantId, List<Integer> cuisineIds) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		criteria.createAlias("cuisines", "cuisine");
+		criteria.createAlias("merchant", "merchant");
+		criteria.add(Restrictions.eq("merchant.id", merchantId));
+		criteria.add(Restrictions.in("cuisine.id", cuisineIds));
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.groupProperty("cuisine.id").as("cuisineId"));
+		projList.add(Projections.count("cuisine.id").as("count"));
+		criteria.setProjection(projList);
+		criteria.setResultTransformer(Transformers.aliasToBean(DishCount.class));
+		List<DishCount> entities = (List<DishCount>) criteria.list();
+		return entities;
 	}
 }

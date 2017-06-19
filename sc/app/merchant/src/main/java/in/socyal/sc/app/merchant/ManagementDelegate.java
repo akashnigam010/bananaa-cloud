@@ -30,4 +30,8 @@ public interface ManagementDelegate {
 	public void contactUsMessage(MessageRequest request) throws BusinessException;
 
 	StatusResponse runDishRatingEngineForMerchant(IdRequest request);
+	
+	StatusResponse runCuisineRatingEngineForMerchant(IdRequest request);
+	
+	StatusResponse runTagsRatingEngineForMerchant(IdRequest request);
 }

@@ -11,7 +11,9 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItem;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.persistence.entity.DishCount;
 
 @Component
 public class ItemMapper implements Serializable {
@@ -63,5 +65,23 @@ public class ItemMapper implements Serializable {
 			}			
 		}
 		return dtos;
+	}
+
+	public List<Integer> getCuisineIds(List<Tag> tags) {
+		List<Integer> cuisineIds = new ArrayList<>();
+		for (Tag tag : tags){
+			cuisineIds.add(tag.getId());
+		}
+		return cuisineIds;
+	}
+
+	public void mapDishCount(List<Tag> tags, List<DishCount> dishCounts) {
+		for (Tag tag : tags) {
+			for (DishCount dishCount : dishCounts) {
+				if (tag.getId() == dishCount.getCuisineId()) {
+					tag.setDishCount(dishCount.getCount().intValue());
+				}
+			}
+		}		
 	}
 }

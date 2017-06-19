@@ -1,13 +1,13 @@
 package in.socyal.sc.api.items.request;
 
-public class GetPopularItemsRequest {
+public class TrendingRequest {
 	private Integer merchantId;
 	private Integer resultsPerPage;
 	private Integer page;
 
-	public GetPopularItemsRequest() {}
+	public TrendingRequest() {}
 
-	public GetPopularItemsRequest(Integer merchantId, Integer resultsPerPage, Integer page) {
+	public TrendingRequest(Integer merchantId, Integer resultsPerPage, Integer page) {
 		this.merchantId = merchantId;
 		this.resultsPerPage = resultsPerPage;
 		this.page = page;

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
@@ -18,6 +19,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
+import in.socyal.sc.persistence.entity.MerchantRatingEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 
@@ -75,6 +77,8 @@ public class DishDaoMapper {
 		SuggestionDto dto = new SuggestionDto();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
+		dto.setImageUrl(entity.getImageUrl());
+		dto.setThumbnail(entity.getThumbnail());
 		return dto;
 	}
 
@@ -90,6 +94,8 @@ public class DishDaoMapper {
 		CuisineDto dto = new CuisineDto();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
+		dto.setImageUrl(entity.getImageUrl());
+		dto.setThumbnail(entity.getThumbnail());
 		return dto;
 	}
 
@@ -149,5 +155,20 @@ public class DishDaoMapper {
 			dtos.add(map(entity, merchantCriteria, dishCriteria));
 		}
 		return dtos;
+	}
+
+	public List<Tag> map(List<MerchantRatingEntity> entities) {
+		List<Tag> tags = new ArrayList<>();
+		Tag tag = null;
+		for (MerchantRatingEntity entity : entities) {
+			tag = new Tag();
+			tag.setId(entity.getId());
+			tag.setName(entity.getTag().getName());
+			tag.setRating(entity.getRating() != null ? entity.getRating().toString() : "");
+			tag.setThumbnail(entity.getTag().getThumbnail());
+			tag.setItemUrl("/" + entity.getTag().getNameId());
+			tags.add(tag);
+		}
+		return tags;
 	}
 }

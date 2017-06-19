@@ -29,7 +29,9 @@ import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.persistence.ManagementDao;
+import in.socyal.sc.rating.engine.dish.CuisineRatingEngine;
 import in.socyal.sc.rating.engine.dish.DishRatingEngine;
+import in.socyal.sc.rating.engine.dish.SuggestionRatingEngine;
 
 @Service
 public class ManagementDelegateImpl implements ManagementDelegate {
@@ -43,6 +45,10 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	ManagementDao dao;
 	@Autowired
 	DishRatingEngine dishRatingEngine;
+	@Autowired
+	CuisineRatingEngine cuisineRatingEngine;
+	@Autowired
+	SuggestionRatingEngine tagRatingEngine;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -142,6 +148,18 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Override
 	public StatusResponse runDishRatingEngineForMerchant(IdRequest request) {
 		dishRatingEngine.rateRestaurantDishes(request.getId());
+		return new StatusResponse();
+	}
+
+	@Override
+	public StatusResponse runCuisineRatingEngineForMerchant(IdRequest request) {
+		cuisineRatingEngine.rateRestaurantForCuisines(request.getId());
+		return new StatusResponse();
+	}
+	
+	@Override
+	public StatusResponse runTagsRatingEngineForMerchant(IdRequest request) {
+		tagRatingEngine.rateRestaurantForTags(request.getId());
 		return new StatusResponse();
 	}
 }

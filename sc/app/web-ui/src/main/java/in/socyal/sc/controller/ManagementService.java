@@ -46,6 +46,20 @@ public class ManagementService {
 		delegate.runDishRatingEngineForMerchant(request);
 		return helper.success(response);
 	}
+	
+	@RequestMapping(value = "/runCuisineRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runCuisineRatingEngine(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		delegate.runCuisineRatingEngineForMerchant(request);
+		return helper.success(response);
+	}
+	
+	@RequestMapping(value = "/runTagsRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runTagsRatingEngine(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		delegate.runTagsRatingEngineForMerchant(request);
+		return helper.success(response);
+	}
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {

@@ -13,10 +13,13 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
-import in.socyal.sc.api.items.request.GetPopularItemsRequest;
+import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.item.response.TagResponse;
+import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.app.rcmdn.mapper.ItemMapper;
 import in.socyal.sc.persistence.DishDao;
+import in.socyal.sc.persistence.entity.DishCount;
 
 @Component
 public class ItemDelegateImpl implements ItemDelegate {
@@ -36,7 +39,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException {
+	public ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException {
 		ItemsResponse response = new ItemsResponse();
 		List<DishDto> result = dishDao.getPopularItems(request.getMerchantId(), request.getPage(),
 				request.getResultsPerPage());
@@ -51,6 +54,27 @@ public class ItemDelegateImpl implements ItemDelegate {
 		response.setDish(dto);
 		response.setReviews(mapper.mapReviews(dto.getRecommendations()));
 		response.setTotalRecommendations(dto.getRecommendations().size());
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException {
+		TagResponse response = new TagResponse();
+		List<Tag> tags = dishDao.getPopularCuisines(request.getMerchantId(), request.getPage(), request.getResultsPerPage());
+		List<DishCount> dishCount = dishDao.getCuisineDishCount(request.getMerchantId(), mapper.getCuisineIds(tags));
+		response.setTags(tags);
+		//FIXME: make use of map rather than list
+		mapper.mapDishCount(tags, dishCount);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public TagResponse getPopularSuggestions(TrendingRequest request) throws BusinessException {
+		TagResponse response = new TagResponse();
+		List<Tag> tags = dishDao.getPopularSuggestions(request.getMerchantId(), request.getPage(), request.getResultsPerPage());
+		response.setTags(tags);
 		return response;
 	}
 }

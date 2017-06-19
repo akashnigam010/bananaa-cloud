@@ -5,11 +5,14 @@ import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
-import in.socyal.sc.api.items.request.GetPopularItemsRequest;
+import in.socyal.sc.api.item.response.TagResponse;
+import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 
 public interface ItemDelegate {
 	SearchItemsResponse searchItems(SearchRequest request);
-	ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException;
+	ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException;
 	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
+	TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException;
+	TagResponse getPopularSuggestions(TrendingRequest request) throws BusinessException;
 }
