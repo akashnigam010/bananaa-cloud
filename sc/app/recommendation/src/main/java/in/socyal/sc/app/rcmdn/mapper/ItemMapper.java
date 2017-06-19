@@ -56,6 +56,7 @@ public class ItemMapper implements Serializable {
 			if (StringUtils.isNotBlank(rcmd.getDescription())) {
 				dto = new RecommendationDto();
 				dto.setId(rcmd.getId());
+				dto.setRating(rcmd.getRating());
 				dto.setUpdatedDateTime(rcmd.getUpdatedDateTime());
 				dto.setTimeDiff(rcmd.getTimeDiff());
 				dto.setDescription(rcmd.getDescription());

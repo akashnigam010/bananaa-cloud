@@ -33,17 +33,9 @@ hr {
     height: 45px;
 }
 
-.my-recommendations {
-	padding-bottom: 5%;
-}
-
 .error-label {
     margin-top: -10%;
     margin-bottom: 10%;
-}
-
-.recommended-item {
-    padding: 3%;
 }
 
 .review-item-desc {

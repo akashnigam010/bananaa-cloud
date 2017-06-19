@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.type.RatingColorType;
 import in.socyal.sc.api.user.dto.UserDto;
 
 public class RecommendationDto implements Serializable, Comparable<RecommendationDto> {
@@ -12,6 +13,7 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 	private DishDto dish;
 	private UserDto user;
 	private Float rating;
+	private String ratingClass;
 	private String description;
 	private Boolean isActive;
 	private Calendar createdDateTime;
@@ -93,5 +95,18 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 
 	public void setRating(Float rating) {
 		this.rating = rating;
+	}
+	
+	public String getRatingClass() {
+		if (rating == 0f) {
+			ratingClass = RatingColorType.R25.getCssClass();
+		} else { 
+			ratingClass = RatingColorType.getCodeByRating(rating).getCssClass();
+		}
+		return ratingClass;
+	}
+	
+	public void setRatingClass(String ratingClass) {
+		this.ratingClass = ratingClass;
 	}
 }

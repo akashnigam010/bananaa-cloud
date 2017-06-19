@@ -164,6 +164,22 @@ body {
   padding-top: 2%;
 }
 
+.primary-rating {
+	padding: 0% 3.5%;
+}
+
+.recommend-item-desc {
+    padding: 3% 0%;
+}
+
+.my-recommendations {
+    padding-bottom: 5%;
+}
+
+.recommended-item {
+	padding: 3%;
+}
+
 /* Rate and Bite modal CSS ENDS */
 
 @media ( max-width : 480px) {

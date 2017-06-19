@@ -19,10 +19,6 @@
     padding: 1% 0%;
 }
 
-.recommended-item {
-	padding: 3%;
-}
-
 .recommend-item-name {
 	padding-top: 2%;
 }
@@ -41,15 +37,7 @@ hr {
     height: 45px;
 }
 
-.my-recommendations {
-    padding-bottom: 5%;
-}
-
 .error-label {
     margin-top: -5%;
     margin-bottom: 5%;
-}
-
-.recommend-item-desc {
-    padding: 3% 0%;
 }

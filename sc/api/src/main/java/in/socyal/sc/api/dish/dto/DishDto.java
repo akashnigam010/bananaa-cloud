@@ -8,6 +8,7 @@ import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
+import in.socyal.sc.api.type.RatingColorType;
 
 public class DishDto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +24,7 @@ public class DishDto implements Serializable {
 	private Boolean isActive;
 	private String itemUrl;
 	private List<RecommendationDto> recommendations;
+	private String ratingClass;
 
 	public Integer getId() {
 		return id;
@@ -127,5 +129,18 @@ public class DishDto implements Serializable {
 
 	public void setRating(Float rating) {
 		this.rating = rating;
+	}
+	
+	public String getRatingClass() {
+		if (rating == 0f) {
+			ratingClass = RatingColorType.R25.getCssClass();
+		} else { 
+			ratingClass = RatingColorType.getCodeByRating(rating).getCssClass();
+		}
+		return ratingClass;
+	}
+	
+	public void setRatingClass(String ratingClass) {
+		this.ratingClass = ratingClass;
 	}
 }

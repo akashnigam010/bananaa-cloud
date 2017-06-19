@@ -122,6 +122,7 @@ public class DishDaoMapper {
 			if (rcmdEntity.getIsActive()) {
 				dto = new RecommendationDto();
 				dto.setId(rcmdEntity.getId());
+				dto.setRating(rcmdEntity.getRating());
 				dto.setDescription(rcmdEntity.getDescription());
 				dto.setIsActive(rcmdEntity.getIsActive());
 				UserDto userDto = new UserDto();
