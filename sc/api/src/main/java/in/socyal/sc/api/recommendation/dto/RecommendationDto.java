@@ -15,7 +15,6 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 	private Float rating;
 	private String ratingClass;
 	private String description;
-	private Boolean isActive;
 	private Calendar createdDateTime;
 	private Calendar updatedDateTime;
 	private String timeDiff;
@@ -42,14 +41,6 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 
 	public void setUser(UserDto user) {
 		this.user = user;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public Calendar getCreatedDateTime() {
@@ -96,16 +87,16 @@ public class RecommendationDto implements Serializable, Comparable<Recommendatio
 	public void setRating(Float rating) {
 		this.rating = rating;
 	}
-	
+
 	public String getRatingClass() {
 		if (rating == 0f) {
 			ratingClass = RatingColorType.R25.getCssClass();
-		} else { 
+		} else {
 			ratingClass = RatingColorType.getCodeByRating(rating).getCssClass();
 		}
 		return ratingClass;
 	}
-	
+
 	public void setRatingClass(String ratingClass) {
 		this.ratingClass = ratingClass;
 	}

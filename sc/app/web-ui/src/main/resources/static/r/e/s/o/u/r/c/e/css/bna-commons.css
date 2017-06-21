@@ -648,7 +648,7 @@ input:focus ~ .highlight, textarea:focus ~ .highlight {
 
 .rating-rcmd {
   color: white; 
-  padding: 0 1%; 
+  padding: 0.5% 1% 0% 1%;
   border-radius: 3px;
   font-size: 0.8em;
 }

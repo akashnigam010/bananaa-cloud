@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -119,38 +121,22 @@ public class DishDaoMapper {
 		List<RecommendationDto> dtos = new ArrayList<>();
 		RecommendationDto dto = null;
 		for (RecommendationEntity rcmdEntity : entity.getRecommendations()) {
-			if (rcmdEntity.getIsActive()) {
-				dto = new RecommendationDto();
-				dto.setId(rcmdEntity.getId());
-				dto.setRating(rcmdEntity.getRating());
-				dto.setDescription(rcmdEntity.getDescription());
-				dto.setIsActive(rcmdEntity.getIsActive());
-				UserDto userDto = new UserDto();
-				userMapper.map(rcmdEntity.getUser(), userDto, false);
-				// FIXME : Result set must be filtered with active
-				// recommendations already
-				userDto.setTotalRecommendations(getActiveRecommendations(rcmdEntity.getUser().getRecommendations()));
-				dto.setUser(userDto);
-				dto.setUpdatedDateTime(rcmdEntity.getUpdatedDateTime());
-				dto.setTimeDiff(timestampHelper.getTimeDiffString(rcmdEntity.getUpdatedDateTime().getTimeInMillis()));
-				dtos.add(dto);
-			}
+			dto = new RecommendationDto();
+			dto.setId(rcmdEntity.getId());
+			dto.setRating(rcmdEntity.getRating());
+			dto.setDescription(rcmdEntity.getDescription());
+			UserDto userDto = new UserDto();
+			userMapper.map(rcmdEntity.getUser(), userDto, false);
+			MutablePair<Integer, Integer> ratingAndReviewCount = getRatingCount(rcmdEntity.getUser().getRecommendations());
+			userDto.setTotalRatings(ratingAndReviewCount.getLeft());
+			userDto.setTotalReviews(ratingAndReviewCount.getRight());
+			dto.setUser(userDto);
+			dto.setUpdatedDateTime(rcmdEntity.getUpdatedDateTime());
+			dto.setTimeDiff(timestampHelper.getTimeDiffString(rcmdEntity.getUpdatedDateTime().getTimeInMillis()));
+			dtos.add(dto);
 		}
 		Collections.sort(dtos);
 		return dtos;
-	}
-
-	/*
-	 * FIXME: Remove this method once isActive flag is put in query
-	 */
-	private Integer getActiveRecommendations(List<RecommendationEntity> entities) {
-		int activeRcmdCount = 0;
-		for (RecommendationEntity entity : entities) {
-			if (entity.getIsActive()) {
-				activeRcmdCount++;
-			}
-		}
-		return activeRcmdCount;
 	}
 
 	public List<DishDto> map(List<DishEntity> entities, MerchantFilterCriteria merchantCriteria,
@@ -181,5 +167,19 @@ public class DishDaoMapper {
 			tags.add(tag);
 		}
 		return tags;
+	}
+	
+	public MutablePair<Integer, Integer> getRatingCount(List<RecommendationEntity> entities) {
+		MutablePair<Integer, Integer> ratingAndReviewCount = new MutablePair<>();
+		int right = 0;
+		int left = entities.size();
+		for (RecommendationEntity rcmd : entities) {
+			if (StringUtils.isNotBlank(rcmd.getDescription())) {
+				right++;
+			}
+		}
+		ratingAndReviewCount.setRight(right);
+		ratingAndReviewCount.setLeft(left);
+		return ratingAndReviewCount;
 	}
 }

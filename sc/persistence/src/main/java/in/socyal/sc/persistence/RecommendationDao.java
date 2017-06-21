@@ -50,7 +50,6 @@ public class RecommendationDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("user.id", userId));
 		criteria.add(Restrictions.eq("dish.id", request.getId()));
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
 		Calendar cal = Calendar.getInstance();
 		if (recommendation == null) {
@@ -58,7 +57,6 @@ public class RecommendationDao {
 			recommendation.setDish(new DishEntity(request.getId()));
 			recommendation.setUser(new UserEntity(userId));
 			recommendation.setRating(request.getRating().floatValue());
-			recommendation.setIsActive(Boolean.TRUE);
 		} else {
 			recommendation.setRating(request.getRating().floatValue());
 			recommendation.setUpdatedDateTime(cal);
@@ -71,7 +69,6 @@ public class RecommendationDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("user.id", userId));
 		criteria.add(Restrictions.eq("dish.id", request.getId()));
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
 		Calendar cal = Calendar.getInstance();
 		if (recommendation == null) {
@@ -79,7 +76,6 @@ public class RecommendationDao {
 			recommendation.setDish(new DishEntity(request.getId()));
 			recommendation.setUser(new UserEntity(userId));
 			recommendation.setDescription(request.getDescription());
-			recommendation.setIsActive(Boolean.TRUE);
 		} else {
 			recommendation.setDescription(request.getDescription());
 			recommendation.setUpdatedDateTime(cal);
@@ -91,7 +87,6 @@ public class RecommendationDao {
 	public List<TrendingMerchantResultDto> getTrendingMerchants() {
 		List<TrendingMerchantResultDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		criteria.createAlias("dish", "d");
 		criteria.createAlias("d.merchant", "m");
 		ProjectionList projList = Projections.projectionList();
@@ -127,7 +122,6 @@ public class RecommendationDao {
 	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
 		List<RecommendationDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		criteria.createAlias("user", "u");
 		criteria.createAlias("dish", "d");
 		criteria.createAlias("d.merchant", "m");
@@ -152,7 +146,6 @@ public class RecommendationDao {
 
 	public RecommendationDto getMyDishRecommendation(Integer userId, Integer dishId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		criteria.add(Restrictions.eq("user.id", userId));
 		criteria.add(Restrictions.eq("dish.id", dishId));
 		RecommendationEntity entity = (RecommendationEntity) criteria.uniqueResult();
@@ -169,14 +162,12 @@ public class RecommendationDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("user.id", userId));
 		criteria.add(Restrictions.eq("dish.id", dishId));
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
 		Calendar cal = Calendar.getInstance();
 		if (recommendation == null) {
 			recommendation = new RecommendationEntity(cal, cal);
 			recommendation.setDish(new DishEntity(dishId));
 			recommendation.setUser(new UserEntity(userId));
-			recommendation.setIsActive(Boolean.TRUE);
 		} else {
 			if (StringUtils.isBlank(description)) {
 				return;
@@ -199,7 +190,6 @@ public class RecommendationDao {
 			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
 		}
 
-		recommendation.setIsActive(Boolean.FALSE);
 		recommendation.setUpdatedDateTime(Calendar.getInstance());
 		session.update(recommendation);
 	}
@@ -208,7 +198,7 @@ public class RecommendationDao {
 		Session session = sessionFactory.getCurrentSession();
 		RecommendationEntity recommendation = (RecommendationEntity) session.get(RecommendationEntity.class,
 				recommendationId);
-		if (recommendation == null || !recommendation.getIsActive()) {
+		if (recommendation == null) {
 			throw new BusinessException(RecommendationErrorCodeType.RCMDN_ID_NOT_FOUND);
 		}
 
@@ -220,7 +210,6 @@ public class RecommendationDao {
 	public Integer getDishRecommendationCount(Integer dishId) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("dish.id", dishId));
-		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		return criteria.list().size();
 	}
 }

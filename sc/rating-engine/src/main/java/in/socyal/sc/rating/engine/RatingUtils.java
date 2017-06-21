@@ -22,10 +22,8 @@ public class RatingUtils {
 		Float credibilityTotal = 0.0f;
 		Float ratingTotal = 0.0f;
 		for (RecommendationEntity rateOb : entity.getRecommendations()) {
-			if (rateOb.getIsActive()) {
-				credibilityTotal += rateOb.getUser().getCredibility();
-				ratingTotal += rateOb.getRating() * rateOb.getUser().getCredibility();
-			}			
+			credibilityTotal += rateOb.getUser().getCredibility();
+			ratingTotal += rateOb.getRating() * rateOb.getUser().getCredibility();
 		}
 		if (credibilityTotal > 0) {
 			return ratingTotal / credibilityTotal;

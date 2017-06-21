@@ -130,16 +130,18 @@ public class DishDto implements Serializable {
 	public void setRating(Float rating) {
 		this.rating = rating;
 	}
-	
+
 	public String getRatingClass() {
-		if (rating == 0f) {
-			ratingClass = RatingColorType.R25.getCssClass();
-		} else { 
-			ratingClass = RatingColorType.getCodeByRating(rating).getCssClass();
+		if (rating != null) {
+			if (rating == 0f) {
+				ratingClass = RatingColorType.R25.getCssClass();
+			} else {
+				ratingClass = RatingColorType.getCodeByRating(rating).getCssClass();
+			}
 		}
 		return ratingClass;
 	}
-	
+
 	public void setRatingClass(String ratingClass) {
 		this.ratingClass = ratingClass;
 	}

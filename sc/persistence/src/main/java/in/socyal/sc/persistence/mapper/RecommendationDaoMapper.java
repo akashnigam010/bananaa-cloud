@@ -46,7 +46,6 @@ public class RecommendationDaoMapper {
 		dto.setDish(dish);
 		dto.setId(entity.getId());
 		dto.setDescription(entity.getDescription());
-		dto.setIsActive(entity.getIsActive());
 		dto.setRating(entity.getRating());
 		dto.setUpdatedDateTime(entity.getUpdatedDateTime());
 	}

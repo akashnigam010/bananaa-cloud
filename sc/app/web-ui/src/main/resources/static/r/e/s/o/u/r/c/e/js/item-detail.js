@@ -11,6 +11,8 @@ $(document).ready(function() {
     getMyItemRecommendation();
 });
 
+var item = {};
+
 function getMyItemRecommendation() {
 	var dataOb = {
 			itemId : itemId
@@ -27,27 +29,31 @@ function getMyItemRecommendation() {
     			  $(".my-item-recommendation-wrapper").find('.loader').addClass('hide');
     			  $(".my-item-recommendation-section").removeClass('hide');
     			  if (response.recommended) {
-    				  $("#recommendation-id").html(response.recommendation.id);
-    				  $("#item-id").html(response.recommendation.itemId);
-    				  $("#item-name").html(response.recommendation.name);
-    				  if (response.recommendation.description == '') {
-    					  $("#no-review-text").removeClass('hide');
+    				  if (response.recommendation.rating == '' || response.recommendation.rating == null) {
+    					  $("#rating-sec").addClass('hide');
     				  } else {
-    					  $("#no-review-text").addClass('hide');    					  
+    					  item.rating = response.recommendation.rating;
+    					  $("#rating-sec").removeClass('hide');
+    					  $("#rating-val").html(response.recommendation.rating)
     				  }
-    				  $("#recommend-item-desc").html(response.recommendation.description);
-    				  $("#addItemRecommendButton").addClass('hide');
+    				  
+    				  if (response.recommendation.description == '' || response.recommendation.description == null) {
+    					  $("#recommend-item-desc").addClass('hide');
+    				  } else {
+    					  item.review = response.recommendation.description;
+    					  $("#recommend-item-desc").removeClass('hide');
+    					  $("#recommend-item-desc").html(response.recommendation.description);
+    				  }    				  
     				  $("#recommend-message").addClass('hide');
     				  $("#recommend-time").html(response.recommendation.timeDiff);
     				  $("#recommend-time").removeClass('hide');
-    				  activateUpdateRcmdModal();
     			  } else {
-    				  $("#recommend-item-desc").html('');
-    				  $("#addItemRecommendButton").removeClass('hide');
-    				  $("#recommend-message").removeClass('hide');
-    				  $("#no-review-text").addClass('hide');
+    				  $("#rating-sec").addClass('hide');
+    				  $("#recommend-item-desc").addClass('hide');
     				  $("#recommend-time").addClass('hide');
+    				  $("#recommend-message").removeClass('hide');
     			  }
+    			  activateUpdateRcmdModal();
     		  } else {
     			  handleErrorCallback(response);
     		  }
@@ -55,13 +61,16 @@ function getMyItemRecommendation() {
 }
 
 function activateUpdateRcmdModal() {
-	$(".my-item-recommendation").on('mouseup', function(e){
-    	rcmdOb = {
-    		rcmdId: $(this).find('#recommendation-id').html(),
-    		itemId: $(this).find('#item-id').html(),
-    		name: $(this).find('#item-name').html(),
-    		desc: $(this).find('#recommend-item-desc').html().trim()
+	$("#addItemRecommendButton").on('mouseup', function(e){
+		rcmdOb = {
+    		id: itemId,
+    		name: itemName,
+    		merchantName: merchantName,
+    		review: item.review
     	};
-    	openRecommendationModal(rcmdOb.rcmdId, rcmdOb.itemId, rcmdOb.name, rcmdOb.desc, true);
+		if (item.rating != '' && item.rating != null) {
+			rcmdOb.rating = parseInt(item.rating);
+		}
+    	openRecommendationModal(rcmdOb);
     });
 }

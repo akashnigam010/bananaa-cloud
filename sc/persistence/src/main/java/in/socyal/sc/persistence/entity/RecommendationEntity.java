@@ -25,9 +25,6 @@ public class RecommendationEntity extends BaseEntity implements Serializable {
 	@Column(name = "RATING")
 	private Float rating;
 	
-	@Column(name = "IS_ACTIVE")
-	private Boolean isActive;
-
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
@@ -53,14 +50,6 @@ public class RecommendationEntity extends BaseEntity implements Serializable {
 
 	public void setUser(UserEntity user) {
 		this.user = user;
-	}
-
-	public Boolean getIsActive() {
-		return isActive;
-	}
-
-	public void setIsActive(Boolean isActive) {
-		this.isActive = isActive;
 	}
 
 	public String getDescription() {

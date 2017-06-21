@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -42,19 +43,21 @@ public class UserDaoMapper {
 		to.setUserUrl("/user/" + from.getNameId());
 		to.setNameId(from.getNameId());
 		to.setCredibility(from.getCredibility());
+		MutablePair<Integer, Integer> ratingAndReviewCount = dishMapper.getRatingCount(from.getRecommendations());
+		to.setTotalRatings(ratingAndReviewCount.getLeft());
+		to.setTotalReviews(ratingAndReviewCount.getRight());
 		if (mapRecommendations) {
 			List<RecommendationDto> dtos = new ArrayList<>();
 			RecommendationDto dto = null;
 			for (RecommendationEntity entity : from.getRecommendations()) {
-				if (entity.getIsActive()) {
-					dto = new RecommendationDto();
-					dto.setId(entity.getId());
-					dto.setUpdatedDateTime(entity.getUpdatedDateTime());
-					dto.setTimeDiff(timestampHelper.getTimeDiffString(entity.getUpdatedDateTime().getTimeInMillis()));
-					dto.setDescription(entity.getDescription());
-					dto.setDish(dishMapper.miniMap(entity.getDish()));
-					dtos.add(dto);
-				}				
+				dto = new RecommendationDto();
+				dto.setId(entity.getId());
+				dto.setRating(entity.getRating());
+				dto.setUpdatedDateTime(entity.getUpdatedDateTime());
+				dto.setTimeDiff(timestampHelper.getTimeDiffString(entity.getUpdatedDateTime().getTimeInMillis()));
+				dto.setDescription(entity.getDescription());
+				dto.setDish(dishMapper.miniMap(entity.getDish()));
+				dtos.add(dto);
 			}
 			Collections.sort(dtos);
 			to.setRecommendations(dtos);

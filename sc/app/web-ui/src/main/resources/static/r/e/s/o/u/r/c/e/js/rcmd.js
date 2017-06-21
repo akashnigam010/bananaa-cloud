@@ -253,7 +253,11 @@ function addRating(id, saveRating) {
             		$(".rcmd-title").removeClass('hide');
             		$('.success-rating').addClass('hide');
             	}, 2000);
-            	getMyRecommendations();
+            	if (page == 'detail') {
+            		getMyRecommendations();
+	  			} else if (page == 'item-detail') {
+	  				getMyItemRecommendation();  
+	  			}
       		} else {
       			handleErrorCallback(response);
       		}
@@ -345,7 +349,11 @@ function addRecommendation() {
       	  .done(function(response) {
       		$('#recommendModal').modal('hide');
       		  if (response.result) {
-      			  getMyRecommendations();
+      			  if (page == 'detail') {
+      				getMyRecommendations();
+      			  } else if (page == 'item-detail') {
+      				getMyItemRecommendation();  
+      			  }
       		  } else {
     			  handleErrorCallback(response);
     		  }	          		  
