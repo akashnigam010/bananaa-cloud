@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
+import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.merchant.response.StoriesResponse;
@@ -53,6 +55,17 @@ public class MerchantService {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
 		try {
 			response = delegate.getTrendingMerchants();
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getMerchantsByTag", method = RequestMethod.POST, headers = "Accept=application/json")
+	public MerchantListForTagResponse getMerchantsByTag(@RequestBody SearchMerchantByTagRequest request) {
+		MerchantListForTagResponse response = new MerchantListForTagResponse();
+		try {
+			response = delegate.getMerchantsByTag(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

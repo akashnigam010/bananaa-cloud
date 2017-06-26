@@ -96,16 +96,12 @@ public class HomeController {
 		request.setMerchantNameId(nameId);
 		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
 		TrendingRequest itemsRequest = new TrendingRequest(response.getId(), 5, 1);
-		TrendingRequest trendingRequest = new TrendingRequest(response.getId(), 5, 1);
 		ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
-		TagResponse tagsCuisineResponse = itemDelegate.getPopularCuisines(trendingRequest);
-		//TagResponse tagsSuggestionResponse = itemDelegate.getPopularSuggestions(tagsRequest);
 		ModelAndView modelAndView = new ModelAndView("detail");
 		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("popularDishes", itemsResponse);
-		modelAndView.addObject("popularCuisines", tagsCuisineResponse);
-		//modelAndView.addObject("popularSuggestions", tagsSuggestionResponse);
+		modelAndView.addObject("popularCuisines", response.getRatedCuisines());
 		modelAndView.addObject("description", getMerchantMetaDescription(response));
 		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
 		modelAndView.addObject("title", getMerchantMetaTitle(response));

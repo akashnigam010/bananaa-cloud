@@ -11,8 +11,24 @@ import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 
 public interface ItemDelegate {
 	SearchItemsResponse searchItems(SearchRequest request);
+	
 	ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException;
+	
 	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
+	
+	/**
+	 * Popular rated cuisines have now been moved to MerchantDto and would be
+	 * mapped based on filter criteria.
+	 * 
+	 */
+	@Deprecated
 	TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException;
+	
+	/**
+	 * Popular rated cuisines have now been moved to MerchantDto and would be
+	 * mapped based on filter criteria.
+	 * 
+	 */
+	@Deprecated
 	TagResponse getPopularSuggestions(TrendingRequest request) throws BusinessException;
 }

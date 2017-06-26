@@ -6,7 +6,7 @@ import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
 
-public class GetMerchantListResponse extends GenericResponse implements Serializable {
+public class MerchantListResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<MerchantResponse> merchants;
 

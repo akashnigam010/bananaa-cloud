@@ -57,6 +57,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 		return response;
 	}
 
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException {

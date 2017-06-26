@@ -14,13 +14,13 @@
         
         <div lang="en" th:replace="fragments/top-header :: top-header"></div>
         
-        <div class="row bna-bg primary-image-wrapper cursor-pointer" onclick="imageView();">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 primary-image-banner">
+        <div class="row bna-bg primary-image-wrapper">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 primary-image-banner cursor-pointer" onclick="imageView();">
             </div>    
         </div> 
 
         <div class="row bna-bg sub-section">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 merchant-detail-main">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 merchant-detail-main">
                 <div class="row white-background details-wrapper details-top-wrapper">
                     <div class="col-xs-12">
                         <div class="row" style="padding: 3% 0%;">
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="clearfix visible-xs-block"></div>
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
-                                    <div class="bna-color">Average Cost</div>
+                                    <div class="bna-color">Cost for 2</div>
                                     <div th:text="'Rs. ' + ${detail.averageCost}"></div>
                                 </div>
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="detail-about">
                         <div class="col-xs-12 col-sm-8 col-sm-pull-4">
-                            <div class="row white-background details-wrapper" style="margin-top: 10px;" th:if="${popularCuisines.tags.size() > 0}">
+                            <div class="row white-background details-wrapper" style="margin-top: 10px;" th:if="${popularCuisines.size() > 0}">
                             	<div class="col-xs-12">
                             		<div class="col-xs-12">
 										<div class="row">
@@ -92,7 +92,7 @@
 										<hr />
 		                                <div class="row recommended-wrapper">
 		                                    <div class="col-xs-12">
-		                                        <div class="row" th:each="item, iterStat : ${popularCuisines.tags}">
+		                                        <div class="row" th:each="item, iterStat : ${popularCuisines}">
 		                                        	<a class="cursor-pointer" th:href="${item.itemUrl}">
 			                                            <div class="col-xs-12 recommended-item">
 			                                                <div class="float-left" style="object-fit: cover; width: 15%;">

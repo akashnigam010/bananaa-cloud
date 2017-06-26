@@ -10,21 +10,23 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.merchant.dto.AddressDto;
 import in.socyal.sc.api.merchant.dto.ContactDto;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
-import in.socyal.sc.persistence.entity.LocalityEntity;
+import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
+import in.socyal.sc.persistence.entity.MerchantRatingEntity;
+import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
 import in.socyal.sc.persistence.entity.TimingEntity;
 
 @Component
 public class MerchantDaoMapper {
-	
+	private static final Float MINIMUM_TAG_RATING = 1.0f;
 	@Autowired
 	LocationDaoMapper mapper;
 	
@@ -32,6 +34,14 @@ public class MerchantDaoMapper {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
 			map(entity, dto, filter);
+			to.add(dto);
+		}
+	}
+	
+	public void mapByTag(List<MerchantRatingEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
+		for (MerchantRatingEntity entity : from) {
+			MerchantDto dto = new MerchantDto();
+			map(entity.getMerchant(), dto, filter);
 			to.add(dto);
 		}
 	}
@@ -56,6 +66,48 @@ public class MerchantDaoMapper {
 		
 		if (filter.getMapTimings()) {
 			dto.setTimings(mapTimingDtos(entity.getTimings()));
+		}
+		
+		if (filter.getMapCuisineRatings()) {
+			Tag tag = null;
+			for (MerchantCuisineRatingEntity tagEntity : entity.getCuisineRatings()) {
+				if (tagEntity.getRating() < MINIMUM_TAG_RATING) {
+					// break the loop, do not map rest of the cuisines if rating
+					// drops below minimum required rating
+					break;
+				}
+				tag = new Tag();
+				tag.setId(tagEntity.getId());
+				tag.setName(tagEntity.getCuisine().getName());
+				tag.setNameId(tagEntity.getCuisine().getNameId());
+				tag.setDishCount(tagEntity.getDishCount());
+				tag.setRating(tagEntity.getRating().toString());
+				// TODO : set itemUrl
+				// tag.setItemUrl(tagEntity.get);
+				tag.setThumbnail(tagEntity.getCuisine().getThumbnail());
+				dto.getRatedCuisines().add(tag);
+			}
+		}
+		
+		if (filter.getMapSuggestionRatings()) {
+			Tag tag = null;
+			for (MerchantSuggestionRatingEntity tagEntity : entity.getSuggestionRatings()) {
+				if (tagEntity.getRating() < MINIMUM_TAG_RATING) {
+					// break the loop, do not map rest of the suggestions if
+					// rating drops below minimum required rating
+					break;
+				}
+				tag = new Tag();
+				tag.setId(tagEntity.getId());
+				tag.setName(tagEntity.getSuggestion().getName());
+				tag.setNameId(tagEntity.getSuggestion().getNameId());
+				tag.setDishCount(tagEntity.getDishCount());
+				tag.setRating(tagEntity.getRating().toString());
+				// TODO : set itemUrl
+				// tag.setItemUrl(tagEntity.get);
+				tag.setThumbnail(tagEntity.getSuggestion().getThumbnail());
+				dto.getRatedSuggestions().add(tag);
+			}
 		}
 		
 		if (filter.getMapOtherDetails()) {

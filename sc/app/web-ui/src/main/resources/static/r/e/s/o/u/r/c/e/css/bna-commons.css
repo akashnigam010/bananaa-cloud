@@ -25,6 +25,14 @@ body {
 	color: #444;
 }
 
+.upper {
+  text-transform: uppercase;
+}
+
+.info-highlights {
+  padding: 0.5% 0%;
+}
+
 /* Loader CSS STARTS */
 .global-search.loading ~ .input-loader-animation-div {
 	display: block;
@@ -246,7 +254,7 @@ body {
 		font-size: 10px;
 	}
 	.details-wrapper {
-		border-radius: 6px;
+		border-radius: 3px;
 	}
 	.rcmd-width {
       width: 300px;

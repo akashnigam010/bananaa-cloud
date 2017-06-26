@@ -1,8 +1,10 @@
 package in.socyal.sc.api.merchant.response;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.response.GenericResponse;
 
 public class MerchantDetailsResponse extends GenericResponse implements Serializable {
@@ -18,7 +20,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private String averageCost;
 	private String longAddress;
 	private String phone;
-	private Integer recommendations;
+	private List<Tag> ratedCuisines;
 
 	public Integer getId() {
 		return id;
@@ -100,19 +102,22 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 		this.nameId = nameId;
 	}
 
-	public Integer getRecommendations() {
-		return recommendations;
-	}
-
-	public void setRecommendations(Integer recommendations) {
-		this.recommendations = recommendations;
-	}
-
 	public String getThumbnail() {
 		return thumbnail;
 	}
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public List<Tag> getRatedCuisines() {
+		if (this.ratedCuisines == null) {
+			this.ratedCuisines = new ArrayList<>();
+		}
+		return ratedCuisines;
+	}
+
+	public void setRatedCuisines(List<Tag> ratedCuisines) {
+		this.ratedCuisines = ratedCuisines;
 	}
 }

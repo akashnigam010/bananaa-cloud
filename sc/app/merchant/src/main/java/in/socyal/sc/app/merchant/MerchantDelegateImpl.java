@@ -19,8 +19,10 @@ import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
+import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.MerchantResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
@@ -46,11 +48,28 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
+		MerchantListForTagResponse response = new MerchantListForTagResponse();
+		List<MerchantDto> dtos = dao.getMerchantsByTag(request);
+		MerchantDetailsResponse merchant = null;
+		for (MerchantDto dto : dtos) {
+			merchant = new MerchantDetailsResponse();
+			try {
+				buildMerchantDetailsResponse(dto, merchant);
+			} catch (ParseException e) {
+				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+			}
+			response.getMerchants().add(merchant);
+		}
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public MerchantDetailsResponse getMerchantDetails(DetailsRequest request) throws BusinessException {
 		MerchantDetailsResponse response = new MerchantDetailsResponse();
-		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
 		MerchantDto merchantDto = dao.getMerchantDetailsByNameId(request.getMerchantNameId(), filter);
-		//Integer recommendations = rcmdnDao.getMerchantRecommendationCount(merchantDto.getId());
 		try {
 			buildMerchantDetailsResponse(merchantDto, response);
 		} catch (ParseException e) {
@@ -141,7 +160,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response) throws ParseException {
-		response.setAverageCost(merchantDto.getAverageCost().intValue() + " for 2");
+		response.setAverageCost(merchantDto.getAverageCost().intValue()+"");
 		response.setId(merchantDto.getId());
 		response.setNameId(merchantDto.getNameId());
 		response.setImageUrl(merchantDto.getImageUrl());
@@ -151,6 +170,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
+		response.setRatedCuisines(merchantDto.getRatedCuisines());
 		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
 			response.setPhone(merchantDto.getContact().getPhone1());
 		}
