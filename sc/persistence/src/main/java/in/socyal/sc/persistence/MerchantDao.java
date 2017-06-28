@@ -18,10 +18,7 @@ import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
-import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
-import in.socyal.sc.persistence.entity.MerchantRatingEntity;
-import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
 import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 
 @Repository
@@ -60,28 +57,62 @@ public class MerchantDao {
 	@SuppressWarnings("unchecked")
 	public List<MerchantDto> getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
 		List<MerchantDto> merchants = new ArrayList<>();
-		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
-		Criteria criteria = null;
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		if (request.getType() == TagType.CUISINE) {
-			criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
-			criteria.add(Restrictions.eq("cuisine.id", request.getId()));
+			criteria.createAlias("cuisineRatings", "cuisineRatings");
+			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
+			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
+			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
-			criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
-			criteria.add(Restrictions.eq("suggestion.id", request.getId()));
+			criteria.createAlias("suggestionRatings", "suggestionRatings");
+			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
+			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
+			criteria.addOrder(Order.desc("suggestionRatings.rating"));
 		} else {
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
 		
-		criteria.addOrder(Order.desc("rating"));
+		criteria.createAlias("address", "address");
+		criteria.createAlias("address.locality", "locality");
+		criteria.add(Restrictions.eq("locality.nameId", request.getLocalityNameId()));
 		int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
-		List<MerchantRatingEntity> entities = criteria.list();
+		List<MerchantEntity> entities = criteria.list();
 		if (entities != null &&  entities.size() > 0) {
-			mapper.mapByTag(entities, merchants, filter);
+			mapper.map(entities, merchants, filter);
 		} 
 		return merchants;
 	}
+	
+//	@SuppressWarnings("unchecked")
+//	public List<MerchantDto> getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
+//		List<MerchantDto> merchants = new ArrayList<>();
+//		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
+//		Criteria criteria = null;
+//		if (request.getType() == TagType.CUISINE) {
+//			criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
+//			criteria.createAlias("cuisine", "cuisine");
+//			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
+//		} else if (request.getType() == TagType.SUGGESTION) {
+//			criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
+//			criteria.createAlias("suggestion", "suggestion");
+//			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
+//		} else {
+//			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+//		}
+//		
+//		criteria.addOrder(Order.desc("rating"));
+//		int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
+//		criteria.setFirstResult(firstResult);
+//		criteria.setMaxResults(RESULTS_PER_PAGE);
+//		List<MerchantRatingEntity> entities = criteria.list();
+//		if (entities != null &&  entities.size() > 0) {
+//			mapper.mapByTag(entities, merchants, filter);
+//		} 
+//		return merchants;
+//	}
 
 	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {

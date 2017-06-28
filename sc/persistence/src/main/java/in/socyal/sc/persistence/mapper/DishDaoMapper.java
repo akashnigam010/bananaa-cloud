@@ -83,6 +83,7 @@ public class DishDaoMapper {
 		SuggestionDto dto = new SuggestionDto();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
+		dto.setNameId(entity.getNameId());
 		dto.setImageUrl(entity.getImageUrl());
 		dto.setThumbnail(entity.getThumbnail());
 		return dto;
@@ -100,6 +101,7 @@ public class DishDaoMapper {
 		CuisineDto dto = new CuisineDto();
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
+		dto.setNameId(entity.getNameId());
 		dto.setImageUrl(entity.getImageUrl());
 		dto.setThumbnail(entity.getThumbnail());
 		return dto;

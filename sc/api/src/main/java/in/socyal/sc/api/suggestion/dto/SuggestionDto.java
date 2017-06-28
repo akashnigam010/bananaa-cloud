@@ -3,6 +3,7 @@ package in.socyal.sc.api.suggestion.dto;
 public class SuggestionDto {
 	private Integer id;
 	private String name;
+	private String nameId;
 	private String imageUrl;
 	private String thumbnail;
 
@@ -36,5 +37,13 @@ public class SuggestionDto {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

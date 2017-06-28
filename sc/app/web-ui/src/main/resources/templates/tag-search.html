@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head"></head>
+<link href="/r/e/s/o/u/r/c/e/css/tag-search.css" type="text/css" rel="stylesheet"></link>
+
+<body>
+	<div class="container-fluid">
+		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
+		<div class="hide" id="primaryImageTemp" th:text="${imageUrl}"></div>
+        
+        <div lang="en" th:replace="fragments/top-header :: top-header"></div>
+        
+        <div class="row bna-bg primary-image-wrapper">
+			<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 primary-image-banner cursor-pointer"
+				onclick="imageView();" style="height: 150px;"></div>
+		</div> 
+
+        <div class="row bna-bg">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <div style="padding: 3% 0%;">
+					<span class="bold font-2" th:text="${detail.tagName}">Italian</span> &nbsp; 
+					<span class="light font-1-5" th:text="'in ' + ${detail.location}">in Hitech City</span>	
+				</div>
+                <div class="row">
+                    <div class="detail-about">
+                        <div class="col-xs-12 col-sm-12">
+                            <div th:each="merchant, iterStat : ${detail.merchants}" class="row white-background details-wrapper" style="margin-top: 10px;">
+                                <div class="col-xs-12">
+                                    <div class="row" style="padding: 2% 0%;">
+                                    	<div class="col-xs-12">
+                                        	<div class="hidden-xs float-left cursor-pointer" style="margin-right: 4%;">
+                                    			<img class="rest-thumbnail" th:src="${merchant.thumbnail}" />
+                                    		</div>
+                                            <div class="float-left">
+                                            	<div class="light">
+                                            		<span th:each="type, iterStat : ${merchant.type}" th:text="!${iterStat.last} ? ${type} + ', ' : ${type}"></span>
+                                                </div>
+                                            	<div class="bold item-name font-1-5 bna-color cursor-pointer" th:text="${merchant.name}"></div>
+                                                <div class="light" th:text="${merchant.shortAddress}"></div>
+                                                <div class="padding-top bold">
+                                                	<span>Spread of</span>
+                                                	<span th:text="${merchant.searchTag.dishCount}"></span>+
+                                                	<span th:text="${merchant.searchTag.name}"></span>
+                                                	<span>dishes</span> 
+                                                </div>
+                                            </div>
+                                            <div class="float-right">
+                                            	<div>
+                                            		<span th:class="${merchant.searchTag.ratingClass} + ' float-right rating-rcmd bold'" style="padding: 5px 10px; font-size: 1.1em;" th:text="${merchant.searchTag.rating}"></span>
+                                            	</div>
+                                            	<div>
+													<div class="float-right light padding-top">
+	                                            		Rated in
+	                                            	</div>
+                                            	</div>
+                                            	<div>
+													<div class="float-right light" th:text="${merchant.searchTag.name}"></div>
+                                            	</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 padding-bottom">
+                                        	<hr style="margin-top: 10px; margin-bottom: 15px;" />
+                                        	<div class="info-highlights">
+                                        		<div class="upper float-left light">
+	                                        		Cost for two
+	                                        	</div>
+	                                        	<div style="margin-left: 30%;" th:text="'Rs. ' + ${merchant.averageCost}"></div>
+                                        	</div>
+                                        	<div class="info-highlights">
+                                        		<div class="upper float-left light">
+	                                        		Hours
+	                                        	</div>
+	                                        	<div style="margin-left: 30%;">
+	                                        		<span th:each="openingHour, iterStat : ${merchant.openingHours}">
+	                                        			<span th:text="${openingHour}"></span>
+	                                        			<br />								
+	                                        		</span>
+	                                        	</div>
+                                        	</div>
+                                        	<div class="info-highlights">
+                                        		<div class="upper float-left light">
+	                                        		Cuisines
+	                                        	</div>
+	                                        	<div style="margin-left: 30%;">
+	                                        		<span th:each="cuisine, iterStat : ${merchant.ratedCuisines}">
+	                                        			<span th:text="${cuisine.name}"></span> 
+	                                        			<span th:class="${cuisine.ratingClass} + ' rating-rcmd'" th:text="${cuisine.rating}"></span>
+	                                        		</span>
+	                                        	</div>
+                                        	</div>
+                                        </div>                                                                               
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row " style="margin: 5% 0%;">
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 padding-3">
+                                                <div class="float-left">
+													Page 1 of 2                                               	
+                                                </div>
+                                                <div class="float-right">
+													<button class="bna-button-light" style="margin-top: 0px;">Prev</button>
+													<span>1</span>
+													<button class="bna-button-light" style="margin-top: 0px;">Next</button>
+                                                </div>
+                                            </div>  
+                                        </div>                                   
+                                    </div>
+                                </div>
+                            </div>                      
+                        </div>                      
+                    </div> 
+                </div>
+            </div>
+        </div>
+        
+        <div lang="en" th:replace="fragments/recommend-modal :: recommend-modal"></div>
+        
+        <div lang="en" th:replace="fragments/alert-modal :: alert-modal"></div>
+        
+        <div lang="en" th:replace="fragments/image-viewer :: image-viewer"></div>
+        
+        <div lang="en" th:replace="fragments/loadmore-modal :: loadmore-modal"></div>
+        
+        <div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
+
+		<div lang="en" th:replace="fragments/footer :: footer"></div>
+
+	</div>
+	<script src="/r/e/s/o/u/r/c/e/js/detail.js"></script>
+	<script src="/r/e/s/o/u/r/c/e/js/rcmd.js"></script>
+</body>
+
+</html>

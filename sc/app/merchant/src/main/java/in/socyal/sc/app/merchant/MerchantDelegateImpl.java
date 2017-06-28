@@ -15,16 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
-import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
-import in.socyal.sc.api.merchant.response.MerchantResponse;
+import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.date.type.DateFormatType;
@@ -51,11 +53,12 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	public MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
 		MerchantListForTagResponse response = new MerchantListForTagResponse();
 		List<MerchantDto> dtos = dao.getMerchantsByTag(request);
-		MerchantDetailsResponse merchant = null;
+		MerchantDetails merchant = null;
 		for (MerchantDto dto : dtos) {
-			merchant = new MerchantDetailsResponse();
+			merchant = new MerchantDetails();
 			try {
-				buildMerchantDetailsResponse(dto, merchant);
+				buildMerchantTagResponse(dto, merchant);
+				mapSearchTag(request, dto, merchant);
 			} catch (ParseException e) {
 				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 			}
@@ -64,10 +67,27 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return response;
 	}
 	
+	private void mapSearchTag(SearchMerchantByTagRequest request, MerchantDto dto, MerchantDetails merchant) {
+		List<Tag> tags = null;
+		if (request.getType() == TagType.CUISINE) {
+			tags = dto.getRatedCuisines();
+		} else if (request.getType() == TagType.SUGGESTION) {
+			tags = dto.getRatedSuggestions();
+		}
+		if (tags != null) {
+			for (Tag tag : tags) {
+				if (tag.getNameId().equalsIgnoreCase(request.getNameId())) {
+					merchant.setSearchTag(tag);
+					break;
+				}
+			}
+		}
+	}
+	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public MerchantDetailsResponse getMerchantDetails(DetailsRequest request) throws BusinessException {
-		MerchantDetailsResponse response = new MerchantDetailsResponse();
+	public MerchantDetails getMerchantDetails(DetailsRequest request) throws BusinessException {
+		MerchantDetails response = new MerchantDetails();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
 		MerchantDto merchantDto = dao.getMerchantDetailsByNameId(request.getMerchantNameId(), filter);
 		try {
@@ -112,9 +132,9 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	}
 
 	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
-		List<MerchantResponse> merchantResponse = new ArrayList<>();
+		List<MerchantShortDetails> merchantResponse = new ArrayList<>();
 		for (MerchantDto dto : merchants) {
-			MerchantResponse merchant = new MerchantResponse();
+			MerchantShortDetails merchant = new MerchantShortDetails();
 			merchant.setId(dto.getId());
 			merchant.setNameId(dto.getNameId());
 			merchant.setName(dto.getName());
@@ -159,20 +179,24 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return openStr + " to " + closeStr;
 	}
 
-	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetailsResponse response) throws ParseException {
-		response.setAverageCost(merchantDto.getAverageCost().intValue()+"");
+	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetails response) throws ParseException {
+		buildMerchantTagResponse(merchantDto, response);
 		response.setId(merchantDto.getId());
-		response.setNameId(merchantDto.getNameId());
 		response.setImageUrl(merchantDto.getImageUrl());
-		response.setThumbnail(merchantDto.getThumbnail());
 		response.setLongAddress(merchantDto.getAddress().getAddress());
+		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
+			response.setPhone(merchantDto.getContact().getPhone1());
+		}
+	}
+	
+	private void buildMerchantTagResponse(MerchantDto merchantDto, MerchantDetails response) throws ParseException {
+		response.setAverageCost(merchantDto.getAverageCost().intValue()+"");
+		response.setNameId(merchantDto.getNameId());
+		response.setThumbnail(merchantDto.getThumbnail());
 		response.setName(merchantDto.getName());
 		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
 		response.setRatedCuisines(merchantDto.getRatedCuisines());
-		if (StringUtils.isNotEmpty(merchantDto.getContact().getPhone1())) {
-			response.setPhone(merchantDto.getContact().getPhone1());
-		}
 	}
 }

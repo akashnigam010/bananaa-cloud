@@ -77,7 +77,7 @@ public class MerchantDaoMapper {
 					break;
 				}
 				tag = new Tag();
-				tag.setId(tagEntity.getId());
+				tag.setId(tagEntity.getCuisine().getId());
 				tag.setName(tagEntity.getCuisine().getName());
 				tag.setNameId(tagEntity.getCuisine().getNameId());
 				tag.setDishCount(tagEntity.getDishCount());
@@ -98,7 +98,7 @@ public class MerchantDaoMapper {
 					break;
 				}
 				tag = new Tag();
-				tag.setId(tagEntity.getId());
+				tag.setId(tagEntity.getSuggestion().getId());
 				tag.setName(tagEntity.getSuggestion().getName());
 				tag.setNameId(tagEntity.getSuggestion().getNameId());
 				tag.setDishCount(tagEntity.getDishCount());

@@ -8,16 +8,34 @@ import in.socyal.sc.api.response.GenericResponse;
 
 public class MerchantListForTagResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<MerchantDetailsResponse> merchants;
+	private List<MerchantDetails> merchants;
+	private String tagName;
+	private String location;
 
-	public List<MerchantDetailsResponse> getMerchants() {
+	public List<MerchantDetails> getMerchants() {
 		if (merchants == null) {
 			merchants = new ArrayList<>();
 		}
 		return merchants;
 	}
 
-	public void setMerchants(List<MerchantDetailsResponse> merchants) {
+	public void setMerchants(List<MerchantDetails> merchants) {
 		this.merchants = merchants;
+	}
+
+	public String getTagName() {
+		return tagName;
+	}
+
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

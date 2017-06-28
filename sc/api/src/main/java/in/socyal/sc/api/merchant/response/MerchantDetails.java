@@ -1,14 +1,11 @@
 package in.socyal.sc.api.merchant.response;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import in.socyal.sc.api.item.response.Tag;
-import in.socyal.sc.api.response.GenericResponse;
 
-public class MerchantDetailsResponse extends GenericResponse implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class MerchantDetails {
 	private Integer id;
 	private String nameId;
 	private String name;
@@ -21,6 +18,7 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 	private String longAddress;
 	private String phone;
 	private List<Tag> ratedCuisines;
+	private Tag searchTag;
 
 	public Integer getId() {
 		return id;
@@ -119,5 +117,13 @@ public class MerchantDetailsResponse extends GenericResponse implements Serializ
 
 	public void setRatedCuisines(List<Tag> ratedCuisines) {
 		this.ratedCuisines = ratedCuisines;
+	}
+
+	public Tag getSearchTag() {
+		return searchTag;
+	}
+
+	public void setSearchTag(Tag searchTag) {
+		this.searchTag = searchTag;
 	}
 }

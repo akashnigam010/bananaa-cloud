@@ -1,0 +1,17 @@
+.rest-thumbnail {
+    object-fit: cover;
+    width:100px;
+    height: 100px;
+    overflow:hidden;
+    vertical-align:top;
+    border-radius: 3px;
+}
+
+.primary-image-banner {
+    height: 250px;
+    border-radius: 4px;
+}
+
+.primary-image-wrapper {
+  padding-top: 1%;
+}

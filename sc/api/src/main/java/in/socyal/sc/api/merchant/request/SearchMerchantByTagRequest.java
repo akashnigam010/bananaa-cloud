@@ -3,16 +3,17 @@ package in.socyal.sc.api.merchant.request;
 import in.socyal.sc.api.type.TagType;
 
 public class SearchMerchantByTagRequest {
-	private Integer id;
+	private String nameId;
 	private TagType type;
 	private Integer page;
+	private String localityNameId;
 
-	public Integer getId() {
-		return id;
+	public String getNameId() {
+		return nameId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 
 	public TagType getType() {
@@ -29,5 +30,13 @@ public class SearchMerchantByTagRequest {
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public String getLocalityNameId() {
+		return localityNameId;
+	}
+
+	public void setLocalityNameId(String localityNameId) {
+		this.localityNameId = localityNameId;
 	}
 }

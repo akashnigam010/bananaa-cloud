@@ -46,7 +46,7 @@
                         <div class="col-xs-12">
                             <div class="row flexi-font" style="padding: 2%;">
                                 <div class="col-xs-6 col-sm-12 detail-type-padding">
-                                    <div class="bna-color">Opening Hours</div>
+                                    <div class="bna-color">Hours</div>
                                     <div>
                                     	<span th:each="openingHour, iterStat : ${detail.openingHours}" th:text="!${iterStat.last} ? ${openingHour} + ', ' : ${openingHour}"></span>
                                     </div>

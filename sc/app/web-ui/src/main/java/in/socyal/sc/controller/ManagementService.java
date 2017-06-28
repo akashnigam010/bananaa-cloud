@@ -18,7 +18,7 @@ import in.socyal.sc.api.manage.response.AddResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
-import in.socyal.sc.api.merchant.response.MerchantResponse;
+import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
@@ -69,7 +69,7 @@ public class ManagementService {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = merchantDelegate.searchMerchant(request);
 				if (response.getMerchants().size() == 0) {
-					MerchantResponse noMatchFound = new MerchantResponse();
+					MerchantShortDetails noMatchFound = new MerchantShortDetails();
 					noMatchFound.setId(-999);
 					noMatchFound.setName("No match found");
 					noMatchFound.setShortAddress("");

@@ -13,22 +13,31 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
-import in.socyal.sc.api.item.response.TagResponse;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.login.response.LoginStatus;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
+import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
-import in.socyal.sc.api.merchant.response.MerchantDetailsResponse;
+import in.socyal.sc.api.merchant.response.MerchantDetails;
+import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.UserDetailsResponse;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.api.type.LocalityType;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
+import in.socyal.sc.cache.CityCache;
+import in.socyal.sc.cache.CuisineCache;
+import in.socyal.sc.cache.LocalityCache;
+import in.socyal.sc.cache.SuggestionCache;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.user.UserDelegate;
 
@@ -62,6 +71,14 @@ public class HomeController {
 	ResponseHelper responseHelper;
 	@Autowired
 	JwtTokenHelper jwtHelper;
+	@Autowired
+	CityCache cityCache;
+	@Autowired
+	LocalityCache localityCache;
+	@Autowired
+	CuisineCache cuisineCache;
+	@Autowired
+	SuggestionCache suggestionCache;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(@CookieValue(name = "city", defaultValue = "") String city,
@@ -79,61 +96,131 @@ public class HomeController {
 			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city)
 			throws BusinessException {
 		ModelAndView modelAndView = new ModelAndView("index");
-		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+		setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
 		modelAndView.addObject("description", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("title", resource.getString(HOME_TITLE));
-		modelAndView.addObject("url", resource.getString(HOME_URL) + "/" + cityType.getName());
+		String[] urlParams = { city };
+		modelAndView.addObject("url", getMetaUrl(urlParams));
 		modelAndView.addObject("imageUrl", resource.getString(HOME_IMAGE));
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/{city}/{nameId}", method = RequestMethod.GET)
-	public ModelAndView merchantDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city,
-			@PathVariable("nameId") String nameId) throws BusinessException {
-		DetailsRequest request = new DetailsRequest();
-		request.setMerchantNameId(nameId);
-		MerchantDetailsResponse response = merchantDelegate.getMerchantDetails(request);
-		TrendingRequest itemsRequest = new TrendingRequest(response.getId(), 5, 1);
-		ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
-		ModelAndView modelAndView = new ModelAndView("detail");
-		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
-		modelAndView.addObject("detail", response);
-		modelAndView.addObject("popularDishes", itemsResponse);
-		modelAndView.addObject("popularCuisines", response.getRatedCuisines());
-		modelAndView.addObject("description", getMerchantMetaDescription(response));
-		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
-		modelAndView.addObject("title", getMerchantMetaTitle(response));
-		modelAndView.addObject("url", getMerchantMetaUrl(response, cityType.getName()));
-		modelAndView.addObject("imageUrl", getMerchantMetaImageUrl(response));
-		return modelAndView;
+	/**
+	 * Accepted URLS :<br>
+	 * - bananaa.in/city/restaurant <br>
+	 * - bananaa.in/city/locality
+	 * 
+	 * @param bnaLoginCookie
+	 * @param loc
+	 * @param city
+	 * @param restaurantOrLocalityNameId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/{city}/{restaurantOrLocalityNameId}", method = RequestMethod.GET)
+	public ModelAndView restaurantDetailsOrListInALocality(
+			@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String loc,
+			@PathVariable("restaurantOrLocalityNameId") String restaurantOrLocalityNameId,
+			@PathVariable("city") String city) throws BusinessException {
+		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
+		if (locality == null) {
+			// URL : bananaa.in/hyderabad/fusion-9-hitech-city
+			DetailsRequest request = new DetailsRequest();
+			request.setMerchantNameId(restaurantOrLocalityNameId);
+			MerchantDetails response = merchantDelegate.getMerchantDetails(request);
+			TrendingRequest itemsRequest = new TrendingRequest(response.getId(), 5, 1);
+			ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
+			ModelAndView modelAndView = new ModelAndView("detail");
+			setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+			modelAndView.addObject("detail", response);
+			modelAndView.addObject("popularDishes", itemsResponse);
+			modelAndView.addObject("popularCuisines", response.getRatedCuisines());
+			modelAndView.addObject("description", getMerchantMetaDescription(response));
+			modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
+			modelAndView.addObject("title", getMerchantMetaTitle(response));
+			String[] urlParams = { city, restaurantOrLocalityNameId };
+			modelAndView.addObject("url", getMetaUrl(urlParams));
+			modelAndView.addObject("imageUrl", response.getThumbnail());
+			return modelAndView;
+		} else {
+			// URL : bananaa.in/hyderabad/hitech-city
+			return null;
+		}
+
 	}
 
-	@RequestMapping(value = "/{city}/{merchantNameId}/{itemNameId}", method = RequestMethod.GET)
+	/**
+	 * Accepted URLS :<br>
+	 * - bananaa.in/city/restaurant/item <br>
+	 * - bananaa.in/city/locality/tag
+	 * 
+	 * @param bnaLoginCookie
+	 * @param loc
+	 * @param city
+	 * @param restaurantOrLocalityNameId
+	 * @param itemOrTagNameId
+	 * @return
+	 * @throws BusinessException
+	 */
+	@RequestMapping(value = "/{city}/{restaurantOrLocalityNameId}/{itemOrTagNameId}", method = RequestMethod.GET)
 	public ModelAndView foodDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
 			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city,
-			@PathVariable("merchantNameId") String merchantNameId, @PathVariable("itemNameId") String itemNameId)
-			throws BusinessException {
-		ModelAndView modelAndView = new ModelAndView("item-detail");
-		CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
-		DetailsRequest detailsRequest = new DetailsRequest();
-		detailsRequest.setItemNameId(itemNameId);
-		detailsRequest.setMerchantNameId(merchantNameId);
-		ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
-		modelAndView.addObject("detail", response);
-		modelAndView.addObject("description", getItemMetaDescription(response));
-		modelAndView.addObject("fbDescription", getItemMetaDescription(response));
-		modelAndView.addObject("title", getItemMetaTitle(response));
-		modelAndView.addObject("url", getItemMetaUrl(response, cityType.getName()));
-		modelAndView.addObject("imageUrl", getItemMetaImageUrl(response));
-		return modelAndView;
+			@PathVariable("restaurantOrLocalityNameId") String restaurantOrLocalityNameId,
+			@PathVariable("itemOrTagNameId") String itemOrTagNameId,
+			@RequestParam(value = "page", required = false) Integer page) throws BusinessException {
+		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
+		if (locality == null) {
+			// bananaa.in/hyderabad/fusion-9-hitech-city/greek-pizza
+			ModelAndView modelAndView = new ModelAndView("item-detail");
+			DetailsRequest detailsRequest = new DetailsRequest();
+			detailsRequest.setItemNameId(itemOrTagNameId);
+			detailsRequest.setMerchantNameId(restaurantOrLocalityNameId);
+			ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
+			setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+			modelAndView.addObject("detail", response);
+			modelAndView.addObject("description", getItemMetaDescription(response));
+			modelAndView.addObject("fbDescription", getItemMetaDescription(response));
+			modelAndView.addObject("title", getItemMetaTitle(response));
+			String[] urlParams = { city, restaurantOrLocalityNameId, itemOrTagNameId };
+			modelAndView.addObject("url", getMetaUrl(urlParams));
+			modelAndView.addObject("imageUrl", response.getDish().getThumbnail());
+			return modelAndView;
+		} else {
+			// bananaa.in/hyderabad/hitech-city/italian,
+			// bananaa.in/hyderabad/hitech-city/pizza,
+			// bananaa.in/hyderabad/hitech-city/cafe
+			ModelAndView modelAndView = new ModelAndView("tag-search");
+			SearchMerchantByTagRequest request = new SearchMerchantByTagRequest();
+			request.setNameId(itemOrTagNameId);
+			page = page == null ? 1 : page;
+			request.setPage(page);
+			request.setType(TagType.CUISINE);
+			request.setLocalityNameId(locality.getNameId());
+			MerchantListForTagResponse response = merchantDelegate.getMerchantsByTag(request);
+			CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+			modelAndView.addObject("detail", response);
+			String[] urlParams = { city, restaurantOrLocalityNameId, itemOrTagNameId };
+			String tagName = getTagName(response, itemOrTagNameId);
+			String location = getLocation(cityType, locality);
+			String metaDescription = getTagMetaDescription(tagName, location);
+			response.setLocation(location);
+			response.setTagName(tagName);
+			modelAndView.addObject("description", metaDescription);
+			modelAndView.addObject("fbDescription", metaDescription);
+			modelAndView.addObject("title", tagName + " in " + location);
+			modelAndView.addObject("url", getMetaUrl(urlParams));
+			//TODO : add image - 
+			modelAndView.addObject("imageUrl", "https://bna-s3.s3.amazonaws.com/d/27/jalapeno-poppers.jpg");
+			return modelAndView;
+		}
 	}
 
 	@RequestMapping(value = "/user/{userNameId}", method = RequestMethod.GET)
 	public ModelAndView userDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@CookieValue(name = "loc", defaultValue = "") String loc, 
-			@PathVariable("userNameId") String userNameId) throws BusinessException {
+			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("userNameId") String userNameId)
+			throws BusinessException {
 		ModelAndView modelAndView = new ModelAndView("user-detail");
 		setCommonModelData(modelAndView, bnaLoginCookie, CityType.HYDERABAD.getName(), loc);
 		UserDetailsResponse response = userDelegate.getUserDetails(userNameId);
@@ -141,8 +228,9 @@ public class HomeController {
 		modelAndView.addObject("description", getUserMetaDescription(response));
 		modelAndView.addObject("fbDescription", getUserMetaDescription(response));
 		modelAndView.addObject("title", getUserMetaTitle(response));
-		modelAndView.addObject("url", getUserMetaUrl(response));
-		modelAndView.addObject("imageUrl", getUserMetaImageUrl(response));
+		String[] urlParams = { "user", userNameId };
+		modelAndView.addObject("url", getMetaUrl(urlParams));
+		modelAndView.addObject("imageUrl", response.getUser().getImageUrl());
 		return modelAndView;
 	}
 
@@ -186,8 +274,16 @@ public class HomeController {
 		}
 		return localityType;
 	}
+	
+	private String getMetaUrl(String[] urlParams) {
+		String url = resource.getString(HOME_URL);
+		for (String urlParam : urlParams) {
+			url += "/" + urlParam;
+		}
+		return url;
+	}
 
-	private String getMerchantMetaDescription(MerchantDetailsResponse response) {
+	private String getMerchantMetaDescription(MerchantDetails response) {
 		String description = response.getName() + "; ";
 		description += response.getName() + ", " + response.getShortAddress() + "; ";
 		description += resource.getString(DETAIL_DESCRIPTION_1);
@@ -196,20 +292,10 @@ public class HomeController {
 		return description;
 	}
 
-	private String getMerchantMetaTitle(MerchantDetailsResponse response) {
+	private String getMerchantMetaTitle(MerchantDetails response) {
 		String title = response.getName() + ", " + response.getShortAddress() + " ";
 		title += resource.getString(DETAIL_TITLE_END);
 		return title;
-	}
-
-	private String getMerchantMetaUrl(MerchantDetailsResponse response, String city) {
-		String url = resource.getString(HOME_URL);
-		url += "/" + city + "/" + response.getNameId();
-		return url;
-	}
-
-	private String getMerchantMetaImageUrl(MerchantDetailsResponse response) {
-		return response.getThumbnail();
 	}
 
 	private String getItemMetaDescription(ItemDetailsResponse response) {
@@ -227,16 +313,6 @@ public class HomeController {
 		return title;
 	}
 
-	private String getItemMetaUrl(ItemDetailsResponse response, String city) {
-		String url = resource.getString(HOME_URL);
-		url += "/" + city + "/" + response.getDish().getItemUrl();
-		return url;
-	}
-
-	private String getItemMetaImageUrl(ItemDetailsResponse response) {
-		return response.getDish().getThumbnail();
-	}
-
 	private String getUserMetaDescription(UserDetailsResponse response) {
 		String description = response.getUser().getName() + "; ";
 		description += resource.getString(USER_DETAIL_DESCRIPTION_1);
@@ -250,12 +326,45 @@ public class HomeController {
 		title += resource.getString(USER_DETAIL_TITLE_END);
 		return title;
 	}
-
-	private String getUserMetaUrl(UserDetailsResponse response) {
-		return resource.getString(HOME_URL) + response.getUser().getUserUrl();
+	
+	private String getTagName(MerchantListForTagResponse response, String nameId) {
+		if (response.getMerchants().size() > 0) {
+			Tag tag = response.getMerchants().get(0).getSearchTag();
+			if (tag != null) {
+				return tag.getName(); 
+			}
+		}
+		return nameId;
 	}
-
-	private String getUserMetaImageUrl(UserDetailsResponse response) {
-		return response.getUser().getImageUrl();
+	
+	private String getLocation(CityType cityType, LocalityDto locality) {
+		StringBuilder location = new StringBuilder();
+		if (locality != null) {
+			location.append(locality.getName());
+			location.append(", ");
+		}
+		location.append(cityType.getName());
+		return location.toString();
+	}
+	
+	private String getTagMetaDescription(String tagName, String location) {
+		StringBuilder description = new StringBuilder();
+		
+		description.append(tagName);
+		description.append(" Restaurants in ");
+		description.append(location + ". ");
+		
+		description.append("Restaurants serving ");
+		description.append(tagName);
+		description.append(" in ");
+		description.append(location + ". ");
+		
+		description.append("Foodviews, Ratings and Recommendations for ");
+		description.append(tagName);
+		description.append(" in ");
+		description.append(location + " - ");
+		description.append(tagName + " Restaurants");
+		
+		return description.toString();
 	}
 }
