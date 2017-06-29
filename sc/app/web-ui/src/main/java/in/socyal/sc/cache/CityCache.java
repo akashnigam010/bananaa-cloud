@@ -1,20 +1,25 @@
 package in.socyal.sc.cache;
 
-import org.springframework.stereotype.Component;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.CityDto;
+import in.socyal.sc.persistence.LocationDao;
 
 @Component
 public class CityCache {
-	// TODO: add caching logic
+	@Autowired
+	LocationDao locationDao;
+
+	// TODO: add caching logic on server startup
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public CityDto getCity(String nameId) {
-		if (nameId.equalsIgnoreCase("hyderabad")) {
-			CityDto city = new CityDto();
-			city.setId(1);
-			city.setName("Hyderabad");
-			city.setNameId("hyderabad");
-			return city;
-		}
-		return null;
+		Map<String, CityDto> cityMap = locationDao.getCityCache();
+		return cityMap.get(nameId);
 	}
 }

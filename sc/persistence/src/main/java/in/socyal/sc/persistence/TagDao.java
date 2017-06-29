@@ -1,32 +1,34 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
+import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
-import in.socyal.sc.persistence.mapper.SuggestionDaoMapper;
+import in.socyal.sc.persistence.mapper.TagDaoMapper;
 
 @Repository
-public class SuggestionDao {
-	private static final Logger LOG = Logger.getLogger(SuggestionDao.class);
+public class TagDao {
 	@Autowired
 	SessionFactory sessionFactory;
 	@Autowired
-	SuggestionDaoMapper mapper;
+	TagDaoMapper mapper;
 
-	public SuggestionDao() {
+	public TagDao() {
 	}
 
-	public SuggestionDao(SessionFactory sessionFactory) {
+	public TagDao(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
@@ -56,5 +58,31 @@ public class SuggestionDao {
 		}
 		
 		return result;
+	}
+	
+	public Map<String, SuggestionDto> getSuggestionCache() {
+		Map<String, SuggestionDto> map = new HashMap<>();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
+		@SuppressWarnings("unchecked")
+		List<SuggestionEntity> suggestions = criteria.list();
+		for (SuggestionEntity entity : suggestions) {
+			SuggestionDto dto = new SuggestionDto();
+			mapper.map(entity, dto);
+			map.put(dto.getNameId(), dto);
+		}		
+		return map;
+	}
+	
+	public Map<String, CuisineDto> getCuisineCache() {
+		Map<String, CuisineDto> map = new HashMap<>();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
+		@SuppressWarnings("unchecked")
+		List<CuisineEntity> suggestions = criteria.list();
+		for (CuisineEntity entity : suggestions) {
+			CuisineDto dto = new CuisineDto();
+			mapper.map(entity, dto);
+			map.put(dto.getNameId(), dto);
+		}		
+		return map;
 	}
 }

@@ -1,32 +1,25 @@
 package in.socyal.sc.cache;
 
-import org.springframework.stereotype.Component;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.LocalityDto;
-import in.socyal.sc.api.type.LocalityType;
+import in.socyal.sc.persistence.LocationDao;
 
 @Component
 public class LocalityCache {
-	// TODO: add caching logic
-	/**
-	 * TODO: create a multi-hash-map to contain city and localities. And search
-	 * should always happen with cityNameId and localityNameId. Using hashing
-	 * algorithm, exactly in 2 checks will be required to get a hit. If found,
-	 * the pair is returned otherwise null is returned. This will bring down the
-	 * search time to very low.
-	 * 
-	 * @param nameId
-	 * @return
-	 */
+	@Autowired
+	LocationDao locationDao;
+
+	// TODO: add caching logic on server startup
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public LocalityDto getLocality(String nameId) {
-		LocalityType loc = LocalityType.getLocalityByNameId(nameId);
-		if (loc != null) {
-			LocalityDto locality = new LocalityDto();
-			locality.setId(loc.getId());
-			locality.setName(loc.getName());
-			locality.setNameId(loc.getNameId());
-			return locality;
-		}
-		return null;
+		Map<String, LocalityDto> locationMap = locationDao.getLocalityCache();
+		return locationMap.get(nameId);
 	}
 }

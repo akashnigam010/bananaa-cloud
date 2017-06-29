@@ -110,6 +110,7 @@ public class HomeController {
 	 * Accepted URLS :<br>
 	 * - bananaa.in/city/restaurant <br>
 	 * - bananaa.in/city/locality
+	 * - bananaa.in/city/tag
 	 * 
 	 * @param bnaLoginCookie
 	 * @param loc
