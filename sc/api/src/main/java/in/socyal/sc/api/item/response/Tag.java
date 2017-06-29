@@ -2,7 +2,7 @@ package in.socyal.sc.api.item.response;
 
 import in.socyal.sc.api.type.RatingColorType;
 
-public class Tag {
+public class Tag implements Comparable<Tag> {
 	private Integer id;
 	private String nameId;
 	private String name;
@@ -79,5 +79,10 @@ public class Tag {
 
 	public void setDishCount(Integer dishCount) {
 		this.dishCount = dishCount;
+	}
+
+	@Override
+	public int compareTo(Tag o) {
+		return o.rating.compareTo(this.rating);
 	}
 }

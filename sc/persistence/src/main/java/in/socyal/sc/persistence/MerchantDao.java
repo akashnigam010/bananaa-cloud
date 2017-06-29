@@ -2,6 +2,7 @@ package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -23,6 +24,8 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 
 @Repository
 public class MerchantDao {
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String MINIMUM_TAG_RATING = "minimum.rating";
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
 	@Autowired
@@ -61,11 +64,13 @@ public class MerchantDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		if (request.getType() == TagType.CUISINE) {
 			criteria.createAlias("cuisineRatings", "cuisineRatings");
+			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
 			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
 			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
 			criteria.createAlias("suggestionRatings", "suggestionRatings");
+			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
 			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
 			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("suggestionRatings.rating"));
@@ -85,34 +90,6 @@ public class MerchantDao {
 		} 
 		return merchants;
 	}
-	
-//	@SuppressWarnings("unchecked")
-//	public List<MerchantDto> getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
-//		List<MerchantDto> merchants = new ArrayList<>();
-//		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
-//		Criteria criteria = null;
-//		if (request.getType() == TagType.CUISINE) {
-//			criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
-//			criteria.createAlias("cuisine", "cuisine");
-//			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
-//		} else if (request.getType() == TagType.SUGGESTION) {
-//			criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
-//			criteria.createAlias("suggestion", "suggestion");
-//			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
-//		} else {
-//			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-//		}
-//		
-//		criteria.addOrder(Order.desc("rating"));
-//		int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
-//		criteria.setFirstResult(firstResult);
-//		criteria.setMaxResults(RESULTS_PER_PAGE);
-//		List<MerchantRatingEntity> entities = criteria.list();
-//		if (entities != null &&  entities.size() > 0) {
-//			mapper.mapByTag(entities, merchants, filter);
-//		} 
-//		return merchants;
-//	}
 
 	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
