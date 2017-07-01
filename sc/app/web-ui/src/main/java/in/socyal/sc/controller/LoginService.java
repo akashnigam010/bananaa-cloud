@@ -16,9 +16,11 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.request.SetLocationRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.merchant.dto.CityDto;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.response.StatusResponse;
-import in.socyal.sc.api.type.CityType;
-import in.socyal.sc.api.type.LocalityType;
+import in.socyal.sc.cache.CityCache;
+import in.socyal.sc.cache.LocalityCache;
 import in.socyal.sc.core.validation.LoginValidator;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.LoginDelegate;
@@ -36,6 +38,10 @@ public class LoginService {
 	HttpServletResponse httpResponse;
 	@Autowired
 	HttpServletRequest httpRequest;
+	@Autowired
+	LocalityCache localityCache;
+	@Autowired
+	CityCache cityCache;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public LoginResponse login(@RequestBody LoginRequest request) {
@@ -75,18 +81,24 @@ public class LoginService {
 	}
 
 	private void addCityCookie() {
-		Cookie cityCookie = new Cookie("city", CityType.HYDERABAD.getName());
+		// TODO: fix default city - change in Home Controller too
+		CityDto city = cityCache.getCity("hyderabad");
+		Cookie cityCookie = new Cookie("city", city.getNameId());
 		cityCookie.setPath("/");
 		httpResponse.addCookie(cityCookie);
 	}
 
-	private void addLocationCookie(Integer id) {
-		LocalityType localityType = LocalityType.getLocalityById(id);
-		if (localityType != null) {
-			Cookie localityCookie = new Cookie("loc", localityType.getId().toString());
-			localityCookie.setPath("/");
-			httpResponse.addCookie(localityCookie);
+	private void addLocationCookie(String nameId) {
+		Cookie localityCookie = null;
+		LocalityDto locality = localityCache.getLocality(nameId);
+		if (locality != null) {
+			localityCookie = new Cookie("loc", locality.getNameId());
+		} else {
+			CityDto city = cityCache.getCity(nameId);
+			localityCookie = new Cookie("loc", city.getNameId());
 		}
+		localityCookie.setPath("/");
+		httpResponse.addCookie(localityCookie);
 	}
 
 	private void removeLoginCookie() {

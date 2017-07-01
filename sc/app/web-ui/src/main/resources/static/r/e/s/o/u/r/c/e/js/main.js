@@ -180,12 +180,12 @@ function loadLocations(e) {
             e.val(location.name);
         },
         source: [
-            {id: "1", cityId: 1, localityId: null, name: "All of Hyderabad"},
-            {id: "2", cityId: 1, localityId: 1,  name: "Hitech City"},
-            {id: "3", cityId: 1, localityId: 2,  name: "Jubilee Hills"},
-            {id: "4", cityId: 1, localityId: 3,  name: "Banjara Hills"},
-            {id: "5", cityId: 1, localityId: 4,  name: "Gachibowli"},
-            {id: "6", cityId: 1, localityId: 5,  name: "Kondapur"}
+            {localityId: 'hyderabad', name: "All of Hyderabad"},
+            {localityId: 'hitech-city',  name: "Hitech City"},
+            {localityId: 'jubilee-hills',  name: "Jubilee Hills"},
+            {localityId: 'banjara-hills',  name: "Banjara Hills"},
+            {localityId: 'gachibowli',  name: "Gachibowli"},
+            {localityId: 'kondapur',  name: "Kondapur"}
         ],
         updater: function(location) {
             isLocationUpdated = true;

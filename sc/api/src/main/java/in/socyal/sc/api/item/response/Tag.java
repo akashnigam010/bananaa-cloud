@@ -1,6 +1,9 @@
 package in.socyal.sc.api.item.response;
 
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
+import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.RatingColorType;
+import in.socyal.sc.api.type.TagType;
 
 public class Tag implements Comparable<Tag> {
 	private Integer id;
@@ -11,6 +14,7 @@ public class Tag implements Comparable<Tag> {
 	private String itemUrl;
 	private String ratingClass;
 	private String rating;
+	private String imageUrl;
 
 	public String getRatingClass() {
 		if (rating == "") {
@@ -81,8 +85,26 @@ public class Tag implements Comparable<Tag> {
 		this.dishCount = dishCount;
 	}
 
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
 	@Override
 	public int compareTo(Tag o) {
 		return o.rating.compareTo(this.rating);
+	}
+	
+	public TagType getTagType() {
+		if (this instanceof CuisineDto) {
+			return TagType.CUISINE;
+		} else if (this instanceof SuggestionDto) {
+			return TagType.SUGGESTION;
+		} else {
+			return null;
+		}
 	}
 }

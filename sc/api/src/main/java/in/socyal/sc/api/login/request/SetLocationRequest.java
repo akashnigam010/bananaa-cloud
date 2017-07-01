@@ -1,13 +1,13 @@
 package in.socyal.sc.api.login.request;
 
 public class SetLocationRequest {
-	private Integer localityId;
+	private String localityId;
 
-	public Integer getLocalityId() {
+	public String getLocalityId() {
 		return localityId;
 	}
 
-	public void setLocalityId(Integer localityId) {
+	public void setLocalityId(String localityId) {
 		this.localityId = localityId;
 	}
 }
