@@ -7,6 +7,7 @@ public class SearchMerchantByTagRequest {
 	private TagType type;
 	private Integer page;
 	private String localityNameId;
+	private String cityNameId;
 
 	public String getNameId() {
 		return nameId;
@@ -38,5 +39,13 @@ public class SearchMerchantByTagRequest {
 
 	public void setLocalityNameId(String localityNameId) {
 		this.localityNameId = localityNameId;
+	}
+
+	public String getCityNameId() {
+		return cityNameId;
+	}
+
+	public void setCityNameId(String cityNameId) {
+		this.cityNameId = cityNameId;
 	}
 }

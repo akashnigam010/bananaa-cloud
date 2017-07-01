@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.DetailsRequest;
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
@@ -29,6 +30,7 @@ import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.UserDetailsResponse;
+import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.CityType;
 import in.socyal.sc.api.type.LocalityType;
 import in.socyal.sc.api.type.TagType;
@@ -109,13 +111,12 @@ public class HomeController {
 	/**
 	 * Accepted URLS :<br>
 	 * - bananaa.in/city/restaurant <br>
-	 * - bananaa.in/city/locality
-	 * - bananaa.in/city/tag
+	 * - bananaa.in/city/locality - bananaa.in/city/tag
 	 * 
 	 * @param bnaLoginCookie
 	 * @param loc
 	 * @param city
-	 * @param restaurantOrLocalityNameId
+	 * @param restLocalityOrTagNameId
 	 * @return
 	 * @throws BusinessException
 	 */
@@ -123,33 +124,87 @@ public class HomeController {
 	public ModelAndView restaurantDetailsOrListInALocality(
 			@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
 			@CookieValue(name = "loc", defaultValue = "") String loc,
-			@PathVariable("restaurantOrLocalityNameId") String restaurantOrLocalityNameId,
-			@PathVariable("city") String city) throws BusinessException {
-		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
-		if (locality == null) {
-			// URL : bananaa.in/hyderabad/fusion-9-hitech-city
-			DetailsRequest request = new DetailsRequest();
-			request.setMerchantNameId(restaurantOrLocalityNameId);
-			MerchantDetails response = merchantDelegate.getMerchantDetails(request);
-			TrendingRequest itemsRequest = new TrendingRequest(response.getId(), 5, 1);
-			ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
-			ModelAndView modelAndView = new ModelAndView("detail");
-			setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
-			modelAndView.addObject("detail", response);
-			modelAndView.addObject("popularDishes", itemsResponse);
-			modelAndView.addObject("popularCuisines", response.getRatedCuisines());
-			modelAndView.addObject("description", getMerchantMetaDescription(response));
-			modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
-			modelAndView.addObject("title", getMerchantMetaTitle(response));
-			String[] urlParams = { city, restaurantOrLocalityNameId };
-			modelAndView.addObject("url", getMetaUrl(urlParams));
-			modelAndView.addObject("imageUrl", response.getThumbnail());
-			return modelAndView;
-		} else {
-			// URL : bananaa.in/hyderabad/hitech-city
+			@PathVariable("restaurantOrLocalityNameId") String restLocalityOrTagNameId,
+			@PathVariable("city") String city, @RequestParam(value = "page", required = false) Integer page)
+			throws BusinessException {
+		LocalityDto locality = localityCache.getLocality(restLocalityOrTagNameId);
+		if (locality != null) {
+			// bananaa.in/hyderabad/hitech-city
 			return null;
+		} else {
+			CuisineDto cuisine = cuisineCache.getCuisine(restLocalityOrTagNameId);
+			if (cuisine != null) {
+				// bananaa.in/hyderabad/cuisine
+				ModelAndView modelAndView = new ModelAndView("tag-search");
+				SearchMerchantByTagRequest request = new SearchMerchantByTagRequest();
+				request.setNameId(restLocalityOrTagNameId);
+				page = page == null ? 1 : page;
+				request.setPage(page);
+				request.setType(TagType.CUISINE);
+				request.setCityNameId(city);
+				MerchantListForTagResponse response = merchantDelegate.getMerchantsByTag(request);
+				CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+				modelAndView.addObject("detail", response);
+				String[] urlParams = { city, restLocalityOrTagNameId };
+				String tagName = cuisine.getName();
+				String location = getLocation(cityType, locality);
+				String metaDescription = getTagMetaDescription(tagName, location);
+				response.setLocation(location);
+				response.setTagName(tagName);
+				modelAndView.addObject("description", metaDescription);
+				modelAndView.addObject("fbDescription", metaDescription);
+				modelAndView.addObject("title", tagName + " in " + location);
+				modelAndView.addObject("url", getMetaUrl(urlParams));
+				modelAndView.addObject("imageUrl", cuisine.getImageUrl());
+				return modelAndView;
+			} else {
+				SuggestionDto suggestion = suggestionCache.getCuisine(restLocalityOrTagNameId);
+				if (suggestion != null) {
+					// bananaa.in/hyderabad/suggestion
+					ModelAndView modelAndView = new ModelAndView("tag-search");
+					SearchMerchantByTagRequest request = new SearchMerchantByTagRequest();
+					request.setNameId(restLocalityOrTagNameId);
+					page = page == null ? 1 : page;
+					request.setPage(page);
+					request.setType(TagType.SUGGESTION);
+					request.setCityNameId(city);
+					MerchantListForTagResponse response = merchantDelegate.getMerchantsByTag(request);
+					CityType cityType = setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+					modelAndView.addObject("detail", response);
+					String[] urlParams = { city, restLocalityOrTagNameId };
+					String tagName = suggestion.getName();
+					String location = getLocation(cityType, locality);
+					String metaDescription = getTagMetaDescription(tagName, location);
+					response.setLocation(location);
+					response.setTagName(tagName);
+					modelAndView.addObject("description", metaDescription);
+					modelAndView.addObject("fbDescription", metaDescription);
+					modelAndView.addObject("title", tagName + " in " + location);
+					modelAndView.addObject("url", getMetaUrl(urlParams));
+					modelAndView.addObject("imageUrl", suggestion.getImageUrl());
+					return modelAndView;
+				} else {
+					// bananaa.in/hyderabad/fusion-9-hitech-city
+					DetailsRequest request = new DetailsRequest();
+					request.setMerchantNameId(restLocalityOrTagNameId);
+					MerchantDetails response = merchantDelegate.getMerchantDetails(request);
+					TrendingRequest itemsRequest = new TrendingRequest(response.getId(), 5, 1);
+					ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
+					ModelAndView modelAndView = new ModelAndView("detail");
+					setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+					modelAndView.addObject("detail", response);
+					modelAndView.addObject("popularDishes", itemsResponse);
+					modelAndView.addObject("popularCuisines", response.getRatedCuisines());
+					modelAndView.addObject("description", getMerchantMetaDescription(response));
+					modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
+					modelAndView.addObject("title", getMerchantMetaTitle(response));
+					String[] urlParams = { city, restLocalityOrTagNameId };
+					modelAndView.addObject("url", getMetaUrl(urlParams));
+					modelAndView.addObject("imageUrl", response.getThumbnail());
+					return modelAndView;
+				}
+			}
 		}
-
 	}
 
 	/**
@@ -172,23 +227,7 @@ public class HomeController {
 			@PathVariable("itemOrTagNameId") String itemOrTagNameId,
 			@RequestParam(value = "page", required = false) Integer page) throws BusinessException {
 		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
-		if (locality == null) {
-			// bananaa.in/hyderabad/fusion-9-hitech-city/greek-pizza
-			ModelAndView modelAndView = new ModelAndView("item-detail");
-			DetailsRequest detailsRequest = new DetailsRequest();
-			detailsRequest.setItemNameId(itemOrTagNameId);
-			detailsRequest.setMerchantNameId(restaurantOrLocalityNameId);
-			ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
-			setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
-			modelAndView.addObject("detail", response);
-			modelAndView.addObject("description", getItemMetaDescription(response));
-			modelAndView.addObject("fbDescription", getItemMetaDescription(response));
-			modelAndView.addObject("title", getItemMetaTitle(response));
-			String[] urlParams = { city, restaurantOrLocalityNameId, itemOrTagNameId };
-			modelAndView.addObject("url", getMetaUrl(urlParams));
-			modelAndView.addObject("imageUrl", response.getDish().getThumbnail());
-			return modelAndView;
-		} else {
+		if (locality != null) {
 			// bananaa.in/hyderabad/hitech-city/italian,
 			// bananaa.in/hyderabad/hitech-city/pizza,
 			// bananaa.in/hyderabad/hitech-city/cafe
@@ -212,8 +251,24 @@ public class HomeController {
 			modelAndView.addObject("fbDescription", metaDescription);
 			modelAndView.addObject("title", tagName + " in " + location);
 			modelAndView.addObject("url", getMetaUrl(urlParams));
-			//TODO : add image - 
+			// TODO : add image -
 			modelAndView.addObject("imageUrl", "https://bna-s3.s3.amazonaws.com/d/27/jalapeno-poppers.jpg");
+			return modelAndView;
+		} else {
+			// bananaa.in/hyderabad/fusion-9-hitech-city/greek-pizza
+			ModelAndView modelAndView = new ModelAndView("item-detail");
+			DetailsRequest detailsRequest = new DetailsRequest();
+			detailsRequest.setItemNameId(itemOrTagNameId);
+			detailsRequest.setMerchantNameId(restaurantOrLocalityNameId);
+			ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
+			setCommonModelData(modelAndView, bnaLoginCookie, city, loc);
+			modelAndView.addObject("detail", response);
+			modelAndView.addObject("description", getItemMetaDescription(response));
+			modelAndView.addObject("fbDescription", getItemMetaDescription(response));
+			modelAndView.addObject("title", getItemMetaTitle(response));
+			String[] urlParams = { city, restaurantOrLocalityNameId, itemOrTagNameId };
+			modelAndView.addObject("url", getMetaUrl(urlParams));
+			modelAndView.addObject("imageUrl", response.getDish().getThumbnail());
 			return modelAndView;
 		}
 	}
@@ -275,7 +330,7 @@ public class HomeController {
 		}
 		return localityType;
 	}
-	
+
 	private String getMetaUrl(String[] urlParams) {
 		String url = resource.getString(HOME_URL);
 		for (String urlParam : urlParams) {
@@ -327,17 +382,17 @@ public class HomeController {
 		title += resource.getString(USER_DETAIL_TITLE_END);
 		return title;
 	}
-	
+
 	private String getTagName(MerchantListForTagResponse response, String nameId) {
 		if (response.getMerchants().size() > 0) {
 			Tag tag = response.getMerchants().get(0).getSearchTag();
 			if (tag != null) {
-				return tag.getName(); 
+				return tag.getName();
 			}
 		}
 		return nameId;
 	}
-	
+
 	private String getLocation(CityType cityType, LocalityDto locality) {
 		StringBuilder location = new StringBuilder();
 		if (locality != null) {
@@ -347,25 +402,25 @@ public class HomeController {
 		location.append(cityType.getName());
 		return location.toString();
 	}
-	
+
 	private String getTagMetaDescription(String tagName, String location) {
 		StringBuilder description = new StringBuilder();
-		
+
 		description.append(tagName);
 		description.append(" Restaurants in ");
 		description.append(location + ". ");
-		
+
 		description.append("Restaurants serving ");
 		description.append(tagName);
 		description.append(" in ");
 		description.append(location + ". ");
-		
+
 		description.append("Foodviews, Ratings and Recommendations for ");
 		description.append(tagName);
 		description.append(" in ");
 		description.append(location + " - ");
 		description.append(tagName + " Restaurants");
-		
+
 		return description.toString();
 	}
 }

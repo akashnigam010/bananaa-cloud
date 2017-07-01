@@ -60,15 +60,17 @@ public class MerchantDao {
 	@SuppressWarnings("unchecked")
 	public List<MerchantDto> getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
 		List<MerchantDto> merchants = new ArrayList<>();
-		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
+		MerchantFilterCriteria filter = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		if (request.getType() == TagType.CUISINE) {
+			filter = new MerchantFilterCriteria(true, true, true, true, false, true);
 			criteria.createAlias("cuisineRatings", "cuisineRatings");
 			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
 			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
 			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
+			filter = new MerchantFilterCriteria(true);
 			criteria.createAlias("suggestionRatings", "suggestionRatings");
 			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
 			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
@@ -80,7 +82,13 @@ public class MerchantDao {
 		
 		criteria.createAlias("address", "address");
 		criteria.createAlias("address.locality", "locality");
-		criteria.add(Restrictions.eq("locality.nameId", request.getLocalityNameId()));
+		if (request.getLocalityNameId() != null) {
+			criteria.add(Restrictions.eq("locality.nameId", request.getLocalityNameId()));
+		} else {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", request.getCityNameId()));
+		}
+		
 		int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
