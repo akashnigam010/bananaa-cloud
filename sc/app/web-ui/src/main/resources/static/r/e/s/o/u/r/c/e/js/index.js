@@ -28,7 +28,7 @@ function getTrendingRestaurants() {
     				  for (var i=0; i<response.merchants.length; i++) {
     					  trendingRestaurantHtml += 
     						  '<div class="trending-item">'+
-			                              '<a href="/'+response.merchants[i].merchantUrl+'">'+
+			                              '<a href="'+response.merchants[i].merchantUrl+'">'+
 			                          '<div>'+
 			                              '<img class="trend-image" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa"/>'+
 			                              '<div class="trending-item-desc">'+

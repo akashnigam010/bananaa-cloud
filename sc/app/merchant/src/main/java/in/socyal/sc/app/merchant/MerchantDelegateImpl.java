@@ -64,6 +64,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 			}
 			response.getMerchants().add(merchant);
 		}
+		response.setPage(request.getPage());
 		return response;
 	}
 	
@@ -131,20 +132,6 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		return response;
 	}
 
-	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
-		List<MerchantShortDetails> merchantResponse = new ArrayList<>();
-		for (MerchantDto dto : merchants) {
-			MerchantShortDetails merchant = new MerchantShortDetails();
-			merchant.setId(dto.getId());
-			merchant.setNameId(dto.getNameId());
-			merchant.setName(dto.getName());
-			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
-			merchant.setMerchantUrl(dto.getMerchantUrl());
-			merchantResponse.add(merchant);
-		}
-		response.setMerchants(merchantResponse);
-	}
-
 //	private Boolean isOpen(List<TimingDto> timings) {
 //		Calendar today = Calendar.getInstance();
 //		for (TimingDto dto : timings) {
@@ -178,6 +165,20 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		String closeStr = dateTimeUtil.formatDate(close, DateFormatType.TIME_FORMAT_AM_PM);
 		return openStr + " to " + closeStr;
 	}
+	
+	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
+		List<MerchantShortDetails> merchantResponse = new ArrayList<>();
+		for (MerchantDto dto : merchants) {
+			MerchantShortDetails merchant = new MerchantShortDetails();
+			merchant.setId(dto.getId());
+			merchant.setNameId(dto.getNameId());
+			merchant.setName(dto.getName());
+			merchant.setShortAddress(dto.getAddress().getLocality().getShortAddress());
+			merchant.setMerchantUrl(dto.getMerchantUrl());
+			merchantResponse.add(merchant);
+		}
+		response.setMerchants(merchantResponse);
+	}
 
 	private void buildMerchantDetailsResponse(MerchantDto merchantDto, MerchantDetails response) throws ParseException {
 		buildMerchantTagResponse(merchantDto, response);
@@ -198,5 +199,6 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
 		response.setRatedCuisines(merchantDto.getRatedCuisines());
+		response.setMerchantUrl(merchantDto.getMerchantUrl());
 	}
 }

@@ -130,7 +130,7 @@ public class HomeController {
 		setCommonModelData(modelAndView, bnaLoginCookie, loc);
 		String[] urlParams = { city, restLocalityOrTagNameId };
 		if (locality != null) {
-			// bananaa.in/hyderabad/hitech-city
+			// TODO: bananaa.in/hyderabad/hitech-city
 			return null;
 		} else {
 			CuisineDto cuisine = cuisineCache.getCuisine(restLocalityOrTagNameId);
@@ -184,7 +184,7 @@ public class HomeController {
 					return getTagSearchResults(tagSearch, suggestion);
 				} else {
 					return null;
-					// general search
+					// TODO: general search
 				}
 			}
 		} else {
@@ -280,7 +280,7 @@ public class HomeController {
 		modelAndView.setViewName("tag-search");
 		SearchMerchantByTagRequest request = new SearchMerchantByTagRequest();
 		request.setNameId(tag.getNameId());
-		request.setPage(tagSearch.getPage() == null ? 1 : tagSearch.getPage());
+		request.setPage(tagSearch.getPage());
 		request.setType(tag.getTagType());
 		if (tagSearch.isCitySearch()) {
 			request.setCityNameId(tagSearch.getCity());
@@ -456,6 +456,9 @@ public class HomeController {
 		}
 
 		public Integer getPage() {
+			if (this.page == null || this.page == 0) {
+				this.page = 1;
+			}
 			return page;
 		}
 

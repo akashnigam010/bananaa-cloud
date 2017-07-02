@@ -155,7 +155,7 @@ function searchConfig(element) {
         },
         updater:function (merchant) {
         	if (merchant.id != -999) {
-                window.location.href = "/" + merchant.merchantUrl;
+                window.location.href = merchant.merchantUrl;
             }
             return merchant;
         }

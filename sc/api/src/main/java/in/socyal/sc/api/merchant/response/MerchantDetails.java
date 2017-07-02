@@ -12,6 +12,7 @@ public class MerchantDetails {
 	private String shortAddress;
 	private String imageUrl;
 	private String thumbnail;
+	private String merchantUrl;
 	private List<String> openingHours;
 	private List<String> type;
 	private String averageCost;
@@ -125,5 +126,13 @@ public class MerchantDetails {
 
 	public void setSearchTag(Tag searchTag) {
 		this.searchTag = searchTag;
+	}
+
+	public String getMerchantUrl() {
+		return merchantUrl;
+	}
+
+	public void setMerchantUrl(String merchantUrl) {
+		this.merchantUrl = merchantUrl;
 	}
 }

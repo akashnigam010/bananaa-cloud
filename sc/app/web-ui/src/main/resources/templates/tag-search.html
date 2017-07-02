@@ -26,20 +26,37 @@
                 <div class="row">
                     <div class="detail-about">
                         <div class="col-xs-12 col-sm-12">
+                        	<div style="height: 200px;" th:if="${detail.merchants.size() == 0}">
+								<p>
+									Oops, no 
+									<span th:if="${detail.page > 1}">more</span> 
+									results found for 
+									<span th:text="${detail.tagName}">Italian</span>
+									<span th:text="'in ' + ${detail.location}"> in Hitech City</span>.
+								</p>
+								<p><span style="font-size: 50px;">&#128532;</span></p>
+                        		<p>We are working on it !</p>
+                        		<p th:if="${detail.page > 1}">Why not go back a page or try a different search ?</p> 
+                        		<p th:unless="${detail.page > 1}">Why not try a different search ?</p>
+                        	</div>
                             <div th:each="merchant, iterStat : ${detail.merchants}" class="row white-background details-wrapper" style="margin-top: 10px;">
                                 <div class="col-xs-12">
                                     <div class="row" style="padding: 2% 0%;">
                                     	<div class="col-xs-12">
                                         	<div class="hidden-xs float-left cursor-pointer" style="margin-right: 4%;">
-                                    			<img class="rest-thumbnail" th:src="${merchant.thumbnail}" />
+                                    			<a th:href="${merchant.merchantUrl}">
+                                    				<img class="rest-thumbnail" th:src="${merchant.thumbnail}" />
+                                    			</a>
                                     		</div>
                                             <div class="float-left">
                                             	<div class="light">
                                             		<span th:each="type, iterStat : ${merchant.type}" th:text="!${iterStat.last} ? ${type} + ', ' : ${type}"></span>
-                                                </div>
-                                            	<div class="bold item-name font-1-5 bna-color cursor-pointer" th:text="${merchant.name}"></div>
+                                                </div>                                                
+                                    			<div class="bold item-name font-1-5 bna-color cursor-pointer">
+                                    				<a th:href="${merchant.merchantUrl}" th:text="${merchant.name}"></a>
+                                    			</div>
                                                 <div class="light" th:text="${merchant.shortAddress}"></div>
-                                                <div class="padding-top bold">
+                                                <div class="padding-top bold" th:if="${merchant.searchTag != null and merchant.searchTag.dishCount > 0}">
                                                 	<span>Spread of</span>
                                                 	<span th:text="${merchant.searchTag.dishCount}"></span>+
                                                 	<span th:text="${merchant.searchTag.name}"></span>
@@ -66,7 +83,7 @@
                                         		<div class="upper float-left light">
 	                                        		Cost for two
 	                                        	</div>
-	                                        	<div style="margin-left: 30%;" th:text="'Rs. ' + ${merchant.averageCost}"></div>
+	                                        	<div style="margin-left: 30%;" th:text="'&#8377; ' + ${merchant.averageCost}"></div>
                                         	</div>
                                         	<div class="info-highlights">
                                         		<div class="upper float-left light">
@@ -101,12 +118,12 @@
                                         <div class="col-xs-12">
                                             <div class="col-xs-12 padding-3">
                                                 <div class="float-left">
-													Page 1 of 2                                               	
+													<!-- Page 1 of 2 -->                                               	
                                                 </div>
                                                 <div class="float-right">
-													<button class="bna-button-light" style="margin-top: 0px;">Prev</button>
-													<span>1</span>
-													<button class="bna-button-light" style="margin-top: 0px;">Next</button>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="prev();" th:disabled="${detail.page == 1}">Prev</button>
+													<span th:text="${detail.page}"></span>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="next();" th:disabled="${detail.merchants.size() == 0}">Next</button>
                                                 </div>
                                             </div>  
                                         </div>                                   
