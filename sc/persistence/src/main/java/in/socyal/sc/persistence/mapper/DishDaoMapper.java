@@ -14,10 +14,12 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.item.response.TagShortDetails;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
@@ -28,6 +30,7 @@ import in.socyal.sc.persistence.entity.MerchantRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
+import in.socyal.sc.persistence.entity.TagEntity;
 
 @Component
 public class DishDaoMapper {
@@ -69,6 +72,23 @@ public class DishDaoMapper {
 			dto.setItemUrl(dto.getMerchant().getNameId() + "/" + dto.getNameId());
 		}
 		return dto;
+	}
+	
+	public List<TagShortDetails> mapTagsShortDetails(List<TagEntity> entites) {
+		List<TagShortDetails> dtos = new ArrayList<>();
+		TagShortDetails tag = null;
+		for (TagEntity entity : entites) {
+			tag = new TagShortDetails();
+			tag.setName(entity.getName());
+			tag.setNameId(entity.getNameId());
+			if (entity instanceof CuisineEntity) {
+				tag.setTagType(TagType.CUISINE);
+			} else if (entity instanceof SuggestionEntity) {
+				tag.setTagType(TagType.SUGGESTION);
+			}
+			dtos.add(tag);
+		}
+		return dtos;
 	}
 
 	public List<SuggestionDto> mapSuggestions(List<SuggestionEntity> entites) {

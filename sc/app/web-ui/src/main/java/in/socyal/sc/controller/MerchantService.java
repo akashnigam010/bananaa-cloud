@@ -9,14 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.TagShortDetailsResponse;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
+import in.socyal.sc.api.merchant.response.GlobalSearchResponse;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.merchant.response.StoriesResponse;
 import in.socyal.sc.api.merchant.response.Story;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
+import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.helper.JsonHelper;
 
 @RestController
@@ -27,7 +31,35 @@ public class MerchantService {
 	@Autowired
 	MerchantDelegate delegate;
 	@Autowired
+	ItemDelegate itemDelegate;
+	@Autowired
 	ResponseHelper responseHelper;
+
+	@RequestMapping(value = "/gSearch", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GlobalSearchResponse globalSearch(@RequestBody SearchRequest request) {
+		JsonHelper.logRequest(request, MerchantService.class, "/merchant/globalSearch");
+		GlobalSearchResponse response = new GlobalSearchResponse();
+		try {
+			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
+				SearchMerchantResponse merchantResponse = delegate.searchActiveMerchant(request);
+				TagShortDetailsResponse cuisineResponse = itemDelegate.searchTags(request, TagType.CUISINE);
+				TagShortDetailsResponse suggestionResponse = itemDelegate.searchTags(request, TagType.SUGGESTION);
+				response.setMerchants(merchantResponse.getMerchants());
+				response.setCuisines(cuisineResponse.getTags());
+				response.setSuggestions(suggestionResponse.getTags());
+				if (response.getMerchants().size() == 0 && response.getCuisines().size() == 0 && response.getSuggestions().size() == 0) {
+					MerchantShortDetails noMatchFound = new MerchantShortDetails();
+					noMatchFound.setId(-999);
+					noMatchFound.setName("No match found");
+					noMatchFound.setShortAddress("");
+					response.getMerchants().add(noMatchFound);
+				}
+			}
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
+	}
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {
@@ -60,7 +92,7 @@ public class MerchantService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getMerchantsByTag", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantListForTagResponse getMerchantsByTag(@RequestBody SearchMerchantByTagRequest request) {
 		MerchantListForTagResponse response = new MerchantListForTagResponse();

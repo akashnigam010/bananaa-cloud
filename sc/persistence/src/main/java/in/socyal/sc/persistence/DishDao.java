@@ -18,12 +18,16 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.item.response.TagShortDetails;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
+import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishCount;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
+import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
@@ -76,9 +80,10 @@ public class DishDao {
 		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE);
 		return getItems(criteria, merchantCriteria, dishCriteria);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private List<DishDto> getItems(Criteria criteria, MerchantFilterCriteria merchantCriteria, DishFilterCriteria dishCriteria) {
+	private List<DishDto> getItems(Criteria criteria, MerchantFilterCriteria merchantCriteria,
+			DishFilterCriteria dishCriteria) {
 		List<DishDto> dishDtos = null;
 		List<DishEntity> dishes = criteria.list();
 		if (dishes != null && !dishes.isEmpty()) {
@@ -102,9 +107,26 @@ public class DishDao {
 		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
 		return mapper.map(entity, filterCriteria, dishCriteria);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Tag> getPopularCuisines(Integer merchantId, Integer page, Integer resultsPerPage) throws BusinessException {
+	public List<TagShortDetails> searchTags(String searchString, Integer page, Integer resultsPerPage,
+			TagType tagType) {
+		Criteria criteria = null;
+		if (tagType == TagType.CUISINE) {
+			criteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
+		} else if (tagType == TagType.SUGGESTION) {
+			criteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
+		}
+		criteria.add(Restrictions.ilike(NAME, searchString, MatchMode.ANYWHERE));
+		int firstResult = ((page - 1) * resultsPerPage);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(resultsPerPage);
+		return mapper.mapTagsShortDetails(criteria.list());
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Tag> getPopularCuisines(Integer merchantId, Integer page, Integer resultsPerPage)
+			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		criteria.addOrder(Order.desc("rating"));
@@ -113,9 +135,10 @@ public class DishDao {
 		criteria.setMaxResults(resultsPerPage);
 		return mapper.map(criteria.list());
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Tag> getPopularSuggestions(Integer merchantId, Integer page, Integer resultsPerPage) throws BusinessException {
+	public List<Tag> getPopularSuggestions(Integer merchantId, Integer page, Integer resultsPerPage)
+			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		criteria.addOrder(Order.desc("rating"));
@@ -124,7 +147,7 @@ public class DishDao {
 		criteria.setMaxResults(resultsPerPage);
 		return mapper.map(criteria.list());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<DishCount> getCuisineDishCount(Integer merchantId, List<Integer> cuisineIds) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);

@@ -15,8 +15,11 @@ import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.item.response.TagResponse;
+import in.socyal.sc.api.item.response.TagShortDetails;
+import in.socyal.sc.api.item.response.TagShortDetailsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.rcmdn.mapper.ItemMapper;
 import in.socyal.sc.persistence.DishDao;
 import in.socyal.sc.persistence.entity.DishCount;
@@ -36,7 +39,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 				mapper.map(dishDao.searchDishAtARestaurant(request.getSearchString(), request.getMerchantId())));
 		return response;
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException {
@@ -57,18 +60,19 @@ public class ItemDelegateImpl implements ItemDelegate {
 		return response;
 	}
 
-	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException {
 		TagResponse response = new TagResponse();
-		List<Tag> tags = dishDao.getPopularCuisines(request.getMerchantId(), request.getPage(), request.getResultsPerPage());
+		List<Tag> tags = dishDao.getPopularCuisines(request.getMerchantId(), request.getPage(),
+				request.getResultsPerPage());
 		if (!tags.isEmpty()) {
-			List<DishCount> dishCount = dishDao.getCuisineDishCount(request.getMerchantId(), mapper.getCuisineIds(tags));
+			List<DishCount> dishCount = dishDao.getCuisineDishCount(request.getMerchantId(),
+					mapper.getCuisineIds(tags));
 			response.setTags(tags);
-			//FIXME: make use of map rather than list
+			// FIXME: make use of map rather than list
 			mapper.mapDishCount(tags, dishCount);
-		}		
+		}
 		return response;
 	}
 
@@ -76,7 +80,17 @@ public class ItemDelegateImpl implements ItemDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public TagResponse getPopularSuggestions(TrendingRequest request) throws BusinessException {
 		TagResponse response = new TagResponse();
-		List<Tag> tags = dishDao.getPopularSuggestions(request.getMerchantId(), request.getPage(), request.getResultsPerPage());
+		List<Tag> tags = dishDao.getPopularSuggestions(request.getMerchantId(), request.getPage(),
+				request.getResultsPerPage());
+		response.setTags(tags);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public TagShortDetailsResponse searchTags(SearchRequest request, TagType tagType) {
+		TagShortDetailsResponse response = new TagShortDetailsResponse();
+		List<TagShortDetails> tags = dishDao.searchTags(request.getSearchString(), 1, 3, tagType);
 		response.setTags(tags);
 		return response;
 	}
