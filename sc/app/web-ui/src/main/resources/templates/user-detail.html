@@ -62,15 +62,19 @@
 		                                <div class="col-xs-12">
 		                                    <div class="my-recommendations">
 		                                        <div class="col-xs-12 recommended-item" th:each="recommendation, iterStat : ${detail.user.recommendations}">
-		                                            <div class="float-left" style="object-fit: cover;">
-		                                                <img class="user-icon" th:src="${recommendation.dish.thumbnail}" />
+		                                            <div class="float-left" style="object-fit: cover; width: 12%;">
+		                                            	<a th:href="${recommendation.dish.itemUrl}">
+		                                            		<img class="user-icon" th:src="${recommendation.dish.thumbnail}" />
+		                                            	</a>
 		                                            </div>
 		                                            <div class="float-left item-desc-wrapper">
-		                                                <div class="bold item-name" th:text="${recommendation.dish.name}">
-		                                                    Some Item Name
+		                                                <div class="bold item-name">
+		                                                    <a th:href="${recommendation.dish.itemUrl}">
+		                                                    	<span th:text="${recommendation.dish.name}"></span>
+		                                                    </a>
 		                                                </div>
 		                                                 <div class="light">
-		                                                 	<a th:href="'/' + ${recommendation.dish.merchant.merchantUrl}">
+		                                                 	<a th:href="${recommendation.dish.merchant.merchantUrl}">
 		                                                 		<span th:text="'@ ' + ${recommendation.dish.merchant.name}">@ Fusion 9</span>
 		                                                 	</a>
 		                                                </div>

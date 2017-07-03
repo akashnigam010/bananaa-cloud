@@ -30,7 +30,7 @@
                                         <div class="row padding-left">
                                             <div class="primary-detail col-xs-12 bold font-2" th:text="${detail.dish.name}">
                                             </div>
-                                            <a th:href="'/' + ${detail.dish.merchant.merchantUrl}">
+                                            <a th:href="${detail.dish.merchant.merchantUrl}">
 	                                            <div class="secondary-detail col-xs-12 light" th:text="'@ ' + ${detail.dish.merchant.name} + ', ' + ${detail.dish.merchant.address.locality.shortAddress}">
 	                                            </div>
                                             </a>                                       

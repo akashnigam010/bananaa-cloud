@@ -134,7 +134,7 @@ public class DishDaoMapper {
 		MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
 		merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);
 		dto.setMerchant(merchant);
-		dto.setItemUrl(dto.getMerchant().getNameId() + "/" + dto.getNameId());
+		dto.setItemUrl(merchant.getMerchantUrl() + "/" + entity.getNameId());
 		return dto;
 	}
 
