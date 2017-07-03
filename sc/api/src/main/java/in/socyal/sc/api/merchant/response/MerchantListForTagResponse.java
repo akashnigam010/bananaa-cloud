@@ -11,7 +11,8 @@ public class MerchantListForTagResponse extends GenericResponse implements Seria
 	private List<MerchantDetails> merchants;
 	private String tagName;
 	private String location;
-	private Integer page;
+	private Integer page = 0;
+	private Integer totalPages;
 
 	public List<MerchantDetails> getMerchants() {
 		if (merchants == null) {
@@ -46,5 +47,13 @@ public class MerchantListForTagResponse extends GenericResponse implements Seria
 
 	public void setPage(Integer page) {
 		this.page = page;
+	}
+
+	public Integer getTotalPages() {
+		return totalPages;
+	}
+
+	public void setTotalPages(Integer totalPages) {
+		this.totalPages = totalPages;
 	}
 }

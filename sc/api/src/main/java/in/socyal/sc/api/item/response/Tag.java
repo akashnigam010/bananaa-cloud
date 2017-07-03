@@ -17,7 +17,7 @@ public class Tag implements Comparable<Tag> {
 	private String imageUrl;
 
 	public String getRatingClass() {
-		if (rating == "") {
+		if (rating == "" || rating == null) {
 			ratingClass = RatingColorType.R25.getCssClass();
 		} else { 
 			ratingClass = RatingColorType.getCodeByRating(Float.parseFloat(rating)).getCssClass();

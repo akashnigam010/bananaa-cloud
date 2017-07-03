@@ -102,7 +102,9 @@
 	                                        	</div>
 	                                        	<div style="margin-left: 30%;">
 	                                        		<span th:each="cuisine, iterStat : ${merchant.ratedCuisines}">
-	                                        			<span th:text="${cuisine.name}"></span> 
+	                                        			<a th:href="${cuisine.itemUrl}" th:title="${cuisine.name}">
+	                                        				<span th:text="${cuisine.name}"></span>
+	                                        			</a>
 	                                        			<span th:class="${cuisine.ratingClass} + ' rating-rcmd'" th:text="${cuisine.rating}"></span>
 	                                        		</span>
 	                                        	</div>
@@ -117,13 +119,16 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <div class="col-xs-12 padding-3">
-                                                <div class="float-left">
-													<!-- Page 1 of 2 -->                                               	
+                                                <div class="float-left" th:if="${detail.totalPages > 0}">
+													<span>Page</span> 
+													<span th:text="${detail.page}">1</span> 
+													<span>of</span> 
+													<span th:text="${detail.totalPages}">2</span>                                               	
                                                 </div>
                                                 <div class="float-right">
-													<button class="bna-button-light" style="margin-top: 0px;" onclick="prev();" th:disabled="${detail.page == 1}">Prev</button>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="prev();" th:disabled="${detail.page} &lt;= 1">Prev</button>
 													<span th:text="${detail.page}"></span>
-													<button class="bna-button-light" style="margin-top: 0px;" onclick="next();" th:disabled="${detail.merchants.size() == 0}">Next</button>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="next();" th:disabled="${detail.page} &gt;= ${detail.totalPages}">Next</button>
                                                 </div>
                                             </div>  
                                         </div>                                   

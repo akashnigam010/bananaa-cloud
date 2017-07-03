@@ -54,19 +54,22 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
 		MerchantListForTagResponse response = new MerchantListForTagResponse();
-		List<MerchantDto> dtos = dao.getMerchantsByTag(request);
-		MerchantDetails merchant = null;
-		for (MerchantDto dto : dtos) {
-			merchant = new MerchantDetails();
-			try {
-				buildMerchantTagResponse(dto, merchant);
-				mapSearchTag(request, dto, merchant);
-			} catch (ParseException e) {
-				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		response.setTotalPages(dao.getMerchantSearchByTagPages(request));
+		if (response.getTotalPages() >= 1) {
+			List<MerchantDto> dtos = dao.getMerchantsByTag(request);
+			MerchantDetails merchant = null;
+			for (MerchantDto dto : dtos) {
+				merchant = new MerchantDetails();
+				try {
+					buildMerchantTagResponse(dto, merchant);
+					mapSearchTag(request, dto, merchant);
+				} catch (ParseException e) {
+					throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+				}
+				response.getMerchants().add(merchant);
 			}
-			response.getMerchants().add(merchant);
+			response.setPage(request.getPage());
 		}
-		response.setPage(request.getPage());
 		return response;
 	}
 	

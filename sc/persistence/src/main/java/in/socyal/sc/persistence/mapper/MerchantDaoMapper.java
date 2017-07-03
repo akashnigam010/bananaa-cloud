@@ -85,8 +85,8 @@ public class MerchantDaoMapper {
 				tag.setNameId(tagEntity.getCuisine().getNameId());
 				tag.setDishCount(tagEntity.getDishCount());
 				tag.setRating(tagEntity.getRating().toString());
-				// TODO : set itemUrl
-				// tag.setItemUrl(tagEntity.get);
+				tag.setItemUrl("/" + entity.getAddress().getLocality().getCity().getNameId() + "/"
+						+ tagEntity.getCuisine().getNameId());
 				tag.setThumbnail(tagEntity.getCuisine().getThumbnail());
 				dto.getRatedCuisines().add(tag);
 			}
@@ -107,8 +107,8 @@ public class MerchantDaoMapper {
 				tag.setNameId(tagEntity.getSuggestion().getNameId());
 				tag.setDishCount(tagEntity.getDishCount());
 				tag.setRating(tagEntity.getRating().toString());
-				// TODO : set itemUrl
-				// tag.setItemUrl(tagEntity.get);
+				tag.setItemUrl("/" + entity.getAddress().getLocality().getCity().getNameId() + "/"
+						+ tagEntity.getSuggestion().getNameId());
 				tag.setThumbnail(tagEntity.getSuggestion().getThumbnail());
 				dto.getRatedSuggestions().add(tag);
 			}

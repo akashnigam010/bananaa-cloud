@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -57,38 +58,27 @@ public class MerchantDao {
 		return dto;
 	}
 	
+	public Integer getMerchantSearchByTagPages(SearchMerchantByTagRequest request) throws BusinessException {
+		Criteria criteria = getMerchantSearchByTagCriteria(request);
+		criteria.setProjection(Projections.rowCount());
+		Long totalCount = (Long) criteria.uniqueResult();
+		if (totalCount <= 0) {
+			return 0;
+		} else {
+			return (int) (totalCount/RESULTS_PER_PAGE + 1);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<MerchantDto> getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
 		List<MerchantDto> merchants = new ArrayList<>();
+		Criteria criteria = getMerchantSearchByTagCriteria(request);
 		MerchantFilterCriteria filter = null;
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		if (request.getType() == TagType.CUISINE) {
 			filter = new MerchantFilterCriteria(true, true, true, true, false, true);
-			criteria.createAlias("cuisineRatings", "cuisineRatings");
-			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
-			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
-			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
-			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
 			filter = new MerchantFilterCriteria(true);
-			criteria.createAlias("suggestionRatings", "suggestionRatings");
-			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
-			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
-			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
-			criteria.addOrder(Order.desc("suggestionRatings.rating"));
-		} else {
-			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
-		
-		criteria.createAlias("address", "address");
-		criteria.createAlias("address.locality", "locality");
-		if (request.getLocalityNameId() != null) {
-			criteria.add(Restrictions.eq("locality.nameId", request.getLocalityNameId()));
-		} else {
-			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", request.getCityNameId()));
-		}
-		
 		int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
@@ -97,6 +87,35 @@ public class MerchantDao {
 			mapper.map(entities, merchants, filter);
 		} 
 		return merchants;
+	}
+	
+	private Criteria getMerchantSearchByTagCriteria(SearchMerchantByTagRequest request) throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
+		if (request.getType() == TagType.CUISINE) {
+			criteria.createAlias("cuisineRatings", "cuisineRatings");
+			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
+			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
+			criteria.addOrder(Order.desc("cuisineRatings.rating"));
+		} else if (request.getType() == TagType.SUGGESTION) {
+			criteria.createAlias("suggestionRatings", "suggestionRatings");
+			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
+			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
+			criteria.addOrder(Order.desc("suggestionRatings.rating"));
+		} else {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+
+		criteria.createAlias("address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (request.getLocalityNameId() != null) {
+			criteria.add(Restrictions.eq("locality.nameId", request.getLocalityNameId()));
+		} else {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", request.getCityNameId()));
+		}
+		return criteria;
 	}
 
 	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
