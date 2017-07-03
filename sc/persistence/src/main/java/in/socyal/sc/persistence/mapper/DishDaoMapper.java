@@ -14,12 +14,12 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
-import in.socyal.sc.api.item.response.TagShortDetails;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
+import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
-import in.socyal.sc.api.type.TagType;
+import in.socyal.sc.api.type.SearchType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
@@ -74,18 +74,17 @@ public class DishDaoMapper {
 		return dto;
 	}
 	
-	public List<TagShortDetails> mapTagsShortDetails(List<TagEntity> entites) {
-		List<TagShortDetails> dtos = new ArrayList<>();
-		TagShortDetails tag = null;
+	public List<GlobalSearchItem> mapTagsShortDetails(List<TagEntity> entites) {
+		List<GlobalSearchItem> dtos = new ArrayList<>();
+		GlobalSearchItem tag = null;
 		for (TagEntity entity : entites) {
-			tag = new TagShortDetails();
+			if (entity instanceof CuisineEntity) {
+				tag = new GlobalSearchItem(SearchType.CUISINE);
+			} else if (entity instanceof SuggestionEntity) {
+				tag = new GlobalSearchItem(SearchType.DISH);
+			}			
 			tag.setName(entity.getName());
 			tag.setNameId(entity.getNameId());
-			if (entity instanceof CuisineEntity) {
-				tag.setTagType(TagType.CUISINE);
-			} else if (entity instanceof SuggestionEntity) {
-				tag.setTagType(TagType.SUGGESTION);
-			}
 			dtos.add(tag);
 		}
 		return dtos;

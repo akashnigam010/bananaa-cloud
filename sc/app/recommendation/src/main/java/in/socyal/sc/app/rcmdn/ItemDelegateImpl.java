@@ -15,9 +15,8 @@ import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.item.response.TagResponse;
-import in.socyal.sc.api.item.response.TagShortDetails;
-import in.socyal.sc.api.item.response.TagShortDetailsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
+import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.rcmdn.mapper.ItemMapper;
@@ -88,10 +87,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public TagShortDetailsResponse searchTags(SearchRequest request, TagType tagType) {
-		TagShortDetailsResponse response = new TagShortDetailsResponse();
-		List<TagShortDetails> tags = dishDao.searchTags(request.getSearchString(), 1, 3, tagType);
-		response.setTags(tags);
-		return response;
+	public List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType) {
+		return dishDao.searchTags(request.getSearchString(), 1, 3, tagType);
 	}
 }

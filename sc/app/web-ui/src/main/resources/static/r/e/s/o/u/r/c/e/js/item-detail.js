@@ -6,8 +6,8 @@ $(document).ready(function() {
     $(".primary-image-banner").css("background-repeat", "no-repeat");
     $(".primary-image-banner").css("background-position", "center");
     $(".primary-image-banner").css("background-size", "cover");
-    $('#topSearchInput').typeahead(searchConfig($('#topSearchInput')));
-    $('#modalSearchInput').typeahead(searchConfig($('#modalSearchInput')));
+    $('#topSearchInput').typeahead(searchConfig($('#topSearchInput'), $('#topSearchLocation')));
+    $('#modalSearchInput').typeahead(searchConfig($('#modalSearchInput'), $('#modalSearchLocation')));
     getMyItemRecommendation();
 });
 

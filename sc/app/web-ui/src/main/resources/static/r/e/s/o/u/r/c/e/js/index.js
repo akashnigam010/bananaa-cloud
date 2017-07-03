@@ -8,11 +8,10 @@ $(document).ready(function() {
         });
     }
     
-    $('#search-field').typeahead(searchConfig($('#search-field')));
+    $('#search-field').typeahead(searchConfig($('#search-field'), $('#search-location')));
     loadLocations($('#search-location'));
     getTrendingRestaurants();
     getStories();
-    
 });
 
 function getTrendingRestaurants() {

@@ -1,5 +1,7 @@
 package in.socyal.sc.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.item.response.TagShortDetailsResponse;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
+import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.GlobalSearchResponse;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.MerchantShortDetails;
@@ -41,18 +43,16 @@ public class MerchantService {
 		GlobalSearchResponse response = new GlobalSearchResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
-				SearchMerchantResponse merchantResponse = delegate.searchActiveMerchant(request);
-				TagShortDetailsResponse cuisineResponse = itemDelegate.searchTags(request, TagType.CUISINE);
-				TagShortDetailsResponse suggestionResponse = itemDelegate.searchTags(request, TagType.SUGGESTION);
-				response.setMerchants(merchantResponse.getMerchants());
-				response.setCuisines(cuisineResponse.getTags());
-				response.setSuggestions(suggestionResponse.getTags());
-				if (response.getMerchants().size() == 0 && response.getCuisines().size() == 0 && response.getSuggestions().size() == 0) {
-					MerchantShortDetails noMatchFound = new MerchantShortDetails();
-					noMatchFound.setId(-999);
+				List<GlobalSearchItem> merchants = delegate.searchMerchantsGlobal(request);
+				List<GlobalSearchItem> cuisines = itemDelegate.searchTags(request, TagType.CUISINE);
+				List<GlobalSearchItem> suggestions = itemDelegate.searchTags(request, TagType.SUGGESTION);
+				response.getSearchItems().addAll(merchants);
+				response.getSearchItems().addAll(cuisines);
+				response.getSearchItems().addAll(suggestions);
+				if (response.getSearchItems().size() == 0) {
+					GlobalSearchItem noMatchFound = new GlobalSearchItem(null);
 					noMatchFound.setName("No match found");
-					noMatchFound.setShortAddress("");
-					response.getMerchants().add(noMatchFound);
+					response.getSearchItems().add(noMatchFound);
 				}
 			}
 			return responseHelper.success(response);

@@ -18,8 +18,8 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
-import in.socyal.sc.api.item.response.TagShortDetails;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
+import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.persistence.entity.CuisineEntity;
@@ -109,7 +109,7 @@ public class DishDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TagShortDetails> searchTags(String searchString, Integer page, Integer resultsPerPage,
+	public List<GlobalSearchItem> searchTags(String searchString, Integer page, Integer resultsPerPage,
 			TagType tagType) {
 		Criteria criteria = null;
 		if (tagType == TagType.CUISINE) {

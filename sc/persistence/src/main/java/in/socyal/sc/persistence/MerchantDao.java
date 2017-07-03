@@ -101,7 +101,7 @@ public class MerchantDao {
 
 	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
-		List<MerchantDto> merchantDtos = null;
+		List<MerchantDto> merchantDtos = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		criteria.add(Restrictions.ilike(NAME, restaurantName, MatchMode.ANYWHERE));
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
@@ -116,7 +116,7 @@ public class MerchantDao {
 	
 	public List<MerchantDto> searchMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
-		List<MerchantDto> merchantDtos = null;
+		List<MerchantDto> merchantDtos = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		criteria.add(Restrictions.ilike(NAME, restaurantName, MatchMode.ANYWHERE));
 		@SuppressWarnings("unchecked")

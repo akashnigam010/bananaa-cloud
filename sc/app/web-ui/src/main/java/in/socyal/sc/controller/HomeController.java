@@ -287,6 +287,7 @@ public class HomeController {
 			location = getLocation(tagSearch.getCity(), null);
 		} else {
 			request.setCityNameId(tagSearch.getCity());
+			request.setLocalityNameId(tagSearch.getLocality());
 			location = getLocation(tagSearch.getCity(), tagSearch.getLocality());
 		}
 		

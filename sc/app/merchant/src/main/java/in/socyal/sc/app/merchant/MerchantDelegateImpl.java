@@ -22,10 +22,12 @@ import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
+import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
+import in.socyal.sc.api.type.SearchType;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
@@ -113,6 +115,14 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public List<GlobalSearchItem> searchMerchantsGlobal(SearchRequest request) throws BusinessException {
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, false, false, false, false);
+		List<MerchantDto> merchants = dao.searchActiveMerchant(request.getSearchString(), filter);
+		return buildSearchMerchantsGlobalResponse(merchants);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public SearchMerchantResponse searchMerchant(SearchRequest request) throws BusinessException {
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, false, false, false, false);
@@ -164,6 +174,20 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		String openStr = dateTimeUtil.formatDate(open, DateFormatType.TIME_FORMAT_AM_PM);
 		String closeStr = dateTimeUtil.formatDate(close, DateFormatType.TIME_FORMAT_AM_PM);
 		return openStr + " to " + closeStr;
+	}
+	
+	private List<GlobalSearchItem> buildSearchMerchantsGlobalResponse(List<MerchantDto> merchants) {
+		List<GlobalSearchItem> items = new ArrayList<>();
+		GlobalSearchItem item = null;
+		for (MerchantDto dto : merchants) {
+			item = new GlobalSearchItem(SearchType.RESTAURANT);
+			item.setName(dto.getName());
+			item.setNameId(dto.getNameId());
+			item.setShortAddress(dto.getAddress().getLocality().getShortAddress());
+			item.setMerchantUrl(dto.getMerchantUrl());
+			items.add(item);
+		}
+		return items;
 	}
 	
 	private void buildSearchMerchantsResponse(List<MerchantDto> merchants, SearchMerchantResponse response) {
