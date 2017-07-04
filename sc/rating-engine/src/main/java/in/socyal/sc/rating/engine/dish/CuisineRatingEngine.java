@@ -14,10 +14,13 @@ import in.socyal.sc.persistence.DishDao;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
+import in.socyal.sc.rating.engine.RatingUtils;
 
 @Repository
 public class CuisineRatingEngine {
-
+	private static final Float MEAN_RATING_WEIGHTAGE = 0.5f;
+	private static final Float COUNT_RATING_WEIGHTAGE = 0.5f;
+	
 	@Autowired
 	DishDao dishDao;
 	@Autowired
@@ -73,6 +76,8 @@ public class CuisineRatingEngine {
 		for (DishEntity entity : dishes) {
 			totalRating += entity.getRating();
 		}
-		return totalRating / dishes.size();
+		float meanRating = totalRating / dishes.size();
+		float countRating = RatingUtils.getDishCountPerCuisineValue(dishes);
+		return meanRating * MEAN_RATING_WEIGHTAGE + countRating * COUNT_RATING_WEIGHTAGE;
 	}
 }
