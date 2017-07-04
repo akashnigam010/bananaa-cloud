@@ -92,8 +92,6 @@ function addSlick(slickElement) {
         dots: false,
         infinite: false,
         speed: 300,
-        slidesToShow: 4,
-        slidesToScroll: 4,
         responsive: [
             {
               breakpoint: 2048,
@@ -114,7 +112,7 @@ function addSlick(slickElement) {
               settings: {
                 arrows: false,
                 slidesToShow: 1.5,
-                slidesToScroll: 1
+                swipeToSlide: true
               }
             }
         ]
