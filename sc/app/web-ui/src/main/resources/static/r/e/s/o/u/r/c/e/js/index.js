@@ -12,8 +12,6 @@ $(document).ready(function() {
     loadLocations($('#search-location'));
     getTrendingRestaurants();
     getStories();
-    var p = $("#gallery").portfolio({ logger: true});
-    p.init();
 });
 
 function getTrendingRestaurants() {
