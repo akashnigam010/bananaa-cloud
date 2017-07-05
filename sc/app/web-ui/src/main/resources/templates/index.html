@@ -8,6 +8,7 @@
 <link href="/r/e/s/o/u/r/c/e/css/home-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 768px), only screen and (max-device-width: 768px)" />
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
+<link href="/r/e/s/o/u/r/c/e/css/flickity.min.css" media="screen" rel="stylesheet"></link>
 <body>
 	<script type="text/javascript" th:src="'https://bna-s3.s3.amazonaws.com/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<div class="container-fluid">
@@ -76,7 +77,7 @@
 		<!-- Top Banner ENDS -->
 		
 		<!-- Trending STARTS -->
-		<div class="row trending">
+		<div class="row trending padding-top padding-bottom">
             <div class="col-xs-12 trending-heading">
                 <p class="bold">restaurants with most food recommendations</p>
             </div>
@@ -84,31 +85,22 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-10 col-sm-offset-1 trending-restaurants">
                     	<div class="loader"></div>
-                        <div class="row trending-restaurant-wrapper clearfix">
-                            <!-- <div class="trending-item"> 
-                                <a href="hyderabad/12346">
-                                    <div>
-                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt=""/>
-                                        <div class="trending-item-desc">
-                                            <div style="padding: 4%;">
-                                                <p>
-                                                    <span class="bold font-1-3">Free Flow</span>
-                                                    <br />
-                                                    <span class="light">Jubilee Hills, Hyderabad</span>
-                                                </p>
-                                                <span>320 Recommendations</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                        <div class="row trending-wrapper clearfix">
+                            <!-- <div class="flick-div">
+                                <img class="flick-image flick-img-txt" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt="" />
+                                <div class="flick-txt padding-left">
+                                    <span class="bold font-1-3">Soda Bottle Opener Wala</span>
+                                    <br />
+                                    <span class="light font-0-8">Jubilee Hills, Hyderabad</span>
+                                </div>
                             </div> -->
                         </div>
                     </div>
                 </div>
-            </div>           
+            </div>          
         </div>
 
-        <div class="row trending">
+        <div class="row trending padding-bottom">
             <div class="col-xs-12 trending-heading">
                 <p class="bold">stories</p>
             </div>
@@ -117,15 +109,11 @@
                     <div class="col-xs-12 col-sm-10 col-sm-offset-1 stories">
                     	<div class="loader"></div>
                         <div class="row diary-wrapper slick-class clearfix">
-                            <!-- <div class="trending-item">
-                                <a href="/about">
-                                    <div class="diary-sec">
-                                        <img class="trend-image diary-img" src="https://bna-s3.s3.amazonaws.com/img/what-mini.jpg" alt="" />
-                                        <div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">
-                                            <p class="bold font-1-3">Bananaa - What the Fuzz!</p>
-                                        </div>
-                                    </div>
-                                </a>
+                            <!-- <div class="flick-div">
+                                <img class="flick-image diary-img" src="http://cdn.bananaa.in/img/what-mini.jpg" alt="" />
+                                <div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">
+                                    <p class="bold font-1-3">Bananaa - What the Fuzz!</p>
+                                </div>
                             </div> -->
                         </div>
                     </div>
@@ -141,6 +129,7 @@
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
 	<script src="/r/e/s/o/u/r/c/e/js/index.js"></script>
+	<script src="/r/e/s/o/u/r/c/e/js/flickity.pkgd.min.js"></script>
 </body>
 
 </html>

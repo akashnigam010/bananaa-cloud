@@ -24,34 +24,39 @@ function getTrendingRestaurants() {
     		  var trendingRestaurantHtml = '';
     		  if (response.result) {
     			  if (response.merchants.length > 0) {
-    				  for (var i=0; i<response.merchants.length; i++) {
-    					  trendingRestaurantHtml += 
-    						  '<div class="trending-item">'+
-			                              '<a href="'+response.merchants[i].merchantUrl+'">'+
-			                          '<div>'+
-			                              '<img class="trend-image" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa"/>'+
-			                              '<div class="trending-item-desc">'+
-			                                  '<div style="padding: 4%;">'+
-			                                      '<p>'+
-			                                          '<span class="bold font-1-3">'+response.merchants[i].name+'</span>'+
-			                                          '<br />'+
-			                                          '<span class="light">'+response.merchants[i].shortAddress+'</span>'+
-			                                      '</p>'+
-			                                      '<span>'+response.merchants[i].recommendations+' Food Recommendations</span>'+
-			                                  '</div>'+
-			                              '</div>'+
-			                          '</div>'+
-			                      '</a>'+
-			                  '</div>';
+    				  for (var i=0; i<response.merchants.length; i++) {    					  
+    					  trendingRestaurantHtml +=
+    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.merchants[i].merchantUrl+'\'">'+
+	                              '<img class="flick-image flick-img-txt" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa" />'+
+	                                  '<div class="flick-txt padding-left">'+
+	                                      '<span class="bold font-1-3">'+response.merchants[i].name+'</span>'+
+	                                      '<br />'+
+	                                      '<span class="light font-0-8">'+response.merchants[i].shortAddress+'</span>'+
+	                                  '</div>'+
+	                              '</div>';
     				  }
-    				  $('.trending-restaurant-wrapper').html(trendingRestaurantHtml);
-    				  addSlick($('.trending-restaurant-wrapper'));
+    				  $('.trending-wrapper').html(trendingRestaurantHtml);
+    				  $('.trending-wrapper').flickity(getFlickityOptions());
     				  $('.trending-restaurants').find('.loader').hide();
     			  }
     		  } else {
     			  handleErrorCallback(response);
     		  }
     	  });
+}
+
+function getFlickityOptions() {
+    var options = {
+        cellAlign: 'left',
+        contain: true,
+        freeScroll: true,
+        pageDots: false,
+        prevNextButtons: true
+    };
+    if (isMobile) {
+        options.prevNextButtons = false;
+    }
+    return options;
 }
 
 function getStories() {
@@ -65,20 +70,16 @@ function getStories() {
     		  if (response.result) {
     			  if (response.stories.length > 0) {
     				  for (var i=0; i<response.stories.length; i++) {
-    					  storiesHtml += 
-    						  '<div class="trending-item">'+
-			                              '<a href="'+response.stories[i].url+'">'+
-			                          '<div class="diary-sec">'+
-			                              '<img class="trend-image diary-img" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
-			                              '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
-			                                  '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
-			                              '</div>'+
-			                          '</div>'+
-			                      '</a>'+
-			                  '</div>';
+    					  storiesHtml +=
+    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.stories[i].url+'\'">'+
+		                          '<img class="flick-image diary-img" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
+		                          '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
+		                              '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
+		                          '</div>'+
+		                      '</div>';
     				  }
     				  $('.diary-wrapper').html(storiesHtml);
-    				  addSlick($('.diary-wrapper'));
+    				  $('.diary-wrapper').flickity(getFlickityOptions());
     				  $('.stories').find('.loader').hide();
     			  }
     		  } else {
