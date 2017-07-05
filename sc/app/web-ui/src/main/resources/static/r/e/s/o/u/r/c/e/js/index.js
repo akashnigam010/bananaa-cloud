@@ -45,20 +45,6 @@ function getTrendingRestaurants() {
     	  });
 }
 
-function getFlickityOptions() {
-    var options = {
-        cellAlign: 'left',
-        contain: true,
-        freeScroll: true,
-        pageDots: false,
-        prevNextButtons: true
-    };
-    if (isMobile) {
-        options.prevNextButtons = false;
-    }
-    return options;
-}
-
 function getStories() {
 	$.ajax({
     	  method: "GET",
@@ -88,34 +74,17 @@ function getStories() {
     	  });
 }
 
-function addSlick(slickElement) {
-	slickElement.slick({
-        dots: false,
-        infinite: false,
-        speed: 300,
-        responsive: [
-            {
-              breakpoint: 2048,
-              settings: {
-                slidesToShow: 3,
-                slidesToScroll: 1
-              }
-            },
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1
-              }
-            },
-            {
-              breakpoint: 480,
-              settings: {
-                arrows: false,
-                slidesToShow: 1.5,
-                swipeToSlide: true
-              }
-            }
-        ]
-    });
+function getFlickityOptions() {
+    var options = {
+        cellAlign: 'left',
+        contain: true,
+        freeScroll: true,
+        pageDots: false,
+        friction: 0.2,
+        prevNextButtons: true
+    };
+    if (isMobile) {
+        options.prevNextButtons = false;
+    }
+    return options;
 }
