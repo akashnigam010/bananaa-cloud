@@ -122,6 +122,12 @@
     }
 }
 
+/* Bug Fix in Flickity */
+.flickity-enabled.is-draggable .flickity-viewport{
+    touch-action: pan-y !important;
+}
+/* Bug Fix in Flickity */
+
 /* Trending CSS - END */
 
 /* Login Button CSS starts */

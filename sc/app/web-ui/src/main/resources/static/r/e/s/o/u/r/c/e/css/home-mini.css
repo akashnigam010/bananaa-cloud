@@ -106,6 +106,12 @@ body {
     padding-top: 1%;
 }
 
+/* Bug Fix in Flickity */
+.flickity-enabled.is-draggable .flickity-viewport{
+    touch-action: pan-y !important;
+}
+/* Bug Fix in Flickity */
+
 /* Trending CSS - END */
 
 /* HEADER CSS - START */
