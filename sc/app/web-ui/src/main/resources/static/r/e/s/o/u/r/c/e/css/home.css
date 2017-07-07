@@ -88,9 +88,9 @@
 .flick-div {
     border-radius: 6px; 
     /*background: linear-gradient(white, purple);*/
-    background-color: #fff;
+    /* background-color: #fff; */
     width: 33%;
-    height: 200px;
+    height: 250px;
     margin-right: 10px;
 }
 
@@ -102,8 +102,7 @@
     height:100%;
     overflow:hidden;
     vertical-align:top;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-radius: 6px;
 }
 
 .flick-img-txt {
@@ -125,6 +124,10 @@
 /* Bug Fix in Flickity */
 .flickity-enabled.is-draggable .flickity-viewport{
     touch-action: pan-y !important;
+}
+
+.flickity-prev-next-button {
+    top: 31% !important;
 }
 /* Bug Fix in Flickity */
 

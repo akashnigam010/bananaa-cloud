@@ -79,9 +79,9 @@ body {
 .flick-div {
     border-radius: 4px; 
     /*background: linear-gradient(white, purple);*/
-    background-color: #fff;
+    /* background-color: #fff; */
     width: 70%;
-    height: 130px;
+    height: 180px;
     margin-right: 10px;
 }
 
@@ -93,8 +93,7 @@ body {
     height:100%;
     overflow:hidden;
     vertical-align:top;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-radius: 4px;
 }
 
 .flick-img-txt {
