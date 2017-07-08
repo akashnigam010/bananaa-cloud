@@ -13,6 +13,14 @@
     height: 150px;
 }
 
+.sub-banner-logo {
+    margin: 5% 0%;
+}
+
+.sub-banner-wrapper {
+    margin: 0%;   
+}
+
 .tagline {
     font-size: 2em;
     padding-top: 2%;
@@ -26,6 +34,16 @@
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+}
+
+.sub-banner {
+    background: linear-gradient(
+                     rgba(20,20,20, .2), 
+                     rgba(20,20,20, .5)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/img/next.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;   
 }
 
 .icon-search-home {

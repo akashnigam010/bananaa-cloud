@@ -17,6 +17,14 @@ body {
     height: 100px;
 }
 
+.sub-banner-logo {
+    margin: 10% 0%;
+}
+
+.sub-banner-wrapper {
+    margin: 10% 0%;   
+}
+
 .tagline {
     font-size: 1.5em;
     padding-top: 5%;
@@ -31,6 +39,16 @@ body {
     background-repeat: no-repeat;
     background-position: center left;
     background-size: cover;
+}
+
+.sub-banner {
+    background: linear-gradient(
+                     rgba(20,20,20, .2), 
+                     rgba(20,20,20, .5)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/img/next.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;   
 }
 
 .icon-search-home {
