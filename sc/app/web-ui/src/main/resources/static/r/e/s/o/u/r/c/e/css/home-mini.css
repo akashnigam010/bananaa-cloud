@@ -41,13 +41,23 @@ body {
     background-size: cover;
 }
 
+.sec-banner {
+    background: linear-gradient(
+                     rgba(20,20,20, .5), 
+                     rgba(20,20,20, .8)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg-sec.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
 .purple-banner {
     font-size: 1.5em;
     padding: 15% 0%;
 }
 
 .bna-search-add {
-    padding: 15% 5%;
+    padding: 10% 0%;
 }
 
 .meme-wrapper {
