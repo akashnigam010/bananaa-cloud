@@ -6,6 +6,12 @@ $(document).ready(function() {
                 scrollTop: $("#search-field").offset().top - 65
             }, 200);
         });
+        
+        $('#search-field-add, #search-location-add').on('mousedown', function (e) {
+        	$('html, body').animate({
+                scrollTop: $("#search-field-add").offset().top - 65
+            }, 200);
+        });
     }
     
     $('#search-field').typeahead(searchConfig($('#search-field'), $('#search-location')));

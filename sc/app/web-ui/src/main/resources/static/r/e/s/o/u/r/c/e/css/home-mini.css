@@ -41,14 +41,17 @@ body {
     background-size: cover;
 }
 
-.sub-banner {
-    background: linear-gradient(
-                     rgba(20,20,20, .2), 
-                     rgba(20,20,20, .5)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/img/next.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;   
+.purple-banner {
+    font-size: 1.5em;
+    padding: 15% 0%;
+}
+
+.bna-search-add {
+    padding: 15% 5%;
+}
+
+.meme-wrapper {
+    margin-bottom: 15%;
 }
 
 .icon-search-home {
@@ -77,6 +80,24 @@ body {
 }
 
 /* Hero Banner CSS - END */
+
+/* Meme css STARTS */
+
+.meme-image-div {
+    height: 60px;
+}
+
+.meme-text {
+    font-size: 1em;
+}
+
+.meme-image {    
+    object-fit: cover;
+    pointer-events: none;
+    height:100%;
+}
+
+/* Meme css ENDS */
 
 /* Trending CSS - START */
 
