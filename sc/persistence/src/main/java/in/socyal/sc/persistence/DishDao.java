@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.item.response.PopularTag;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
@@ -27,6 +27,7 @@ import in.socyal.sc.persistence.entity.DishCount;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
+import in.socyal.sc.persistence.entity.PopularTagEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
@@ -125,27 +126,45 @@ public class DishDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Tag> getPopularCuisines(Integer merchantId, Integer page, Integer resultsPerPage)
+	public List<PopularTag> getPopularCuisines(Integer page, Integer resultsPerPage)
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
-		criteria.add(Restrictions.eq("merchant.id", merchantId));
-		criteria.addOrder(Order.desc("rating"));
+		criteria.createAlias("cuisine", "cuisine");
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.count("cuisine.id").as("merchants"));
+		projList.add(Projections.groupProperty("cuisine.id"));
+		projList.add(Projections.property("cuisine.name").as("name"));
+		projList.add(Projections.property("cuisine.nameId").as("nameId"));
+		projList.add(Projections.property("cuisine.thumbnail").as("thumbnail"));
+		criteria.setProjection(projList);
+		criteria.addOrder(Order.desc("merchants"));
 		int firstResult = ((page - 1) * resultsPerPage);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(resultsPerPage);
-		return mapper.map(criteria.list());
+		criteria.setResultTransformer(Transformers.aliasToBean(PopularTagEntity.class));
+		List<PopularTagEntity> entities = (List<PopularTagEntity>) criteria.list();
+		return mapper.mapPopularTags(entities);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Tag> getPopularSuggestions(Integer merchantId, Integer page, Integer resultsPerPage)
+	public List<PopularTag> getPopularSuggestions(Integer page, Integer resultsPerPage)
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
-		criteria.add(Restrictions.eq("merchant.id", merchantId));
-		criteria.addOrder(Order.desc("rating"));
+		criteria.createAlias("suggestion", "suggestion");
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.count("suggestion.id").as("merchants"));
+		projList.add(Projections.groupProperty("suggestion.id"));
+		projList.add(Projections.property("suggestion.name").as("name"));
+		projList.add(Projections.property("suggestion.nameId").as("nameId"));
+		projList.add(Projections.property("suggestion.thumbnail").as("thumbnail"));
+		criteria.setProjection(projList);
+		criteria.addOrder(Order.desc("merchants"));
 		int firstResult = ((page - 1) * resultsPerPage);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(resultsPerPage);
-		return mapper.map(criteria.list());
+		criteria.setResultTransformer(Transformers.aliasToBean(PopularTagEntity.class));
+		List<PopularTagEntity> entities = (List<PopularTagEntity>) criteria.list();
+		return mapper.mapPopularTags(entities);
 	}
 
 	@SuppressWarnings("unchecked")

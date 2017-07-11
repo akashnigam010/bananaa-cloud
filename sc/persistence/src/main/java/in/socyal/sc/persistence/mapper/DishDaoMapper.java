@@ -13,6 +13,7 @@ import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.PopularTag;
 import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
@@ -28,6 +29,7 @@ import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
+import in.socyal.sc.persistence.entity.PopularTagEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.entity.TagEntity;
@@ -202,5 +204,20 @@ public class DishDaoMapper {
 		ratingAndReviewCount.setRight(right);
 		ratingAndReviewCount.setLeft(left);
 		return ratingAndReviewCount;
+	}
+
+	public List<PopularTag> mapPopularTags(List<PopularTagEntity> entities) {
+		List<PopularTag> tags = new ArrayList<>();
+		PopularTag tag = null;
+		for (PopularTagEntity entity : entities) {
+			tag = new PopularTag();
+			tag.setMerchants(entity.getMerchants());
+			tag.setName(entity.getName());
+			tag.setNameId(entity.getNameId());
+			tag.setThumbnail(entity.getThumbnail());
+			tag.setUrl("/hyderabad/"+entity.getNameId());
+			tags.add(tag);
+		}
+		return tags;
 	}
 }

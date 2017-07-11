@@ -12,6 +12,7 @@ import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItem;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
@@ -50,13 +51,37 @@ public class ItemService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getPopularItems", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ItemsResponse getPopularItems(@RequestBody TrendingRequest request) {
 		ItemsResponse response = new ItemsResponse();
 		try {
 			validator.validateGetPopularItemsRequest(request);
 			response = delegate.getPopularItems(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			LOG.debug(e.getMessage());
+			return helper.failure(response, e);
+		}
+	}
+
+	@RequestMapping(value = "/getTrendingCuisines", method = RequestMethod.GET, headers = "Accept=application/json")
+	public PopularTagResponse getTrendingCuisines() {
+		PopularTagResponse response = new PopularTagResponse();
+		try {
+			response = delegate.getPopularCuisines();
+			return helper.success(response);
+		} catch (BusinessException e) {
+			LOG.debug(e.getMessage());
+			return helper.failure(response, e);
+		}
+	}
+
+	@RequestMapping(value = "/getTrendingDishes", method = RequestMethod.GET, headers = "Accept=application/json")
+	public PopularTagResponse getTrendingDishes() {
+		PopularTagResponse response = new PopularTagResponse();
+		try {
+			response = delegate.getPopularDishes();
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

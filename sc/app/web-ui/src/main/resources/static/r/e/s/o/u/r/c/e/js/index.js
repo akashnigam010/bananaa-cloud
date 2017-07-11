@@ -19,6 +19,8 @@ $(document).ready(function() {
     loadLocations($('#search-location'));
     loadLocations($('#search-location-add'));
     getTrendingRestaurants();
+    getTrendingCuisines();
+    getTrendingDishes();
     getStories();
 });
 
@@ -48,14 +50,92 @@ function getTrendingRestaurants() {
 	                                  '</div>'+
 	                              '</div>';
     				  }
-    				  $('.trending-wrapper').html(trendingRestaurantHtml);
-    				  $('.trending-wrapper').flickity(getFlickityOptions());
+    				  $('.restaurant-wrapper').html(trendingRestaurantHtml);
+    				  $('.restaurant-wrapper').flickity(getFlickityOptions());
     				  $('.trending-restaurants').find('.loader').hide();
     			  }
     		  } else {
     			  handleErrorCallback(response);
     		  }
     	  });
+}
+
+function getTrendingCuisines() {
+	$.ajax({
+    	  method: "GET",
+    	  url: "/socyal/item/getTrendingCuisines",
+    	  contentType : "application/json"
+    	})
+    	  .done(function(response) {
+    		  var trendingHtml = '';
+    		  if (response.result) {
+    			  if (response.tags.length > 0) {
+    				  for (var i=0; i<response.tags.length; i++) {    					  
+    					  trendingHtml +=
+    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.tags[i].url+'\'">'+
+	                              '<img class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
+	                                  '<div class="flick-txt padding-left">'+
+	                                      '<div class="pull-left">'+
+	                                        '<span class="font-1-3">'+response.tags[i].name+'</span>'+
+	                                      '</div>'+
+	                                      '<div class="pull-right">'+
+	                                      	'<span class="font-0-8 bold">'+response.tags[i].merchants+'</span>&nbsp;'+
+	                                      	'<span class="font-0-8">'+getPlaceString(response.tags[i].merchants)+'</span>'+
+	                                      '</div>'+	                                      
+	                                  '</div>'+
+	                              '</div>';
+    				  }
+    				  $('.cuisine-wrapper').html(trendingHtml);
+    				  $('.cuisine-wrapper').flickity(getFlickityOptions());
+    				  $('.trending-cuisines').find('.loader').hide();
+    			  }
+    		  } else {
+    			  handleErrorCallback(response);
+    		  }
+    	  });
+}
+
+function getTrendingDishes() {
+	$.ajax({
+    	  method: "GET",
+    	  url: "/socyal/item/getTrendingDishes",
+    	  contentType : "application/json"
+    	})
+    	  .done(function(response) {
+    		  var trendingHtml = '';
+    		  if (response.result) {
+    			  if (response.tags.length > 0) {
+    				  for (var i=0; i<response.tags.length; i++) {
+    					  trendingHtml +=
+    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.tags[i].url+'\'">'+
+	                              '<img class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
+	                                  '<div class="flick-txt padding-left">'+
+	                                      '<div class="pull-left">'+
+	                                        '<span class="font-1-3">'+response.tags[i].name+'</span>'+
+	                                      '</div>'+
+	                                      '<div class="pull-right">'+
+	                                      	'<span class="font-0-8 bold">'+response.tags[i].merchants+'</span>&nbsp;'+
+	                                      	'<span class="font-0-8">'+getPlaceString(response.tags[i].merchants)+'</span>'+
+	                                      '</div>'+	                                      
+	                                  '</div>'+
+	                              '</div>';
+    				  }
+    				  $('.dish-wrapper').html(trendingHtml);
+    				  $('.dish-wrapper').flickity(getFlickityOptions());
+    				  $('.trending-dishes').find('.loader').hide();
+    			  }
+    		  } else {
+    			  handleErrorCallback(response);
+    		  }
+    	  });
+}
+
+function getPlaceString(merchants) {
+	if (merchants != 1) {
+		return 'places';
+	} else {
+		return 'place';
+	}
 }
 
 function getStories() {

@@ -120,7 +120,7 @@ body {
     text-transform: uppercase;  
 }
 
-.trending-wrapper, .diary-wrapper {
+.trending-wrapper {
     padding-left: 3%;
     padding-right: 3%;
 }

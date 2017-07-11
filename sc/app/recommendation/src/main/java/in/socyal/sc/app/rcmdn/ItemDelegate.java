@@ -6,6 +6,7 @@ import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
+import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.item.response.TagResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
@@ -22,19 +23,7 @@ public interface ItemDelegate {
 
 	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
 
-	/**
-	 * Popular rated cuisines have now been moved to MerchantDto and would be
-	 * mapped based on filter criteria.
-	 * 
-	 */
-	@Deprecated
-	TagResponse getPopularCuisines(TrendingRequest request) throws BusinessException;
+	PopularTagResponse getPopularCuisines() throws BusinessException;
 
-	/**
-	 * Popular rated cuisines have now been moved to MerchantDto and would be
-	 * mapped based on filter criteria.
-	 * 
-	 */
-	@Deprecated
-	TagResponse getPopularSuggestions(TrendingRequest request) throws BusinessException;
+	PopularTagResponse getPopularDishes() throws BusinessException;
 }
