@@ -6,8 +6,6 @@
 <head th:replace="fragments/head :: head"></head>
 <link href="/r/e/s/o/u/r/c/e/css/home.css" type="text/css" rel="stylesheet"></link>
 <link href="/r/e/s/o/u/r/c/e/css/home-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 768px), only screen and (max-device-width: 768px)" />
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
 <link href="/r/e/s/o/u/r/c/e/css/flickity.min.css" media="screen" rel="stylesheet"></link>
 <body>
 	<script type="text/javascript" th:src="'https://bna-s3.s3.amazonaws.com/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
@@ -18,7 +16,7 @@
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-6">
-                        <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p>
+                        <!-- <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p> -->
                     </div>
                     <div class="col-xs-6">
                         <div class="btn-group login-info pull-right">
@@ -37,12 +35,18 @@
             </div>
             <div class="col-xs-12">
                 <div class="row">
-                    <div class="col-xs-12 align-center logo-wrapper">
-                        <img class="logo-round" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/logo-pr.svg" alt="bananaa-logo" />                    
+                    <div class="col-xs-12 align-center logo-wrapper" style="font-size: 3em;">
+                        <!-- <img class="logo-round" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/logo-pr.svg" alt="bananaa-logo" /> -->
+                        <p class="simpson header-icon" style=" padding-left: 0%;">bananaa</p>                    
                     </div>
-                    <div class="col-xs-12 tagline align-center white">
+                    <div class="col-xs-12 hidden-sm hidden-md hidden-lg tagline align-center white">
                         <span>
-                            Find the most delectable food at restaurants in Hyderabad
+                            Food suggestions, <br/>for you, by all
+                        </span>
+                    </div>
+                    <div class="col-xs-12 hidden-xs tagline align-center white">
+                        <span>
+                            Food suggestions, for you, by all
                         </span>
                     </div>
 					
@@ -67,7 +71,7 @@
                         </form>
                         <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
                             <div class="form-group-lg has-feedback float-left">
-                                <button class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
+                                <button type="button" onclick="homeSearch();" class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
                             </div>
                         </form>
                     </div>					
@@ -198,36 +202,35 @@
                             <p class="font-1-5 upper align-center">
                                 Only a search away.
                             </p>
-                            <br />
-                            <hr />
-                            <div class="col-xs-12 align-center home-search-wrapper">
-                                <form class="form-horizontal inline-block location-wrapper">
-                                    <div class="form-group-lg has-feedback float-left full-width">
-                                        <input type="text" id="search-location-add" data-provide="typeahead" 
-                                        class="cursor-pointer header-search-input" th:value="${location}" autocomplete="off" value="Hyderabad" placeholder="Type your location" />
-                                        <i class="glyphicon icon-location form-control-feedback i-height i-width"></i>
-                                    </div>
-                                </form>
-
-                                <form class="form-horizontal inline-block search-wrapper">
-                                    <div class="form-group-lg has-feedback float-left full-width">
-                                        <input type="text" id="search-field-add" name="search" data-provide="typeahead" 
-                                        	class="global-search header-search-input noloading" placeholder="Search for a restaurant, cuisine or dish" autocomplete="off" />
-		                                <i class="glyphicon icon-search form-control-feedback i-height i-width"></i>
-		                                <div class="input-loader-animation-div">
-		                                    <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
-		                                </div>
-                                                                      
-                                    </div>
-                                </form>
-                                <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
-                                    <div class="form-group-lg has-feedback float-left">
-                                        <button class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
-                                    </div>
-                                </form>
-                            </div>
+                            <hr />                            
                         </div>
                     </div>
+                </div>
+                <div class="col-xs-12 align-center home-search-wrapper margin-bottom">
+                    <form class="form-horizontal inline-block location-wrapper">
+                        <div class="form-group-lg has-feedback float-left full-width">
+                            <input type="text" id="search-location-add" data-provide="typeahead" 
+                            class="cursor-pointer header-search-input" th:value="${location}" autocomplete="off" value="Hyderabad" placeholder="Type your location" />
+                            <i class="glyphicon icon-location form-control-feedback i-height i-width"></i>
+                        </div>
+                    </form>
+
+                    <form class="form-horizontal inline-block search-wrapper">
+                        <div class="form-group-lg has-feedback float-left full-width">
+                            <input type="text" id="search-field-add" name="search" data-provide="typeahead" 
+                            	class="global-search header-search-input noloading" placeholder="Search for a restaurant, cuisine or dish" autocomplete="off" />
+                      <i class="glyphicon icon-search form-control-feedback i-height i-width"></i>
+                      <div class="input-loader-animation-div">
+                          <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                      </div>
+                                                          
+                        </div>
+                    </form>
+                    <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
+                        <div class="form-group-lg has-feedback float-left">
+                            <button class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

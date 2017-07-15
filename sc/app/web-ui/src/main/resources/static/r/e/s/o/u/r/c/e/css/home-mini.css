@@ -26,16 +26,15 @@ body {
 }
 
 .tagline {
-    font-size: 1.5em;
-    padding-top: 5%;
-    padding-bottom: 4%;
+    font-size: 2.5em;
+    padding-top: 3%;
 }
 
 .home-banner {
     background: linear-gradient(
-                     rgba(20,20,20, .5), 
-                     rgba(20,20,20, .5)),
-                     url("https://bna-s3.s3.amazonaws.com/commons/home-bg.png");
+                     rgba(20,20,20, .3), 
+                     rgba(20,20,20, 0)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.png");
     background-repeat: no-repeat;
     background-position: center left;
     background-size: cover;
@@ -57,7 +56,7 @@ body {
 }
 
 .bna-search-add {
-    padding: 10% 0%;
+    padding: 10% 0% 0% 0%;
 }
 
 .meme-wrapper {

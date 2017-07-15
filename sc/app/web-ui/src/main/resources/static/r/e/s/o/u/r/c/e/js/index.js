@@ -16,13 +16,25 @@ $(document).ready(function() {
     
     $('#search-field').typeahead(searchConfig($('#search-field'), $('#search-location')));
     $('#search-field-add').typeahead(searchConfig($('#search-field-add'), $('#search-location-add')));
-    loadLocations($('#search-location'));
-    loadLocations($('#search-location-add'));
+    loadLocations($('#search-location'), $('#search-field'));
+    loadLocations($('#search-location-add'), $('#search-field-add'));
+    $("#search-field").keypress(function(e) {
+        if(e.which == 10 || e.which == 13) {
+            homeSearch();
+        }
+    });
     getTrendingRestaurants();
     getTrendingCuisines();
     getTrendingDishes();
     getStories();
 });
+
+function homeSearch() {
+    var urlWithParams = window.location.href;
+    var urlWithOutParams = urlWithParams.split('?')[0];
+    var searchString = $("#search-field").val();
+    window.location = urlWithOutParams+'?search='+searchString;
+}
 
 function getTrendingRestaurants() {
 	$.ajax({

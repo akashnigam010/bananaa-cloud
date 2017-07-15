@@ -61,7 +61,19 @@ $(document).ready(function() {
         }
     });
     $('[data-toggle="popover"]').popover();
+    $("#topSearchInput").keypress(function(e) {
+        if(e.which == 10 || e.which == 13) {
+            homeGlobalSearch();
+        }
+    });
 });
+
+function homeGlobalSearch() {
+    var urlWithParams = window.location.href;
+    var urlWithOutParams = urlWithParams.split('?')[0];
+    var searchString = $("#topSearchInput").val();
+    window.location = urlWithOutParams+'?search='+searchString;
+}
 
 function activateLogin() {
 	if ($("#login-info").html() == 'Login') {
@@ -101,7 +113,7 @@ function searchConfig(element, loc) {
 	var timeout;
 	var config = {
     	minLength: 2,
-    	autoSelect: true,
+    	autoSelect: false,
     	fitToElement: true,
     	matcher: function(searchItem) {
             if (searchItem.name.toLowerCase().includes(this.query.trim().toLowerCase())) {
@@ -196,7 +208,7 @@ function getLocationUrlString(val) {
 	return l;
 }
 
-function loadLocations(e) {
+function loadLocations(e, searchElement) {
 	var isLocationUpdated = false;
     var defaultSelected = e.val();
     e.typeahead({
@@ -232,7 +244,7 @@ function loadLocations(e) {
               	  });
             }
             setTimeout(function() {
-            	$('.global-search').focus();
+            	searchElement.focus();
             }, 100);
             return location;
         }

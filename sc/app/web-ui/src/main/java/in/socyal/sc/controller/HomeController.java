@@ -32,6 +32,7 @@ import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.UserDetailsResponse;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.cache.CityCache;
@@ -92,17 +93,24 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/{city}", method = RequestMethod.GET)
-	public ModelAndView cityHome(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city)
+	public ModelAndView cityHome(
+			@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String locationCookie, 
+			@PathVariable("city") String city,
+			@RequestParam(value = "search", required = false) String search,
+			@RequestParam(value = "page", required = false) Integer page)
 			throws BusinessException {
-		ModelAndView modelAndView = new ModelAndView("index");
-		setCommonModelData(modelAndView, bnaLoginCookie, loc);
+		String[] urlParams = { city };
+		ModelAndView modelAndView = initializeModelAndView(bnaLoginCookie, locationCookie, urlParams);
+		if (StringUtils.isNotBlank(search)) {
+			return globalSearch(modelAndView, locationCookie, search, page);
+		}
+		modelAndView.setViewName("index");
 		modelAndView.addObject("description", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("fbDescription", resource.getString(HOME_DESCRIPTION));
 		modelAndView.addObject("title", resource.getString(HOME_TITLE));
-		String[] urlParams = { city };
-		modelAndView.addObject("url", getMetaUrl(urlParams));
 		modelAndView.addObject("imageUrl", resource.getString(HOME_IMAGE));
+		modelAndView.addObject("isSearch", false);
 		return modelAndView;
 	}
 
@@ -112,7 +120,7 @@ public class HomeController {
 	 * - bananaa.in/city/locality - bananaa.in/city/tag
 	 * 
 	 * @param bnaLoginCookie
-	 * @param loc
+	 * @param locationCookie
 	 * @param city
 	 * @param restLocalityOrTagNameId
 	 * @return
@@ -121,29 +129,33 @@ public class HomeController {
 	@RequestMapping(value = "/{city}/{restLocalityOrTagNameId}", method = RequestMethod.GET)
 	public ModelAndView restaurantDetailsOrListInALocality(
 			@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@CookieValue(name = "loc", defaultValue = "") String loc,
+			@CookieValue(name = "loc", defaultValue = "") String locationCookie,
 			@PathVariable("restLocalityOrTagNameId") String restLocalityOrTagNameId,
-			@PathVariable("city") String city, @RequestParam(value = "page", required = false) Integer page)
+			@PathVariable("city") String city, 
+			@RequestParam(value = "search", required = false) String search,
+			@RequestParam(value = "page", required = false) Integer page)
 			throws BusinessException {
-		LocalityDto locality = localityCache.getLocality(restLocalityOrTagNameId);
-		ModelAndView modelAndView = new ModelAndView();
-		setCommonModelData(modelAndView, bnaLoginCookie, loc);
 		String[] urlParams = { city, restLocalityOrTagNameId };
+		ModelAndView modelAndView = initializeModelAndView(bnaLoginCookie, locationCookie, urlParams);
+		if (StringUtils.isNotBlank(search)) {
+			return globalSearch(modelAndView, locationCookie, search, page);
+		}
+		LocalityDto locality = localityCache.getLocality(restLocalityOrTagNameId);
 		if (locality != null) {
 			// TODO: bananaa.in/hyderabad/hitech-city
 			return null;
 		} else {
 			CuisineDto cuisine = cuisineCache.getCuisine(restLocalityOrTagNameId);
 			if (cuisine != null) {
-				TagSearch tagSearch = new TagSearch(modelAndView, urlParams, page, true, city, null);
+				TagSearch tagSearch = new TagSearch(modelAndView, page, true, city, null);
 				return getTagSearchResults(tagSearch, cuisine);
 			} else {
 				SuggestionDto suggestion = suggestionCache.getCuisine(restLocalityOrTagNameId);
 				if (suggestion != null) {
-					TagSearch tagSearch = new TagSearch(modelAndView, urlParams, page, true, city, null);
+					TagSearch tagSearch = new TagSearch(modelAndView, page, true, city, null);
 					return getTagSearchResults(tagSearch, suggestion);
 				} else {
-					return getMerchantDetails(modelAndView, restLocalityOrTagNameId, urlParams);
+					return getMerchantDetails(modelAndView, restLocalityOrTagNameId);
 				}
 			}
 		}
@@ -155,7 +167,7 @@ public class HomeController {
 	 * - bananaa.in/city/locality/tag
 	 * 
 	 * @param bnaLoginCookie
-	 * @param loc
+	 * @param locationCookie
 	 * @param city
 	 * @param restaurantOrLocalityNameId
 	 * @param itemOrTagNameId
@@ -163,24 +175,29 @@ public class HomeController {
 	 * @throws BusinessException
 	 */
 	@RequestMapping(value = "/{city}/{restaurantOrLocalityNameId}/{itemOrTagNameId}", method = RequestMethod.GET)
-	public ModelAndView foodDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("city") String city,
+	public ModelAndView foodDetails(
+			@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String locationCookie, 
+			@PathVariable("city") String city,
 			@PathVariable("restaurantOrLocalityNameId") String restaurantOrLocalityNameId,
 			@PathVariable("itemOrTagNameId") String itemOrTagNameId,
+			@RequestParam(value = "search", required = false) String search,
 			@RequestParam(value = "page", required = false) Integer page) throws BusinessException {
-		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
-		ModelAndView modelAndView = new ModelAndView();
-		setCommonModelData(modelAndView, bnaLoginCookie, loc);
 		String[] urlParams = { city, restaurantOrLocalityNameId, itemOrTagNameId };
+		ModelAndView modelAndView = initializeModelAndView(bnaLoginCookie, locationCookie, urlParams);
+		if (StringUtils.isNotBlank(search)) {
+			return globalSearch(modelAndView, locationCookie, search, page);
+		}
+		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
 		if (locality != null) {
 			CuisineDto cuisine = cuisineCache.getCuisine(itemOrTagNameId);
 			if (cuisine != null) {
-				TagSearch tagSearch = new TagSearch(modelAndView, urlParams, page, false, city, locality.getNameId());
+				TagSearch tagSearch = new TagSearch(modelAndView, page, false, city, locality.getNameId());
 				return getTagSearchResults(tagSearch, cuisine);
 			} else {
 				SuggestionDto suggestion = suggestionCache.getCuisine(itemOrTagNameId);
 				if (suggestion != null) {
-					TagSearch tagSearch = new TagSearch(modelAndView, urlParams, page, false, city, locality.getNameId());
+					TagSearch tagSearch = new TagSearch(modelAndView, page, false, city, locality.getNameId());
 					return getTagSearchResults(tagSearch, suggestion);
 				} else {
 					return null;
@@ -188,24 +205,71 @@ public class HomeController {
 				}
 			}
 		} else {
-			return getItemDetails(modelAndView, itemOrTagNameId, restaurantOrLocalityNameId, urlParams);
+			return getItemDetails(modelAndView, itemOrTagNameId, restaurantOrLocalityNameId);
 		}
 	}
 
 	@RequestMapping(value = "/user/{userNameId}", method = RequestMethod.GET)
-	public ModelAndView userDetails(@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
-			@CookieValue(name = "loc", defaultValue = "") String loc, @PathVariable("userNameId") String userNameId)
+	public ModelAndView userDetails(
+			@CookieValue(name = "blc", defaultValue = "") String bnaLoginCookie,
+			@CookieValue(name = "loc", defaultValue = "") String locationCookie, 
+			@PathVariable("userNameId") String userNameId,
+			@RequestParam(value = "search", required = false) String search,
+			@RequestParam(value = "page", required = false) Integer page)
 			throws BusinessException {
-		ModelAndView modelAndView = new ModelAndView("user-detail");
-		setCommonModelData(modelAndView, bnaLoginCookie, loc);
+		String[] urlParams = { "user", userNameId };
+		ModelAndView modelAndView = initializeModelAndView(bnaLoginCookie, locationCookie, urlParams);
+		if (StringUtils.isNotBlank(search)) {
+			return globalSearch(modelAndView, locationCookie, search, page);
+		}
+		modelAndView.setViewName("user-detail");
+		setCommonModelData(modelAndView, bnaLoginCookie, locationCookie);
 		UserDetailsResponse response = userDelegate.getUserDetails(userNameId);
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("description", getUserMetaDescription(response));
 		modelAndView.addObject("fbDescription", getUserMetaDescription(response));
 		modelAndView.addObject("title", getUserMetaTitle(response));
-		String[] urlParams = { "user", userNameId };
-		modelAndView.addObject("url", getMetaUrl(urlParams));
 		modelAndView.addObject("imageUrl", response.getUser().getImageUrl());
+		return modelAndView;
+	}
+	
+	private ModelAndView initializeModelAndView(String bnaLoginCookie, String locationCookie, String[] urlParams) {
+		ModelAndView modelAndView = new ModelAndView();
+		setCommonModelData(modelAndView, bnaLoginCookie, locationCookie);
+		modelAndView.addObject("url", getMetaUrl(urlParams));
+		return modelAndView;
+	}
+	
+	private ModelAndView globalSearch(ModelAndView modelAndView, String locationCookie, String search,
+			Integer page) throws BusinessException {
+		modelAndView.setViewName("tag-search");
+		page = page == null ? 1 : page;
+		String locationId = null;
+		String locationName = null;
+		boolean isCitySearch;
+		LocalityDto locality = localityCache.getLocality(locationCookie);
+		if (locality != null) {
+			isCitySearch = false;
+			locationId = locality.getNameId();
+			locationName = locality.getName();
+		} else {
+			CityDto city = cityCache.getCity(locationCookie);
+			if (city == null) {
+				// by default - city must be selected in cache
+				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+			}
+			isCitySearch = true;
+			locationId = city.getNameId();
+			locationName = city.getName();
+		}
+		MerchantListForTagResponse response = itemDelegate.searchDishByName(search, isCitySearch, locationId, page);
+		response.setTagName(search);
+		response.setLocation(locationName);
+		modelAndView.addObject("detail", response);
+		modelAndView.addObject("title", getSearchDescription(search));
+		modelAndView.addObject("description", getSearchDescription(search));
+		modelAndView.addObject("fbDescription", getSearchDescription(search));
+		modelAndView.addObject("isSearch", true);
 		return modelAndView;
 	}
 	
@@ -217,7 +281,7 @@ public class HomeController {
 	 * @return
 	 * @throws BusinessException
 	 */
-	private ModelAndView getMerchantDetails(ModelAndView modelAndView, String merchantNameId, String[] urlParams)
+	private ModelAndView getMerchantDetails(ModelAndView modelAndView, String merchantNameId)
 			throws BusinessException {
 		modelAndView.setViewName("detail");
 		DetailsRequest request = new DetailsRequest();
@@ -231,7 +295,6 @@ public class HomeController {
 		modelAndView.addObject("description", getMerchantMetaDescription(response));
 		modelAndView.addObject("fbDescription", getMerchantMetaDescription(response));
 		modelAndView.addObject("title", getMerchantMetaTitle(response));
-		modelAndView.addObject("url", getMetaUrl(urlParams));
 		modelAndView.addObject("imageUrl", response.getThumbnail());
 		return modelAndView;
 	}
@@ -245,8 +308,8 @@ public class HomeController {
 	 * @return
 	 * @throws BusinessException
 	 */
-	private ModelAndView getItemDetails(ModelAndView modelAndView, String itemNameId, String merchantNameId,
-			String[] urlParams) throws BusinessException {
+	private ModelAndView getItemDetails(ModelAndView modelAndView, String itemNameId, String merchantNameId)
+			throws BusinessException {
 		modelAndView.setViewName("item-detail");
 		DetailsRequest detailsRequest = new DetailsRequest();
 		detailsRequest.setItemNameId(itemNameId);
@@ -256,7 +319,6 @@ public class HomeController {
 		modelAndView.addObject("description", getItemMetaDescription(response));
 		modelAndView.addObject("fbDescription", getItemMetaDescription(response));
 		modelAndView.addObject("title", getItemMetaTitle(response));
-		modelAndView.addObject("url", getMetaUrl(urlParams));
 		modelAndView.addObject("imageUrl", response.getDish().getThumbnail());
 		return modelAndView;
 	}
@@ -299,7 +361,6 @@ public class HomeController {
 		modelAndView.addObject("description", metaDescription);
 		modelAndView.addObject("fbDescription", metaDescription);
 		modelAndView.addObject("title", tagName + " in " + location);
-		modelAndView.addObject("url", getMetaUrl(tagSearch.getUrlParams()));
 		modelAndView.addObject("imageUrl", tag.getImageUrl());
 		return modelAndView;
 	}
@@ -431,17 +492,19 @@ public class HomeController {
 		return description.toString();
 	}
 	
+	private String getSearchDescription(String searchString) {
+		return "Bananaa Search for '" + searchString + "'";
+	}
+	
 	private class TagSearch {
 		private ModelAndView modelAndView;
-		private String[] urlParams;
 		private Integer page;
 		private String city;
 		private String locality;
 		private boolean isCitySearch;
 		
-		public TagSearch(ModelAndView modelAndView, String[] urlParams, Integer page, boolean isCitySearch, String city, String locality) {
+		public TagSearch(ModelAndView modelAndView, Integer page, boolean isCitySearch, String city, String locality) {
 			this.modelAndView = modelAndView;
-			this.urlParams = urlParams;
 			this.page = page;
 			this.isCitySearch = isCitySearch;
 			this.city = city;
@@ -450,10 +513,6 @@ public class HomeController {
 
 		public ModelAndView getModelAndView() {
 			return modelAndView;
-		}
-
-		public String[] getUrlParams() {
-			return urlParams;
 		}
 
 		public Integer getPage() {

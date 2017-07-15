@@ -1,5 +1,6 @@
 package in.socyal.sc.persistence;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.PopularTag;
+import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
@@ -27,18 +29,24 @@ import in.socyal.sc.persistence.entity.DishCount;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
+import in.socyal.sc.persistence.entity.MerchantWrapperEntity;
 import in.socyal.sc.persistence.entity.PopularTagEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
+import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class DishDao {
 	private static final String NAME = "name";
+	private static final Integer RESULTS_PER_PAGE = 10;
+	
 	@Autowired
 	DishDaoMapper mapper;
 	@Autowired
 	RecommendationDaoMapper rcmdnMapper;
+	@Autowired
+	MerchantDaoMapper merchantDaoMapper;
 	@Autowired
 	SessionFactory sessionFactory;
 
@@ -54,6 +62,59 @@ public class DishDao {
 		return dish == null ? false : true;
 	}
 
+	@SuppressWarnings("unchecked")
+	public Integer searchDishByNamePages(String searchString, boolean isCitySearch, String localityId) {
+		Criteria criteria = searchDishByNameCriteria(searchString, isCitySearch, localityId);
+		List<Long> totalCountList = criteria.list();
+		if (totalCountList.size() <= 0) {
+			return 0;
+		} else {
+			return (int) (totalCountList.size() / RESULTS_PER_PAGE + 1);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MerchantDto> searchDishByName(String searchString, boolean isCitySearch, String localityId, Integer page) {
+		Criteria criteria = searchDishByNameCriteria(searchString, isCitySearch, localityId);
+		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		criteria.setResultTransformer(Transformers.aliasToBean(MerchantWrapperEntity.class));
+		List<MerchantWrapperEntity> merchants = criteria.list();
+		if (merchants != null && !merchants.isEmpty()) {
+			List<MerchantDto> merchantDtos = new ArrayList<>();
+			MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
+			MerchantDto dto = null;
+			for (MerchantWrapperEntity wrapper : merchants) {
+				dto = new MerchantDto();
+				merchantDaoMapper.map(wrapper.getMerchant(), dto, filter);
+				merchantDtos.add(dto);
+			}
+			return merchantDtos;
+		}
+		return Collections.emptyList();
+	}
+	
+	private Criteria searchDishByNameCriteria(String searchString, boolean isCitySearch, String localityId) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.ilike(NAME, searchString, MatchMode.ANYWHERE));
+		criteria.createAlias("merchant", "merchant");
+		criteria.createAlias("merchant.address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (isCitySearch) {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", localityId));
+		} else {
+			criteria.add(Restrictions.eq("locality.nameId", localityId));
+		}		
+		
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("merchant").as("merchant"));
+		projList.add(Projections.groupProperty("merchant.id"));
+		criteria.setProjection(projList);
+		return criteria;
+	}
+	
 	public List<DishDto> searchDishAtARestaurant(String searchString, Integer merchantId) {
 		List<DishDto> dishDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);

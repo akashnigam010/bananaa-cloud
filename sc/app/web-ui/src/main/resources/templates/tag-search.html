@@ -19,7 +19,16 @@
 
         <div class="row bna-bg">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                <div style="padding: 3% 0%;">
+                <div style="padding: 3% 0%;" th:if="${isSearch}">
+					<span class="light font-1-5">Following places serve</span>&nbsp;
+					<span class="bold font-2">
+						<span>'</span>
+						<span th:text="${detail.tagName}">falafel</span>
+						<span>'</span>
+					</span>&nbsp;
+					<span class="light font-1-5" th:text="'in ' + ${detail.location}">in Hitech City</span>	
+				</div>
+				<div style="padding: 3% 0%;" th:unless="${isSearch}">
 					<span class="bold font-2" th:text="${detail.tagName}">Italian</span> &nbsp; 
 					<span class="light font-1-5" th:text="'in ' + ${detail.location}">in Hitech City</span>	
 				</div>
@@ -63,7 +72,7 @@
                                                 	<span>dishes</span> 
                                                 </div>
                                             </div>
-                                            <div class="float-right">
+                                            <div class="float-right" th:if="${merchant.searchTag != null}">
                                             	<div>
                                             		<span th:class="${merchant.searchTag.ratingClass} + ' float-right rating-rcmd bold'" style="padding: 5px 10px; font-size: 1.1em;" th:text="${merchant.searchTag.rating}"></span>
                                             	</div>

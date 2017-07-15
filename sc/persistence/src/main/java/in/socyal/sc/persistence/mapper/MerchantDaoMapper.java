@@ -2,6 +2,7 @@ package in.socyal.sc.persistence.mapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -33,7 +34,7 @@ public class MerchantDaoMapper {
 	@Autowired
 	LocationDaoMapper mapper;
 	
-	public void map(List<MerchantEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
+	public void map(Collection<MerchantEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
 		for (MerchantEntity entity : from) {
 			MerchantDto dto = new MerchantDto();
 			map(entity, dto, filter);

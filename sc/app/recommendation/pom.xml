@@ -21,5 +21,10 @@
 			<artifactId>persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>sc</groupId>
+			<artifactId>merchant</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

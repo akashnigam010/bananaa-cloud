@@ -8,10 +8,10 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
-import in.socyal.sc.api.item.response.TagResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
+import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.type.TagType;
 
 public interface ItemDelegate {
@@ -26,4 +26,7 @@ public interface ItemDelegate {
 	PopularTagResponse getPopularCuisines() throws BusinessException;
 
 	PopularTagResponse getPopularDishes() throws BusinessException;
+
+	MerchantListForTagResponse searchDishByName(String searchString, boolean isCitySearch, String localityId,
+			Integer page) throws BusinessException;
 }

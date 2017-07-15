@@ -32,8 +32,8 @@
 	<script src="/r/e/s/o/u/r/c/e/js/main.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			loadLocations($('#topSearchLocation'));
-			loadLocations($('#modalSearchLocation'));
+			loadLocations($('#topSearchLocation'), $('#topSearchInput'));
+			loadLocations($('#modalSearchLocation'), $('#modalSearchInput'));
 		});
 		function openSearchModal() {
 			$('#searchModal').modal('show');
