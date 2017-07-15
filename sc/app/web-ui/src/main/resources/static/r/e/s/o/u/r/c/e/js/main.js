@@ -63,16 +63,26 @@ $(document).ready(function() {
     $('[data-toggle="popover"]').popover();
     $("#topSearchInput").keypress(function(e) {
         if(e.which == 10 || e.which == 13) {
-            homeGlobalSearch();
+            homeGlobalSearch($("#topSearchInput").val());
         }
+    });
+    
+    $("#modalSearchInput").keypress(function(e) {
+        if(e.which == 10 || e.which == 13) {
+        	homeGlobalSearch($("#modalSearchInput").val());
+        }
+    });
+    
+    $("#topHeaderSearchButton").on('click', function() {
+    	homeGlobalSearch($("#topSearchInput").val());
     });
 });
 
-function homeGlobalSearch() {
+function homeGlobalSearch(searchString) {
     var urlWithParams = window.location.href;
     var urlWithOutParams = urlWithParams.split('?')[0];
-    var searchString = $("#topSearchInput").val();
-    window.location = urlWithOutParams+'?search='+searchString;
+    var urlWithOutHash = urlWithOutParams.split('#')[0];
+    window.location = urlWithOutHash+'?search='+searchString;
 }
 
 function activateLogin() {

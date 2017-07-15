@@ -30,10 +30,11 @@ $(document).ready(function() {
 });
 
 function homeSearch() {
-    var urlWithParams = window.location.href;
+	var searchString = $("#search-field").val();
+	var urlWithParams = window.location.href;
     var urlWithOutParams = urlWithParams.split('?')[0];
-    var searchString = $("#search-field").val();
-    window.location = urlWithOutParams+'?search='+searchString;
+    var urlWithOutHash = urlWithOutParams.split('#')[0];
+    window.location = urlWithOutHash+'?search='+searchString;
 }
 
 function getTrendingRestaurants() {
