@@ -42,10 +42,10 @@ public class MerchantDelegateMapper {
 			TrendingMerchant trendingMerchant = new TrendingMerchant();
 			MerchantDto merchant = dto.getMerchant();
 			trendingMerchant.setId(merchant.getId());
+			trendingMerchant.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
 			trendingMerchant.setThumbnail(merchant.getThumbnail());
 			trendingMerchant.setName(merchant.getName());
 			trendingMerchant.setNameId(merchant.getNameId());
-			trendingMerchant.setRecommendations(dto.getRecommendations());
 			trendingMerchant.setShortAddress(merchant.getAddress().getLocality().getShortAddress());
 			trendingMerchant.setMerchantUrl(merchant.getMerchantUrl());
 			merchants.add(trendingMerchant);

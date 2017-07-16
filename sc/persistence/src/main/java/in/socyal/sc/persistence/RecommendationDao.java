@@ -85,16 +85,17 @@ public class RecommendationDao {
 
 	@SuppressWarnings("unchecked")
 	public List<TrendingMerchantResultDto> getTrendingMerchants() {
+		// Trending restaurants is calculated using average of DISH rating
 		List<TrendingMerchantResultDto> response = new ArrayList<>();
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
-		criteria.createAlias("dish", "d");
-		criteria.createAlias("d.merchant", "m");
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.ge("rating", 0.0));
+		criteria.createAlias("merchant", "merchant");
 		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.count("m.id").as("recommendations"));
-		projList.add(Projections.groupProperty("m.id").as("merchantId"));
-		projList.add(Projections.property("d.merchant").as("merchant"));
+		projList.add(Projections.avg("rating").as("rating"));
+		projList.add(Projections.groupProperty("merchant.id"));
+		projList.add(Projections.property("merchant").as("merchant"));
 		criteria.setProjection(projList);
-		criteria.addOrder(Order.desc("recommendations"));
+		criteria.addOrder(Order.desc("rating"));
 		int firstResult = ((PAGE - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
@@ -103,20 +104,6 @@ public class RecommendationDao {
 		mapper.map(result, response);
 		return response;
 	}
-
-//	@SuppressWarnings("unchecked")
-//	public Integer getMerchantRecommendationCount(Integer merchantId) {
-//		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
-//		criteria.createAlias("dish", "d");
-//		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
-//		criteria.add(Restrictions.eq("d.isActive", Boolean.TRUE));
-//		criteria.add(Restrictions.eq("d.merchant.id", merchantId));
-//		List<RecommendationEntity> entities = criteria.list();
-//		if (entities == null) {
-//			return 0;
-//		}
-//		return entities.size();
-//	}
 
 	@SuppressWarnings("unchecked")
 	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {

@@ -3,6 +3,7 @@ package in.socyal.sc.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -83,7 +84,8 @@ public class MerchantService {
 	}
 
 	@RequestMapping(value = "/getTrendingRestaurants", method = RequestMethod.GET, headers = "Accept=application/json")
-	public GetTrendingMerchantsResponse getTrendingRestaurants() {
+	public GetTrendingMerchantsResponse getTrendingRestaurants(
+			@CookieValue(name = "loc", defaultValue = "") String locationCookie) {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
 		try {
 			response = delegate.getTrendingMerchants();

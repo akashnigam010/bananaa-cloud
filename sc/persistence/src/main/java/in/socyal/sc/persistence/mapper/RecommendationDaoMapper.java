@@ -33,10 +33,10 @@ public class RecommendationDaoMapper {
 
 	public void map(TrendingMerchantResultEntity entity, TrendingMerchantResultDto dto) {
 		MerchantDto merchant = new MerchantDto();
-		MerchantFilterCriteria criteria = new MerchantFilterCriteria(true, true, false, false, false, true);
+		MerchantFilterCriteria criteria = new MerchantFilterCriteria(true, true, false, false, false, false);
 		merchantMapper.map(entity.getMerchant(), merchant, criteria);
 		dto.setMerchant(merchant);
-		dto.setRecommendations(entity.getRecommendations());
+		dto.setRating(entity.getRating().floatValue());
 	}
 
 	public void map(RecommendationEntity entity, RecommendationDto dto) {

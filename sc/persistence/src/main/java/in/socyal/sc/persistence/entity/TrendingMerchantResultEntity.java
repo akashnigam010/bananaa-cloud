@@ -1,24 +1,15 @@
 package in.socyal.sc.persistence.entity;
 
 public class TrendingMerchantResultEntity {
-	private Integer merchantId;
-	private Long recommendations;
+	private Double rating;
 	private MerchantEntity merchant;
 
-	public Integer getMerchantId() {
-		return merchantId;
+	public Double getRating() {
+		return rating;
 	}
 
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
-	}
-
-	public Long getRecommendations() {
-		return recommendations;
-	}
-
-	public void setRecommendations(Long recommendations) {
-		this.recommendations = recommendations;
+	public void setRating(Double rating) {
+		this.rating = rating;
 	}
 
 	public MerchantEntity getMerchant() {
@@ -28,4 +19,5 @@ public class TrendingMerchantResultEntity {
 	public void setMerchant(MerchantEntity merchant) {
 		this.merchant = merchant;
 	}
+
 }
