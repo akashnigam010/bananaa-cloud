@@ -127,9 +127,10 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public GetTrendingMerchantsResponse getTrendingMerchants() throws BusinessException {
+	public GetTrendingMerchantsResponse getTrendingMerchants(boolean isCitySearch, String locationId)
+			throws BusinessException {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
-		List<TrendingMerchantResultDto> result = rcmdnDao.getTrendingMerchants();
+		List<TrendingMerchantResultDto> result = rcmdnDao.getTrendingMerchants(isCitySearch, locationId);
 		mapper.map(result, response);
 		return response;
 	}

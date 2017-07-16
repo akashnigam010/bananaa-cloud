@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.dto.CityDto;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
@@ -22,8 +24,11 @@ import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.merchant.response.StoriesResponse;
 import in.socyal.sc.api.merchant.response.Story;
 import in.socyal.sc.api.type.TagType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
+import in.socyal.sc.cache.CityCache;
+import in.socyal.sc.cache.LocalityCache;
 import in.socyal.sc.helper.JsonHelper;
 
 @RestController
@@ -37,6 +42,10 @@ public class MerchantService {
 	ItemDelegate itemDelegate;
 	@Autowired
 	ResponseHelper responseHelper;
+	@Autowired
+	CityCache cityCache;
+	@Autowired
+	LocalityCache localityCache;
 
 	@RequestMapping(value = "/gSearch", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GlobalSearchResponse globalSearch(@RequestBody SearchRequest request) {
@@ -88,7 +97,22 @@ public class MerchantService {
 			@CookieValue(name = "loc", defaultValue = "") String locationCookie) {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
 		try {
-			response = delegate.getTrendingMerchants();
+			boolean isCitySearch = false;
+			String locationId = null;
+			LocalityDto locality = localityCache.getLocality(locationCookie);
+			if (locality != null) {
+				isCitySearch = false;
+				locationId = locality.getNameId();
+			} else {
+				CityDto city = cityCache.getCity(locationCookie);
+				if (city == null) {
+					// by default - city must be selected in cache
+					throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+				}
+				isCitySearch = true;
+				locationId = city.getNameId();
+			}
+			response = delegate.getTrendingMerchants(isCitySearch, locationId);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

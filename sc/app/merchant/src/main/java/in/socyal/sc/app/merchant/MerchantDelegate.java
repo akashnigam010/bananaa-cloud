@@ -19,7 +19,7 @@ public interface MerchantDelegate {
 
 	SearchMerchantResponse searchMerchant(SearchRequest request) throws BusinessException;
 
-	GetTrendingMerchantsResponse getTrendingMerchants() throws BusinessException;
+	GetTrendingMerchantsResponse getTrendingMerchants(boolean isCitySearch, String locationId) throws BusinessException;
 
 	MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException;
 

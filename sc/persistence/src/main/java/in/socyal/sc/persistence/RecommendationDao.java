@@ -84,12 +84,22 @@ public class RecommendationDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TrendingMerchantResultDto> getTrendingMerchants() {
+	public List<TrendingMerchantResultDto> getTrendingMerchants(boolean isCitySearch, String locationId) {
 		// Trending restaurants is calculated using average of DISH rating
 		List<TrendingMerchantResultDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.ge("rating", 0.0));
 		criteria.createAlias("merchant", "merchant");
+		
+		criteria.createAlias("merchant.address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (isCitySearch) {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", locationId));
+		} else {
+			criteria.add(Restrictions.eq("locality.nameId", locationId));
+		}	
+		
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.avg("rating").as("rating"));
 		projList.add(Projections.groupProperty("merchant.id"));
