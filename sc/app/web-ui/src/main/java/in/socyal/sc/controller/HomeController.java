@@ -32,13 +32,14 @@ import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.UserDetailsResponse;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
-import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.cache.CityCache;
 import in.socyal.sc.cache.CuisineCache;
 import in.socyal.sc.cache.LocalityCache;
 import in.socyal.sc.cache.SuggestionCache;
+import in.socyal.sc.helper.LocalityCookieDto;
+import in.socyal.sc.helper.LocalityCookieHelper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.user.UserDelegate;
 
@@ -80,6 +81,8 @@ public class HomeController {
 	CuisineCache cuisineCache;
 	@Autowired
 	SuggestionCache suggestionCache;
+	@Autowired
+	LocalityCookieHelper cookieHelper;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(@CookieValue(name = "city", defaultValue = "") String city,
@@ -244,27 +247,10 @@ public class HomeController {
 			Integer page) throws BusinessException {
 		modelAndView.setViewName("tag-search");
 		page = page == null ? 1 : page;
-		String locationId = null;
-		String locationName = null;
-		boolean isCitySearch;
-		LocalityDto locality = localityCache.getLocality(locationCookie);
-		if (locality != null) {
-			isCitySearch = false;
-			locationId = locality.getNameId();
-			locationName = locality.getName();
-		} else {
-			CityDto city = cityCache.getCity(locationCookie);
-			if (city == null) {
-				// by default - city must be selected in cache
-				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-			}
-			isCitySearch = true;
-			locationId = city.getNameId();
-			locationName = city.getName();
-		}
-		MerchantListForTagResponse response = itemDelegate.searchDishByName(search, isCitySearch, locationId, page);
+		LocalityCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+		MerchantListForTagResponse response = itemDelegate.searchDishByName(search, cookieDto.isCitySearch(), cookieDto.getLocalityId(), page);
 		response.setTagName(search);
-		response.setLocation(locationName);
+		response.setLocation(cookieDto.getLocationName());
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("title", getSearchDescription(search));
 		modelAndView.addObject("description", getSearchDescription(search));

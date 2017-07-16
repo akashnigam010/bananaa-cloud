@@ -90,7 +90,6 @@ public class RecommendationDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.ge("rating", 0.0));
 		criteria.createAlias("merchant", "merchant");
-		
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
 		if (isCitySearch) {

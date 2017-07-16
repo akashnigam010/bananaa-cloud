@@ -23,9 +23,9 @@ public interface ItemDelegate {
 
 	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
 
-	PopularTagResponse getPopularCuisines() throws BusinessException;
+	PopularTagResponse getPopularCuisines(boolean isCitySearch, String locationId) throws BusinessException;
 
-	PopularTagResponse getPopularDishes() throws BusinessException;
+	PopularTagResponse getPopularDishes(boolean isCitySearch, String locationId) throws BusinessException;
 
 	MerchantListForTagResponse searchDishByName(String searchString, boolean isCitySearch, String localityId,
 			Integer page) throws BusinessException;

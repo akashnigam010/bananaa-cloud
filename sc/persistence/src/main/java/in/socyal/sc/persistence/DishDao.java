@@ -3,6 +3,7 @@ package in.socyal.sc.persistence;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
@@ -38,8 +39,10 @@ import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class DishDao {
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
+	private static final String MINIMUM_TAG_RATING = "minimum.rating";
 	
 	@Autowired
 	DishDaoMapper mapper;
@@ -187,9 +190,20 @@ public class DishDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PopularTag> getPopularCuisines(Integer page, Integer resultsPerPage)
+	public List<PopularTag> getPopularCuisines(boolean isCitySearch, String locationId, Integer page, Integer resultsPerPage)
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
+		criteria.createAlias("merchant", "merchant");
+		criteria.createAlias("merchant.cuisineRatings", "cuisineRatings");
+		criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+		criteria.createAlias("merchant.address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (isCitySearch) {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", locationId));
+		} else {
+			criteria.add(Restrictions.eq("locality.nameId", locationId));
+		}	
 		criteria.createAlias("cuisine", "cuisine");
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.count("cuisine.id").as("merchants"));
@@ -208,9 +222,20 @@ public class DishDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PopularTag> getPopularSuggestions(Integer page, Integer resultsPerPage)
+	public List<PopularTag> getPopularSuggestions(boolean isCitySearch, String locationId, Integer page, Integer resultsPerPage)
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
+		criteria.createAlias("merchant", "merchant");
+		criteria.createAlias("merchant.suggestionRatings", "suggestionRatings");
+		criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+		criteria.createAlias("merchant.address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (isCitySearch) {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", locationId));
+		} else {
+			criteria.add(Restrictions.eq("locality.nameId", locationId));
+		}	
 		criteria.createAlias("suggestion", "suggestion");
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.count("suggestion.id").as("merchants"));

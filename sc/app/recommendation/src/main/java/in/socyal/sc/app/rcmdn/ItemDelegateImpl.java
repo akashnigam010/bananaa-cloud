@@ -68,9 +68,9 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public PopularTagResponse getPopularCuisines() throws BusinessException {
+	public PopularTagResponse getPopularCuisines(boolean isCitySearch, String locationId) throws BusinessException {
 		PopularTagResponse response = new PopularTagResponse();
-		List<PopularTag> tags = dishDao.getPopularCuisines(1, 5);
+		List<PopularTag> tags = dishDao.getPopularCuisines(isCitySearch, locationId, 1, 5);
 		if (!tags.isEmpty()) {
 			response.setTags(tags);
 		}
@@ -79,9 +79,9 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public PopularTagResponse getPopularDishes() throws BusinessException {
+	public PopularTagResponse getPopularDishes(boolean isCitySearch, String locationId) throws BusinessException {
 		PopularTagResponse response = new PopularTagResponse();
-		List<PopularTag> tags = dishDao.getPopularSuggestions(1, 5);
+		List<PopularTag> tags = dishDao.getPopularSuggestions(isCitySearch, locationId, 1, 5);
 		if (!tags.isEmpty()) {
 			response.setTags(tags);
 		}
