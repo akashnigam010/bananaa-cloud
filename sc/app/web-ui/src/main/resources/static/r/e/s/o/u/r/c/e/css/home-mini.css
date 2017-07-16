@@ -30,26 +30,6 @@ body {
     padding-top: 3%;
 }
 
-.home-banner {
-    background: linear-gradient(
-                     rgba(20,20,20, .3), 
-                     rgba(20,20,20, 0)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.png");
-    background-repeat: no-repeat;
-    background-position: center left;
-    background-size: cover;
-}
-
-.sec-banner {
-    background: linear-gradient(
-                     rgba(20,20,20, .5), 
-                     rgba(20,20,20, .8)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg-sec.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-}
-
 .purple-banner {
     font-size: 1.5em;
     padding: 15% 0%;
@@ -60,7 +40,7 @@ body {
 }
 
 .meme-wrapper {
-    margin-bottom: 15%;
+    margin-bottom: 10%;
 }
 
 .icon-search-home {

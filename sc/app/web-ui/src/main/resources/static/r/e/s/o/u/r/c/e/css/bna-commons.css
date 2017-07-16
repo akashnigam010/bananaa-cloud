@@ -394,6 +394,14 @@ a:hover {
 	padding-bottom: 5%;
 }
 
+.margin-top {
+  margin-top: 5%;
+}
+
+.margin-bottom {
+  margin-bottom: 5%;
+}
+
 .float-left {
 	float: left;
 }
@@ -624,6 +632,25 @@ input:focus ~ .highlight, textarea:focus ~ .highlight {
 
 .bna-button-light:hover, .bna-button-light:focus {
   background-color: #cdced0;
+}
+
+.bna-button-white {
+    padding: 10px 16px;
+    margin: 10px;
+    line-height: 1.3333333;
+    border-radius: 3px;
+    -webkit-appearance: button;
+    cursor: pointer;
+    align-items: flex-start;
+    text-align: center;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    outline: none;
+}
+
+.bna-button-white:hover, .bna-button-white:focus {
+  background-color: #E0E1E2;
 }
 
 /*Input placeholder css STARTS*/

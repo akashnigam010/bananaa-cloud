@@ -134,7 +134,7 @@ function searchConfig(element, loc) {
             }
         },
     	displayText: function(searchItem) {
-    		var displayTxt = '<div style="padding: 2%;"><span>' + 
+    		var displayTxt = '<div style="padding: 1%;"><span>' + 
 								searchItem.name + 
 							 '</span> <br />';
     		if (searchItem.type == 'RESTAURANT') {
