@@ -47,6 +47,7 @@ function getTrendingRestaurants() {
     		  var trendingRestaurantHtml = '';
     		  if (response.result) {
     			  if (response.merchants.length > 0) {
+    				  $('.trending-restaurants').removeClass('hide');
     				  for (var i=0; i<response.merchants.length; i++) {    					  
     					  trendingRestaurantHtml +=
     						  '<div class="flick-div" onclick="javascript:location.href=\''+response.merchants[i].merchantUrl+'\'">'+
@@ -66,6 +67,8 @@ function getTrendingRestaurants() {
     				  $('.restaurant-wrapper').html(trendingRestaurantHtml);
     				  $('.restaurant-wrapper').flickity(getFlickityOptions());
     				  $('.trending-restaurants').find('.loader').hide();
+    			  } else {
+    				  $('.trending-restaurants').addClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);
@@ -83,6 +86,7 @@ function getTrendingCuisines() {
     		  var trendingHtml = '';
     		  if (response.result) {
     			  if (response.tags.length > 0) {
+    				  $(".trending-cuisines").removeClass('hide');
     				  for (var i=0; i<response.tags.length; i++) {    					  
     					  trendingHtml +=
     						  '<div class="flick-div" onclick="javascript:location.href=\''+response.tags[i].url+'\'">'+
@@ -101,6 +105,8 @@ function getTrendingCuisines() {
     				  $('.cuisine-wrapper').html(trendingHtml);
     				  $('.cuisine-wrapper').flickity(getFlickityOptions());
     				  $('.trending-cuisines').find('.loader').hide();
+    			  } else {
+    				  $(".trending-cuisines").addClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);
@@ -118,6 +124,7 @@ function getTrendingDishes() {
     		  var trendingHtml = '';
     		  if (response.result) {
     			  if (response.tags.length > 0) {
+    				  $('.trending-dishes').removeClass('hide');
     				  for (var i=0; i<response.tags.length; i++) {
     					  trendingHtml +=
     						  '<div class="flick-div" onclick="javascript:location.href=\''+response.tags[i].url+'\'">'+
@@ -136,6 +143,8 @@ function getTrendingDishes() {
     				  $('.dish-wrapper').html(trendingHtml);
     				  $('.dish-wrapper').flickity(getFlickityOptions());
     				  $('.trending-dishes').find('.loader').hide();
+    			  } else {
+    				  $('.trending-dishes').addClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);
