@@ -206,7 +206,7 @@ public class DishDaoMapper {
 		return ratingAndReviewCount;
 	}
 
-	public List<PopularTag> mapPopularTags(List<PopularTagEntity> entities) {
+	public List<PopularTag> mapPopularTags(List<PopularTagEntity> entities, String preUrl) {
 		List<PopularTag> tags = new ArrayList<>();
 		PopularTag tag = null;
 		for (PopularTagEntity entity : entities) {
@@ -215,7 +215,7 @@ public class DishDaoMapper {
 			tag.setName(entity.getName());
 			tag.setNameId(entity.getNameId());
 			tag.setThumbnail(entity.getThumbnail());
-			tag.setUrl("/hyderabad/"+entity.getNameId());
+			tag.setUrl(preUrl + entity.getNameId());
 			tags.add(tag);
 		}
 		return tags;

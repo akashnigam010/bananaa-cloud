@@ -50,8 +50,9 @@ function getTrendingRestaurants() {
     				  $('.trending-restaurants').removeClass('hide');
     				  for (var i=0; i<response.merchants.length; i++) {    					  
     					  trendingRestaurantHtml +=
-    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.merchants[i].merchantUrl+'\'">'+
-	                              '<img class="flick-image flick-img-txt details-wrapper" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa" />'+
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.merchants[i].merchantUrl+'">'+
+		                              '<img draggable="false" class="flick-image flick-img-txt details-wrapper" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa" />'+
 	                                  '<div class="flick-txt padding-left">'+
 	                                      '<div class="pull-left">'+
 	                                        '<span class="font-1-3">'+response.merchants[i].name+'</span>'+
@@ -62,7 +63,8 @@ function getTrendingRestaurants() {
 	                                        '<span class="float-right rating-rcmd ' + response.merchants[i].ratingClass + '" style="padding: 10% 40%;">'+response.merchants[i].rating+'</span>'+
 	                                      '</div>'+	                                      
 	                                  '</div>'+
-	                              '</div>';
+                                  '</a>'+
+	                          '</div>';
     				  }
     				  $('.restaurant-wrapper').html(trendingRestaurantHtml);
     				  $('.restaurant-wrapper').flickity(getFlickityOptions());
@@ -89,8 +91,9 @@ function getTrendingCuisines() {
     				  $(".trending-cuisines").removeClass('hide');
     				  for (var i=0; i<response.tags.length; i++) {    					  
     					  trendingHtml +=
-    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.tags[i].url+'\'">'+
-	                              '<img class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.tags[i].url+'">'+
+	    						  	  '<img draggable="false" class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
 	                                  '<div class="flick-txt padding-left">'+
 	                                      '<div class="pull-left">'+
 	                                        '<span class="font-1-3">'+response.tags[i].name+'</span>'+
@@ -100,7 +103,8 @@ function getTrendingCuisines() {
 	                                      	'<span class="font-0-8">'+getPlaceString(response.tags[i].merchants)+'</span>'+
 	                                      '</div>'+	                                      
 	                                  '</div>'+
-	                              '</div>';
+                                  '</a>'+
+                              '</div>';
     				  }
     				  $('.cuisine-wrapper').html(trendingHtml);
     				  $('.cuisine-wrapper').flickity(getFlickityOptions());
@@ -127,8 +131,9 @@ function getTrendingDishes() {
     				  $('.trending-dishes').removeClass('hide');
     				  for (var i=0; i<response.tags.length; i++) {
     					  trendingHtml +=
-    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.tags[i].url+'\'">'+
-	                              '<img class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.tags[i].url+'">'+
+	    						  	  '<img draggable="false" class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
 	                                  '<div class="flick-txt padding-left">'+
 	                                      '<div class="pull-left">'+
 	                                        '<span class="font-1-3">'+response.tags[i].name+'</span>'+
@@ -138,7 +143,8 @@ function getTrendingDishes() {
 	                                      	'<span class="font-0-8">'+getPlaceString(response.tags[i].merchants)+'</span>'+
 	                                      '</div>'+	                                      
 	                                  '</div>'+
-	                              '</div>';
+                                  '</a>'+
+                              '</div>';
     				  }
     				  $('.dish-wrapper').html(trendingHtml);
     				  $('.dish-wrapper').flickity(getFlickityOptions());
@@ -172,11 +178,13 @@ function getStories() {
     			  if (response.stories.length > 0) {
     				  for (var i=0; i<response.stories.length; i++) {
     					  storiesHtml +=
-    						  '<div class="flick-div" onclick="javascript:location.href=\''+response.stories[i].url+'\'">'+
-		                          '<img class="flick-image flick-img-txt diary-img details-wrapper" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
-		                          '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
-		                              '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
-		                          '</div>'+
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.stories[i].url+'">'+
+			                          '<img draggable="false" class="flick-image flick-img-txt diary-img details-wrapper" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
+			                          '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
+			                              '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
+			                          '</div>'+
+		                          '</a>'+
 		                      '</div>';
     				  }
     				  $('.diary-wrapper').html(storiesHtml);

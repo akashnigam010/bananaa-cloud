@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import in.socyal.sc.api.DetailsRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
@@ -38,7 +39,6 @@ import in.socyal.sc.cache.CityCache;
 import in.socyal.sc.cache.CuisineCache;
 import in.socyal.sc.cache.LocalityCache;
 import in.socyal.sc.cache.SuggestionCache;
-import in.socyal.sc.helper.LocalityCookieDto;
 import in.socyal.sc.helper.LocalityCookieHelper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.user.UserDelegate;
@@ -247,8 +247,8 @@ public class HomeController {
 			Integer page) throws BusinessException {
 		modelAndView.setViewName("tag-search");
 		page = page == null ? 1 : page;
-		LocalityCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
-		MerchantListForTagResponse response = itemDelegate.searchDishByName(search, cookieDto.isCitySearch(), cookieDto.getLocalityId(), page);
+		LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+		MerchantListForTagResponse response = itemDelegate.searchDishByName(search, cookieDto, page);
 		response.setTagName(search);
 		response.setLocation(cookieDto.getLocationName());
 		modelAndView.addObject("detail", response);

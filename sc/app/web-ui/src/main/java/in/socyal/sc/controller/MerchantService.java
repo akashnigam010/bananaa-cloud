@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
@@ -25,7 +26,6 @@ import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.helper.JsonHelper;
-import in.socyal.sc.helper.LocalityCookieDto;
 import in.socyal.sc.helper.LocalityCookieHelper;
 
 @RestController
@@ -92,8 +92,8 @@ public class MerchantService {
 			@CookieValue(name = "loc", defaultValue = "") String locationCookie) {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
 		try {
-			LocalityCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
-			response = delegate.getTrendingMerchants(cookieDto.isCitySearch(), cookieDto.getLocalityId());
+			LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+			response = delegate.getTrendingMerchants(cookieDto);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

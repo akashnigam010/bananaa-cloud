@@ -17,6 +17,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
@@ -84,7 +85,7 @@ public class RecommendationDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TrendingMerchantResultDto> getTrendingMerchants(boolean isCitySearch, String locationId) {
+	public List<TrendingMerchantResultDto> getTrendingMerchants(LocationCookieDto cookieDto) {
 		// Trending restaurants is calculated using average of DISH rating
 		List<TrendingMerchantResultDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
@@ -92,11 +93,11 @@ public class RecommendationDao {
 		criteria.createAlias("merchant", "merchant");
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
-		if (isCitySearch) {
+		if (cookieDto.isCitySearch()) {
 			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", locationId));
+			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
 		} else {
-			criteria.add(Restrictions.eq("locality.nameId", locationId));
+			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
 		}	
 		
 		ProjectionList projList = Projections.projectionList();

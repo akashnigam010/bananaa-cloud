@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
@@ -68,9 +69,9 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public PopularTagResponse getPopularCuisines(boolean isCitySearch, String locationId) throws BusinessException {
+	public PopularTagResponse getPopularCuisines(LocationCookieDto cookieDto) throws BusinessException {
 		PopularTagResponse response = new PopularTagResponse();
-		List<PopularTag> tags = dishDao.getPopularCuisines(isCitySearch, locationId, 1, 5);
+		List<PopularTag> tags = dishDao.getPopularCuisines(cookieDto, 1, 5);
 		if (!tags.isEmpty()) {
 			response.setTags(tags);
 		}
@@ -79,9 +80,9 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public PopularTagResponse getPopularDishes(boolean isCitySearch, String locationId) throws BusinessException {
+	public PopularTagResponse getPopularDishes(LocationCookieDto cookieDto) throws BusinessException {
 		PopularTagResponse response = new PopularTagResponse();
-		List<PopularTag> tags = dishDao.getPopularSuggestions(isCitySearch, locationId, 1, 5);
+		List<PopularTag> tags = dishDao.getPopularSuggestions(cookieDto, 1, 5);
 		if (!tags.isEmpty()) {
 			response.setTags(tags);
 		}
@@ -96,12 +97,12 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public MerchantListForTagResponse searchDishByName(String searchString, boolean isCitySearch, String localityId,
-			Integer page) throws BusinessException {
+	public MerchantListForTagResponse searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page)
+			throws BusinessException {
 		MerchantListForTagResponse response = new MerchantListForTagResponse();
-		response.setTotalPages(dishDao.searchDishByNamePages(searchString, isCitySearch, localityId));
+		response.setTotalPages(dishDao.searchDishByNamePages(searchString, cookieDto));
 		if (response.getTotalPages() >= 1) {
-			List<MerchantDto> dtos = dishDao.searchDishByName(searchString, isCitySearch, localityId, page);
+			List<MerchantDto> dtos = dishDao.searchDishByName(searchString, cookieDto, page);
 			MerchantDetails merchant = null;
 			for (MerchantDto dto : dtos) {
 				merchant = new MerchantDetails();

@@ -16,6 +16,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
@@ -66,8 +67,8 @@ public class DishDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Integer searchDishByNamePages(String searchString, boolean isCitySearch, String localityId) {
-		Criteria criteria = searchDishByNameCriteria(searchString, isCitySearch, localityId);
+	public Integer searchDishByNamePages(String searchString, LocationCookieDto cookieDto) {
+		Criteria criteria = searchDishByNameCriteria(searchString, cookieDto);
 		List<Long> totalCountList = criteria.list();
 		if (totalCountList.size() <= 0) {
 			return 0;
@@ -77,8 +78,8 @@ public class DishDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<MerchantDto> searchDishByName(String searchString, boolean isCitySearch, String localityId, Integer page) {
-		Criteria criteria = searchDishByNameCriteria(searchString, isCitySearch, localityId);
+	public List<MerchantDto> searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page) {
+		Criteria criteria = searchDishByNameCriteria(searchString, cookieDto);
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
@@ -98,17 +99,17 @@ public class DishDao {
 		return Collections.emptyList();
 	}
 	
-	private Criteria searchDishByNameCriteria(String searchString, boolean isCitySearch, String localityId) {
+	private Criteria searchDishByNameCriteria(String searchString, LocationCookieDto cookieDto) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.ilike(NAME, searchString, MatchMode.ANYWHERE));
 		criteria.createAlias("merchant", "merchant");
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
-		if (isCitySearch) {
+		if (cookieDto.isCitySearch()) {
 			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", localityId));
+			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
 		} else {
-			criteria.add(Restrictions.eq("locality.nameId", localityId));
+			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
 		}		
 		
 		ProjectionList projList = Projections.projectionList();
@@ -190,19 +191,21 @@ public class DishDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PopularTag> getPopularCuisines(boolean isCitySearch, String locationId, Integer page, Integer resultsPerPage)
+	public List<PopularTag> getPopularCuisines(LocationCookieDto cookieDto, Integer page, Integer resultsPerPage)
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
 		criteria.createAlias("merchant", "merchant");
-		criteria.createAlias("merchant.cuisineRatings", "cuisineRatings");
-		criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+		criteria.add(Restrictions.gt("rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
-		if (isCitySearch) {
+		String preUrl = null;
+		if (cookieDto.isCitySearch()) {
 			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", locationId));
+			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+			preUrl = "/" + cookieDto.getCityId() + "/";
 		} else {
-			criteria.add(Restrictions.eq("locality.nameId", locationId));
+			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+			preUrl = "/" + cookieDto.getCityId() + "/" + cookieDto.getLocalityId() + "/";
 		}	
 		criteria.createAlias("cuisine", "cuisine");
 		ProjectionList projList = Projections.projectionList();
@@ -218,23 +221,25 @@ public class DishDao {
 		criteria.setMaxResults(resultsPerPage);
 		criteria.setResultTransformer(Transformers.aliasToBean(PopularTagEntity.class));
 		List<PopularTagEntity> entities = (List<PopularTagEntity>) criteria.list();
-		return mapper.mapPopularTags(entities);
+		return mapper.mapPopularTags(entities, preUrl);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<PopularTag> getPopularSuggestions(boolean isCitySearch, String locationId, Integer page, Integer resultsPerPage)
+	public List<PopularTag> getPopularSuggestions(LocationCookieDto cookieDto, Integer page, Integer resultsPerPage)
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
 		criteria.createAlias("merchant", "merchant");
-		criteria.createAlias("merchant.suggestionRatings", "suggestionRatings");
-		criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+		criteria.add(Restrictions.gt("rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
-		if (isCitySearch) {
+		String preUrl = null;
+		if (cookieDto.isCitySearch()) {
 			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", locationId));
+			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+			preUrl = "/" + cookieDto.getCityId() + "/";
 		} else {
-			criteria.add(Restrictions.eq("locality.nameId", locationId));
+			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+			preUrl = "/" + cookieDto.getCityId() + "/" + cookieDto.getLocalityId() + "/";
 		}	
 		criteria.createAlias("suggestion", "suggestion");
 		ProjectionList projList = Projections.projectionList();
@@ -250,7 +255,7 @@ public class DishDao {
 		criteria.setMaxResults(resultsPerPage);
 		criteria.setResultTransformer(Transformers.aliasToBean(PopularTagEntity.class));
 		List<PopularTagEntity> entities = (List<PopularTagEntity>) criteria.list();
-		return mapper.mapPopularTags(entities);
+		return mapper.mapPopularTags(entities, preUrl);
 	}
 
 	@SuppressWarnings("unchecked")

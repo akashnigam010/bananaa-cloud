@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
@@ -127,10 +128,10 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public GetTrendingMerchantsResponse getTrendingMerchants(boolean isCitySearch, String locationId)
+	public GetTrendingMerchantsResponse getTrendingMerchants(LocationCookieDto cookieDto)
 			throws BusinessException {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
-		List<TrendingMerchantResultDto> result = rcmdnDao.getTrendingMerchants(isCitySearch, locationId);
+		List<TrendingMerchantResultDto> result = rcmdnDao.getTrendingMerchants(cookieDto);
 		mapper.map(result, response);
 		return response;
 	}

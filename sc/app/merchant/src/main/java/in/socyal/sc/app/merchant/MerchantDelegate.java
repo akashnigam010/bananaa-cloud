@@ -4,6 +4,7 @@ import java.util.List;
 
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
@@ -19,7 +20,7 @@ public interface MerchantDelegate {
 
 	SearchMerchantResponse searchMerchant(SearchRequest request) throws BusinessException;
 
-	GetTrendingMerchantsResponse getTrendingMerchants(boolean isCitySearch, String locationId) throws BusinessException;
+	GetTrendingMerchantsResponse getTrendingMerchants(LocationCookieDto cookieDto) throws BusinessException;
 
 	MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException;
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTagResponse;
@@ -23,10 +24,10 @@ public interface ItemDelegate {
 
 	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
 
-	PopularTagResponse getPopularCuisines(boolean isCitySearch, String locationId) throws BusinessException;
+	PopularTagResponse getPopularCuisines(LocationCookieDto cookieDto) throws BusinessException;
 
-	PopularTagResponse getPopularDishes(boolean isCitySearch, String locationId) throws BusinessException;
+	PopularTagResponse getPopularDishes(LocationCookieDto cookieDto) throws BusinessException;
 
-	MerchantListForTagResponse searchDishByName(String searchString, boolean isCitySearch, String localityId,
-			Integer page) throws BusinessException;
+	MerchantListForTagResponse searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page)
+			throws BusinessException;
 }

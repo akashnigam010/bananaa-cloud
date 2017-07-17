@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
@@ -19,7 +20,6 @@ import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.core.validation.ItemValidator;
-import in.socyal.sc.helper.LocalityCookieDto;
 import in.socyal.sc.helper.LocalityCookieHelper;
 
 @RestController
@@ -74,8 +74,8 @@ public class ItemService {
 	public PopularTagResponse getTrendingCuisines(@CookieValue(name = "loc", defaultValue = "") String locationCookie) {
 		PopularTagResponse response = new PopularTagResponse();
 		try {
-			LocalityCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
-			response = delegate.getPopularCuisines(cookieDto.isCitySearch(), cookieDto.getLocalityId());
+			LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+			response = delegate.getPopularCuisines(cookieDto);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());
@@ -87,8 +87,8 @@ public class ItemService {
 	public PopularTagResponse getTrendingDishes(@CookieValue(name = "loc", defaultValue = "") String locationCookie) {
 		PopularTagResponse response = new PopularTagResponse();
 		try {
-			LocalityCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
-			response = delegate.getPopularDishes(cookieDto.isCitySearch(), cookieDto.getLocalityId());
+			LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+			response = delegate.getPopularDishes(cookieDto);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());
