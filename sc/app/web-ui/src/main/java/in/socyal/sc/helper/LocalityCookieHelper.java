@@ -1,5 +1,8 @@
 package in.socyal.sc.helper;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -7,7 +10,6 @@ import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.CityDto;
 import in.socyal.sc.api.merchant.dto.LocalityDto;
-import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.cache.CityCache;
 import in.socyal.sc.cache.LocalityCache;
 
@@ -27,11 +29,20 @@ public class LocalityCookieHelper {
 			CityDto city = cityCache.getCity(locationCookie);
 			if (city == null) {
 				//TODO: by default - city must be selected in cache - fix for future releases
-				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+				city = cityCache.getCity("hyderabad");
 			}
 			dto = new LocationCookieDto(true, city.getNameId(), null, city.getName());
 		}
 		return dto;
+	}
+	
+	public CityDto addDefaultCityCookie(HttpServletResponse httpResponse) {
+		// TODO: fix default city - change in Home Controller too
+		CityDto city = cityCache.getCity("hyderabad");
+		Cookie localityCookie = new Cookie("loc", city.getNameId());
+		localityCookie.setPath("/");
+		httpResponse.addCookie(localityCookie);
+		return city;
 	}
 
 }

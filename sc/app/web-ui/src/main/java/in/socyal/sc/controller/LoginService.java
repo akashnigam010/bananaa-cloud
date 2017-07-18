@@ -22,6 +22,7 @@ import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.cache.CityCache;
 import in.socyal.sc.cache.LocalityCache;
 import in.socyal.sc.core.validation.LoginValidator;
+import in.socyal.sc.helper.LocalityCookieHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.LoginDelegate;
 
@@ -42,6 +43,8 @@ public class LoginService {
 	LocalityCache localityCache;
 	@Autowired
 	CityCache cityCache;
+	@Autowired
+	LocalityCookieHelper cookieHelper;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public LoginResponse login(@RequestBody LoginRequest request) {
@@ -50,7 +53,7 @@ public class LoginService {
 			validator.validateLoginRequest(request);
 			response = delegate.federatedLogin(request);
 			addLoginCookie(response);
-			addCityCookie();
+			cookieHelper.addDefaultCityCookie(httpResponse);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
@@ -78,14 +81,6 @@ public class LoginService {
 		loginCookie.setPath("/");
 		httpResponse.addCookie(loginCookie);
 
-	}
-
-	private void addCityCookie() {
-		// TODO: fix default city - change in Home Controller too
-		CityDto city = cityCache.getCity("hyderabad");
-		Cookie cityCookie = new Cookie("city", city.getNameId());
-		cityCookie.setPath("/");
-		httpResponse.addCookie(cityCookie);
 	}
 
 	private void addLocationCookie(String nameId) {

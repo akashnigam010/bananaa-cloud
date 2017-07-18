@@ -2,7 +2,6 @@ package in.socyal.sc.controller;
 
 import java.util.ResourceBundle;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
@@ -87,12 +86,10 @@ public class HomeController {
 	LocalityCookieHelper cookieHelper;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(@CookieValue(name = "city", defaultValue = "") String city,
-			@CookieValue(name = "loc", defaultValue = "") String loc) {
-		if (StringUtils.isEmpty(city)) {
-			Cookie cityCookie = new Cookie("city", cityCache.getCity("hyderabad").getNameId());
-			cityCookie.setPath("/");
-			httpResponse.addCookie(cityCookie);
+	public String home(@CookieValue(name = "loc", defaultValue = "") String loc) {
+		// TODO: Add this logic to all URLs
+		if (StringUtils.isBlank(loc)) {
+			cookieHelper.addDefaultCityCookie(httpResponse);
 		}
 		return "redirect:hyderabad";
 	}
