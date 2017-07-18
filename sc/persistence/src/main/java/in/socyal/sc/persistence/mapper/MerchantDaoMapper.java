@@ -19,6 +19,7 @@ import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
+import in.socyal.sc.helper.NumberUtils;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
@@ -35,6 +36,8 @@ public class MerchantDaoMapper {
 	
 	@Autowired
 	LocationDaoMapper mapper;
+	@Autowired
+	NumberUtils numberUtils;
 	
 	public void map(Collection<MerchantEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
 		for (MerchantEntity entity : from) {
@@ -180,7 +183,7 @@ public class MerchantDaoMapper {
 		MerchantDto merchant = new MerchantDto();
 		map(entity.getMerchant(), merchant, criteria);
 		dto.setMerchant(merchant);
-		dto.setRating(entity.getRating().floatValue());
+		dto.setRating(numberUtils.toFloatOneDecimal(entity.getRating()));
 	}
 
 	/**
