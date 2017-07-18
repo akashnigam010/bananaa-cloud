@@ -3,42 +3,19 @@ package in.socyal.sc.persistence.entity;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CUISINE", schema = "bna")
-public class CuisineEntity extends BaseEntity implements Serializable {
+public class CuisineEntity extends TagEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "NAME")
-	private String name;
-
-	@Column(name = "NAME_ID")
-	private String nameId;
-	
 	public CuisineEntity() {
 
 	}
 
 	public CuisineEntity(Calendar createdDateTime, Calendar updatedDateTime) {
 		super(createdDateTime, updatedDateTime);
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getNameId() {
-		return nameId;
-	}
-
-	public void setNameId(String nameId) {
-		this.nameId = nameId;
 	}
 }

@@ -38,6 +38,7 @@ public class RecommendationMapper implements Serializable {
 		recommendation.setTotalRcmdns(dishRcmdnCount);
 		recommendation.setThumbnail(dto.getDish().getThumbnail());
 		recommendation.setTimeDiff(timestampHelper.getTimeDiffString(dto.getUpdatedDateTime().getTimeInMillis()));
+		recommendation.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
 		return recommendation;
 	}
 }

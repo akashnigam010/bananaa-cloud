@@ -14,23 +14,23 @@
         
         <div lang="en" th:replace="fragments/top-header :: top-header"></div>
         
-        <div class="row blue-white-background primary-image-wrapper cursor-pointer" onclick="imageView();">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 primary-image-banner">
+        <div class="row bna-bg primary-image-wrapper">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 primary-image-banner cursor-pointer" onclick="imageView();">
             </div>    
         </div>
 
-        <div class="row blue-white-background sub-section">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 merchant-detail-main">
+        <div class="row bna-bg sub-section">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 merchant-detail-main">
                 <div class="row white-background details-wrapper details-top-wrapper">
                     <div class="col-xs-12">
                         <div class="row" style="padding: 3% 0%;">
-                            <div class="col-xs-12 col-sm-8">
+                            <div class="col-xs-10">
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="row padding-left">
                                             <div class="primary-detail col-xs-12 bold font-2" th:text="${detail.dish.name}">
                                             </div>
-                                            <a th:href="'/' + ${detail.dish.merchant.merchantUrl}">
+                                            <a th:href="${detail.dish.merchant.merchantUrl}">
 	                                            <div class="secondary-detail col-xs-12 light" th:text="'@ ' + ${detail.dish.merchant.name} + ', ' + ${detail.dish.merchant.address.locality.shortAddress}">
 	                                            </div>
                                             </a>                                       
@@ -38,36 +38,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="hidden-xs col-sm-4">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="row padding-left" style="padding-top: 2%;">
-                                            <div class="col-xs-12 bold font-1-5" th:text="${detail.totalRecommendations}">
-                                                
-                                            </div>
-                                            <div class="col-xs-12 bna-color" th:if="${detail.totalRecommendations == 1}">
-                                                RECOMMENDATION
-                                            </div>
-                                            <div class="col-xs-12 bna-color" th:unless="${detail.totalRecommendations == 1}">
-                                                RECOMMENDATIONS
-                                            </div>                                
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 hidden-sm hidden-md hidden-lg">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="row padding-left">
-                                            <div class="col-xs-12 padding-top">
-                                                <hr />
-                                                <span class="bold font-1-5" th:text="${detail.totalRecommendations}"></span>
-                                            	<span class="bna-color" th:if="${detail.totalRecommendations == 1}">RECOMMENDATION</span>
-                                            	<span class="bna-color" th:unless="${detail.totalRecommendations == 1}">RECOMMENDATIONS</span> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-xs-2 primary-rating">
+                                <span th:class="${detail.dish.ratingClass} + ' float-right rating-rcmd'" style="padding: 10% 25%; font-size: 1em;" th:text="${detail.dish.rating}"></span>
                             </div>
                         </div>                                              
                     </div>   
@@ -79,26 +51,18 @@
                         <div class="col-xs-12 my-item-recommendation-wrapper">
                             <div class="row" style="padding: 2%;">
                                 <div class="col-xs-12 font-1-5 bna-color padding-3">
-                                    I recommend &nbsp; <img src="https://bna-s3.s3.amazonaws.com/img/smiley_love.svg" />
+                                    My Rating and Foodview
                                 </div>                               
                             </div>
                             <div class="loader"></div>
                             <div class="my-item-recommendation-section hide">
                                 <div class="my-item-recommendation row" style="padding: 2%;">
                                     <div class="col-xs-12 detail-type-padding">
-                                    	<span id="recommendation-id" class="hide">21</span>
-                                        <span id="item-id" class="hide">11</span>
-                                        <span id="item-name" class="hide">Joojeh Kebab</span>
-                                        <div id="recommend-item-desc" class="detail-type-2"></div>
-                                        <div id="no-review-text" class="detail-type-2 hide">You recommend this! Click to add a mini review.</div>
-                                        <div id="recommend-message" class="detail-type-2">If it soothes your taste buds, let us know..</div>
-                                    </div>                                
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <div class="row align-center addRecommendButtonDiv">
-                                            <button id="addItemRecommendButton" class="bna-button recommend-button">Add recommendation</button>
+                                        <div id="rating-sec" class="detail-type-2 hide">
+                                        	<span class="bold">You rated this - &nbsp;</span><span id="rating-val" class="rating-rcmd r50">5.0</span>
                                         </div>
+                                        <div id="recommend-item-desc" class="detail-type-2" style="padding: 3% 0%;"></div>
+                                        <div id="recommend-message" class="detail-type-2">Share a foodview ! A tiny review about this dish to help others know how it tastes and if they should give it a try.</div>
                                     </div>                                
                                 </div>
                                 <div class="row">
@@ -106,56 +70,70 @@
                                         <p id="recommend-time" class="light font-0-8 hide">just now</p>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="row align-center addRecommendButtonDiv">
+                                            <button id="addItemRecommendButton" class="bna-button recommend-button">Rate and Foodview</button>
+                                        </div>
+                                    </div>                                
+                                </div>                                
                             </div>                            
                         </div>                       
                     </div>
                     <div class="detail-about">
-                        <div class="col-xs-12 col-sm-8 col-sm-pull-4 white-background details-wrapper" style="margin-top: 10px;">
-                            <div class="row">
+                        <div class="col-xs-12 col-sm-8 col-sm-pull-4" style="margin-top: 10px;">
+                        	<div class="row white-background details-wrapper">
                                 <div class="col-xs-12">
-                                    <div class="col-xs-12 font-1-5 bna-color padding-3">
-                                        Reviews
-                                    </div>    
-                                </div>                                   
-                            </div>
-                            <hr />
-                            <div class="row recommended-wrapper">
-                                <div class="col-xs-12">
-                                	<div class="my-recommendations" th:if="${detail.reviewCount == 0}">
-                                        <div class="col-xs-12 recommended-item light">
-                                            No one has added a review yet. 
-                                            <br />
-                                            Add a mini review and let others know why <b th:text="${detail.dish.name}">Some Dish</b> @ <span th:text="${detail.dish.merchant.name}"></span> stands out to be a recommendation.
-                                            <br />
-                                            <br />
-                                            <!-- Add one now. -->                                            
-                                        </div>
+                                	<div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 font-1-5 bna-color padding-3">
+                                                Foodviews
+                                            </div>    
+                                        </div>                          
                                     </div>
-                                    <div class="my-recommendations" th:unless="${detail.reviewCount == 0}">                                    
-                                        <div class="col-xs-12 recommended-item" th:each="review, iterStat : ${detail.reviews}">
-                                            <div class="float-left" style="object-fit: cover;">
-                                                <a th:href="${review.user.userUrl}">
-                                                	<img class="user-icon" th:src="${review.user.imageUrl}" />
-                                                </a>
-                                            </div>
-                                            <div class="float-left item-desc-wrapper">
-                                                <div class="bold item-name">
-                                                	<a th:href="${review.user.userUrl}" th:text="${review.user.name}"></a>
-                                                </div>
-                                                <div class="light" th:if="${review.user.totalRecommendations == 1}" th:text="${review.user.totalRecommendations} + ' Recommendation'">
-                                                </div>
-                                                <div class="light" th:unless="${review.user.totalRecommendations == 1}" th:text="${review.user.totalRecommendations} + ' Recommendations'">                                                    
-                                                </div>
-                                            </div>
-                                            <div class="col-xs-12 review-item-desc" th:text="${review.description}">                                                
-                                            </div>
-                                            <div class="light float-left font-0-8" th:text="${review.timeDiff}">
-                                                just now
-                                            </div>
-                                        </div>                                                                                                                     
-                                    </div>                                   
+                                    <hr />
+                                	<div class="row recommended-wrapper">
+		                                <div class="col-xs-12">
+		                                	<div class="my-recommendations" th:if="${detail.reviewCount == 0}">
+		                                        <div class="col-xs-12 recommended-item light">
+		                                            No one has added a foodview yet.  
+		                                            <br />		                                            
+		                                            <br />
+		                                            <!-- Add one now. -->                                            
+		                                        </div>
+		                                    </div>
+		                                    <div class="my-recommendations" th:unless="${detail.reviewCount == 0}">                                    
+		                                        <div class="col-xs-12 recommended-item" th:each="review, iterStat : ${detail.reviews}">
+		                                            <div class="float-left" style="object-fit: cover; width: 15%;">
+		                                                <a th:href="${review.user.userUrl}">
+		                                                	<img class="user-icon" th:src="${review.user.imageUrl}" />
+		                                                </a>
+		                                            </div>
+		                                            <div class="float-left item-desc-wrapper">
+		                                                <div class="bold item-name">
+		                                                	<a th:href="${review.user.userUrl}" th:text="${review.user.name}"></a>
+		                                                </div>
+		                                                <div class="light">
+		                                                	<span th:if="${review.user.totalRatings == 1}" th:text="${review.user.totalRatings} + ' Rating'"></span>
+		                                                	<span th:unless="${review.user.totalRatings == 1}" th:text="${review.user.totalRatings} + ' Ratings'"></span>
+		                                                	<span th:if="${review.user.totalReviews == 1}" th:text="' and ' + ${review.user.totalReviews} + ' Foodview'"></span>
+		                                                	<span th:unless="${review.user.totalReviews == 1}" th:text="' and ' + ${review.user.totalReviews} + ' Foodviews'"></span>
+		                                                </div>
+		                                            </div>
+		                                            <div class="col-xs-12 recommend-item-desc" style="white-space: inherit;">
+			                                            <span class="bold">Rated &nbsp;</span>
+			                                            <span th:class="${review.ratingClass} +  ' rating-rcmd'" th:text="${review.rating}">5.0</span> &nbsp; &nbsp; 
+			                                            <span class="review" th:text="${review.description}"></span>
+			                                        </div>                                                
+		                                            <div class="light float-left font-0-8" th:text="${review.timeDiff}">
+		                                                just now
+		                                            </div>
+		                                        </div>                                                                                                                     
+		                                    </div>                                   
+		                                </div>
+		                            </div> 
                                 </div>
-                            </div>                      
+                            </div>                     
                         </div>                                               
                     </div> 
                 </div>

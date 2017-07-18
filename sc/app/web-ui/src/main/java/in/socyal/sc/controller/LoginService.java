@@ -4,7 +4,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,18 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
+import in.socyal.sc.api.login.request.SetLocationRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
-import in.socyal.sc.api.type.CityType;
+import in.socyal.sc.api.merchant.dto.CityDto;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
+import in.socyal.sc.api.response.StatusResponse;
+import in.socyal.sc.cache.CityCache;
+import in.socyal.sc.cache.LocalityCache;
 import in.socyal.sc.core.validation.LoginValidator;
+import in.socyal.sc.helper.LocalityCookieHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 import in.socyal.sc.login.LoginDelegate;
 
 @RestController
 @RequestMapping(value = "/socyal/login")
 public class LoginService {
-	private static final Logger LOG = Logger.getLogger(LoginService.class);
 	@Autowired
 	LoginDelegate delegate;
 	@Autowired
@@ -36,18 +39,12 @@ public class LoginService {
 	HttpServletResponse httpResponse;
 	@Autowired
 	HttpServletRequest httpRequest;
-
-	@RequestMapping(value = "/skipLogin", method = RequestMethod.GET, headers = "Accept=application/json")
-	public LoginResponse skipLogin() {
-		LoginResponse response = new LoginResponse();
-		try {
-			LOG.info("Skip login request");
-			response = delegate.skipLogin();
-			return helper.success(response);
-		} catch (BusinessException e) {
-			return helper.failure(response, e);
-		}
-	}
+	@Autowired
+	LocalityCache localityCache;
+	@Autowired
+	CityCache cityCache;
+	@Autowired
+	LocalityCookieHelper cookieHelper;
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST, headers = "Accept=application/json")
 	public LoginResponse login(@RequestBody LoginRequest request) {
@@ -56,7 +53,7 @@ public class LoginService {
 			validator.validateLoginRequest(request);
 			response = delegate.federatedLogin(request);
 			addLoginCookie(response);
-			addLocationCookie();
+			cookieHelper.addDefaultCityCookie(httpResponse);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
@@ -71,6 +68,12 @@ public class LoginService {
 		return helper.success(response);
 	}
 
+	@RequestMapping(value = "/setLocation", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse setLocation(@RequestBody SetLocationRequest request) {
+		addLocationCookie(request.getLocalityId());
+		return helper.success(new StatusResponse());
+	}
+
 	private void addLoginCookie(LoginResponse response) throws BusinessException {
 		Cookie loginCookie = new Cookie("blc",
 				JwtHelper.createJsonWebTokenForUser(response.getUser().getId().toString(),
@@ -80,10 +83,17 @@ public class LoginService {
 
 	}
 
-	private void addLocationCookie() {
-		Cookie cityCookie = new Cookie("city", CityType.HYDERABAD.getName());
-		cityCookie.setPath("/");
-		httpResponse.addCookie(cityCookie);
+	private void addLocationCookie(String nameId) {
+		Cookie localityCookie = null;
+		LocalityDto locality = localityCache.getLocality(nameId);
+		if (locality != null) {
+			localityCookie = new Cookie("loc", locality.getNameId());
+		} else {
+			CityDto city = cityCache.getCity(nameId);
+			localityCookie = new Cookie("loc", city.getNameId());
+		}
+		localityCookie.setPath("/");
+		httpResponse.addCookie(localityCookie);
 	}
 
 	private void removeLoginCookie() {

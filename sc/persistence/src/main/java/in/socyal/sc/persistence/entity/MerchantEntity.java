@@ -2,6 +2,7 @@ package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -50,6 +51,12 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "merchant")
+	private List<MerchantCuisineRatingEntity> cuisineRatings;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "merchant")
+	private List<MerchantSuggestionRatingEntity> suggestionRatings;
 	
 	public MerchantEntity() {
 
@@ -137,5 +144,21 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public List<MerchantCuisineRatingEntity> getCuisineRatings() {
+		return cuisineRatings;
+	}
+
+	public void setCuisineRatings(List<MerchantCuisineRatingEntity> cuisineRatings) {
+		this.cuisineRatings = cuisineRatings;
+	}
+
+	public List<MerchantSuggestionRatingEntity> getSuggestionRatings() {
+		return suggestionRatings;
+	}
+
+	public void setSuggestionRatings(List<MerchantSuggestionRatingEntity> suggestionRatings) {
+		this.suggestionRatings = suggestionRatings;
 	}
 }

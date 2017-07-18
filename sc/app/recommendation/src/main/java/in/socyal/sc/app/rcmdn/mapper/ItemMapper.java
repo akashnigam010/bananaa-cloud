@@ -10,43 +10,45 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
-import in.socyal.sc.api.items.dto.DishResultDto;
+import in.socyal.sc.api.item.response.SearchItem;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.persistence.entity.DishCount;
 
 @Component
 public class ItemMapper implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public List<Item> map(List<DishDto> dtos) {
-		List<Item> items = new ArrayList<>();
-		Item item = null;
+	public List<SearchItem> map(List<DishDto> dtos) {
+		List<SearchItem> items = new ArrayList<>();
+		SearchItem item = null;
 		for (DishDto dto : dtos) {
-			item = new Item();
+			item = new SearchItem();
 			item.setId(dto.getId());
 			item.setName(dto.getName());
+			item.setMerchantName(dto.getMerchant().getName());
 			items.add(item);
 		}
 		return items;
 	}
 
-	public ItemsResponse map(List<DishResultDto> result, ItemsResponse response) {
+	public ItemsResponse map(List<DishDto> dtos, ItemsResponse response) {
 		List<Item> items = new ArrayList<>();
-		for (DishResultDto dto : result) {
+		for (DishDto dto : dtos) {
 			Item item = new Item();
-			DishDto dish = dto.getDish();
-			item.setId(dish.getId());
-			item.setName(dish.getName());
-			item.setThumbnail(dish.getThumbnail());
-			item.setNameId(dish.getNameId());
-			item.setRecommendations(dto.getRecommendations().intValue());
-			item.setItemUrl(dto.getDish().getItemUrl());
+			item.setId(dto.getId());
+			item.setName(dto.getName());
+			item.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
+			item.setThumbnail(dto.getThumbnail());
+			item.setNameId(dto.getNameId());
+			item.setRecommendations(dto.getRecommendations().size());
+			item.setItemUrl(dto.getItemUrl());
 			items.add(item);
 		}
 
 		response.setItems(items);
 		return response;
 	}
-	
 	public List<RecommendationDto> mapReviews(List<RecommendationDto> recommendations) {
 		List<RecommendationDto> dtos = new ArrayList<>();
 		RecommendationDto dto = null;
@@ -54,6 +56,7 @@ public class ItemMapper implements Serializable {
 			if (StringUtils.isNotBlank(rcmd.getDescription())) {
 				dto = new RecommendationDto();
 				dto.setId(rcmd.getId());
+				dto.setRating(rcmd.getRating());
 				dto.setUpdatedDateTime(rcmd.getUpdatedDateTime());
 				dto.setTimeDiff(rcmd.getTimeDiff());
 				dto.setDescription(rcmd.getDescription());
@@ -65,4 +68,21 @@ public class ItemMapper implements Serializable {
 		return dtos;
 	}
 
+	public List<Integer> getCuisineIds(List<Tag> tags) {
+		List<Integer> cuisineIds = new ArrayList<>();
+		for (Tag tag : tags){
+			cuisineIds.add(tag.getId());
+		}
+		return cuisineIds;
+	}
+
+	public void mapDishCount(List<Tag> tags, List<DishCount> dishCounts) {
+		for (Tag tag : tags) {
+			for (DishCount dishCount : dishCounts) {
+				if (tag.getId() == dishCount.getCuisineId()) {
+					tag.setDishCount(dishCount.getCount().intValue());
+				}
+			}
+		}		
+	}
 }

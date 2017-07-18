@@ -7,6 +7,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdditionalDetailsController {
+	
+	@RequestMapping(value = "/bna/manage/managementConsole", method = RequestMethod.GET)
+	public ModelAndView managementConsole() {
+		ModelAndView modelAndView = new ModelAndView("manage");
+		return modelAndView;
+	}
 
 	@RequestMapping(value = "/google6f82628d4ebc8d30.html", method = RequestMethod.GET)
 	public ModelAndView googleWebmasterVerify() {

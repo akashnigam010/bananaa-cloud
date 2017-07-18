@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -53,7 +52,7 @@ public class ManagementDao {
 	public ManagementDao(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public void addItem(AddItemRequest request) throws BusinessException {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());
@@ -71,20 +70,20 @@ public class ManagementDao {
 		sessionFactory.getCurrentSession().save(entity);
 	}
 	
-	public void addRecommendations(Integer id, Integer rcmdCount) throws BusinessException {
-		Date date = Calendar.getInstance().getTime();
+	public void addRecommendations(Integer id, Float rating, Integer rcmdCount) throws BusinessException {
+		Timestamp ts = new Timestamp(Calendar.getInstance().getTime().getTime());
 		try {
 			sessionFactory.getCurrentSession().doWork(new Work() {
 				@Override
 				public void execute(Connection con) throws SQLException {
 					PreparedStatement st = con.prepareStatement(
-							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `IS_ACTIVE`, `CREATED_DATETIME`, `UPDATED_DATETIME`) VALUES (?, ?, ?, ?, ?)");
+							"INSERT INTO `bna`.`recommendation` (`DISH_ID`, `USER_ID`, `RATING`, `CREATED_DATETIME`, `UPDATED_DATETIME`) VALUES (?, ?, ?, ?, ?)");
 					for (int i = 1; i <= rcmdCount; i++) {
 						st.setInt(1, id);
 						st.setInt(2, Integer.parseInt(resource.getString(BNA_USER_ID)));
-						st.setBoolean(3, Boolean.TRUE);
-						st.setTimestamp(4, new Timestamp(date.getTime()));
-						st.setTimestamp(5, new Timestamp(date.getTime()));
+						st.setFloat(3, rating);
+						st.setTimestamp(4, ts);
+						st.setTimestamp(5, ts);
 						st.addBatch();
 					}
 

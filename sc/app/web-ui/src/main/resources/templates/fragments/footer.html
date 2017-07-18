@@ -30,5 +30,15 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://bna-s3.s3.amazonaws.com/js/bootstrap3-typeahead.min.js"></script>
 	<script src="/r/e/s/o/u/r/c/e/js/main.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			loadLocations($('#topSearchLocation'), $('#topSearchInput'));
+			loadLocations($('#modalSearchLocation'), $('#modalSearchInput'));
+		});
+		function openSearchModal() {
+			$('#searchModal').modal('show');
+			$("#modalSearchInput").focus();
+		}
+	</script>
 	<!-- Footer ENDS -->
 </div>

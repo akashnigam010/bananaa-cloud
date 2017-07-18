@@ -5,9 +5,8 @@
 
 <head th:replace="fragments/head :: head"></head>
 <link href="/r/e/s/o/u/r/c/e/css/home.css" type="text/css" rel="stylesheet"></link>
-<link href="/r/e/s/o/u/r/c/e/css/home-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 480px), only screen and (max-device-width: 480px)" />
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css"/>
+<link href="/r/e/s/o/u/r/c/e/css/home-mini.css" type="text/css" rel="stylesheet" media="only screen and (max-width: 768px), only screen and (max-device-width: 768px)" />
+<link href="https://bna-s3.s3.amazonaws.com/css/flickity.min.css" media="screen" rel="stylesheet"></link>
 <body>
 	<script type="text/javascript" th:src="'https://bna-s3.s3.amazonaws.com/js/login-' + ${loginStatus.bnaEnv} + '.js'"></script>
 	<div class="container-fluid">
@@ -17,7 +16,7 @@
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-6">
-                        <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p>
+                        <!-- <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p> -->
                     </div>
                     <div class="col-xs-6">
                         <div class="btn-group login-info pull-right">
@@ -35,60 +34,327 @@
                 </div>
             </div>
             <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12 align-center logo-wrapper">
-                        <img class="logo-round" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/logo-pr.svg" alt="bananaa-logo" />                    
+                <div class="row padding-4">
+                    <div class="col-xs-12 align-center logo-wrapper" style="font-size: 3em;">
+                        <!-- <img class="logo-round" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/logo-pr.svg" alt="bananaa-logo" /> -->
+                        <p class="simpson header-icon" style=" padding-left: 0%;">bananaa</p>                    
                     </div>
-                    <div class="col-xs-12 tagline align-center" style="color: white;">
+                    <div class="col-xs-12 hidden-sm hidden-md hidden-lg tagline align-center white">
                         <span>
-                            Find the most delectable food at restaurants in Hyderabad
+                            Food suggestions, <br/>for you, by all
                         </span>
                     </div>
-					<div
-						class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 search-box-wrapper">
-						<form class="form-horizontal">
-							<div class="form-group form-group-lg has-feedback">
-								<input type="text" id="search-field" name="search" data-provide="typeahead"
-									class="global-search form-control noloading" placeholder="Search for a Restaurant"
-									autocomplete="off" style="border-radius: 3px;" /> 
-								<i class="glyphicon icon-search form-control-feedback"></i>
-								<div class="input-loader-animation-div">
+                    <div class="col-xs-12 hidden-xs tagline align-center white">
+                        <span>
+                            Food suggestions, for you, by all
+                        </span>
+                    </div>
+					
+					<div class="col-xs-12 align-center home-search-wrapper">
+                        <form class="form-horizontal inline-block location-wrapper">
+                            <div class="form-group-lg has-feedback float-left full-width">
+                                <input type="text" id="search-location" data-provide="typeahead" class="form-control cursor-pointer form-input i-height" 
+                                	autocomplete="off" th:value="${location}" placeholder="Type your location" />
+                                <i class="glyphicon icon-location form-control-feedback i-height i-width"></i>
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal inline-block search-wrapper">
+                            <div class="form-group-lg has-feedback float-left full-width">
+                                <input type="text" id="search-field" name="search" data-provide="typeahead" class="global-search form-control noloading form-input i-height" 
+                                	placeholder="Search for a restaurant, cuisine or dish" autocomplete="off" />
+                                <i class="glyphicon icon-search form-control-feedback i-height i-width"></i>
+                                <div class="input-loader-animation-div">
                                     <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
-                                </div>
-							</div>
-						</form>
-					</div>
+                                </div>                                
+                            </div>
+                        </form>
+                        <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
+                            <div class="form-group-lg has-feedback float-left">
+                                <button type="button" onclick="clickSearchHome();" class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
+                            </div>
+                        </form>
+                    </div>					
 				</div>
             </div>            
         </div>
 		<!-- Top Banner ENDS -->
 		
+		<div class="row">
+            <div class="col-xs-12 padding">
+                <div class="align-center">
+                    <span class="font-2">What is it?</span><br/>
+                    <span class="font-2">Well first, let us take you to that troublesome time</span><br />
+                    <span style="font-size: 5em;">&#129300;</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meme section STARTS -->
+        <div class="row meme-wrapper">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                        <div class="row">
+                            <div class="align-center">
+                                <div class="meme-text" style="padding-bottom: 3%;">
+                                    You and your hungry friend at a restaurant..   
+                                </div> 
+                                <div class="col-xs-12 padding-bottom">
+                                    <div class="col-xs-6 meme-image-div align-right">
+                                        <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/happy-1.jpg" alt="" />    
+                                    </div>
+                                    <div class="col-xs-6 meme-image-div align-left">
+                                        <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/happy-2.jpg" alt="" />
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="align-center">
+                                <div class="meme-text" style="padding-bottom: 3%;">
+                                    And after a long hustle with the menu..
+                                </div>                               
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row padding-top">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-left">
+                                <div class="meme-image-div float-left" style="margin-right: 2%;">
+                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/waiter.jpg" alt="" />
+                                </div>                                
+                                <span class="meme-text">Waiter appears</span><br />
+                                <span class="meme-text bna-color">"Your order, Sir?"</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-right">
+                                <div class="meme-image-div float-right" style="margin-left: 2%;">
+                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/me.jpg" alt="" />
+                                </div>                                
+                                <span class="meme-text">You</span><br />
+                                <div class="meme-text bna-color">"In a moment please. <br />We need to go through the menu again."</div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 10%;">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-right">
+                                <div class="meme-image-div float-right" style="margin-left: 2%;">
+                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/suspicious.jpg" alt="" />
+                                </div>                                
+                                <span class="meme-text">You to your friend</span><br/>
+                                <span class="meme-text bna-color">"I have no idea what these dishes are. <br />What do you suggest?"</span>
+                            </div>
+                        </div>
+                        <div class="row padding-top">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-left">
+                                <div class="meme-image-div float-left" style="margin-right: 2%;">
+                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/smirk.jpg" alt="" />
+                                </div>                                
+                                <span class="meme-text">Friend</span><br />
+                                <span class="meme-text bna-color">"Don't know man, maybe we should just order something regular. <br />
+                                Schezwan Noodles ?"</span>
+                            </div>
+                        </div>
+                        <div class="row padding-top">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-right">
+                                <div class="meme-image-div float-right" style="margin-left: 2%;">
+                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/okay.jpg" alt="" />
+                                </div>                                
+                                <span class="meme-text">You</span><br />
+                                <span class="meme-text bna-color">"Yeah okay. <br />I wanted to try something different though."</span>
+                            </div>
+                        </div>
+                        <div class="row padding-top">
+                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-left">
+                                <div class="meme-image-div float-left" style="margin-right: 2%;">
+                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/thinking.jpg" alt="" />
+                                </div>                                
+                                <span class="meme-text">Friend</span><br />
+                                <span class="meme-text bna-color">"Hey! you know what. Why don't we just find what people love eating here on Bananaa"</span>
+                            </div>
+                        </div>
+                        <div class="row padding-top">
+                            <div class="col-xs-12 align-center">
+                                <span style="font-size: 5em;">&#128525;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <!-- Meme section ENDS -->
+
+		<!-- Secondary banner STARTS -->
+        <div class="row sec-banner-1 padding-top padding-bottom">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                        <div class="row purple-banner white align-center">
+                            <div class="col-xs-12 padding-bottom">
+                                That's right ! <br />
+                                Keep aside those boring menus and go Bananaa
+                            </div>
+                            <div class="col-xs-12">
+                                And we help you choose all the good food at a restaurant.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Secondary banner ENDS -->
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                        <div class="row bna-search-add">
+                            <p class="font-1-5 upper align-center">
+                                Whereabouts of your favourite food ?
+                            </p>
+                            <p class="font-1-5 upper align-center">
+                                Great picks at a restaurant ?
+                            </p>
+                            <p class="font-1-5 upper align-center">
+                                Only a search away.
+                            </p>
+                            <hr />                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 align-center home-search-wrapper margin-bottom">
+                    <form class="form-horizontal inline-block location-wrapper">
+                        <div class="form-group-lg has-feedback float-left full-width">
+                            <input type="text" id="search-location-add" data-provide="typeahead" 
+                            class="cursor-pointer header-search-input" th:value="${location}" autocomplete="off" value="Hyderabad" placeholder="Type your location" />
+                            <i class="glyphicon icon-location form-control-feedback i-height i-width"></i>
+                        </div>
+                    </form>
+
+                    <form class="form-horizontal inline-block search-wrapper">
+                        <div class="form-group-lg has-feedback float-left full-width">
+                            <input type="text" id="search-field-add" name="search" data-provide="typeahead" 
+                            	class="global-search header-search-input noloading" placeholder="Search for a restaurant, cuisine or dish" autocomplete="off" />
+                      <i class="glyphicon icon-search form-control-feedback i-height i-width"></i>
+                      <div class="input-loader-animation-div">
+                          <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                      </div>
+                                                          
+                        </div>
+                    </form>
+                    <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
+                        <div class="form-group-lg has-feedback float-left">
+                            <button type="button" onclick="clickSearchAddHome();" class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+		
 		<!-- Trending STARTS -->
-		<div class="row trending">
+		<div class="row">
             <div class="col-xs-12 trending-heading">
-                <p class="bold">restaurants with most food recommendations</p>
+                <p class="font-1-3">Give it a spin with some recommended restaurants for their food</p>
             </div>
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-12 col-sm-10 col-sm-offset-1 trending-restaurants">
                     	<div class="loader"></div>
-                        <div class="row trending-restaurant-wrapper clearfix">
-                            <!-- <div class="trending-item"> 
-                                <a href="hyderabad/12346">
-                                    <div>
-                                        <img class="trend-image" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt=""/>
-                                        <div class="trending-item-desc">
-                                            <div style="padding: 4%;">
-                                                <p>
-                                                    <span class="bold font-1-3">Free Flow</span>
-                                                    <br />
-                                                    <span class="light">Jubilee Hills, Hyderabad</span>
-                                                </p>
-                                                <span>320 Recommendations</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
+                        <div class="row trending-wrapper restaurant-wrapper clearfix">
+                            <!-- <div class="flick-div">
+                                <img class="flick-image flick-img-txt" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt="" />
+                                <div class="flick-txt padding-left">
+                                    <span class="bold font-1-3">Soda Bottle Opener Wala</span>
+                                    <br />
+                                    <span class="light font-0-8">Jubilee Hills, Hyderabad</span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+		
+		<div class="row">
+            <div class="col-xs-12 trending-heading">
+                <p class="font-1-3">Or check out some trending cuisines around you</p>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 trending-cuisines">
+                    	<div class="loader"></div>
+                        <div class="row trending-wrapper cuisine-wrapper clearfix">
+                            <!-- <div class="flick-div">
+                                <img class="flick-image flick-img-txt" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt="" />
+                                <div class="flick-txt padding-left">
+                                    <span class="bold font-1-3">Soda Bottle Opener Wala</span>
+                                    <br />
+                                    <span class="light font-0-8">Jubilee Hills, Hyderabad</span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+        
+        <div class="row" style="margin-bottom: 10%;">
+            <div class="col-xs-12 trending-heading">
+                <p class="font-1-3">Even dishes, if you wish</p>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 trending-dishes">
+                    	<div class="loader"></div>
+                        <div class="row trending-wrapper dish-wrapper clearfix">
+                            <!-- <div class="flick-div">
+                                <img class="flick-image flick-img-txt" src="https://s3.ap-south-1.amazonaws.com/bananaimages/12350.png" alt="" />
+                                <div class="flick-txt padding-left">
+                                    <span class="bold font-1-3">Soda Bottle Opener Wala</span>
+                                    <br />
+                                    <span class="light font-0-8">Jubilee Hills, Hyderabad</span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>          
+        </div>
+        
+        <div class="row sec-banner-2 padding-top padding-bottom"  style="margin-bottom: 10%;">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                        <div class="row purple-banner white align-center">
+                            <div class="col-xs-12 padding-bottom">
+                                Great food insights, powered by you
+                            </div>
+                            <div class="col-xs-12">
+                                Add your foodviews and ratings and help the community thrive
+                            </div>
+                        </div>
+                        <div class="col-xs-12 align-center bold upper" th:if="${loginStatus.status == false}">
+                            <button onclick="activateLogin();" class="bna-button-white i-height" style="margin: 0px; width: 200px;">Login</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row padding-bottom">
+            <div class="col-xs-12 trending-heading">
+                <p class="font-1-5">stories</p>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 stories">
+                    	<div class="loader"></div>
+                        <div class="row trending-wrapper diary-wrapper slick-class clearfix">
+                            <!-- <div class="flick-div">
+                                <img class="flick-image diary-img" src="http://cdn.bananaa.in/img/what-mini.jpg" alt="" />
+                                <div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">
+                                    <p class="bold font-1-3">Bananaa - What the Fuzz!</p>
+                                </div>
                             </div> -->
                         </div>
                     </div>
@@ -96,29 +362,28 @@
             </div>           
         </div>
 
-        <div class="row trending">
-            <div class="col-xs-12 trending-heading">
-                <p class="bold">stories</p>
-            </div>
+        <div class="row bna-bg padding-top padding-bottom">
             <div class="col-xs-12">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 stories">
-                    	<div class="loader"></div>
-                        <div class="row diary-wrapper slick-class clearfix">
-                            <!-- <div class="trending-item">
-                                <a href="/about">
-                                    <div class="diary-sec">
-                                        <img class="trend-image diary-img" src="https://bna-s3.s3.amazonaws.com/img/what-mini.jpg" alt="" />
-                                        <div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">
-                                            <p class="bold font-1-3">Bananaa - What the Fuzz!</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div> -->
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 trending-restaurants">
+                        <div class="row bna-stats light align-center">
+                            <div class="col-xs-12 font-1-5">
+                                Helping foodies select the best picks across Hyderabad
+                            </div>
+                            <div class="col-xs-12 padding-top font-1-5 upper">
+                                <div class="col-xs-6">
+                                    <div>100+</div>
+                                    <div>Restaurants</div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div>5000+</div>
+                                    <div>Dishes</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>           
+            </div>
         </div>
 
 		<div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
@@ -127,8 +392,8 @@
 
 	</div>
 
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
 	<script src="/r/e/s/o/u/r/c/e/js/index.js"></script>
+	<script src="https://bna-s3.s3.amazonaws.com/js/flickity.pkgd.min.js"></script>
 </body>
 
 </html>

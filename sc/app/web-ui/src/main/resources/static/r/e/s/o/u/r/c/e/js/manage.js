@@ -204,6 +204,7 @@ function addRecommendations() {
 	var item = $('#rcmd-itemName');
 	var currentItem = item.typeahead("getActive");
 	var $itemName = item.val();
+	var $rating = $("#rcmd-rating").val();
 	var $recommendations = $("#rcmd-recommendations").val();
 
 	if (currentMerchant) {
@@ -214,9 +215,15 @@ function addRecommendations() {
 						alertMessage('Recommendations count should be more than 0');
 						return;
 					}
+					
+					if ($rating == '' || $rating <= 0 || $rating > 5) {
+						alertMessage('Recommendations count should be between 0 and 5');
+						return;
+					}
 
 					var dataOb = {
 			    			itemId : currentItem.id,
+			    			rating : $rating,
 			    			rcmdCount : $recommendations
 			    	};
 			        return $.ajax({

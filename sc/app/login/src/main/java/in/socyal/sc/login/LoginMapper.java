@@ -16,8 +16,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 
 @Component
 public class LoginMapper {
-	private static final String GUEST_NAME = "Guest";
-	private static final String GUEST_IMAGE_URL = "http://www.whitebay.in/images/guestUser.png";
+	private static final Float DEFAULT_USER_CREDIBILITY = 2.5f;
 
 	public LoginUserDto mapFbUserToUserDto(in.socyal.sc.api.user.dto.UserDto userDetails, Integer userCheckinCount) {
 		LoginUserDto userDto = new LoginUserDto();
@@ -25,13 +24,6 @@ public class LoginMapper {
 		userDto.setLastName(userDetails.getLastName());
 		userDto.setId(userDetails.getId());
 		userDto.setImageUrl(userDetails.getImageUrl());
-		return userDto;
-	}
-
-	public LoginUserDto mapGuestUser() {
-		LoginUserDto userDto = new LoginUserDto();
-		userDto.setFirstName(GUEST_NAME);
-		userDto.setImageUrl(GUEST_IMAGE_URL);
 		return userDto;
 	}
 
@@ -56,6 +48,7 @@ public class LoginMapper {
 		user.setNameId(generateUserNameId(user.getFirstName(), user.getLastName()));
 		user.setImageUrl(federatedUser.getPhotoUrl());
 		user.setEmail(federatedUser.getEmail() != null ? federatedUser.getEmail() : null);
+		user.setCredibility(DEFAULT_USER_CREDIBILITY);
 		return user;
 	}
 

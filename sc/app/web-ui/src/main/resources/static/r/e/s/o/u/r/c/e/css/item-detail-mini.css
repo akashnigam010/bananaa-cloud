@@ -1,30 +1,3 @@
-/* Common mini-CSS STARTS */
-.login-info {
-    cursor: pointer; 
-    color: white; 
-    padding-right: 5%; 
-    padding-top: 5%;    
-}
-
-.login-info>.btn {
-    font-size: 10px;
-}
-
-.dropdown-menu {
-    font-size: 10px;
-}
-
-.header-icon {
-    font-size: 1.5em; 
-    padding-top: 7%; 
-}
-
-body {
-    font-size: 12px;
-}
-
-/* Common mini-CSS ENDS */
-
 .primary-image-banner {
     height: 150px;
     border-radius: 0px;
@@ -38,26 +11,12 @@ body {
     padding: 0%;
 }
 
-.details-wrapper {
-	border-radius: 6px;
-}
-
 .details-top-wrapper {
 	border-radius: 0px 0px 6px 6px;
 }
 
 .detail-type-padding {
 	padding: 3%;
-}
-
-.user-icon {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	text-align: center;
-	background-position: center;
-	background-repeat: no-repeat;
-	object-fit: cover;
 }
 
 hr {
@@ -74,22 +33,9 @@ hr {
     height: 45px;
 }
 
-.my-recommendations {
-	padding-bottom: 5%;
-}
-
 .error-label {
     margin-top: -10%;
     margin-bottom: 10%;
-}
-
-.recommended-item {
-    padding: 3%;
-}
-
-.item-desc-wrapper {
-    margin-left: 4%;
-    width: 80%;
 }
 
 .review-item-desc {

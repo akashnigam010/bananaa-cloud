@@ -7,6 +7,13 @@ public class DetailsRequest implements Serializable {
 	private String merchantNameId;
 	private String itemNameId;
 
+	public DetailsRequest() {
+	}
+
+	public DetailsRequest(String merchantNameId) {
+		this.merchantNameId = merchantNameId;
+	}
+
 	public String getMerchantNameId() {
 		return merchantNameId;
 	}

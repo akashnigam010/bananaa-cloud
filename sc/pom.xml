@@ -153,6 +153,7 @@
 		<module>app</module>
 		<module>utility</module>
 		<module>persistence</module>
+		<module>rating-engine</module>
 	</modules>
 
 	<organization>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head"></head>
+<link href="/r/e/s/o/u/r/c/e/css/tag-search.css" type="text/css" rel="stylesheet"></link>
+
+<body>
+	<div class="container-fluid">
+		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
+		<div class="hide" id="primaryImageTemp" th:text="${imageUrl}"></div>
+        
+        <div lang="en" th:replace="fragments/top-header :: top-header"></div>
+        
+        <div class="row bna-bg primary-image-wrapper">
+			<div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 primary-image-banner" style="height: 150px;"></div>
+		</div> 
+
+        <div class="row bna-bg">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                <div style="padding: 3% 0%;" th:if="${isSearch}">
+					<span class="light font-1-5">Places serving</span>&nbsp;
+					<span class="bold font-2">
+						<span>'</span>
+						<span th:text="${detail.tagName}">falafel</span>
+						<span>'</span>
+					</span>&nbsp;
+					<span class="light font-1-5" th:text="'in ' + ${detail.location}">in Hitech City</span>	
+				</div>
+				<div style="padding: 3% 0%;" th:unless="${isSearch}">
+					<span class="bold font-2" th:text="${detail.tagName}">Italian</span> &nbsp; 
+					<span class="light font-1-5" th:text="'in ' + ${detail.location}">in Hitech City</span>	
+				</div>
+                <div class="row">
+                    <div class="detail-about">
+                        <div class="col-xs-12 col-sm-12">
+                        	<div style="height: 200px;" th:if="${detail.merchants.size() == 0}">
+								<p>
+									Oops, no 
+									<span th:if="${detail.page > 1}">more</span> 
+									results found for 
+									<span th:text="${detail.tagName}">Italian</span>
+									<span th:text="'in ' + ${detail.location}"> in Hitech City</span>.
+								</p>
+								<p><span style="font-size: 50px;">&#128532;</span></p>
+                        		<p>We are working on it !</p>
+                        		<p th:if="${detail.page > 1}">Why not go back a page or try a different search ?</p> 
+                        		<p th:unless="${detail.page > 1}">Why not try a different search ?</p>
+                        	</div>
+                            <div th:each="merchant, iterStat : ${detail.merchants}" class="row white-background details-wrapper" style="margin-top: 10px;">
+                                <div class="col-xs-12">
+                                    <div class="row" style="padding: 2% 0%;">
+                                    	<div class="col-xs-12">
+                                        	<div class="hidden-xs float-left cursor-pointer" style="margin-right: 4%;">
+                                    			<a th:href="${merchant.merchantUrl}">
+                                    				<img class="rest-thumbnail" th:src="${merchant.thumbnail}" />
+                                    			</a>
+                                    		</div>
+                                            <div class="float-left">
+                                            	<div class="light">
+                                            		<span th:each="type, iterStat : ${merchant.type}" th:text="!${iterStat.last} ? ${type} + ', ' : ${type}"></span>
+                                                </div>                                                
+                                    			<div class="bold item-name font-1-5 bna-color cursor-pointer">
+                                    				<a th:href="${merchant.merchantUrl}" th:text="${merchant.name}"></a>
+                                    			</div>
+                                                <div class="light" th:text="${merchant.shortAddress}"></div>
+                                                <div class="padding-top bold" th:if="${merchant.searchTag != null and merchant.searchTag.dishCount > 0}">
+                                                	<span>Spread of</span>
+                                                	<span th:text="${merchant.searchTag.dishCount}"></span>+
+                                                	<span th:text="${merchant.searchTag.name}"></span>
+                                                	<span>dishes</span> 
+                                                </div>
+                                            </div>
+                                            <div class="float-right" th:if="${merchant.searchTag != null}">
+                                            	<div>
+                                            		<span th:class="${merchant.searchTag.ratingClass} + ' float-right rating-rcmd bold'" style="padding: 5px 10px; font-size: 1.1em;" th:text="${merchant.searchTag.rating}"></span>
+                                            	</div>
+                                            	<div>
+													<div class="float-right light padding-top">
+	                                            		Rated in
+	                                            	</div>
+                                            	</div>
+                                            	<div>
+													<div class="float-right light" th:text="${merchant.searchTag.name}"></div>
+                                            	</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 padding-bottom">
+                                        	<hr style="margin-top: 10px; margin-bottom: 15px;" />
+                                        	<div class="info-highlights">
+                                        		<div class="upper float-left light">
+	                                        		Cost for two
+	                                        	</div>
+	                                        	<div style="margin-left: 30%;" th:text="'&#8377; ' + ${merchant.averageCost}"></div>
+                                        	</div>
+                                        	<div class="info-highlights">
+                                        		<div class="upper float-left light">
+	                                        		Hours
+	                                        	</div>
+	                                        	<div style="margin-left: 30%;">
+	                                        		<span th:each="openingHour, iterStat : ${merchant.openingHours}">
+	                                        			<span th:text="${openingHour}"></span>
+	                                        			<br />								
+	                                        		</span>
+	                                        	</div>
+                                        	</div>
+                                        	<div class="info-highlights">
+                                        		<div class="upper float-left light">
+	                                        		Cuisines
+	                                        	</div>
+	                                        	<div style="margin-left: 30%;">
+	                                        		<span th:each="cuisine, iterStat : ${merchant.ratedCuisines}">
+	                                        			<a th:href="${cuisine.itemUrl}" th:title="${cuisine.name}">
+	                                        				<span th:text="${cuisine.name}"></span>
+	                                        			</a>
+	                                        			<span th:class="${cuisine.ratingClass} + ' rating-rcmd'" th:text="${cuisine.rating}"></span>
+	                                        		</span>
+	                                        	</div>
+                                        	</div>
+                                        </div>                                                                               
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row " style="margin: 5% 0%;">
+                                <div class="col-xs-12">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="col-xs-12 padding-3">
+                                                <div class="float-left" th:if="${detail.totalPages > 0}">
+													<span>Page</span> 
+													<span th:text="${detail.page}">1</span> 
+													<span>of</span> 
+													<span th:text="${detail.totalPages}">2</span>                                               	
+                                                </div>
+                                                <div class="float-right">
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="prev();" th:if="${detail.page} &gt; 1">Prev</button>
+													<span th:text="${detail.page}"></span>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="next();" th:if="${detail.page} &lt; ${detail.totalPages}">Next</button>
+                                                </div>
+                                            </div>  
+                                        </div>                                   
+                                    </div>
+                                </div>
+                            </div>                      
+                        </div>                      
+                    </div> 
+                </div>
+            </div>
+        </div>
+        
+        <div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
+
+		<div lang="en" th:replace="fragments/footer :: footer"></div>
+
+	</div>
+	<script src="/r/e/s/o/u/r/c/e/js/tag-search.js"></script>
+</body>
+
+</html>

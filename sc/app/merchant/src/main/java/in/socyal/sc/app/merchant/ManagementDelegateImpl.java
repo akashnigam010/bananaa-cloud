@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
@@ -26,7 +27,11 @@ import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
+import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.persistence.ManagementDao;
+import in.socyal.sc.rating.engine.dish.CuisineRatingEngine;
+import in.socyal.sc.rating.engine.dish.DishRatingEngine;
+import in.socyal.sc.rating.engine.dish.SuggestionRatingEngine;
 
 @Service
 public class ManagementDelegateImpl implements ManagementDelegate {
@@ -38,6 +43,12 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 
 	@Autowired
 	ManagementDao dao;
+	@Autowired
+	DishRatingEngine dishRatingEngine;
+	@Autowired
+	CuisineRatingEngine cuisineRatingEngine;
+	@Autowired
+	SuggestionRatingEngine tagRatingEngine;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -50,7 +61,7 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addRecommendations(AddRecommendationsRequest request) throws BusinessException {
-		dao.addRecommendations(request.getItemId(), request.getRcmdCount());
+		dao.addRecommendations(request.getItemId(), request.getRating(), request.getRcmdCount());
 	}
 
 	@Override
@@ -132,5 +143,23 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 		} catch (MessagingException e) {
 			throw new BusinessException();
 		}
+	}
+
+	@Override
+	public StatusResponse runDishRatingEngineForMerchant(IdRequest request) {
+		dishRatingEngine.rateRestaurantDishes(request.getId());
+		return new StatusResponse();
+	}
+
+	@Override
+	public StatusResponse runCuisineRatingEngineForMerchant(IdRequest request) {
+		cuisineRatingEngine.rateRestaurantForCuisines(request.getId());
+		return new StatusResponse();
+	}
+	
+	@Override
+	public StatusResponse runTagsRatingEngineForMerchant(IdRequest request) {
+		tagRatingEngine.rateRestaurantForTags(request.getId());
+		return new StatusResponse();
 	}
 }
