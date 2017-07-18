@@ -135,9 +135,9 @@
 													<span th:text="${detail.totalPages}">2</span>                                               	
                                                 </div>
                                                 <div class="float-right">
-													<button class="bna-button-light" style="margin-top: 0px;" onclick="prev();" th:disabled="${detail.page} &lt;= 1">Prev</button>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="prev();" th:if="${detail.page} &gt; 1">Prev</button>
 													<span th:text="${detail.page}"></span>
-													<button class="bna-button-light" style="margin-top: 0px;" onclick="next();" th:disabled="${detail.page} &gt;= ${detail.totalPages}">Next</button>
+													<button class="bna-button-light" style="margin-top: 0px;" onclick="next();" th:if="${detail.page} &lt; ${detail.totalPages}">Next</button>
                                                 </div>
                                             </div>  
                                         </div>                                   
