@@ -125,7 +125,7 @@ public class MerchantService {
 		story1.setUrl("/about");
 		response.getStories().add(story1);
 		Story story2 = new Story();
-		story2.setName("Recommendations. But wait..how ?");
+		story2.setName("Food Suggestions. But wait..how ?");
 		story2.setImageUrl("https://bna-s3.s3.amazonaws.com/img/next.jpg");
 		story2.setUrl("/how");
 		response.getStories().add(story2);
