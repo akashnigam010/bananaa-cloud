@@ -18,9 +18,10 @@ $(document).ready(function() {
     $('#search-field-add').typeahead(searchConfig($('#search-field-add'), $('#search-location-add')));
     loadLocations($('#search-location'), $('#search-field'));
     loadLocations($('#search-location-add'), $('#search-field-add'));
-    $("#search-field").keypress(function(e) {
+    $("#search-field, #search-field-add").keypress(function(e) {
         if(e.which == 10 || e.which == 13) {
-            homeSearch();
+        	e.preventDefault();
+            homeSearch(this.value);
         }
     });
     getTrendingRestaurants();
@@ -29,8 +30,15 @@ $(document).ready(function() {
     getStories();
 });
 
-function homeSearch() {
-	var searchString = $("#search-field").val();
+function clickSearchHome() {
+	homeSearch($("#search-field").val());
+}
+
+function clickSearchAddHome() {
+	homeSearch($("#search-field-add").val());
+}
+
+function homeSearch(searchString) {
 	if (searchString == '') {
     	searchString = 'all';
     }
