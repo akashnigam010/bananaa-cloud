@@ -145,13 +145,15 @@ public class HomeController {
 		if (StringUtils.isNotBlank(search)) {
 			return globalSearch(modelAndView, locationCookie, search, page);
 		}
-		if (restLocalityOrTagNameId.equalsIgnoreCase(RESTAURANTS)) {
-			return allPlacesSearch(modelAndView, locationCookie, page);
-		}
 		LocalityDto locality = localityCache.getLocality(restLocalityOrTagNameId);
-		if (locality != null) {
-			// it will never be invoked with normal flow - only via direct url hit
-			return allPlacesSearch(modelAndView, locationCookie, page);
+		if (restLocalityOrTagNameId.equalsIgnoreCase(RESTAURANTS)) {
+			CityDto cityDto = cityCache.getCity(city);
+			LocationCookieDto dto = new LocationCookieDto(true, cityDto.getNameId(), null, cityDto.getName());
+			return allPlacesSearch(modelAndView, dto, page);
+		} else if (locality != null) {
+			LocationCookieDto dto = new LocationCookieDto(false, locality.getCity().getNameId(), locality.getNameId(),
+					locality.getName());
+			return allPlacesSearch(modelAndView, dto, page);
 		} else {
 			CuisineDto cuisine = cuisineCache.getCuisine(restLocalityOrTagNameId);
 			if (cuisine != null) {
@@ -207,7 +209,9 @@ public class HomeController {
 		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
 		if (locality != null) {
 			if (itemOrTagNameId.equalsIgnoreCase(RESTAURANTS)) {
-				return allPlacesSearch(modelAndView, locationCookie, page);
+				LocationCookieDto locationDto = new LocationCookieDto(false, locality.getCity().getNameId(),
+						locality.getNameId(), locality.getName());
+				return allPlacesSearch(modelAndView, locationDto, page);
 			}
 			CuisineDto cuisine = cuisineCache.getCuisine(itemOrTagNameId);
 			if (cuisine != null) {
@@ -288,11 +292,10 @@ public class HomeController {
 		return modelAndView;
 	}
 	
-	private ModelAndView allPlacesSearch(ModelAndView modelAndView, String locationCookie, Integer page)
+	private ModelAndView allPlacesSearch(ModelAndView modelAndView, LocationCookieDto cookieDto, Integer page)
 			throws BusinessException {
 		modelAndView.setViewName("tag-search");
 		page = page == null ? 1 : page;
-		LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
 		MerchantListForTagResponse response = merchantDelegate.getAllSortedMerchants(cookieDto, page);
 		response.setTagName("All places");
 		response.setLocation(cookieDto.getLocationName());
@@ -300,7 +303,6 @@ public class HomeController {
 		modelAndView.addObject("title", getSearchDescription("All places", cookieDto.getLocationName()));
 		modelAndView.addObject("description", getSearchDescription("All places", cookieDto.getLocationName()));
 		modelAndView.addObject("fbDescription", getSearchDescription("All places", cookieDto.getLocationName()));
-		modelAndView.addObject("isSearch", true);
 		return modelAndView;
 	}
 	

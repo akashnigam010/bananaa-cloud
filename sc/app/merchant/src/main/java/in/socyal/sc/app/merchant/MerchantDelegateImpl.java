@@ -80,6 +80,10 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 				merchant = new MerchantDetails();
 				try {
 					mapper.buildMerchantTagResponse(dto.getMerchant(), merchant);
+					Tag tag = new Tag();
+					tag.setRating(dto.getRating().toString());
+					tag.setName("Food");
+					merchant.setSearchTag(tag);
 				} catch (ParseException e) {
 					throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 				}
