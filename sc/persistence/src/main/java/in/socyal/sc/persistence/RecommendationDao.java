@@ -10,29 +10,22 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
 import in.socyal.sc.api.recommendation.request.ReviewRequest;
 import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
-import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class RecommendationDao {
-	private static final Integer PAGE = 1;
 	private static final Integer RESULTS_PER_PAGE = 5;
 	@Autowired
 	SessionFactory sessionFactory;
@@ -64,7 +57,7 @@ public class RecommendationDao {
 		}
 		session.saveOrUpdate(recommendation);
 	}
-	
+
 	public void saveReview(ReviewRequest request, Integer userId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
@@ -82,37 +75,6 @@ public class RecommendationDao {
 			recommendation.setUpdatedDateTime(cal);
 		}
 		session.saveOrUpdate(recommendation);
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<TrendingMerchantResultDto> getTrendingMerchants(LocationCookieDto cookieDto) {
-		// Trending restaurants is calculated using average of DISH rating
-		List<TrendingMerchantResultDto> response = new ArrayList<>();
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
-		criteria.add(Restrictions.ge("rating", 0.0));
-		criteria.createAlias("merchant", "merchant");
-		criteria.createAlias("merchant.address", "address");
-		criteria.createAlias("address.locality", "locality");
-		if (cookieDto.isCitySearch()) {
-			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
-		} else {
-			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
-		}	
-		
-		ProjectionList projList = Projections.projectionList();
-		projList.add(Projections.avg("rating").as("rating"));
-		projList.add(Projections.groupProperty("merchant.id"));
-		projList.add(Projections.property("merchant").as("merchant"));
-		criteria.setProjection(projList);
-		criteria.addOrder(Order.desc("rating"));
-		int firstResult = ((PAGE - 1) * RESULTS_PER_PAGE);
-		criteria.setFirstResult(firstResult);
-		criteria.setMaxResults(RESULTS_PER_PAGE);
-		criteria.setResultTransformer(Transformers.aliasToBean(TrendingMerchantResultEntity.class));
-		List<TrendingMerchantResultEntity> result = (List<TrendingMerchantResultEntity>) criteria.list();
-		mapper.map(result, response);
-		return response;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -138,7 +100,7 @@ public class RecommendationDao {
 			return response;
 		} else {
 			return Collections.emptyList();
-		}		
+		}
 	}
 
 	public RecommendationDto getMyDishRecommendation(Integer userId, Integer dishId) {

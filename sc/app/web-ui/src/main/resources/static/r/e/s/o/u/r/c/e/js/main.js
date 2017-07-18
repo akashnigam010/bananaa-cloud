@@ -79,6 +79,9 @@ $(document).ready(function() {
 });
 
 function homeGlobalSearch(searchString) {
+	if (searchString == '') {
+    	searchString = 'all';
+    }
     var urlWithParams = window.location.href;
     var urlWithOutParams = urlWithParams.split('?')[0];
     var urlWithOutHash = urlWithOutParams.split('#')[0];

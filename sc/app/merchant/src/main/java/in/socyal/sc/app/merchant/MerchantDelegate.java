@@ -23,6 +23,8 @@ public interface MerchantDelegate {
 	GetTrendingMerchantsResponse getTrendingMerchants(LocationCookieDto cookieDto) throws BusinessException;
 
 	MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException;
+	
+	MerchantListForTagResponse getAllSortedMerchants(LocationCookieDto cookieDto, Integer page) throws BusinessException;
 
 	List<GlobalSearchItem> searchMerchantsGlobal(SearchRequest request) throws BusinessException;
 }

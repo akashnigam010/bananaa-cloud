@@ -8,19 +8,25 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
+import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
+import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
+import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 
 @Repository
@@ -29,6 +35,7 @@ public class MerchantDao {
 	private static final String MINIMUM_TAG_RATING = "minimum.rating";
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
+	
 	@Autowired
 	SessionFactory sessionFactory;
 	@Autowired
@@ -145,5 +152,53 @@ public class MerchantDao {
 			mapper.map(merchants, merchantDtos, filter);
 		}
 		return merchantDtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TrendingMerchantResultDto> getAllSortedMerchants(LocationCookieDto cookieDto,
+			MerchantFilterCriteria filter, Integer page, Integer resultsPerPage) {
+		List<TrendingMerchantResultDto> response = new ArrayList<>();
+		Criteria criteria = getAllSortedMerchantsCriteria(cookieDto);
+		int firstResult = ((page - 1) * resultsPerPage);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(resultsPerPage);
+		List<TrendingMerchantResultEntity> result = (List<TrendingMerchantResultEntity>) criteria.list();
+		mapper.map(result, response, filter);
+		return response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Integer getAllSortedMerchantsPages(LocationCookieDto cookieDto) {
+		Criteria criteria = getAllSortedMerchantsCriteria(cookieDto);
+		List<Long> totalCountList = criteria.list();
+		if (totalCountList.size() <= 0) {
+			return 0;
+		} else {
+			return (int) (totalCountList.size() / RESULTS_PER_PAGE + 1);
+		}
+	}
+	
+	private Criteria getAllSortedMerchantsCriteria(LocationCookieDto cookieDto) {
+		// Trending restaurant criteria is calculated using average of DISH rating
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.ge("rating", 0.0));
+		criteria.createAlias("merchant", "merchant");
+		criteria.createAlias("merchant.address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (cookieDto.isCitySearch()) {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+		} else {
+			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+		}	
+		
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.avg("rating").as("rating"));
+		projList.add(Projections.groupProperty("merchant.id"));
+		projList.add(Projections.property("merchant").as("merchant"));
+		criteria.setProjection(projList);
+		criteria.addOrder(Order.desc("rating"));
+		criteria.setResultTransformer(Transformers.aliasToBean(TrendingMerchantResultEntity.class));
+		return criteria;
 	}
 }

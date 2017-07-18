@@ -31,6 +31,10 @@ import in.socyal.sc.persistence.RecommendationDao;
 
 @Service
 public class MerchantDelegateImpl implements MerchantDelegate {
+	private static final Integer PAGE = 1;
+	private static final Integer RESULTS_PER_PAGE = 10;
+	private static final Integer RESULTS_PER_PAGE_TRENDING = 5;
+	
 	@Autowired
 	MerchantDao dao;
 	@Autowired
@@ -59,6 +63,29 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 				response.getMerchants().add(merchant);
 			}
 			response.setPage(request.getPage());
+		}
+		return response;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public MerchantListForTagResponse getAllSortedMerchants(LocationCookieDto cookieDto, Integer page) throws BusinessException {
+		MerchantListForTagResponse response = new MerchantListForTagResponse();
+		response.setTotalPages(dao.getAllSortedMerchantsPages(cookieDto));
+		if (response.getTotalPages() >= 1) {
+			MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
+			List<TrendingMerchantResultDto> dtos = dao.getAllSortedMerchants(cookieDto, filter, page, RESULTS_PER_PAGE);
+			MerchantDetails merchant = null;
+			for (TrendingMerchantResultDto dto : dtos) {
+				merchant = new MerchantDetails();
+				try {
+					mapper.buildMerchantTagResponse(dto.getMerchant(), merchant);
+				} catch (ParseException e) {
+					throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+				}
+				response.getMerchants().add(merchant);
+			}
+			response.setPage(page);
 		}
 		return response;
 	}
@@ -128,10 +155,10 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public GetTrendingMerchantsResponse getTrendingMerchants(LocationCookieDto cookieDto)
-			throws BusinessException {
+	public GetTrendingMerchantsResponse getTrendingMerchants(LocationCookieDto cookieDto) throws BusinessException {
 		GetTrendingMerchantsResponse response = new GetTrendingMerchantsResponse();
-		List<TrendingMerchantResultDto> result = rcmdnDao.getTrendingMerchants(cookieDto);
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, false, false, false, false);
+		List<TrendingMerchantResultDto> result = dao.getAllSortedMerchants(cookieDto, filter, PAGE, RESULTS_PER_PAGE_TRENDING);
 		mapper.map(result, response);
 		return response;
 	}

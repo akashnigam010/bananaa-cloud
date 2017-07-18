@@ -60,6 +60,8 @@ public class HomeController {
 	private static final String USER_DETAIL_DESCRIPTION_1 = "user.detail.description.1";
 	private static final String USER_DETAIL_DESCRIPTION_2 = "user.detail.description.2";
 	private static final String USER_DETAIL_TITLE_END = "user.detail.title.end";
+	private static final String ALL = "all";
+	private static final String RESTAURANTS = "restaurants";
 
 	@Autowired
 	MerchantDelegate merchantDelegate;
@@ -143,10 +145,13 @@ public class HomeController {
 		if (StringUtils.isNotBlank(search)) {
 			return globalSearch(modelAndView, locationCookie, search, page);
 		}
+		if (restLocalityOrTagNameId.equalsIgnoreCase(RESTAURANTS)) {
+			return allPlacesSearch(modelAndView, locationCookie, page);
+		}
 		LocalityDto locality = localityCache.getLocality(restLocalityOrTagNameId);
 		if (locality != null) {
-			// TODO: bananaa.in/hyderabad/hitech-city
-			return null;
+			// it will never be invoked with normal flow - only via direct url hit
+			return allPlacesSearch(modelAndView, locationCookie, page);
 		} else {
 			CuisineDto cuisine = cuisineCache.getCuisine(restLocalityOrTagNameId);
 			if (cuisine != null) {
@@ -158,7 +163,15 @@ public class HomeController {
 					TagSearch tagSearch = new TagSearch(modelAndView, page, true, city, null);
 					return getTagSearchResults(tagSearch, suggestion);
 				} else {
-					return getMerchantDetails(modelAndView, restLocalityOrTagNameId);
+					DetailsRequest request = new DetailsRequest(restLocalityOrTagNameId);
+					MerchantDetails response = null;
+					try {
+						response = merchantDelegate.getMerchantDetails(request);
+					} catch (BusinessException e) {
+						// Merchant Details not found
+						return globalSearch(modelAndView, locationCookie, restLocalityOrTagNameId, page);
+					}
+					return getMerchantDetails(modelAndView, response);
 				}
 			}
 		}
@@ -193,6 +206,9 @@ public class HomeController {
 		}
 		LocalityDto locality = localityCache.getLocality(restaurantOrLocalityNameId);
 		if (locality != null) {
+			if (itemOrTagNameId.equalsIgnoreCase(RESTAURANTS)) {
+				return allPlacesSearch(modelAndView, locationCookie, page);
+			}
 			CuisineDto cuisine = cuisineCache.getCuisine(itemOrTagNameId);
 			if (cuisine != null) {
 				TagSearch tagSearch = new TagSearch(modelAndView, page, false, city, locality.getNameId());
@@ -203,8 +219,7 @@ public class HomeController {
 					TagSearch tagSearch = new TagSearch(modelAndView, page, false, city, locality.getNameId());
 					return getTagSearchResults(tagSearch, suggestion);
 				} else {
-					return null;
-					// TODO: general search
+					return globalSearch(modelAndView, locationCookie, itemOrTagNameId, page);
 				}
 			}
 		} else {
@@ -248,31 +263,57 @@ public class HomeController {
 		modelAndView.setViewName("tag-search");
 		page = page == null ? 1 : page;
 		LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+		if (search.equalsIgnoreCase(ALL)) {
+			return allSearch(cookieDto);
+		}
 		MerchantListForTagResponse response = itemDelegate.searchDishByName(search, cookieDto, page);
 		response.setTagName(search);
 		response.setLocation(cookieDto.getLocationName());
 		modelAndView.addObject("detail", response);
-		modelAndView.addObject("title", getSearchDescription(search));
-		modelAndView.addObject("description", getSearchDescription(search));
-		modelAndView.addObject("fbDescription", getSearchDescription(search));
+		modelAndView.addObject("title", getSearchDescription(search, cookieDto.getLocationName()));
+		modelAndView.addObject("description", getSearchDescription(search, cookieDto.getLocationName()));
+		modelAndView.addObject("fbDescription", getSearchDescription(search, cookieDto.getLocationName()));
+		modelAndView.addObject("isSearch", true);
+		return modelAndView;
+	}
+	
+	private ModelAndView allSearch(LocationCookieDto locationDto) {
+		ModelAndView modelAndView = new ModelAndView();
+		if (locationDto.isCitySearch()) {
+			modelAndView.setViewName("redirect:" + "/" + locationDto.getCityId() + "/" + RESTAURANTS);
+		} else {
+			modelAndView.setViewName("redirect:" + "/" + locationDto.getCityId() + "/" + locationDto.getLocalityId()
+					+ "/" + RESTAURANTS);
+		}
+		return modelAndView;
+	}
+	
+	private ModelAndView allPlacesSearch(ModelAndView modelAndView, String locationCookie, Integer page)
+			throws BusinessException {
+		modelAndView.setViewName("tag-search");
+		page = page == null ? 1 : page;
+		LocationCookieDto cookieDto = cookieHelper.getLocalityData(locationCookie);
+		MerchantListForTagResponse response = merchantDelegate.getAllSortedMerchants(cookieDto, page);
+		response.setTagName("All places");
+		response.setLocation(cookieDto.getLocationName());
+		modelAndView.addObject("detail", response);
+		modelAndView.addObject("title", getSearchDescription("All places", cookieDto.getLocationName()));
+		modelAndView.addObject("description", getSearchDescription("All places", cookieDto.getLocationName()));
+		modelAndView.addObject("fbDescription", getSearchDescription("All places", cookieDto.getLocationName()));
 		modelAndView.addObject("isSearch", true);
 		return modelAndView;
 	}
 	
 	/**
-	 * bananaa.in/hyderabad/fusion-9-hitech-city
+	 * Mapping model and view details for merchant details
 	 * @param modelAndView
-	 * @param city
-	 * @param merchantNameId
+	 * @param response
 	 * @return
 	 * @throws BusinessException
 	 */
-	private ModelAndView getMerchantDetails(ModelAndView modelAndView, String merchantNameId)
+	private ModelAndView getMerchantDetails(ModelAndView modelAndView, MerchantDetails response)
 			throws BusinessException {
 		modelAndView.setViewName("detail");
-		DetailsRequest request = new DetailsRequest();
-		request.setMerchantNameId(merchantNameId);
-		MerchantDetails response = merchantDelegate.getMerchantDetails(request);
 		TrendingRequest itemsRequest = new TrendingRequest(response.getId(), 5, 1);
 		ItemsResponse itemsResponse = itemDelegate.getPopularItems(itemsRequest);
 		modelAndView.addObject("detail", response);
@@ -478,8 +519,8 @@ public class HomeController {
 		return description.toString();
 	}
 	
-	private String getSearchDescription(String searchString) {
-		return "Bananaa Search for '" + searchString + "'";
+	private String getSearchDescription(String searchString, String location) {
+		return "Bananaa Search for '" + searchString + "' in " + location;
 	}
 	
 	private class TagSearch {

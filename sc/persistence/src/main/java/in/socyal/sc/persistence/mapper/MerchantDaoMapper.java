@@ -18,6 +18,7 @@ import in.socyal.sc.api.merchant.dto.ContactDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
+import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
 import in.socyal.sc.persistence.entity.MerchantCuisineRatingEntity;
@@ -25,6 +26,7 @@ import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.MerchantRatingEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
 import in.socyal.sc.persistence.entity.TimingEntity;
+import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 
 @Component
 public class MerchantDaoMapper {
@@ -163,6 +165,22 @@ public class MerchantDaoMapper {
 		to.setId(from.getId());
 		to.setLatitude(from.getLatitude());
 		to.setLongitude(from.getLongitude());
+	}
+	
+	public void map(List<TrendingMerchantResultEntity> result, List<TrendingMerchantResultDto> response,
+			MerchantFilterCriteria criteria) {
+		for (TrendingMerchantResultEntity entity : result) {
+			TrendingMerchantResultDto dto = new TrendingMerchantResultDto();
+			map(entity, dto, criteria);
+			response.add(dto);
+		}
+	}
+
+	public void map(TrendingMerchantResultEntity entity, TrendingMerchantResultDto dto, MerchantFilterCriteria criteria) {
+		MerchantDto merchant = new MerchantDto();
+		map(entity.getMerchant(), merchant, criteria);
+		dto.setMerchant(merchant);
+		dto.setRating(entity.getRating().floatValue());
 	}
 
 	/**
