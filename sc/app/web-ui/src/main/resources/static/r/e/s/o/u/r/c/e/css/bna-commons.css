@@ -113,7 +113,7 @@ body {
 
 .details-wrapper {
 	border-radius: 3px;
-    border: solid 1px #D3D3D3;
+    box-shadow: 0px 1px 1px #888888;
 }
 
 /* Rate and Bite modal CSS STARTS */
@@ -158,12 +158,13 @@ body {
 }
 
 .user-icon {
-  width: 100%;
+  width: 50px;
   border-radius: 50%;
   text-align: center;
   background-position: center;
   background-repeat: no-repeat;
   object-fit: cover;
+  height: 50px;
 }
 
 .item-desc-wrapper {
