@@ -1,11 +1,18 @@
 var isMobile = false;
-var rcmdOb = {};
 var fs = [];
 var merchantId;
 var merchantName;
 var itemId;
 var itemName;
 var page;
+var localityArr = [
+                   {localityId: 'hyderabad', cityId: null, name: "Hyderabad"},
+                   {localityId: 'hitech-city', cityId: 'hyderabad',  name: "Hitech City"},
+                   {localityId: 'jubilee-hills', cityId: 'hyderabad',  name: "Jubilee Hills"},
+                   {localityId: 'banjara-hills', cityId: 'hyderabad',  name: "Banjara Hills"},
+                   {localityId: 'gachibowli', cityId: 'hyderabad',  name: "Gachibowli"},
+                   {localityId: 'kondapur', cityId: 'hyderabad',  name: "Kondapur"}
+               ];
 $(document).ready(function() {
 	merchantId = $('#merchantId').val();
 	merchantName = $('#merchantName').val();
@@ -33,7 +40,7 @@ $(document).ready(function() {
         var modal = $(this),
             dialog = modal.find('.modal-dialog');
         modal.css('display', 'block');
-        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 4));
     }
     $('.modal').on('show.bs.modal', repositionModal);
     $(window).on('resize', function() {
@@ -53,7 +60,33 @@ $(document).ready(function() {
             $('.modal').modal('hide');
         }
     });
+    $('[data-toggle="popover"]').popover();
+    $("#topSearchInput").keypress(function(e) {
+        if(e.which == 10 || e.which == 13) {
+            homeGlobalSearch($("#topSearchInput").val());
+        }
+    });
+    
+    $("#modalSearchInput").keypress(function(e) {
+        if(e.which == 10 || e.which == 13) {
+        	homeGlobalSearch($("#modalSearchInput").val());
+        }
+    });
+    
+    $("#topHeaderSearchButton").on('click', function() {
+    	homeGlobalSearch($("#topSearchInput").val());
+    });
 });
+
+function homeGlobalSearch(searchString) {
+	if (searchString == '') {
+    	searchString = 'all';
+    }
+    var urlWithParams = window.location.href;
+    var urlWithOutParams = urlWithParams.split('?')[0];
+    var urlWithOutHash = urlWithOutParams.split('#')[0];
+    window.location = urlWithOutHash+'?search='+searchString;
+}
 
 function activateLogin() {
 	if ($("#login-info").html() == 'Login') {
@@ -89,30 +122,38 @@ function handleErrorCallback(response) {
 	  }
 }
 
-function searchConfig(element) {
+function searchConfig(element, loc) {
 	var timeout;
 	var config = {
     	minLength: 2,
-    	autoSelect: true,
+    	autoSelect: false,
     	fitToElement: true,
-    	matcher: function(merchant) {
-            if (merchant.name.toLowerCase().includes(this.query.trim().toLowerCase())) {
+    	matcher: function(searchItem) {
+            if (searchItem.name.toLowerCase().includes(this.query.trim().toLowerCase())) {
                 return true;
             } else {
                 this.query = 'No match found';
                 return true;
             }
         },
-    	displayText: function(merchant) {
-	        return '<div style="padding: 2%;"><span>' + 
-	                  merchant.name + 
-	                  '</span> <br /><span class="font-0-8">' +
-	                  merchant.shortAddress + 
-	                  '</span></div>';
+    	displayText: function(searchItem) {
+    		var displayTxt = '<div style="padding: 1%;"><span>' + 
+								searchItem.name + 
+							 '</span> <br />';
+    		if (searchItem.type == 'RESTAURANT') {
+    			displayTxt += '<span class="font-0-8">' +
+                				searchItem.shortAddress + 
+                			  '</span></div>';
+    		} else if (searchItem.type == 'CUISINE' || searchItem.type == 'DISH') {
+    			displayTxt += '<span class="font-0-8">' +
+    							searchItem.type + 
+							  '</span></div>';
+    		}
+	        return displayTxt;
 		},
-		afterSelect: function(merchant) {
-			if (merchant.id != -999) {
-				element.val(merchant.name);
+		afterSelect: function(searchItem) {
+			if (searchItem.type != null) {
+				element.val(searchItem.name);
             } else {
             	element.val('');
             }
@@ -128,7 +169,7 @@ function searchConfig(element) {
             	};
                 return $.ajax({
                 	method: "POST",
-					url: "/socyal/merchant/searchMerchant",
+					url: "/socyal/merchant/gSearch",
 					contentType : "application/json",
 					data: JSON.stringify(dataOb),
 					beforeSend: function() {
@@ -142,24 +183,95 @@ function searchConfig(element) {
               	})
               	  .done(function(response) {
               		  if (response.result) {
-              			  if (response.merchants.length == 0) {
-              				alert('Something went wrong. Please try again after refreshing the page');
-              			  } else {
-              				return process(response.merchants);
-              			  }              			
+              			  return process(response.searchItems);             			
               		  } else {
             			  handleErrorCallback(response);
             		  }	          		  
               	  });
             }, 300);
         },
-        updater:function (merchant) {
-        	if (merchant.id != -999) {
-                window.location.href = "/" + merchant.merchantUrl;
-            }
-            return merchant;
+        updater:function (searchItem) {
+        	if (searchItem.type != null) {
+        		if (searchItem.type == 'RESTAURANT') {
+        			window.location.href = searchItem.merchantUrl;
+        		} else if (searchItem.type == 'CUISINE' || searchItem.type == 'DISH') {
+        			var l = getLocationUrlString(loc.val());
+        			window.location.href = '/' + l + '/' + searchItem.nameId;
+        		}
+        	}
+            return searchItem;
         }
     };
 	
 	return config;
+}
+
+function getLocationUrlString(val) {
+	var l = '';
+	for (var i=0; i<localityArr.length; i++) {
+		if (localityArr[i].name === val) {
+			if (localityArr[i].cityId != null) {
+				l = localityArr[i].cityId + '/' + localityArr[i].localityId;
+			} else {
+				l = localityArr[i].localityId;
+			}
+			break;
+		}
+	}
+	return l;
+}
+
+function loadLocations(e, searchElement) {
+	var isLocationUpdated = false;
+    var defaultSelected = e.val();
+    e.typeahead({
+        fitToElement: true,
+        showHintOnFocus: "all",
+        items: 4,
+        displayText: function(location) {
+              return '<div style="padding: 2%; font-size: 0.9em;"><span>' + 
+                        location.name + 
+                        '</span></div>';
+        },
+        afterSelect: function(location) {
+            e.val(location.name);
+        },
+        source: localityArr,
+        updater: function(location) {
+            isLocationUpdated = true;
+            defaultSelected = location.name;
+            if (location.localityId != null) {
+            	var dataOb = {
+                		localityId : location.localityId
+            	};
+            	$.ajax({
+              	  method: "POST",
+              	  url: "/socyal/login/setLocation",
+              	  contentType : "application/json",
+              	  data: JSON.stringify(dataOb)
+              	})
+              	  .done(function(response) {
+              		  if (!response.result) {
+              			location.reload();
+              		  }		
+              	  });
+            }
+            setTimeout(function() {
+            	searchElement.focus();
+            }, 100);
+            return location;
+        }
+    });
+
+    e.on('mousedown', function() {
+        e.val('');
+        e.typeahead('lookup');
+    });
+
+    e.on('focusout', function() {
+        if (!isLocationUpdated) {
+            e.val(defaultSelected);
+            isLocationUpdated = false;
+        }
+    });
 }

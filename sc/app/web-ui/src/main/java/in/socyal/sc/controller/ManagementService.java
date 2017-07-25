@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
@@ -17,7 +18,7 @@ import in.socyal.sc.api.manage.response.AddResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
-import in.socyal.sc.api.merchant.response.MerchantResponse;
+import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
@@ -38,7 +39,28 @@ public class ManagementService {
 	ManageValidator validator;
 	@Autowired
 	MerchantDelegate merchantDelegate;
+
+	@RequestMapping(value = "/runDishRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runDishRatingEngine(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		delegate.runDishRatingEngineForMerchant(request);
+		return helper.success(response);
+	}
 	
+	@RequestMapping(value = "/runCuisineRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runCuisineRatingEngine(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		delegate.runCuisineRatingEngineForMerchant(request);
+		return helper.success(response);
+	}
+	
+	@RequestMapping(value = "/runTagsRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runTagsRatingEngine(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		delegate.runTagsRatingEngineForMerchant(request);
+		return helper.success(response);
+	}
+
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {
 		JsonHelper.logRequest(request, MerchantService.class, "/merchant/searchMerchant");
@@ -47,7 +69,7 @@ public class ManagementService {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				response = merchantDelegate.searchMerchant(request);
 				if (response.getMerchants().size() == 0) {
-					MerchantResponse noMatchFound = new MerchantResponse();
+					MerchantShortDetails noMatchFound = new MerchantShortDetails();
 					noMatchFound.setId(-999);
 					noMatchFound.setName("No match found");
 					noMatchFound.setShortAddress("");
@@ -59,7 +81,7 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/addItem", method = RequestMethod.POST, headers = "Accept=application/json")
 	public AddResponse addItem(@RequestBody AddItemRequest request) {
 		AddResponse response = new AddResponse();
@@ -71,7 +93,7 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/addRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
 	public AddResponse addRecommendations(@RequestBody AddRecommendationsRequest request) {
 		AddResponse response = new AddResponse();
@@ -125,7 +147,7 @@ public class ManagementService {
 		}
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/getItemImages", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GetItemImagesResponse getItemImages(@RequestBody SearchRequest request) {
 		GetItemImagesResponse response = new GetItemImagesResponse();
@@ -134,7 +156,7 @@ public class ManagementService {
 		}
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse sendMessage(@RequestBody MessageRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -144,6 +166,6 @@ public class ManagementService {
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
-		}		
+		}
 	}
 }

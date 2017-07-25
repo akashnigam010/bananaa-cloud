@@ -34,25 +34,12 @@ public class JwtHelper {
 	private static final Logger LOG = Logger.getLogger(JwtHelper.class);
 	private static final String SIGNING_KEY = "LongAndHardToGuessValueWithSpecialCharacters";
 	private static String userTokenExpiry;
-	private static String guestTokenExpiry;
-	private static String merchantTokenExpiry;
 	private static String audience;
 	private static String issuer;
 	
 	@Value("${jwt.token.user.expiry}")
 	public void setUserTokenExpiry(String expiry) {
 		JwtHelper.userTokenExpiry = expiry;
-	}
-	
-	
-	@Value("${jwt.token.guest.expiry}")
-	public void setGuestTokenExpiry(String expiry) {
-		JwtHelper.guestTokenExpiry = expiry;
-	}
-	
-	@Value("${jwt.token.merchant.expiry}")
-	public void setMerchantTokenExpiry(String expiry) {
-		JwtHelper.merchantTokenExpiry = expiry;
 	}
 	
 	@Value("${jwt.audience}")
@@ -98,64 +85,6 @@ public class JwtHelper {
 		request.addProperty("firstName", firstName);
 		request.addProperty("nameId", nameId);
 		request.addProperty("role", RoleType.USER.getRole());
-		JsonObject payload = token.getPayloadAsJsonObject();
-		payload.add("info", request);
-		try {
-			return token.serializeAndSign();
-		} catch (SignatureException e) {
-			LOG.error("Exception occured while serializing and signing JWT token ", e);
-			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-		}
-	}
-	
-	public static String createJsonWebTokenForGuest() throws BusinessException {
-		// Current time and signing algorithm
-		Calendar cal = Calendar.getInstance();
-		HmacSHA256Signer signer;
-		try {
-			signer = new HmacSHA256Signer(issuer, null, SIGNING_KEY.getBytes());
-		} catch (InvalidKeyException e) {
-			LOG.error("Exception occured while creating JWT token ", e);
-			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-		}
-		// Configure JSON token
-		JsonToken token = new net.oauth.jsontoken.JsonToken(signer);
-		token.setAudience(audience);
-		token.setIssuedAt(new org.joda.time.Instant(cal.getTimeInMillis()));
-		token.setExpiration(new org.joda.time.Instant(cal.getTimeInMillis() + 1000L * Long.valueOf(userTokenExpiry)));
-		// Configure request object, which provides information of the item
-		JsonObject request = new JsonObject();
-		request.addProperty("role", RoleType.GUEST.getRole());
-		JsonObject payload = token.getPayloadAsJsonObject();
-		payload.add("info", request);
-		try {
-			return token.serializeAndSign();
-		} catch (SignatureException e) {
-			LOG.error("Exception occured while serializing and signing JWT token ", e);
-			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-		}
-	}
-	
-	public static String createJsonWebTokenForMerchant(String deviceId, String merchantId) throws BusinessException {
-		// Current time and signing algorithm
-		Calendar cal = Calendar.getInstance();
-		HmacSHA256Signer signer;
-		try {
-			signer = new HmacSHA256Signer(issuer, null, SIGNING_KEY.getBytes());
-		} catch (InvalidKeyException e) {
-			LOG.error("Exception occured while creating JWT token ", e);
-			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-		}
-		// Configure JSON token
-		JsonToken token = new net.oauth.jsontoken.JsonToken(signer);
-		token.setAudience(audience);
-		token.setIssuedAt(new org.joda.time.Instant(cal.getTimeInMillis()));
-		token.setExpiration(new org.joda.time.Instant(cal.getTimeInMillis() + 1000L * Long.valueOf(userTokenExpiry)));
-		// Configure request object, which provides information of the item
-		JsonObject request = new JsonObject();
-		request.addProperty("deviceId", deviceId);
-		request.addProperty("merchantId", merchantId);
-		request.addProperty("role", RoleType.MERCHANT.getRole());
 		JsonObject payload = token.getPayloadAsJsonObject();
 		payload.add("info", request);
 		try {
@@ -213,21 +142,6 @@ public class JwtHelper {
 					tokenInfo.setUserId(userIdString);
 					tokenInfo.setFirstName(firstNameString);
 					tokenInfo.setNameId(nameIdString);
-					tokenInfo.setRole(roleString);
-					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
-					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
-					return tokenInfo;
-				} else if (RoleType.GUEST == RoleType.getRole(roleString)) {
-					tokenInfo.setRole(roleString);
-					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
-					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));
-					return tokenInfo;
-				//this condition is for setting deviceId and merchantId in JWT token
-				} else {
-					String deviceIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("deviceId").getAsString();
-					String merchantIdString = payload.getAsJsonObject("info").getAsJsonPrimitive("merchantId").getAsString();
-					tokenInfo.setDeviceId(deviceIdString);
-					tokenInfo.setMerchantId(merchantIdString);
 					tokenInfo.setRole(roleString);
 					tokenInfo.setIssued(new DateTime(payload.getAsJsonPrimitive("iat").getAsLong()));
 					tokenInfo.setExpires(new DateTime(payload.getAsJsonPrimitive("exp").getAsLong()));

@@ -34,7 +34,7 @@ public class ManageValidator {
 	}
 
 	public void validateAddRecommendationsRequest(AddRecommendationsRequest request) throws BusinessException {
-		if (request.getItemId() == null || request.getRcmdCount() == null) {
+		if (request.getItemId() == null || request.getRating() == null || request.getRcmdCount() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

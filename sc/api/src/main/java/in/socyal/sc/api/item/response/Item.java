@@ -1,5 +1,7 @@
 package in.socyal.sc.api.item.response;
 
+import in.socyal.sc.api.type.RatingColorType;
+
 public class Item {
 	private Integer id;
 	private String nameId;
@@ -7,6 +9,25 @@ public class Item {
 	private String thumbnail;
 	private Integer recommendations;
 	private String itemUrl;
+	private String ratingClass;
+	private String rating;
+
+	public String getRatingClass() {
+		if (rating == "") {
+			ratingClass = RatingColorType.R25.getCssClass();
+		} else { 
+			ratingClass = RatingColorType.getCodeByRating(Float.parseFloat(rating)).getCssClass();
+		}
+		return ratingClass;
+	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
 
 	public Integer getId() {
 		return id;
@@ -54,5 +75,9 @@ public class Item {
 
 	public void setItemUrl(String itemUrl) {
 		this.itemUrl = itemUrl;
+	}
+
+	public void setRatingClass(String ratingClass) {
+		this.ratingClass = ratingClass;
 	}
 }

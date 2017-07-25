@@ -1,5 +1,7 @@
 package in.socyal.sc.api.merchant.response;
 
+import in.socyal.sc.api.type.RatingColorType;
+
 public class Recommendation  {
 	private Integer id;
 	private Integer itemId;
@@ -8,6 +10,21 @@ public class Recommendation  {
 	private Integer totalRcmdns;
 	private String thumbnail;
 	private String timeDiff;
+	private String rating;
+	private String ratingClass;
+	
+	public String getRatingClass() {
+		if (rating == "") {
+			ratingClass = RatingColorType.R25.getCssClass();
+		} else { 
+			ratingClass = RatingColorType.getCodeByRating(Float.parseFloat(rating)).getCssClass();
+		}
+		return ratingClass;
+	}
+	
+	public void setRatingClass(String ratingClass) {
+		this.ratingClass = ratingClass;
+	}
 
 	public Integer getId() {
 		return id;
@@ -63,5 +80,13 @@ public class Recommendation  {
 
 	public void setTimeDiff(String timeDiff) {
 		this.timeDiff = timeDiff;
+	}
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
 	}
 }

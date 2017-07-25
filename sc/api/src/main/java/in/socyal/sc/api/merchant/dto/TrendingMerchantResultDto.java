@@ -1,24 +1,15 @@
 package in.socyal.sc.api.merchant.dto;
 
 public class TrendingMerchantResultDto {
-	private Integer merchantId;
-	private Long recommendations;
+	private Float rating;
 	private MerchantDto merchant;
 
-	public Integer getMerchantId() {
-		return merchantId;
+	public Float getRating() {
+		return rating;
 	}
 
-	public void setMerchantId(Integer merchantId) {
-		this.merchantId = merchantId;
-	}
-
-	public Long getRecommendations() {
-		return recommendations;
-	}
-
-	public void setRecommendations(Long recommendations) {
-		this.recommendations = recommendations;
+	public void setRating(Float rating) {
+		this.rating = rating;
 	}
 
 	public MerchantDto getMerchant() {

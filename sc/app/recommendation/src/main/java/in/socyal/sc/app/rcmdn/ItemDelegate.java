@@ -1,14 +1,33 @@
 package in.socyal.sc.app.rcmdn;
 
+import java.util.List;
+
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
-import in.socyal.sc.api.items.request.GetPopularItemsRequest;
+import in.socyal.sc.api.item.response.PopularTagResponse;
+import in.socyal.sc.api.item.response.SearchItemsResponse;
+import in.socyal.sc.api.items.request.TrendingRequest;
+import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
+import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
+import in.socyal.sc.api.type.TagType;
 
 public interface ItemDelegate {
-	ItemsResponse searchItems(SearchRequest request);
-	ItemsResponse getPopularItems(GetPopularItemsRequest request) throws BusinessException;
+	SearchItemsResponse searchItems(SearchRequest request);
+
+	List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType);
+
+	ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException;
+
 	ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException;
+
+	PopularTagResponse getPopularCuisines(LocationCookieDto cookieDto) throws BusinessException;
+
+	PopularTagResponse getPopularDishes(LocationCookieDto cookieDto) throws BusinessException;
+
+	MerchantListForTagResponse searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page)
+			throws BusinessException;
 }

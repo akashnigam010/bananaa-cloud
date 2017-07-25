@@ -1,8 +1,10 @@
 package in.socyal.sc.api.merchant.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
+import in.socyal.sc.api.item.response.Tag;
 
 public class MerchantDto implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -17,6 +19,8 @@ public class MerchantDto implements Serializable {
 	private Double averageCost;
 	private List<String> types;
 	private String merchantUrl;
+	private List<Tag> ratedCuisines;
+	private List<Tag> ratedSuggestions;
 
 	public Integer getId() {
 		return id;
@@ -104,5 +108,27 @@ public class MerchantDto implements Serializable {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public List<Tag> getRatedCuisines() {
+		if (this.ratedCuisines == null) {
+			this.ratedCuisines = new ArrayList<>();
+		}
+		return ratedCuisines;
+	}
+
+	public void setRatedCuisines(List<Tag> ratedCuisines) {
+		this.ratedCuisines = ratedCuisines;
+	}
+
+	public List<Tag> getRatedSuggestions() {
+		if (this.ratedSuggestions == null) {
+			this.ratedSuggestions = new ArrayList<>();
+		}
+		return ratedSuggestions;
+	}
+
+	public void setRatedSuggestions(List<Tag> ratedSuggestions) {
+		this.ratedSuggestions = ratedSuggestions;
 	}
 }

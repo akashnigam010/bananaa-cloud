@@ -22,8 +22,6 @@ public class UserDelegateImpl implements UserDelegate {
 		UserDto userDto = userDao.getUserByNameId(userNameId);
 		UserDetailsResponse response = new UserDetailsResponse();
 		response.setUser(userDto);
-		response.setRecommendations(userDto.getRecommendations());
-		response.setTotalRecommendations(userDto.getRecommendations().size());
 		return response;
 	}
 }

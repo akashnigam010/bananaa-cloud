@@ -1,22 +1,6 @@
 package in.socyal.sc.api.cuisine.dto;
 
-public class CuisineDto {
-	private Integer id;
-	private String name;
+import in.socyal.sc.api.item.response.Tag;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+public class CuisineDto extends Tag {
 }

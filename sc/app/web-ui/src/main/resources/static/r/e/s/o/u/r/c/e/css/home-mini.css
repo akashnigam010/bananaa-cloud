@@ -17,112 +17,76 @@ body {
     height: 100px;
 }
 
-.logo {
-    background-repeat: no-repeat;
-    background-position: center;
+.sub-banner-logo {
+    margin: 10% 0%;
+}
+
+.sub-banner-wrapper {
+    margin: 10% 0%;   
 }
 
 .tagline {
+    font-size: 2.5em;
+    padding-top: 3%;
+}
+
+.purple-banner {
     font-size: 1.5em;
-    padding-top: 5%;
-    padding-bottom: 4%;
+    padding: 15% 0%;
 }
 
-.home-banner {
-    background: linear-gradient(
-                     rgba(20,20,20, .5), 
-                     rgba(20,20,20, .5)),
-                     url("https://bna-s3.s3.amazonaws.com/commons/home-bg.png");
-    background-repeat: no-repeat;
-    background-position: center left;
-    background-size: cover;
+.bna-search-add {
+    padding: 10% 0% 0% 0%;
 }
 
-.icon-search {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/search_icon.png");
+.meme-wrapper {
+    margin-bottom: 10%;
+}
+
+.icon-search-home {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.search-box-wrapper {
-    height: 85px;
+.icon-location-home {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25px;
+}
+
+.location-wrapper {
+    width: 100%;
     padding-top: 2%;
+    padding-bottom: 2%;
 }
 
-.search-box-wrapper>.form-horizontal>.form-group-lg>input {
-    font-size: 1.2em;
-}
-
-.search-box-suggestion {
-    z-index: 1; 
-    position: absolute; 
-    background: white; 
-    color: black; 
-    width: 100%; 
-    border-radius: 5px;
-    -webkit-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-    -moz-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-    box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-}
-
-.suggestion {
-    padding: 2% 2% 0% 2%;
+.search-wrapper {
+    width: 100%;
+    margin-left: 0px;
+    padding-bottom: 5%;
 }
 
 /* Hero Banner CSS - END */
 
-/* Feature Banner CSS - START */
+/* Meme css STARTS */
 
-.feature {
-    padding-top: 100px;
+.meme-image-div {
+    height: 60px;
 }
 
-.feature-details {
-    padding-top: 30px;
+.meme-text {
+    font-size: 1em;
 }
 
-.feature-heading {
-    text-transform: uppercase;
-    font-family: bna-bold;
-    font-size: 20px;
+.meme-image {    
+    object-fit: cover;
+    pointer-events: none;
+    height:100%;
 }
 
- .feature-description {
-    color: #808080;
-    font-size: 16px;
- }
-
-/* Feature Banner CSS - END */
-
-/* Word Cloud CSS - START */
-
-.word-cloud-wrapper {
-    padding-top: 50px;
-}
-
-.wc-custom-class-1 {
-    text-transform: uppercase;
-    font-family: bna-bold !important;
-    padding: 10px !important;
-}
-
-.wc-custom-class-2 {
-    text-transform: uppercase;
-    font-family: bna-bold !important;
-    padding: 10px !important;
-}
-
-.wc-custom-class-3 {
-    text-transform: uppercase;
-    font-family: bna-web !important;
-    padding: 10px !important;
-}
-
-.extra-padding {
-    padding-top: 50px;
-}
-
-/* Word Cloud CSS - END */
+/* Meme css ENDS */
 
 /* Trending CSS - START */
 
@@ -131,97 +95,51 @@ body {
 }
 
 .trending-heading {
-    padding: 10% 3% 1% 3%;
+    padding: 5% 3% 1% 3%;
     text-transform: uppercase;  
 }
 
-.trending-restaurant-wrapper, .diary-wrapper {
+.trending-wrapper {
     padding-left: 3%;
     padding-right: 3%;
 }
 
-.trending-item {
+.flick-div {
+    border-radius: 4px; 
+    /*background: linear-gradient(white, purple);*/
+    /* background-color: #fff; */
+    width: 70%;
+    height: 180px;
     margin-right: 10px;
 }
 
-.trend-image {
+.flick-image {
+    /*opacity: 0.8;*/
     object-fit: cover;
+    /* pointer-events: none; */
     width:100%;
-    height:130px;
+    height:100%;
     overflow:hidden;
     vertical-align:top;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-.trending-item-desc {
-    background-color: #FFFFFF;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-}
-
-.desc-top {
-    font-family: bna-bold;
-    padding: 0px 5px 0px 5px;
-}
-
-.desc-bottom {
-    padding: 10px 5px 0px 5px;
-    color: #808080;
-}
-
-.rating-gear {
-    background-color: #9932CC;
-    color: #FFFFFF;
-    height: 25px;
-    width: 50px;
     border-radius: 4px;
 }
 
-.checkins-gear {
-    height: 25px;
-    width: 50px;
+.flick-img-txt {
+    height:64%;
 }
 
-.icon-rating {
-    height: 15px;
-    width: 15px;
+.flick-txt {
+    height:36%;
+    padding-top: 1%;
 }
 
-.icon-bananaa {
-    height: 15px;
-    width: 20px;
+/* Bug Fix in Flickity */
+.flickity-enabled.is-draggable .flickity-viewport{
+    touch-action: pan-y !important;
 }
-
-.rating-value {
-    vertical-align: middle;
-}
-
-.checkin-value {
-    vertical-align: middle;
-}
+/* Bug Fix in Flickity */
 
 /* Trending CSS - END */
-
-/* App Info CSS - START */
-
-.app-info {
-    background-color: #FFFFFF;
-    padding: 10% 15% 10% 15%;
-}
-
-.download-heading {
-    padding : 20% 0% 5% 0%;
-    font-family: bna-bold;
-    font-size: 2.5em;
-    text-align: left;
-}
-
-.download-link-image {
-    padding-top: 5%;
-}
-
-/* App Info CSS - END */
 
 /* HEADER CSS - START */
 
@@ -243,48 +161,6 @@ body {
 }
 
 /* HEADER CSS - END */
-
-/* ERROR PAGE CSS - START*/
-
-.error-message-primary {
-    padding: 5% 0% 3% 0%;
-    color: #9932CC;
-}
-
-.error-message-secondary {
-    padding-bottom: 3%;
-}
-
-.back-home-button {
-    color: #ffffff;
-    background-color: #9932CC;
-}
-
-/* ERROR PAGE CSS - END*/
-
-/* PLACEHOLDER CSS - START*/
-
-::-webkit-input-placeholder {
-   text-align: center;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-   text-align: center;  
-}
-
-::-moz-placeholder {  /* Firefox 19+ */
-   text-align: center;  
-}
-
-:-ms-input-placeholder {  
-   text-align: center; 
-}
-
-hr {
-    margin-top: 2px;
-    margin-bottom: 2px; 
-}
-/* PLACEHOLDER CSS - END*/
 
 /* Login Button CSS starts */
 .login-info {

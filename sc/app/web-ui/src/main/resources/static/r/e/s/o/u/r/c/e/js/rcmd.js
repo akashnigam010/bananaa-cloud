@@ -1,3 +1,35 @@
+var rcmdOb = {};
+var revItem = {};
+var selectedRating = 0;
+var flashTime = 50;
+var rateVal = new Array();
+var star_e = "https://bna-s3.s3.amazonaws.com/img/rate-e.png";
+var star_f = "https://bna-s3.s3.amazonaws.com/img/rate-f.png";
+rateVal[1] = {
+	name: 'EWW',
+	display: 'EWW (>.<)',
+	color: '#CD1C26'
+};
+rateVal[2] = {
+	name: 'MEH',
+	display: 'MEH : /',
+	color: '#FF7800'
+};
+rateVal[3] = {
+	name: 'OK OK',
+	display: 'OK OK :)',
+	color: '#CDD614'
+};
+rateVal[4] = {
+	name: 'YUMMY',
+	display: 'YUMMY :D',
+	color: '#5BA829'
+};
+rateVal[5] = {
+	name: 'AWESOME',
+	display: 'AWESOME !',
+	color: '#305D02'
+};
 $(document).ready(function() {
     var timeout;
     $('#modal-item-name').typeahead({
@@ -62,6 +94,14 @@ $(document).ready(function() {
             		  }	          		  
               	  });
             }, 300);
+        },
+        updater:function (item) {
+            if (item.id != -999) {
+            	tapItemDropdown(item);
+            } else {
+            	resetModal();
+            }
+            return item;
         }
     });
         
@@ -70,233 +110,255 @@ $(document).ready(function() {
     		activateLogin();
     		return;
 		}
-    	openRecommendationModal('', '', '', '', false);
+    	$(".rating-section").css('pointer-events', 'none');
+    	openRecommendationModal();
     });
     
-    $("#addItemRecommendButton").on('mouseup', function (e) {
-    	if ($("#loginStatus").html() == 'false') {
-    		activateLogin();
-    		return;
-		}
-    	openItemRecommendationModal(itemId, itemName, '');
+    $(".rate-star").on('click', function() {
+    	addRating(getStarId(this.id), true);
     });
-    
-    $('#modal-item-desc').on('focusin', function(e) {
-    	$(this).attr('placeholder', 'Dive down into the specifics! Tell us how this dish or drink stands out to be a recommendation. And remember to keep it short - a minimum of 50 and a maximum of 200 characters. :)');
-		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
-    });
-    $('#modal-item-desc').on('focusout', function(e) {
-    	$(this).attr('placeholder', '');
-    	if ($(this).val() == '') {
-    		$("#modal-item-desc-label").attr('style', '');
-    	}
-    });
+
+    handleReviewCount();
 });
 
-function openRecommendationModal(rcmdId, itemId, name, desc, isUpdateFlag) {
-	$("#recommendModal").find('.main-area').show();
-	$("#recommendModal").find('.loader').addClass('hide');
-	$("#modal-recommendation-id").val(rcmdId);
-	$("#modal-item-id").val(itemId);
-	$("#modal-item-name").val(name);
-	$("#modal-item-desc").val(desc);
-	$("#merchant-name-title").html(' @ '+ merchantName);
-	if (desc != '') {
-		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
-	} else {
-		$("#modal-item-desc-label").attr('style', '');
-	}	
-	if (isUpdateFlag) {
-		$("#removeRecommendation").removeClass('hide');
-		$("#recommendSubmit").html('Update recommendation');
-		$("#recommendSubmit").off('mouseup');
-		$("#recommendSubmit").on('mouseup', updateRecommendation);
-		$('#modal-item-name').prop('disabled', true);
-		$("#modal-item-name-label").addClass('hide');
-	} else {
-		$("#removeRecommendation").addClass('hide');
-		$("#recommendSubmit").html('Add recommendation');
-		$("#recommendSubmit").off('mouseup');
-		$("#recommendSubmit").on('mouseup', addRecommendation);
-		$('#modal-item-name').prop('disabled', false);
-		$("#modal-item-name-label").removeClass('hide');
-	}
-	$('#recommendModal').find('.error-label').addClass('hide');
-	$('#recommendModal').modal('show');
+function resetModal() {
+	$(".rating-section").css('pointer-events', 'none');
+	$('#modal-item-name').val('');
+	removeStars();
+	navigateToRate();
+	$(".goto-review").addClass('hide');
 }
 
-function openItemRecommendationModal(itemId, name, desc) {
-	$("#recommendModal").find('.main-area').show();
-	$("#recommendModal").find('.loader').addClass('hide');
-	$("#modal-item-id").val(itemId);
-	$("#modal-item-name").val(name);
-	$("#modal-item-desc").val(desc);
-	$("#merchant-name-title").html('');
-	if (desc != '') {
-		$("#modal-item-desc-label").attr('style', 'top:-20px;font-size:10px;color:#9932CC;');
-	} else {
-		$("#modal-item-desc-label").attr('style', '');
-	}
-	$("#removeRecommendation").addClass('hide');
-	$("#recommendSubmit").html('Add recommendation');
-	$("#recommendSubmit").off('mouseup');
-	$("#recommendSubmit").on('mouseup', addItemRecommendation);
-	$('#modal-item-name').prop('disabled', true);
-	$("#modal-item-name-label").addClass('hide');
-	
-	$('#recommendModal').find('.error-label').addClass('hide');
-	$('#recommendModal').modal('show');
-}
-
-function updateRecommendation() {
-	var $rcmdId = $('#modal-recommendation-id').val();
-	var $itemId = $('#modal-item-id').val();
-	var $desc = $('#modal-item-desc').val();	
-	if ($desc != rcmdOb.desc) {
-		if (handleReview($desc)) {
-			var dataOb = {
-		 			rcmdnId : $rcmdId,
-		 			description : $desc
-        	};
-            return $.ajax({
-          	  method: "POST",
-          	  url: "/socyal/recommendation/updateRecommendation",
-          	  contentType : "application/json",
-          	  data: JSON.stringify(dataOb)
-          	})
-          	  .done(function(response) {
-          		$('#recommendModal').modal('hide');
-          		  if (response.result) {
-          			  if (page == 'detail') {
-          				getMyRecommendations()
-          			  } else if (page == 'item-detail') {
-          				getMyItemRecommendation();
-          			  } else {
-          				location.reload();
-          			  }             			
-          		  } else {
-        			  handleErrorCallback(response);
-        		  }	          		  
-          	  });
+function tapItemDropdown(item) {
+	$(".rating-section").css('pointer-events', '');
+	setTimeout(function(){
+		$('#modal-item-name').blur();
+	}, 100);
+    revItem = item;
+    if (item.rating == '' || item.rating == null) {
+    	activateRatingWidget();
+    	$('.reviewTab').find('.recommend-desc-area').val('');
+    } else {
+    	if (!$(".ratingTab").hasClass('active')) {
+			$(".ratingTab").addClass('active');
+			$(".reviewTab").removeClass('active');
 		}
-		return;	
+    	addRating(item.rating, false);
+    	$('.reviewTab').find('.recommend-desc-area').val(item.review);
+    }
+}
+
+function getStarId(sid) {
+	if (sid === 's5') return 5;
+	if (sid === 's4') return 4;
+	if (sid === 's3') return 3;
+	if (sid === 's2') return 2;
+	if (sid === 's1') return 1;
+}
+
+function flashStars() {
+	$("#s1").attr("src", star_f);
+	setTimeout(function(){
+		$("#s2").attr("src", star_f);
+		setTimeout(function(){
+	        $("#s3").attr("src", star_f);
+	        setTimeout(function(){
+		        $("#s4").attr("src", star_f);
+		        setTimeout(function(){
+			        $("#s5").attr("src", star_f);
+			        setTimeout(function(){
+				        $("#s5").attr("src", star_e);
+				        setTimeout(function(){
+					        $("#s4").attr("src", star_e);  
+					        setTimeout(function(){
+						        $("#s3").attr("src", star_e);
+						        setTimeout(function(){
+									$("#s2").attr("src", star_e);
+									setTimeout(function(){
+										$("#s1").attr("src", star_e);
+								    },flashTime);
+							    },flashTime);
+						    },flashTime);
+					    },flashTime);
+				    },flashTime);
+			    },flashTime);
+		    },flashTime);
+	    },flashTime);
+    },flashTime);
+}
+
+function activateRatingWidget() {
+	setTimeout(function() {
+		flashStars();
+	}, 300);
+	$(".rating-section").hover(function(){
+    	$(".rate-star").hover(function(){
+	    	fillStars(getStarId(this.id));
+	    });
+    }, function() {
+    	removeStars();
+    });
+	$(".rating-txt").html("ADD YOUR RATING");
+	$(".rating-txt").css('color', '');
+	$(".rating-txt").addClass('light');
+	$(".goto-review").addClass('hide');
+}
+
+function navigateToReview() {
+	resetHeading('review');
+	$(".ratingTab").removeClass('active');
+	$(".reviewTab").addClass('active');
+	$('.reviewTab').find('.rTitle').html(revItem.name + " @ " + revItem.merchantName);
+	$('.reviewTab').find('.rRating').html('"' + revItem.star.name + '"');
+	$('.reviewTab').find('.rRating').css('color', revItem.star.color);
+	if (revItem.review != '') {
+		$('.reviewTab').find('.recommend-desc-area').val(revItem.review);
+		var review = revItem.review != null ? revItem.review : '';
+		$('.char-count').html(review.length + '/200');
 	} else {
-		$('#recommendModal').modal('hide');
+		$('.char-count').html('0/200');
+	}
+	//$('.recommend-desc-area').focus();
+}
+
+function navigateToRate() {
+	resetHeading('rate');
+	$(".ratingTab").addClass('active');
+	$(".reviewTab").removeClass('active');
+}
+
+function addRating(id, saveRating) {
+	$(".rating-section").off("mouseenter mouseleave");
+	$(".rate-star").off("mouseenter mouseleave");
+	fillStars(id);
+	$(".goto-review").removeClass('hide');
+	if (selectedRating != id && saveRating) {
+		selectedRating = id;
+		revItem.rating = id;
+		var dataOb = {
+			id: revItem.id,
+			rating: revItem.rating
+		};
+		return $.ajax({
+      	  method: "POST",
+      	  url: "/socyal/recommendation/saveRating",
+      	  contentType : "application/json",
+      	  data: JSON.stringify(dataOb)
+      	})
+      	.done(function(response) {
+      		if (response.result) {
+      			$(".rcmd-title").addClass('hide');
+            	$('.success-rating').removeClass('hide');
+            	setTimeout(function(){
+            		$(".rcmd-title").removeClass('hide');
+            		$('.success-rating').addClass('hide');
+            	}, 2000);
+            	if (page == 'detail') {
+            		getMyRecommendations();
+	  			} else if (page == 'item-detail') {
+	  				getMyItemRecommendation();  
+	  			}
+      		} else {
+      			handleErrorCallback(response);
+      		}
+      	});
+	}
+}
+
+function resetHeading(to) {
+	$('.error-review').addClass('hide');
+	$('.success-rating').addClass('hide');
+	if (to == 'rate') {
+		$(".rcmd-title").html('ADD FOOD RATING');	
+	} else {
+		$(".rcmd-title").html('ADD FOODVIEW');
+	}
+	$('.rcmd-title').removeClass('hide');
+}
+
+function removeStars() {
+	$("#s5, #s4, #s3, #s2, #s1").attr("src", star_e);
+	$(".rating-txt").html('add your rating');
+	$(".rating-txt").css('color', '#939393');
+}
+
+function fillStars(id) {
+	if (id == 5) {
+		$("#s5, #s4, #s3, #s2, #s1").attr("src", star_f);
+	} else if (id == 4) {
+		$("#s5").attr("src", star_e);
+		$("#s4, #s3, #s2, #s1").attr("src", star_f);
+	} else if (id == 3) {
+		$("#s5, #s4").attr("src", star_e);
+		$("#s3, #s2, #s1").attr("src", star_f);
+	} else if (id == 2) {
+		$("#s5, #s4, #s3").attr("src", star_e);
+		$("#s2, #s1").attr("src", star_f);
+	} else if (id == 1) {
+		$("#s5, #s4, #s3, #s2").attr("src", star_e);
+		$("#s1").attr("src", star_f);
+	}
+	$(".rating-txt").html(rateVal[id].display);
+	$(".rating-txt").css('color', rateVal[id].color);
+	revItem.star = rateVal[id];
+}
+
+function handleReviewCount() {
+	$('.recommend-desc-area').on('keyup',function(){
+	    $('.char-count').html($(this).val().length + '/200');
+	    revItem.review = $(this).val();
+	});
+}
+
+function handleReview(desc) {
+	if(desc == null || desc.length < 50 || desc.length > 200) {
+		$(".rcmd-title").addClass('hide');
+    	$('.error-review').removeClass('hide');
+    	setTimeout(function(){
+    		$(".rcmd-title").removeClass('hide');
+    		$('.error-review').addClass('hide');
+    	}, 3000);
+		return false;
+	}
+	return true;
+}
+
+function openRecommendationModal(rcmdOb) {
+	$('#recommendModal').modal('show');
+	if (rcmdOb) {
+		$("#modal-item-name").val(rcmdOb.name);
+		tapItemDropdown(rcmdOb);
+	} else {
+		resetModal();
+		$('#modal-item-name').focus();
 	}
 }
 
 function addRecommendation() {
-	var nameInput = $('#modal-item-name');
-	var current = nameInput.typeahead("getActive");
-	var $rcmdId = $('#modal-recommendation-id').val();
-	var $name = nameInput.val();
-	var $desc = $('#modal-item-desc').val();
-	$('#recommendModal').find('.error-label-name').html('Please select the food or drink item');
-	if (current) {
-		if (current.name.toLowerCase() == $name.toLowerCase()) {
-			$('#recommendModal').find('.error-label-name').addClass('hide');
-			if (handleReview($desc)) {
-				$("#recommendModal").find('.main-area').hide();
-				$("#recommendModal").find('.loader').removeClass('hide');
-				var dataOb = {
-			 			dishId : current.id,
-			 			description : $desc
-	        	};
-	            return $.ajax({
-	          	  method: "POST",
-	          	  url: "/socyal/recommendation/addRecommendation",
-	          	  contentType : "application/json",
-	          	  data: JSON.stringify(dataOb)
-	          	})
-	          	  .done(function(response) {
-	          		$('#recommendModal').modal('hide');
-	          		  if (response.result) {
-	          			  getMyRecommendations()
-	          		  } else {
-	        			  handleErrorCallback(response);
-	        		  }	          		  
-	          	  });
-			}	      	
-	    } else {
-	    	$('#recommendModal').find('.error-label-name').removeClass('hide');
-	    }
-	  } else {
-		  	$('#recommendModal').find('.error-label-name').removeClass('hide');
-	  }
-}
-
-function addItemRecommendation() {
-	var $itemId = $('#modal-item-id').val();
-	var $desc = $('#modal-item-desc').val();	
-	
-	if (handleReview($desc)) {
-		var dataOb = {
-	 			dishId : $itemId,
-	 			description : $desc
-    	};
+	var dataOb = {
+		id: revItem.id,
+		description: revItem.review
+	};
+	if (handleReview(dataOb.description)) {
         return $.ajax({
       	  method: "POST",
-      	  url: "/socyal/recommendation/addRecommendation",
+      	  url: "/socyal/recommendation/saveReview",
       	  contentType : "application/json",
       	  data: JSON.stringify(dataOb)
       	})
       	  .done(function(response) {
       		$('#recommendModal').modal('hide');
       		  if (response.result) {
-      			  getMyItemRecommendation()             			
+      			  if (page == 'detail') {
+      				getMyRecommendations();
+      			  } else if (page == 'item-detail') {
+      				getMyItemRecommendation();  
+      			  }
       		  } else {
     			  handleErrorCallback(response);
     		  }	          		  
       	  });
-	}
-	return;
-}
-
-function handleReview(desc) {
-	if (desc.length == 0) {
-		return true;
-	}
-	if(desc.length < 50 || desc.length > 200) {
-		$('#recommendModal').find('.error-label-review').removeClass('hide');
+	} else {
 		return false;
 	}
-	return true;
-}
-
-function removeRecommendation() {
-	$('#recommendModal').modal('hide');
-	setTimeout(function(){
-		$("#alertModal").find('.main-area').show();
-		$("#alertModal").find('.loader').addClass('hide');
-		$("#alertText").html('Are you sure you want to remove ' + rcmdOb.name + ' from your recommendations ?');
-		$("#alertModal").modal('show');
-		$("#confirmAlertButton").off('mouseup');
-		$("#confirmAlertButton").on('mouseup', function (e) {
-		 	$("#alertModal").find('.main-area').hide();
-		 	$("#alertModal").find('.loader').removeClass('hide');
-		 	var dataOb = {
-		 			rcmdnId : rcmdOb.rcmdId
-        	};
-            return $.ajax({
-          	  method: "POST",
-          	  url: "/socyal/recommendation/removeRecommendation",
-          	  contentType : "application/json",
-          	  data: JSON.stringify(dataOb)
-          	})
-          	  .done(function(response) {
-          		  $("#alertModal").modal('hide');
-          		  if (response.result) {
-          			  if (page == 'detail') {
-          				getMyRecommendations()
-          			  } else if (page == 'item-detail') {
-          				getMyItemRecommendation();
-          			  } else {
-          				location.reload();
-          			  }             			
-          		  } else {
-        			  handleErrorCallback(response);
-        		  }	          		  
-          	  });
-		});
-	},500);
 }

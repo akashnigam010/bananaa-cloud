@@ -1,22 +1,7 @@
 package in.socyal.sc.api.suggestion.dto;
 
-public class SuggestionDto {
-	private Integer id;
-	private String name;
+import in.socyal.sc.api.item.response.Tag;
 
-	public Integer getId() {
-		return id;
-	}
+public class SuggestionDto extends Tag {
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

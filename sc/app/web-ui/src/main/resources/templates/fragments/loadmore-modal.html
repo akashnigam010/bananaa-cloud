@@ -8,7 +8,10 @@
                             <button type="button" class="close float-left" data-dismiss="modal" aria-label="Close">
                                 <img src="https://bna-s3.s3.amazonaws.com/img/arrow_back_black.svg" />
                             </button>
-                            <h4 class="modal-title bold bna-color" id="alertHeading">What people love here</h4>
+                            <h4 class="modal-title bold bna-color" id="alertHeading">
+                                Most tempting food here &nbsp;
+                                <a style="font-size: 70%; color: #444;" href="#" data-placement="bottom" data-toggle="popover" data-trigger="hover" data-content="Based on weighted average of most recent ratings and number of times people have tried a dish" onclick="event.preventDefault();">&#9432;</a>
+                            </h4>
                         </div>
                         <div class="modal-body row">
                             <div class="col-xs-12">
@@ -32,10 +35,13 @@
                             </div>
                         </div>                        
                     </div>
-                    <div class="modal-footer cursor-pointer align-center recommendSubmit" data-dismiss="modal" aria-label="Close">
-                        Close
-                    </div>
-                </div>
+				<div
+					class="modal-footer align-center bna-bg-primary white cursor-pointer"
+					data-dismiss="modal" aria-label="Close"
+					style="border-bottom-left-radius: 6px; border-bottom-right-radius: 6px;">
+					Close
+				</div>
+			</div>
             </div>
         </div>
 	<!-- Load More Modal ENDS -->

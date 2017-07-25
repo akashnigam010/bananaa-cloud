@@ -1,18 +1,52 @@
 $(document).ready(function() {
 	page = 'index';
 	if (isMobile) {
-        $('#search-field').on('mousedown', function (e) {
-            $('html, body').animate({
-                scrollTop: $("#search-field").offset().top - 18
+        $('#search-field, #search-location').on('mousedown', function (e) {
+        	$('html, body').animate({
+                scrollTop: $("#search-field").offset().top - 65
+            }, 200);
+        });
+        
+        $('#search-field-add, #search-location-add').on('mousedown', function (e) {
+        	$('html, body').animate({
+                scrollTop: $("#search-field-add").offset().top - 65
             }, 200);
         });
     }
     
-    $('#search-field').typeahead(searchConfig($('#search-field')));
+    $('#search-field').typeahead(searchConfig($('#search-field'), $('#search-location')));
+    $('#search-field-add').typeahead(searchConfig($('#search-field-add'), $('#search-location-add')));
+    loadLocations($('#search-location'), $('#search-field'));
+    loadLocations($('#search-location-add'), $('#search-field-add'));
+    $("#search-field, #search-field-add").keypress(function(e) {
+        if(e.which == 10 || e.which == 13) {
+        	e.preventDefault();
+            homeSearch(this.value);
+        }
+    });
     getTrendingRestaurants();
+    getTrendingCuisines();
+    getTrendingDishes();
     getStories();
-    
 });
+
+function clickSearchHome() {
+	homeSearch($("#search-field").val());
+}
+
+function clickSearchAddHome() {
+	homeSearch($("#search-field-add").val());
+}
+
+function homeSearch(searchString) {
+	if (searchString == '') {
+    	searchString = 'all';
+    }
+	var urlWithParams = window.location.href;
+    var urlWithOutParams = urlWithParams.split('?')[0];
+    var urlWithOutHash = urlWithOutParams.split('#')[0];
+    window.location = urlWithOutHash+'?search='+searchString;
+}
 
 function getTrendingRestaurants() {
 	$.ajax({
@@ -24,34 +58,123 @@ function getTrendingRestaurants() {
     		  var trendingRestaurantHtml = '';
     		  if (response.result) {
     			  if (response.merchants.length > 0) {
-    				  for (var i=0; i<response.merchants.length; i++) {
-    					  trendingRestaurantHtml += 
-    						  '<div class="trending-item">'+
-			                              '<a href="/'+response.merchants[i].merchantUrl+'">'+
-			                          '<div>'+
-			                              '<img class="trend-image" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa"/>'+
-			                              '<div class="trending-item-desc">'+
-			                                  '<div style="padding: 4%;">'+
-			                                      '<p>'+
-			                                          '<span class="bold font-1-3">'+response.merchants[i].name+'</span>'+
-			                                          '<br />'+
-			                                          '<span class="light">'+response.merchants[i].shortAddress+'</span>'+
-			                                      '</p>'+
-			                                      '<span>'+response.merchants[i].recommendations+' Food Recommendations</span>'+
-			                                  '</div>'+
-			                              '</div>'+
-			                          '</div>'+
-			                      '</a>'+
-			                  '</div>';
+    				  $('.trending-restaurants').removeClass('hide');
+    				  for (var i=0; i<response.merchants.length; i++) {    					  
+    					  trendingRestaurantHtml +=
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.merchants[i].merchantUrl+'">'+
+		                              '<img draggable="false" class="flick-image flick-img-txt details-wrapper" src="'+response.merchants[i].thumbnail+'" alt="'+response.merchants[i].name+' at Bananaa" />'+
+	                                  '<div class="flick-txt padding-left">'+
+	                                      '<div class="pull-left">'+
+	                                        '<span class="font-1-3">'+response.merchants[i].name+'</span>'+
+	                                        '<br />'+
+	                                        '<span class="font-0-8">'+response.merchants[i].shortAddress+'</span>'+    
+	                                      '</div>'+
+	                                      '<div class="pull-right">'+
+	                                        '<span class="float-right rating-rcmd ' + response.merchants[i].ratingClass + '" style="padding: 10% 40%;">'+response.merchants[i].rating+'</span>'+
+	                                      '</div>'+	                                      
+	                                  '</div>'+
+                                  '</a>'+
+	                          '</div>';
     				  }
-    				  $('.trending-restaurant-wrapper').html(trendingRestaurantHtml);
-    				  addSlick($('.trending-restaurant-wrapper'));
+    				  $('.restaurant-wrapper').html(trendingRestaurantHtml);
+    				  $('.restaurant-wrapper').flickity(getFlickityOptions());
     				  $('.trending-restaurants').find('.loader').hide();
+    			  } else {
+    				  $('.trending-restaurants').addClass('hide');
     			  }
     		  } else {
     			  handleErrorCallback(response);
     		  }
     	  });
+}
+
+function getTrendingCuisines() {
+	$.ajax({
+    	  method: "GET",
+    	  url: "/socyal/item/getTrendingCuisines",
+    	  contentType : "application/json"
+    	})
+    	  .done(function(response) {
+    		  var trendingHtml = '';
+    		  if (response.result) {
+    			  if (response.tags.length > 0) {
+    				  $(".trending-cuisines").removeClass('hide');
+    				  for (var i=0; i<response.tags.length; i++) {    					  
+    					  trendingHtml +=
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.tags[i].url+'">'+
+	    						  	  '<img draggable="false" class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
+	                                  '<div class="flick-txt padding-left">'+
+	                                      '<div class="pull-left">'+
+	                                        '<span class="font-1-3">'+response.tags[i].name+'</span>'+
+	                                      '</div>'+
+	                                      '<div class="pull-right">'+
+	                                      	'<span class="font-0-8 bold">'+response.tags[i].merchants+'</span>&nbsp;'+
+	                                      	'<span class="font-0-8">'+getPlaceString(response.tags[i].merchants)+'</span>'+
+	                                      '</div>'+	                                      
+	                                  '</div>'+
+                                  '</a>'+
+                              '</div>';
+    				  }
+    				  $('.cuisine-wrapper').html(trendingHtml);
+    				  $('.cuisine-wrapper').flickity(getFlickityOptions());
+    				  $('.trending-cuisines').find('.loader').hide();
+    			  } else {
+    				  $(".trending-cuisines").addClass('hide');
+    			  }
+    		  } else {
+    			  handleErrorCallback(response);
+    		  }
+    	  });
+}
+
+function getTrendingDishes() {
+	$.ajax({
+    	  method: "GET",
+    	  url: "/socyal/item/getTrendingDishes",
+    	  contentType : "application/json"
+    	})
+    	  .done(function(response) {
+    		  var trendingHtml = '';
+    		  if (response.result) {
+    			  if (response.tags.length > 0) {
+    				  $('.trending-dishes').removeClass('hide');
+    				  for (var i=0; i<response.tags.length; i++) {
+    					  trendingHtml +=
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.tags[i].url+'">'+
+	    						  	  '<img draggable="false" class="flick-image flick-img-txt details-wrapper" src="'+response.tags[i].thumbnail+'" alt="'+response.tags[i].name+' at Bananaa" />'+
+	                                  '<div class="flick-txt padding-left">'+
+	                                      '<div class="pull-left">'+
+	                                        '<span class="font-1-3">'+response.tags[i].name+'</span>'+
+	                                      '</div>'+
+	                                      '<div class="pull-right">'+
+	                                      	'<span class="font-0-8 bold">'+response.tags[i].merchants+'</span>&nbsp;'+
+	                                      	'<span class="font-0-8">'+getPlaceString(response.tags[i].merchants)+'</span>'+
+	                                      '</div>'+	                                      
+	                                  '</div>'+
+                                  '</a>'+
+                              '</div>';
+    				  }
+    				  $('.dish-wrapper').html(trendingHtml);
+    				  $('.dish-wrapper').flickity(getFlickityOptions());
+    				  $('.trending-dishes').find('.loader').hide();
+    			  } else {
+    				  $('.trending-dishes').addClass('hide');
+    			  }
+    		  } else {
+    			  handleErrorCallback(response);
+    		  }
+    	  });
+}
+
+function getPlaceString(merchants) {
+	if (merchants != 1) {
+		return 'places';
+	} else {
+		return 'place';
+	}
 }
 
 function getStories() {
@@ -65,20 +188,18 @@ function getStories() {
     		  if (response.result) {
     			  if (response.stories.length > 0) {
     				  for (var i=0; i<response.stories.length; i++) {
-    					  storiesHtml += 
-    						  '<div class="trending-item">'+
-			                              '<a href="'+response.stories[i].url+'">'+
-			                          '<div class="diary-sec">'+
-			                              '<img class="trend-image diary-img" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
-			                              '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
-			                                  '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
-			                              '</div>'+
+    					  storiesHtml +=
+    						  '<div class="flick-div">'+
+    						  	  '<a draggable="false" href="'+response.stories[i].url+'">'+
+			                          '<img draggable="false" class="flick-image flick-img-txt diary-img details-wrapper" src="'+response.stories[i].imageUrl+'" alt="'+response.stories[i].name+' Story at Bananaa" />'+
+			                          '<div class="align-center padding" style="position: absolute; top: 20%; width: 100%;">'+
+			                              '<p class="bold font-1-3">'+response.stories[i].name+'</p>'+
 			                          '</div>'+
-			                      '</a>'+
-			                  '</div>';
+		                          '</a>'+
+		                      '</div>';
     				  }
     				  $('.diary-wrapper').html(storiesHtml);
-    				  addSlick($('.diary-wrapper'));
+    				  $('.diary-wrapper').flickity(getFlickityOptions());
     				  $('.stories').find('.loader').hide();
     			  }
     		  } else {
@@ -87,36 +208,17 @@ function getStories() {
     	  });
 }
 
-function addSlick(slickElement) {
-	slickElement.slick({
-        dots: false,
-        infinite: false,
-        speed: 300,
-        slidesToShow: 4,
-        slidesToScroll: 4,
-        responsive: [
-            {
-              breakpoint: 2048,
-              settings: {
-                slidesToShow: 3,
-                slidesToScroll: 1
-              }
-            },
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1
-              }
-            },
-            {
-              breakpoint: 480,
-              settings: {
-                arrows: false,
-                slidesToShow: 1.5,
-                slidesToScroll: 1
-              }
-            }
-        ]
-    });
+function getFlickityOptions() {
+    var options = {
+        cellAlign: 'left',
+        contain: true,
+        freeScroll: true,
+        pageDots: false,
+        friction: 0.2,
+        prevNextButtons: true
+    };
+    if (isMobile) {
+        options.prevNextButtons = false;
+    }
+    return options;
 }

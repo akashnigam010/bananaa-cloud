@@ -7,14 +7,6 @@ import in.socyal.sc.api.login.response.LoginResponse;
 
 public interface LoginDelegate {
 	/**
-	 * Set details when login is skipped
-	 * 
-	 * @return
-	 * @throws BusinessException
-	 */
-	public LoginResponse skipLogin() throws BusinessException;
-
-	/**
 	 * Firebase Login
 	 * 
 	 * @param request

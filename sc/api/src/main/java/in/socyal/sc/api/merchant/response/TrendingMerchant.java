@@ -2,16 +2,35 @@ package in.socyal.sc.api.merchant.response;
 
 import java.io.Serializable;
 
-public class TrendingMerchant  implements Serializable {
-	private static final long serialVersionUID = 1L;
+import in.socyal.sc.api.type.RatingColorType;
 
+public class TrendingMerchant implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
 	private String nameId;
 	private String shortAddress;
-	private Long recommendations;
+	private String rating;
 	private String thumbnail;
 	private String merchantUrl;
+	private String ratingClass;
+
+	public String getRating() {
+		return rating;
+	}
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
+
+	public String getRatingClass() {
+		if (rating == "") {
+			ratingClass = RatingColorType.R25.getCssClass();
+		} else { 
+			ratingClass = RatingColorType.getCodeByRating(Float.parseFloat(rating)).getCssClass();
+		}
+		return ratingClass;
+	}
 
 	public Integer getId() {
 		return id;
@@ -35,14 +54,6 @@ public class TrendingMerchant  implements Serializable {
 
 	public void setShortAddress(String shortAddress) {
 		this.shortAddress = shortAddress;
-	}
-
-	public Long getRecommendations() {
-		return recommendations;
-	}
-
-	public void setRecommendations(Long recommendations) {
-		this.recommendations = recommendations;
 	}
 
 	public String getThumbnail() {

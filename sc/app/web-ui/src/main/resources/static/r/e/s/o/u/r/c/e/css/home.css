@@ -13,111 +13,121 @@
     height: 150px;
 }
 
-.logo {
-    background-repeat: no-repeat;
-    background-position: center;
+.sub-banner-logo {
+    margin: 5% 0%;
+}
+
+.sub-banner-wrapper {
+    margin: 0%;   
 }
 
 .tagline {
-    font-size: 2em;
+    font-size: 3em;
     padding-top: 2%;
+    padding-bottom: 1%;
 }
 
 .home-banner {
     background: linear-gradient(
-                     rgba(20,20,20, .2), 
-                     rgba(20,20,20, .5)),
-                     url("https://bna-s3.s3.amazonaws.com/commons/home-bg.png");
+                     rgba(20,20,20,.2), 
+                     rgba(20,20,20,.2)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
 }
 
-.icon-search {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/search_icon.png");
+.sec-banner-1 {
+    background: linear-gradient(
+                     rgba(20,20,20, .5), 
+                     rgba(20,20,20, .8)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg-sec.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.sec-banner-2 {
+    background: linear-gradient(
+                     rgba(20,20,20, .5), 
+                     rgba(20,20,20, .8)),
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg-sec-2.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.purple-banner {
+    font-size: 1.8em;
+    padding: 7% 0%;
+}
+
+.bna-search-add {
+    padding: 5% 0% 0% 0%;
+}
+
+.meme-wrapper {
+    margin-bottom: 5%;
+}
+
+.icon-search-home {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.search-box-wrapper {
-    height: 100px;
+.icon-location-home {
+    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25px;
+}
+
+.home-search-wrapper {
     padding-top: 2%;
+    padding-bottom: 2%;
 }
 
-.search-box-wrapper>.form-horizontal>.form-group-lg>input {
-    font-size: 1.2em;
+.home-search-wrapper>.form-horizontal>.form-group-lg>input {
+    font-size: 1em;
 }
 
-.search-box-suggestion {
-    z-index: 1; 
-    position: absolute; 
-    background: white; 
-    color: black; 
-    width: 100%; 
-    border-radius: 5px;
-    -webkit-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-    -moz-box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
-    box-shadow: 4px 7px 11px 1px rgba(143,133,143,0.85);
+.location-wrapper {
+    width: 180px;
 }
 
-.suggestion {
-    padding: 2% 2% 0% 2%;
+.search-wrapper {
+    width: 400px;
+    margin-left: 5px;
+}
+
+.i-height {
+    height: 40px !important;
+}
+
+.i-width {
+    width: 20px !important;
 }
 
 /* Hero Banner CSS - END */
 
-/* Feature Banner CSS - START */
+/* Meme css STARTS */
 
-.feature {
-    padding-top: 100px;
+.meme-image-div {
+    height: 80px;
 }
 
-.feature-details {
-    padding-top: 30px;
+.meme-text {
+    font-size: 1.3em;
 }
 
-.feature-heading {
-    text-transform: uppercase;
-    font-family: bna-bold;
-    font-size: 20px;
+.meme-image {    
+    object-fit: cover;
+    pointer-events: none;
+    height:100%;
 }
 
- .feature-description {
-    color: #808080;
-    font-size: 16px;
- }
-
-/* Feature Banner CSS - END */
-
-/* Word Cloud CSS - START */
-
-.word-cloud-wrapper {
-    padding-top: 50px;
-}
-
-.wc-custom-class-1 {
-    text-transform: uppercase;
-    font-family: bna-bold !important;
-    padding: 10px !important;
-}
-
-.wc-custom-class-2 {
-    text-transform: uppercase;
-    font-family: bna-bold !important;
-    padding: 10px !important;
-}
-
-.wc-custom-class-3 {
-    text-transform: uppercase;
-    font-family: bna-web !important;
-    padding: 10px !important;
-}
-
-.extra-padding {
-    padding-top: 50px;
-}
-
-/* Word Cloud CSS - END */
+/* Meme css ENDS */
 
 /* Trending CSS - START */
 
@@ -126,139 +136,62 @@
 }
 
 .trending-heading {
-    padding: 5% 3% 1% 11%;
+    padding: 1% 3% 1% 11%;
     text-transform: uppercase;  
 }
 
-.trending-restaurant-wrapper, .diary-wrapper {
+.trending-wrapper {
     padding-left: 3%;
     padding-right: 3%;
 }
 
-.trending-item {
+.flick-div {
+    border-radius: 6px; 
+    /*background: linear-gradient(white, purple);*/
+    /* background-color: #fff; */
+    width: 33%;
+    height: 250px;
     margin-right: 10px;
 }
 
-.trend-image {
+.flick-image {
+    /*opacity: 0.8;*/
     object-fit: cover;
+    /* pointer-events: none; */
     width:100%;
-    height:180px;
+    height:100%;
     overflow:hidden;
     vertical-align:top;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+    border-radius: 6px;
 }
 
-.trending-item-desc {
-    background-color: #FFFFFF;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
+.flick-img-txt {
+    height:65%;
 }
 
-.desc-top {
-    font-family: bna-bold;
-    padding: 0px 5px 0px 5px;
+.flick-txt {
+    height:35%;
+    padding-top: 2%;
 }
 
-.desc-bottom {
-    padding: 10px 5px 0px 5px;
-    color: #808080;
+@media (max-width: 1024px) {
+    .flick-div {
+        width: 50%;
+        height: 150px;
+    }
 }
 
-.rating-gear {
-    background-color: #9932CC;
-    color: #FFFFFF;
-    height: 25px;
-    width: 50px;
-    border-radius: 4px;
+/* Bug Fix in Flickity */
+.flickity-enabled.is-draggable .flickity-viewport{
+    touch-action: pan-y !important;
 }
 
-.checkins-gear {
-    height: 25px;
-    width: 50px;
+.flickity-prev-next-button {
+    top: 31% !important;
 }
-
-.icon-rating {
-    height: 15px;
-    width: 15px;
-}
-
-.icon-bananaa {
-    height: 15px;
-    width: 20px;
-}
-
-.rating-value {
-    vertical-align: middle;
-}
-
-.checkin-value {
-    vertical-align: middle;
-}
+/* Bug Fix in Flickity */
 
 /* Trending CSS - END */
-
-/* App Info CSS - START */
-
-.app-info {
-    background-color: #FFFFFF;
-    padding: 10% 15% 10% 15%;
-}
-
-.download-heading {
-    padding : 20% 0% 5% 0%;
-    font-family: bna-bold;
-    font-size: 2.5em;
-    text-align: left;
-}
-
-.download-link-image {
-    padding-top: 5%;
-}
-
-/* App Info CSS - END */
-
-/* ERROR PAGE CSS - START*/
-
-.error-message-primary {
-    padding: 5% 0% 3% 0%;
-    color: #9932CC;
-}
-
-.error-message-secondary {
-    padding-bottom: 3%;
-}
-
-.back-home-button {
-    color: #ffffff;
-    background-color: #9932CC;
-}
-
-/* ERROR PAGE CSS - END*/
-
-/* PLACEHOLDER CSS - START*/
-
-::-webkit-input-placeholder {
-   text-align: center;
-}
-
-:-moz-placeholder { /* Firefox 18- */
-   text-align: center;  
-}
-
-::-moz-placeholder {  /* Firefox 19+ */
-   text-align: center;  
-}
-
-:-ms-input-placeholder {  
-   text-align: center; 
-}
-
-hr {
-    margin-top: 2px;
-    margin-bottom: 2px; 
-}
-/* PLACEHOLDER CSS - END*/
 
 /* Login Button CSS starts */
 .login-info {
@@ -279,15 +212,7 @@ hr {
 /*Home Icon CSS ends*/
 
 /*Our diary css STARTS*/
-
-.diary-sec {
-    position: relative; 
-    border-radius: 6px; 
-    background: linear-gradient(white, purple);
-}
-
 .diary-img {
     opacity: 0.8;
 }
-
 /*Our diary css ENDS*/
