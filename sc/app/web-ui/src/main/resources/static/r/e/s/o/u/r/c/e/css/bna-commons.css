@@ -158,12 +158,13 @@ body {
 }
 
 .user-icon {
-  width: 100%;
+  width: 50px;
   border-radius: 50%;
   text-align: center;
   background-position: center;
   background-repeat: no-repeat;
   object-fit: cover;
+  height: 50px;
 }
 
 .item-desc-wrapper {
