@@ -70,9 +70,9 @@ function getTrendingRestaurants() {
 	                                        '<br />'+
 	                                        '<span class="font-0-8">'+response.merchants[i].shortAddress+'</span>'+    
 	                                      '</div>'+
-	                                      '<div class="pull-right">'+
-	                                        '<span class="float-right rating-rcmd ' + response.merchants[i].ratingClass + '" style="padding: 10% 40%;">'+response.merchants[i].rating+'</span>'+
-	                                      '</div>'+	                                      
+//	                                      '<div class="pull-right">'+
+//	                                        '<span class="float-right rating-rcmd ' + response.merchants[i].ratingClass + '" style="padding: 10% 40%;">'+response.merchants[i].rating+'</span>'+
+//	                                      '</div>'+	                                      
 	                                  '</div>'+
                                   '</a>'+
 	                          '</div>';

@@ -9,6 +9,7 @@
 .primary-image-banner {
 	height: 250px;
     border-radius: 4px;
+    box-shadow: 0px 1px 1px #888888;
 }
 
 .primary-image-wrapper {
