@@ -9,9 +9,9 @@ var localityArr = [
                    {localityId: 'hyderabad', cityId: null, name: "Hyderabad"},
                    {localityId: 'hitech-city', cityId: 'hyderabad',  name: "Hitech City"},
                    {localityId: 'jubilee-hills', cityId: 'hyderabad',  name: "Jubilee Hills"},
-                   {localityId: 'banjara-hills', cityId: 'hyderabad',  name: "Banjara Hills"},
-                   {localityId: 'gachibowli', cityId: 'hyderabad',  name: "Gachibowli"},
-                   {localityId: 'kondapur', cityId: 'hyderabad',  name: "Kondapur"}
+//                   {localityId: 'banjara-hills', cityId: 'hyderabad',  name: "Banjara Hills"},
+                   {localityId: 'gachibowli', cityId: 'hyderabad',  name: "Gachibowli"}
+//                   {localityId: 'kondapur', cityId: 'hyderabad',  name: "Kondapur"}
                ];
 $(document).ready(function() {
 	merchantId = $('#merchantId').val();
