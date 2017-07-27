@@ -103,6 +103,7 @@ public class DishDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.ilike(NAME, searchString, MatchMode.ANYWHERE));
 		criteria.createAlias("merchant", "merchant");
+		criteria.add(Restrictions.eq("merchant.isActive", Boolean.TRUE));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
 		if (cookieDto.isCitySearch()) {
