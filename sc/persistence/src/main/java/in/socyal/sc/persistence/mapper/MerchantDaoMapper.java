@@ -32,7 +32,7 @@ import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 @Component
 public class MerchantDaoMapper {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
-	private static final String MINIMUM_TAG_RATING = "minimum.rating";
+	private static final String MINIMUM_TAG_RATING_DISPLAY = "minimum.rating.display";
 	
 	@Autowired
 	LocationDaoMapper mapper;
@@ -79,8 +79,9 @@ public class MerchantDaoMapper {
 		
 		if (filter.getMapCuisineRatings()) {
 			Tag tag = null;
-			for (MerchantCuisineRatingEntity tagEntity : entity.getCuisineRatings()) {
-				if (tagEntity.getRating() < Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))) {
+			int lastIndex = entity.getCuisineRatings().size() >= 4 ? 4 : entity.getCuisineRatings().size();
+			for (MerchantCuisineRatingEntity tagEntity : entity.getCuisineRatings().subList(0, lastIndex)) {
+				if (tagEntity.getRating() < Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_DISPLAY))) {
 					// break the loop, do not map rest of the cuisines if rating
 					// drops below minimum required rating
 					break;
@@ -101,8 +102,9 @@ public class MerchantDaoMapper {
 		
 		if (filter.getMapSuggestionRatings()) {
 			Tag tag = null;
-			for (MerchantSuggestionRatingEntity tagEntity : entity.getSuggestionRatings()) {
-				if (tagEntity.getRating() < Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))) {
+			int lastIndex = entity.getSuggestionRatings().size() >= 4 ? 4 : entity.getSuggestionRatings().size();
+			for (MerchantSuggestionRatingEntity tagEntity : entity.getSuggestionRatings().subList(0, lastIndex)) {
+				if (tagEntity.getRating() < Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_DISPLAY))) {
 					// break the loop, do not map rest of the suggestions if
 					// rating drops below minimum required rating
 					break;
