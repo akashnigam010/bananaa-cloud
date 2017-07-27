@@ -32,7 +32,7 @@ import in.socyal.sc.persistence.mapper.MerchantDaoMapper;
 @Repository
 public class MerchantDao {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
-	private static final String MINIMUM_TAG_RATING = "minimum.rating";
+	private static final String MINIMUM_TAG_RATING_SEARCH = "minimum.rating.search";
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
 	
@@ -100,13 +100,13 @@ public class MerchantDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		if (request.getType() == TagType.CUISINE) {
 			criteria.createAlias("cuisineRatings", "cuisineRatings");
-			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
 			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
 			criteria.createAlias("suggestionRatings", "suggestionRatings");
-			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
 			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("suggestionRatings.rating"));

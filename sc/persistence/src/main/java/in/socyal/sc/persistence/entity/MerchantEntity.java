@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -53,9 +54,11 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 	private Boolean isActive;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "merchant")
+	@OrderBy("rating desc")
 	private List<MerchantCuisineRatingEntity> cuisineRatings;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "merchant")
+	@OrderBy("rating desc")
 	private List<MerchantSuggestionRatingEntity> suggestionRatings;
 	
 	public MerchantEntity() {

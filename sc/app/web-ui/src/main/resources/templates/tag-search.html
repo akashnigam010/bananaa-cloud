@@ -72,16 +72,19 @@
                                                 	<span>dishes</span> 
                                                 </div>
                                             </div>
-                                            <div class="float-right" th:if="${merchant.searchTag != null}">
-                                            	<div>
+                                            <div class="float-right">
+                                            	<div th:if="${merchant.searchTag != null}">
                                             		<span th:class="${merchant.searchTag.ratingClass} + ' float-right rating-rcmd bold'" style="padding: 5px 10px; font-size: 1.1em;" th:text="${merchant.searchTag.rating}"></span>
                                             	</div>
-                                            	<div>
+                                            	<div th:unless="${merchant.searchTag != null}">
+                                            		<span class="float-right rating-rcmd bold r25" style="padding: 5px 10px; font-size: 1.1em;">-.-</span>
+                                            	</div>
+                                            	<div th:if="${merchant.searchTag != null}">
 													<div class="float-right light padding-top">
 	                                            		Rated in
 	                                            	</div>
                                             	</div>
-                                            	<div>
+                                            	<div th:if="${merchant.searchTag != null}">
 													<div class="float-right light" th:text="${merchant.searchTag.name}"></div>
                                             	</div>
                                             </div>
