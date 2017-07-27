@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.engine.request.IdListRequest;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
@@ -40,6 +41,31 @@ public class ManagementService {
 	@Autowired
 	MerchantDelegate merchantDelegate;
 
+	@RequestMapping(value = "/runRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runFullRatingEngine(@RequestBody IdListRequest request) {
+		StatusResponse response = new StatusResponse();
+		if (request.getIds() != null) {
+			for (Integer id : request.getIds()) {
+				IdRequest idRequest = new IdRequest(id);
+				delegate.runDishRatingEngineForMerchant(idRequest);
+				delegate.runCuisineRatingEngineForMerchant(idRequest);
+				delegate.runTagsRatingEngineForMerchant(idRequest);
+			}
+		}		
+		return helper.success(response);
+	}
+	
+	@RequestMapping(value = "/runRatingEngineForMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse runRatingEngineForMerchant(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		if (request.getId() != null) {
+			delegate.runDishRatingEngineForMerchant(request);
+			delegate.runCuisineRatingEngineForMerchant(request);
+			delegate.runTagsRatingEngineForMerchant(request);
+		}
+		return helper.success(response);
+	}
+	
 	@RequestMapping(value = "/runDishRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse runDishRatingEngine(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
