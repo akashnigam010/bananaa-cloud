@@ -43,7 +43,7 @@ public class DishDao {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
-	private static final String MINIMUM_TAG_RATING = "minimum.rating";
+	private static final String MINIMUM_TAG_RATING_SEARCH = "minimum.rating.search";
 	
 	@Autowired
 	DishDaoMapper mapper;
@@ -196,7 +196,7 @@ public class DishDao {
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantCuisineRatingEntity.class);
 		criteria.createAlias("merchant", "merchant");
-		criteria.add(Restrictions.gt("rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+		criteria.add(Restrictions.gt("rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
 		String preUrl = null;
@@ -230,7 +230,7 @@ public class DishDao {
 			throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantSuggestionRatingEntity.class);
 		criteria.createAlias("merchant", "merchant");
-		criteria.add(Restrictions.gt("rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING))));
+		criteria.add(Restrictions.gt("rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
 		String preUrl = null;
