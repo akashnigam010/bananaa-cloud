@@ -98,6 +98,7 @@ public class MerchantDao {
 	
 	private Criteria getMerchantSearchByTagCriteria(SearchMerchantByTagRequest request) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		if (request.getType() == TagType.CUISINE) {
 			criteria.createAlias("cuisineRatings", "cuisineRatings");
 			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
@@ -183,6 +184,7 @@ public class MerchantDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.ge("rating", 3.0));
 		criteria.createAlias("merchant", "merchant");
+		criteria.add(Restrictions.eq("merchant.isActive", Boolean.TRUE));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
 		if (cookieDto.isCitySearch()) {
