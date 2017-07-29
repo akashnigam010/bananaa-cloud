@@ -156,9 +156,20 @@ function addItem() {
 			      	  .done(function(response) {
 			      		  if (response.result) {
 			      			  alertMessage($itemName + ' successfully added');
-							  $("#itemName").val('');
+							  // reset dish name
+			      			  $("#itemName").val('');
+							  
+			      			  //reset cuisine data						  
+							  cuisines = [];
 							  $("#cuisineName").val('');
+							  $("#cuisine-name-display").html('');
+
+							  //reset suggestion data
+							  suggestions = [];
 							  $("#suggestionName").val('');
+							  $("#suggestion-name-display").html('');
+							  
+							  
 			      		  } else {
 			    			  handleErrorCallback(response);
 			    		  }	          		  
