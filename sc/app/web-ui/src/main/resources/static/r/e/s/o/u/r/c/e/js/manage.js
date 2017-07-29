@@ -90,19 +90,6 @@ $(document).ready(function() {
     		itemSource(query, process, $('#rcmd-restaurantName'));
 	    }
     });
-
-    $('#imageSearch').typeahead({
-        minLength: 2,
-        autoSelect: true,
-        source: function(query, process) {
-          imageSource(query, process);
-        },
-        updater:function (item) {
-            $("#imageUrl").val(item.url);
-            $("#thumbnailUrl").val(item.thumbnail);
-            return item;
-        }
-    });
     
     $("#imageSearch-add").typeahead({
     	minLength: 2,
@@ -126,7 +113,8 @@ function addItem() {
 	var $itemName = '';
 	var $imageUrl = $("#image").val().trim();
 	var $thumbnail = $("#thumbnail").val().trim();
-	var $isActive = ($("#isActive:checked").val() == 'true') ? true : false;
+	//var $isActive = ($("#isActive:checked").val() == 'true') ? true : false;
+	var $isActive = true;
 
 	if (currentMerchant) {
 		if (currentMerchant.name == $merchantName) {
@@ -168,17 +156,9 @@ function addItem() {
 			      	  .done(function(response) {
 			      		  if (response.result) {
 			      			  alertMessage($itemName + ' successfully added');
-			      			  cuisines = [];
-			      			  suggestions = [];
 							  $("#itemName").val('');
 							  $("#cuisineName").val('');
-							  $("#cuisine-name-display").html('');
 							  $("#suggestionName").val('');
-							  $("#suggestion-name-display").html('');
-							  $("#image").val('');
-							  $("#thumbnail").val('');
-							  $('#suggestionName').val('');
-							  $('#cuisineName').val('');
 			      		  } else {
 			    			  handleErrorCallback(response);
 			    		  }	          		  
@@ -447,6 +427,18 @@ function itemSource(query, process, merchant) {
     		alertMessage('Please select a restaurant');
     	}          	           	
     }, 500);
+}
+
+function resetCuisines() {
+	cuisines = [];
+	$("#cuisineName").val('');
+	$("#cuisine-name-display").html('');
+}
+
+function resetSuggestions() {
+	suggestions = [];
+	$("#suggestionName").val('');
+	$("#suggestion-name-display").html('');
 }
 
 function alertMessage(message) {
