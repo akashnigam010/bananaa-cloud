@@ -7,6 +7,8 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
+import in.socyal.sc.api.manage.request.UpdateItemRequest;
+import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
@@ -30,8 +32,12 @@ public interface ManagementDelegate {
 	public void contactUsMessage(MessageRequest request) throws BusinessException;
 
 	StatusResponse runDishRatingEngineForMerchant(IdRequest request);
-	
+
 	StatusResponse runCuisineRatingEngineForMerchant(IdRequest request);
-	
+
 	StatusResponse runTagsRatingEngineForMerchant(IdRequest request);
+
+	public void updateItem(UpdateItemRequest request) throws BusinessException;
+
+	public GetAllItemsResponse getAllItems(IdRequest request) throws BusinessException;
 }

@@ -16,13 +16,40 @@
 	    top : 0px;
 	    position: initial;
 	}
+	.grid {
+    	width: 100%;
+    	height: 100%;
+ 	}
+ 	.loader-animation {
+       position: absolute;
+       height: 15%;
+       left: 50%;
+       top: 100%;
+     }
+     .loader-animation-rating {
+          position: absolute;
+          height: 15%;
+          left: 50%;
+          top: 50%; 
+        }
 	</style>
 </head>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://bna-s3.s3.amazonaws.com/js/bootstrap3-typeahead.min.js"></script>
+<script src="/r/e/s/o/u/r/c/e/js/main.js"></script>
+<script src="/r/e/s/o/u/r/c/e/js/manage.js"></script>
+<script src="/r/e/s/o/u/r/c/e/js/manageDishes.js"></script>
+<script src="/r/e/s/o/u/r/c/e/js/ratingEngine.js"></script>
+<script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
 <body>
 	<div class="container-fluid">
         <div class="row">
             <div class="col-xs-10 col-xs-offset-1 padding-3 bold">
-                <h2>Bananaa Management Console</h2>
+                <h2 class="float-left">Bananaa Management Console</h2>
+                <form action="/blogin" method="get">
+                  <button class="bna-button-light float-right" type="submit">Logout</button>
+                </form>
             </div>           
         </div>
         <div class="row">
@@ -32,9 +59,11 @@
                     <div class="col-xs-10 col-xs-offset-1">
 
                         <ul class="nav nav-tabs bna-color">
-                          <li class="active"><a data-toggle="tab" href="#itemTab">Dishes</a></li>
+                          <li class="active"><a data-toggle="tab" href="#itemTab">Add Dish</a></li>
+                          <li><a data-toggle="tab" href="#editTab">Edit Dishes</a></li>
                           <li><a data-toggle="tab" href="#tagsTab">Tags</a></li>
                           <li><a data-toggle="tab" href="#addRcmdTab">Recommendations</a></li>
+                          <li><a data-toggle="tab" href="#ratingTab">Rate Engines</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -74,7 +103,7 @@
                                 </div>
                                 <div class="col-sm-1">
                                   <!-- <button type="button" class="bna-button" onclick="resetSuggestions();">Reset</button> -->
-                                  <span class="font-1-3 cursor-pointer" onclick="resetSuggestions();">&#x21bb;</span>
+                                  <span class="font-1-3 cursor-pointer" onclick="resetSuggestions();">&#10006;</span>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -90,7 +119,7 @@
                                 </div>
                                 <div class="col-sm-1">
                                   <!-- <button type="button" class="bna-button" onclick="resetCuisines();">Reset</button> -->
-                                  <span class="font-1-3 cursor-pointer" onclick="resetCuisines();">&#x21bb;</span>
+                                  <span class="font-1-3 cursor-pointer" onclick="resetCuisines();">&#10006;</span>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -180,20 +209,147 @@
                               </div>
                             </form>
                           </div>
+                          
+                          <div id="editTab" class="tab-pane fade">
+                            <form class="form-horizontal padding">
+                              <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label bold">Restaurant</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" data-provide="typeahead" id="restaurantNameModal" autocomplete="off" />
+                                </div>
+                              </div>
+                            </form>
+                            <table class="table table-striped table-hover" style="margin-bottom: 100px;">
+                              <thead>
+                                <tr>
+                                  <th style="width: 10%;">Id</th>
+                                  <th style="width: 40%;">Name</th>
+                                  <th style="width: 30%;">Suggestions</th>
+                                  <th style="width: 20%;">Cuisines</th>
+                                </tr>
+                              </thead>
+                              <tbody class="grid-body">                          
+                              </tbody>
+                            </table>
+                            <img class="loader-animation hide" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                          </div>
+                          
+                          <div id="ratingTab" class="tab-pane fade">
+                          	<img class="loader-animation-rating hide" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                            <form class="form-horizontal padding">
+                              <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label bold">Restaurant</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" data-provide="typeahead" id="restaurantNameRating" autocomplete="off" />
+                                </div>
+                              </div>
+                            </form>
+                            <div class="row rateRest hide">
+                              <div class="col-xs-3 font-1-3" style="padding-top: 1%;">
+                                Id : <span class="bold" id="ratingRestId"></span>
+                              </div>
+                              <div class="col-xs-6 font-1-3 bold" id="ratingRestName" style="padding-top: 1%;">                                
+                              </div>
+                              <div class="col-xs-3">
+                                <button type="button" class="bna-button" onclick="rateARestaurants();">Run Engine</button>
+                              </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                              <div class="col-xs-3 font-1-3" style="padding-top: 1%;">
+                                
+                              </div>
+                              <div class="col-xs-6" style="padding-top: 1%;">
+                                <input type="text" id="restIdsRating" placeholder="Enter comma seperated restaurant ids to rate" />
+                              </div>
+                              <div class="col-xs-3">
+                                <button type="button" class="bna-button" onclick="rateManyRestaurants();">Run Engine</button>
+                              </div>
+                            </div>
+                          </div>
+                                                  
                         </div>                        
                     </div>                    
                 </div>
             </div>           
         </div>
-    </div>
+        
+        <!-- Dish Edit Modal STARTS -->
+        <div class="modal fade" id="editModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="loader hide"></div>
+                    <div class="main-area">
+                        <div class="modal-header align-center">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-times" aria-hidden="true" style="color:black"></i>
+                            </button>
+                            <h4 class="modal-title bold" id="alertHeading">Edit Dish</h4>
+                        </div>
+                        <div class="modal-body align-center">
+                          <form class="form-horizontal padding">
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Name</label>
+                              <div class="col-sm-8">
+                                <input class="form-control" type="text" id="itemNameModal" required="required" autocomplete="off" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Suggestion Name</label>
+                              <div class="col-sm-8">
+                                <input class="form-control" type="text" data-provide="typeahead" id="suggestionNameModal" autocomplete="off" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Suggestions :</label>
+                              <div class="col-sm-7 align-left bold">
+                                <p id="suggestion-name-display-modal"></p>
+                              </div>
+                              <div class="col-sm-1">
+                                <span class="font-1-3 cursor-pointer" onclick="resetModalSuggestions();">&#10006;</span>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Cuisine</label>
+                              <div class="col-sm-8">
+                                <input class="form-control" type="text" data-provide="typeahead" id="cuisineNameModal" autocomplete="off" />
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Cuisines :</label>
+                              <div class="col-sm-7 align-left bold">
+                                <p id="cuisine-name-display-modal"></p>
+                              </div>
+                              <div class="col-sm-1">
+                                <span class="font-1-3 cursor-pointer" onclick="resetModalCuisines();">&#10006;</span>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Image</label>
+                              <div class="col-sm-8">
+                                <input type="text" class="form-control" required="required" autocomplete="off" id="imageModal"></input>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <label class="col-sm-3 control-label bold">Thumbnail</label>
+                              <div class="col-sm-8">
+                                <input type="text" class="form-control" required="required" autocomplete="off" id="thumbnailModal"></input>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer align-center">
+                            <button class="bna-button" style="width: 25%;" onclick="updateDish();">Update</button>
+                            <button class="bna-button-light" style="width: 25%;" data-dismiss="modal" aria-label="Close">Discard</button>
+                        </div>
+                    </div>
+                </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-		crossorigin="anonymous"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="https://bna-s3.s3.amazonaws.com/js/bootstrap3-typeahead.min.js"></script>
-	<script src="/r/e/s/o/u/r/c/e/js/main.js"></script>
-    <script src="/r/e/s/o/u/r/c/e/js/manage.js"></script>
+            </div>
+        </div>
+        <!-- Dish Edit Modal ENDS --> 
+        
+    </div>
 </body>
 
 </html>

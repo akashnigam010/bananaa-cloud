@@ -15,7 +15,8 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
-import in.socyal.sc.api.manage.response.AddResponse;
+import in.socyal.sc.api.manage.request.UpdateItemRequest;
+import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
@@ -108,9 +109,21 @@ public class ManagementService {
 		}
 	}
 
+	@RequestMapping(value = "/getAllItems", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GetAllItemsResponse getAllItems(@RequestBody IdRequest request) {
+		GetAllItemsResponse response = new GetAllItemsResponse();
+		try {
+			validator.validateIdRequest(request);
+			response = delegate.getAllItems(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
 	@RequestMapping(value = "/addItem", method = RequestMethod.POST, headers = "Accept=application/json")
-	public AddResponse addItem(@RequestBody AddItemRequest request) {
-		AddResponse response = new AddResponse();
+	public StatusResponse addItem(@RequestBody AddItemRequest request) {
+		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateAddItemRequest(request);
 			delegate.addItem(request);
@@ -119,10 +132,22 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
+	
+	@RequestMapping(value = "/updateItem", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse updateItem(@RequestBody UpdateItemRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateUpdateItemRequest(request);
+			delegate.updateItem(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
 
 	@RequestMapping(value = "/addRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
-	public AddResponse addRecommendations(@RequestBody AddRecommendationsRequest request) {
-		AddResponse response = new AddResponse();
+	public StatusResponse addRecommendations(@RequestBody AddRecommendationsRequest request) {
+		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateAddRecommendationsRequest(request);
 			delegate.addRecommendations(request);
@@ -133,8 +158,8 @@ public class ManagementService {
 	}
 
 	@RequestMapping(value = "/addCuisine", method = RequestMethod.POST, headers = "Accept=application/json")
-	public AddResponse addCuisine(@RequestBody AddRequest request) {
-		AddResponse response = new AddResponse();
+	public StatusResponse addCuisine(@RequestBody AddRequest request) {
+		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateAddRequest(request);
 			delegate.addCuisine(request);
@@ -145,8 +170,8 @@ public class ManagementService {
 	}
 
 	@RequestMapping(value = "/addSuggestion", method = RequestMethod.POST, headers = "Accept=application/json")
-	public AddResponse addSuggestion(@RequestBody AddRequest request) {
-		AddResponse response = new AddResponse();
+	public StatusResponse addSuggestion(@RequestBody AddRequest request) {
+		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateAddRequest(request);
 			delegate.addSuggestion(request);
