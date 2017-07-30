@@ -26,6 +26,12 @@
        left: 50%;
        top: 100%;
      }
+     .loader-animation-rating {
+          position: absolute;
+          height: 15%;
+          left: 50%;
+          top: 50%; 
+        }
 	</style>
 </head>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -34,6 +40,7 @@
 <script src="/r/e/s/o/u/r/c/e/js/main.js"></script>
 <script src="/r/e/s/o/u/r/c/e/js/manage.js"></script>
 <script src="/r/e/s/o/u/r/c/e/js/manageDishes.js"></script>
+<script src="/r/e/s/o/u/r/c/e/js/ratingEngine.js"></script>
 <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
 <body>
 	<div class="container-fluid">
@@ -49,10 +56,11 @@
                     <div class="col-xs-10 col-xs-offset-1">
 
                         <ul class="nav nav-tabs bna-color">
-                          <li class="active"><a data-toggle="tab" href="#itemTab">Dishes</a></li>
+                          <li class="active"><a data-toggle="tab" href="#itemTab">Add Dish</a></li>
+                          <li><a data-toggle="tab" href="#editTab">Edit Dishes</a></li>
                           <li><a data-toggle="tab" href="#tagsTab">Tags</a></li>
                           <li><a data-toggle="tab" href="#addRcmdTab">Recommendations</a></li>
-                          <li><a data-toggle="tab" href="#editTab">Edit Dishes</a></li>
+                          <li><a data-toggle="tab" href="#ratingTab">Rate Engines</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -199,7 +207,7 @@
                             </form>
                           </div>
                           
-                          <div id="editTab" class="tab-pane fade in active">
+                          <div id="editTab" class="tab-pane fade">
                             <form class="form-horizontal padding">
                               <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-2 control-label bold">Restaurant</label>
@@ -221,7 +229,42 @@
                               </tbody>
                             </table>
                             <img class="loader-animation hide" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
-                          </div>                          
+                          </div>
+                          
+                          <div id="ratingTab" class="tab-pane fade">
+                          	<img class="loader-animation-rating hide" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+                            <form class="form-horizontal padding">
+                              <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label bold">Restaurant</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" data-provide="typeahead" id="restaurantNameRating" autocomplete="off" />
+                                </div>
+                              </div>
+                            </form>
+                            <div class="row rateRest hide">
+                              <div class="col-xs-3 font-1-3" style="padding-top: 1%;">
+                                Id : <span class="bold" id="ratingRestId"></span>
+                              </div>
+                              <div class="col-xs-6 font-1-3 bold" id="ratingRestName" style="padding-top: 1%;">                                
+                              </div>
+                              <div class="col-xs-3">
+                                <button type="button" class="bna-button" onclick="rateARestaurants();">Run Engine</button>
+                              </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                              <div class="col-xs-3 font-1-3" style="padding-top: 1%;">
+                                
+                              </div>
+                              <div class="col-xs-6" style="padding-top: 1%;">
+                                <input type="text" id="restIdsRating" placeholder="Enter comma seperated restaurant ids to rate" />
+                              </div>
+                              <div class="col-xs-3">
+                                <button type="button" class="bna-button" onclick="rateManyRestaurants();">Run Engine</button>
+                              </div>
+                            </div>
+                          </div>
+                                                  
                         </div>                        
                     </div>                    
                 </div>
