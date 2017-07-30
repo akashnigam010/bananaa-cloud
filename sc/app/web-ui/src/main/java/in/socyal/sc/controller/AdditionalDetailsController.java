@@ -1,16 +1,38 @@
 package in.socyal.sc.controller;
 
+import java.util.ResourceBundle;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdditionalDetailsController {
+	private ResourceBundle resource = ResourceBundle.getBundle("environment");
+	private static final String USERNAME = "bna.manage.username";
+	private static final String PASSWORD = "bna.manage.password";
 	
-	@RequestMapping(value = "/bna/manage/managementConsole", method = RequestMethod.GET)
+	@RequestMapping(value = "/blogin", method = RequestMethod.GET)
 	public ModelAndView managementConsole() {
-		ModelAndView modelAndView = new ModelAndView("manage");
+		ModelAndView modelAndView = new ModelAndView("blogin");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/bna/manage/managementConsole", method = RequestMethod.POST)
+	public ModelAndView blogin(
+			@RequestParam(value = "username", required = false) String username,
+			@RequestParam(value = "password", required = false) String password) {
+		ModelAndView modelAndView = new ModelAndView();
+		if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
+			if (username.equals(resource.getString(USERNAME)) && password.equals(resource.getString(PASSWORD))) {
+				modelAndView.setViewName("manage");
+			} else {
+				modelAndView.setViewName("blogin");
+			}			
+		}
 		return modelAndView;
 	}
 
