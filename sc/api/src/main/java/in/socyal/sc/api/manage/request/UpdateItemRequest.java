@@ -6,6 +6,7 @@ import java.util.List;
 public class UpdateItemRequest {
 	private Integer id;
 	private String name;
+	private String nameId;
 	private List<Tag> cuisines;
 	private List<Tag> suggestions;
 	private String imageUrl;
@@ -82,5 +83,13 @@ public class UpdateItemRequest {
 			list.add(tag.getId());
 		}
 		return list;
+	}
+
+	public String getNameId() {
+		return nameId;
+	}
+
+	public void setNameId(String nameId) {
+		this.nameId = nameId;
 	}
 }

@@ -94,6 +94,7 @@ public class ManagementDao {
 			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
 		}
 		dish.setName(request.getName());
+		dish.setNameId(request.getNameId());
 		dish.setThumbnail(request.getThumbnail());
 		dish.setImageUrl(request.getImageUrl());
 		dish.setIsActive(request.getIsActive());

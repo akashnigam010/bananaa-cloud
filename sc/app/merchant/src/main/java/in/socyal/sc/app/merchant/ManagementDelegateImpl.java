@@ -65,6 +65,8 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void updateItem(UpdateItemRequest request) throws BusinessException {
+		request.setName(WordUtils.capitalizeFully(request.getName().trim()));
+		request.setNameId(createNameId(request.getName()));
 		dao.updateItem(request);
 	}
 
