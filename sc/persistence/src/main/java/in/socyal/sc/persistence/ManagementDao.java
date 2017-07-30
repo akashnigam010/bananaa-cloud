@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -19,9 +20,13 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
+import in.socyal.sc.api.manage.request.UpdateItemRequest;
+import in.socyal.sc.api.manage.response.Item;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
+import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
 import in.socyal.sc.persistence.entity.CuisineEntity;
@@ -54,6 +59,18 @@ public class ManagementDao {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Item> getAllItems(IdRequest request) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.createAlias("merchant", "merchant");
+		criteria.add(Restrictions.eq("merchant.id", request.getId()));
+		List<DishEntity> entities = criteria.list();
+		if (entities != null) {
+			return mapper.map(entities);
+		}
+		return Collections.EMPTY_LIST;		
+	}
+	
+	@SuppressWarnings("unchecked")
 	public void addItem(AddItemRequest request) throws BusinessException {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());
 		Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
@@ -68,6 +85,38 @@ public class ManagementDao {
 			entity.setCuisines(cuisineCriteria.list());
 		}
 		sessionFactory.getCurrentSession().save(entity);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void updateItem(UpdateItemRequest request) throws BusinessException {
+		DishEntity dish = (DishEntity) sessionFactory.getCurrentSession().get(DishEntity.class, request.getId());
+		if (dish == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
+		}
+		dish.setName(request.getName());
+		dish.setThumbnail(request.getThumbnail());
+		dish.setImageUrl(request.getImageUrl());
+		dish.setIsActive(request.getIsActive());
+		List<Integer> suggestionIds = request.getSuggestionIds();
+		List<Integer> cuisineIds = request.getCuisineIds();
+		
+		if (suggestionIds.size() > 0) {
+			Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
+			suggestionCriteria.add(Restrictions.in("id", suggestionIds));
+			dish.setSuggestions(suggestionCriteria.list());
+		} else {
+			dish.setSuggestions(null);
+		}
+		
+		if (cuisineIds.size() > 0) {
+			Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
+			cuisineCriteria.add(Restrictions.in("id", cuisineIds));
+			dish.setCuisines(cuisineCriteria.list());
+		} else {
+			dish.setCuisines(null);
+		}
+		
+		sessionFactory.getCurrentSession().save(dish);
 	}
 	
 	public void addRecommendations(Integer id, Float rating, Integer rcmdCount) throws BusinessException {

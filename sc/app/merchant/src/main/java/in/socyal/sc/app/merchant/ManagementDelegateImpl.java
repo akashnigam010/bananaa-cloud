@@ -1,5 +1,6 @@
 package in.socyal.sc.app.merchant;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -24,9 +25,12 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
+import in.socyal.sc.api.manage.request.UpdateItemRequest;
+import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
+import in.socyal.sc.api.manage.response.Item;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.persistence.ManagementDao;
 import in.socyal.sc.rating.engine.dish.CuisineRatingEngine;
@@ -56,6 +60,12 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 		request.setName(WordUtils.capitalizeFully(request.getName().trim()));
 		request.setNameId(createNameId(request.getName()));
 		dao.addItem(request);
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void updateItem(UpdateItemRequest request) throws BusinessException {
+		dao.updateItem(request);
 	}
 
 	@Override
@@ -161,5 +171,16 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	public StatusResponse runTagsRatingEngineForMerchant(IdRequest request) {
 		tagRatingEngine.rateRestaurantForTags(request.getId());
 		return new StatusResponse();
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public GetAllItemsResponse getAllItems(IdRequest request) throws BusinessException {
+		GetAllItemsResponse response = new GetAllItemsResponse();
+		List<Item> dishes = dao.getAllItems(request);
+		for (Item item : dishes) {
+			response.getDishes().put(item.getId(), item);
+		}
+		return response;
 	}
 }
