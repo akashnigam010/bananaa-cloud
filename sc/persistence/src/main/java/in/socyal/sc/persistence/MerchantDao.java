@@ -1,10 +1,12 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -126,7 +128,8 @@ public class MerchantDao {
 		return criteria;
 	}
 
-	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
+	@Deprecated
+	public List<MerchantDto> searchActiveMerchantOld(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
 		List<MerchantDto> merchantDtos = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
@@ -140,6 +143,35 @@ public class MerchantDao {
 		}
 		return merchantDtos;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
+			throws BusinessException {
+		List<MerchantDto> merchantDtos = Collections.emptyList();
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(levenshteinDistanceQuery());
+		query.addEntity(MerchantEntity.class);
+		query.setString("searchStr", restaurantName);
+		int firstResult = 0;
+    	query.setFirstResult(firstResult);
+    	query.setMaxResults(5);
+    	List<MerchantEntity> merchants = query.list();
+    	if (merchants != null && !merchants.isEmpty()) {
+			merchantDtos = new ArrayList<>();
+			mapper.map(merchants, merchantDtos, filter);
+		}
+		return merchantDtos;
+	}
+	
+	private String levenshteinDistanceQuery() {
+    	StringBuilder query = new StringBuilder();
+    	query.append("SELECT * FROM ");
+    	query.append("(SELECT *, bna.LEVENSHTEIN_RATIO(:searchStr, M.NAME) AS RATIO FROM ");
+    	query.append("bna.MERCHANT M ");
+    	query.append("WHERE M.IS_ACTIVE = 1 ");
+    	query.append("ORDER BY RATIO DESC ) T ");
+    	query.append("WHERE T.RATIO > 10");
+    	return query.toString();
+    }
 	
 	public List<MerchantDto> searchMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
