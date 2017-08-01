@@ -169,7 +169,7 @@ public class MerchantDao {
     	query.append("bna.MERCHANT M ");
     	query.append("WHERE M.IS_ACTIVE = 1 ");
     	query.append("ORDER BY RATIO DESC ) T ");
-    	query.append("WHERE T.RATIO > 10");
+    	query.append("WHERE T.RATIO > 20");
     	return query.toString();
     }
 	
