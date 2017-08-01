@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -40,10 +42,15 @@ public class MerchantDaoMapper {
 	NumberUtils numberUtils;
 	
 	public void map(Collection<MerchantEntity> from, List<MerchantDto> to, MerchantFilterCriteria filter) {
+		// using map to remove duplicates
+		Map<Integer, MerchantEntity> merchantMap = new HashMap<>();
 		for (MerchantEntity entity : from) {
-			MerchantDto dto = new MerchantDto();
-			map(entity, dto, filter);
-			to.add(dto);
+			if (!merchantMap.containsKey(entity.getId())) {
+				merchantMap.put(entity.getId(), entity);
+				MerchantDto dto = new MerchantDto();
+				map(entity, dto, filter);
+				to.add(dto);
+			}			
 		}
 	}
 	

@@ -128,8 +128,7 @@ public class MerchantDao {
 		return criteria;
 	}
 
-	@Deprecated
-	public List<MerchantDto> searchActiveMerchantOld(String restaurantName, MerchantFilterCriteria filter)
+	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
 		List<MerchantDto> merchantDtos = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
@@ -137,6 +136,7 @@ public class MerchantDao {
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		@SuppressWarnings("unchecked")
 		List<MerchantEntity> merchants = (List<MerchantEntity>) criteria.list();
+		merchants.addAll(searchActiveMerchantApprox(restaurantName));
 		if (merchants != null && !merchants.isEmpty()) {
 			merchantDtos = new ArrayList<>();
 			mapper.map(merchants, merchantDtos, filter);
@@ -145,21 +145,14 @@ public class MerchantDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<MerchantDto> searchActiveMerchant(String restaurantName, MerchantFilterCriteria filter)
-			throws BusinessException {
-		List<MerchantDto> merchantDtos = Collections.emptyList();
+	private List<MerchantEntity> searchActiveMerchantApprox(String restaurantName) {
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(levenshteinDistanceQuery());
 		query.addEntity(MerchantEntity.class);
 		query.setString("searchStr", restaurantName);
 		int firstResult = 0;
     	query.setFirstResult(firstResult);
     	query.setMaxResults(5);
-    	List<MerchantEntity> merchants = query.list();
-    	if (merchants != null && !merchants.isEmpty()) {
-			merchantDtos = new ArrayList<>();
-			mapper.map(merchants, merchantDtos, filter);
-		}
-		return merchantDtos;
+    	return query.list();
 	}
 	
 	private String levenshteinDistanceQuery() {
