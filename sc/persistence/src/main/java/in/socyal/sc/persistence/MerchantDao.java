@@ -1,10 +1,12 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -134,12 +136,35 @@ public class MerchantDao {
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		@SuppressWarnings("unchecked")
 		List<MerchantEntity> merchants = (List<MerchantEntity>) criteria.list();
+		merchants.addAll(searchActiveMerchantApprox(restaurantName));
 		if (merchants != null && !merchants.isEmpty()) {
 			merchantDtos = new ArrayList<>();
 			mapper.map(merchants, merchantDtos, filter);
 		}
 		return merchantDtos;
 	}
+	
+	@SuppressWarnings("unchecked")
+	private List<MerchantEntity> searchActiveMerchantApprox(String restaurantName) {
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(levenshteinDistanceQuery());
+		query.addEntity(MerchantEntity.class);
+		query.setString("searchStr", restaurantName);
+		int firstResult = 0;
+    	query.setFirstResult(firstResult);
+    	query.setMaxResults(5);
+    	return query.list();
+	}
+	
+	private String levenshteinDistanceQuery() {
+    	StringBuilder query = new StringBuilder();
+    	query.append("SELECT * FROM ");
+    	query.append("(SELECT *, bna.LEVENSHTEIN_RATIO(:searchStr, M.NAME) AS RATIO FROM ");
+    	query.append("bna.MERCHANT M ");
+    	query.append("WHERE M.IS_ACTIVE = 1 ");
+    	query.append("ORDER BY RATIO DESC ) T ");
+    	query.append("WHERE T.RATIO > 20");
+    	return query.toString();
+    }
 	
 	public List<MerchantDto> searchMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
