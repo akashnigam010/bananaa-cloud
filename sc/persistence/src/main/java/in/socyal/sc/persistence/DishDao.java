@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -44,7 +45,7 @@ public class DishDao {
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
 	private static final String MINIMUM_TAG_RATING_SEARCH = "minimum.rating.search";
-	
+
 	@Autowired
 	DishDaoMapper mapper;
 	@Autowired
@@ -76,7 +77,7 @@ public class DishDao {
 			return (int) (totalCountList.size() / RESULTS_PER_PAGE + 1);
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<MerchantDto> searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page) {
 		Criteria criteria = searchDishByNameCriteria(searchString, cookieDto);
@@ -98,7 +99,7 @@ public class DishDao {
 		}
 		return Collections.emptyList();
 	}
-	
+
 	private Criteria searchDishByNameCriteria(String searchString, LocationCookieDto cookieDto) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.ilike(NAME, searchString, MatchMode.ANYWHERE));
@@ -111,15 +112,24 @@ public class DishDao {
 			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
 		} else {
 			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
-		}		
-		
+		}
+
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.property("merchant").as("merchant"));
 		projList.add(Projections.groupProperty("merchant.id"));
 		criteria.setProjection(projList);
 		return criteria;
 	}
+
 	
+	/**
+	 * This method makes use of levenschtein algorithm to search dishes at a restaurant
+	 * 
+	 * @param restaurantName
+	 * @param filter
+	 * @return
+	 * @throws BusinessException
+	 */
 	public List<DishDto> searchDishAtARestaurant(String searchString, Integer merchantId) {
 		List<DishDto> dishDtos = null;
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
@@ -127,6 +137,7 @@ public class DishDao {
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		@SuppressWarnings("unchecked")
 		List<DishEntity> dishes = (List<DishEntity>) criteria.list();
+		dishes.addAll(searchDishAtARestaurantApprox(searchString, merchantId));
 		if (dishes != null && !dishes.isEmpty()) {
 			DishFilterCriteria dishCriteria = new DishFilterCriteria(Boolean.FALSE);
 			MerchantFilterCriteria merchantCriteria = new MerchantFilterCriteria(Boolean.FALSE);
@@ -134,6 +145,29 @@ public class DishDao {
 			return dishDtos;
 		}
 		return Collections.emptyList();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<DishEntity> searchDishAtARestaurantApprox(String searchString, Integer merchantId) {
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(levenshteinDistanceQueryDish());
+		query.addEntity(DishEntity.class);
+		query.setString("searchStr", searchString);
+		query.setInteger("merchantId", merchantId);
+		int firstResult = 0;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(3);
+		return query.list();
+	}
+
+	private String levenshteinDistanceQueryDish() {
+		StringBuilder query = new StringBuilder();
+		query.append("SELECT * FROM ");
+		query.append("(SELECT *, bna.LEVENSHTEIN_RATIO(:searchStr, D.NAME) AS RATIO FROM ");
+		query.append("bna.DISH D ");
+		query.append("WHERE D.MERCHANT_ID = :merchantId ");
+		query.append("ORDER BY RATIO DESC ) T ");
+		query.append("WHERE T.RATIO > 20");
+		return query.toString();
 	}
 
 	public List<DishDto> getPopularItems(Integer merchantId, Integer page, Integer resultsPerPage) {
@@ -207,7 +241,7 @@ public class DishDao {
 		} else {
 			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
 			preUrl = "/" + cookieDto.getCityId() + "/" + cookieDto.getLocalityId() + "/";
-		}	
+		}
 		criteria.createAlias("cuisine", "cuisine");
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.count("cuisine.id").as("merchants"));
@@ -241,7 +275,7 @@ public class DishDao {
 		} else {
 			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
 			preUrl = "/" + cookieDto.getCityId() + "/" + cookieDto.getLocalityId() + "/";
-		}	
+		}
 		criteria.createAlias("suggestion", "suggestion");
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.count("suggestion.id").as("merchants"));
