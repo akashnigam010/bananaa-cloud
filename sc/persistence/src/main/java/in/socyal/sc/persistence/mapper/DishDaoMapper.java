@@ -2,7 +2,9 @@ package in.socyal.sc.persistence.mapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -164,9 +166,13 @@ public class DishDaoMapper {
 
 	public List<DishDto> map(List<DishEntity> entities, MerchantFilterCriteria merchantCriteria,
 			DishFilterCriteria dishCriteria) {
+		Map<Integer, DishEntity> map = new HashMap<>();
 		List<DishDto> dtos = new ArrayList<>();
 		for (DishEntity entity : entities) {
-			dtos.add(map(entity, merchantCriteria, dishCriteria));
+			if (!map.containsKey(entity.getId())) {
+				map.put(entity.getId(), entity);
+				dtos.add(map(entity, merchantCriteria, dishCriteria));				
+			}			
 		}
 		return dtos;
 	}
