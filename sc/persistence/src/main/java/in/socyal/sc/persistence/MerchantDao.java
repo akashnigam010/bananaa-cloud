@@ -166,6 +166,15 @@ public class MerchantDao {
     	return query.toString();
     }
 	
+	/**
+	 * This method doesn't makes use of levenschtein algorithm. See
+	 * searchActiveMerchantApprox for that
+	 * 
+	 * @param restaurantName
+	 * @param filter
+	 * @return
+	 * @throws BusinessException
+	 */
 	public List<MerchantDto> searchMerchant(String restaurantName, MerchantFilterCriteria filter)
 			throws BusinessException {
 		List<MerchantDto> merchantDtos = new ArrayList<>();
