@@ -136,7 +136,8 @@ public class MerchantDao {
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		@SuppressWarnings("unchecked")
 		List<MerchantEntity> merchants = (List<MerchantEntity>) criteria.list();
-		merchants.addAll(searchActiveMerchantApprox(restaurantName));
+		// FIXME : Removed Approx name matching for now.Fix later
+		//merchants.addAll(searchActiveMerchantApprox(restaurantName));
 		if (merchants != null && !merchants.isEmpty()) {
 			merchantDtos = new ArrayList<>();
 			mapper.map(merchants, merchantDtos, filter);
