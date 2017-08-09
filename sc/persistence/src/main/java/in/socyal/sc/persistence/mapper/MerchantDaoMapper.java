@@ -109,7 +109,7 @@ public class MerchantDaoMapper {
 		
 		if (filter.getMapSuggestionRatings()) {
 			Tag tag = null;
-			int lastIndex = entity.getSuggestionRatings().size() >= 4 ? 4 : entity.getSuggestionRatings().size();
+			int lastIndex = entity.getSuggestionRatings().size() >= 15 ? 15 : entity.getSuggestionRatings().size();
 			for (MerchantSuggestionRatingEntity tagEntity : entity.getSuggestionRatings().subList(0, lastIndex)) {
 				if (tagEntity.getRating() < Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_DISPLAY))) {
 					// break the loop, do not map rest of the suggestions if

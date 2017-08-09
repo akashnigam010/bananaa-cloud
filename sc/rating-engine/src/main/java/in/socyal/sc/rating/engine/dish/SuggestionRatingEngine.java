@@ -14,9 +14,11 @@ import in.socyal.sc.persistence.DishDao;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.MerchantSuggestionRatingEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
+import in.socyal.sc.rating.engine.RatingUtils;
 
 @Repository
 public class SuggestionRatingEngine {
+	private static final Float MAX_RATING = 5.0f;
 
 	@Autowired
 	DishDao dishDao;
@@ -69,10 +71,20 @@ public class SuggestionRatingEngine {
 	}
 
 	private Float getTagRating(List<DishEntity> dishes) {
-		float totalRating = 0.0f;
+		float rating = 0.0f;
+		int ratedDishes = 0;
 		for (DishEntity entity : dishes) {
-			totalRating += entity.getRating();
+			if (entity.getRating() > 0) {
+				rating += entity.getRating();
+				ratedDishes++;
+			}
 		}
-		return totalRating / dishes.size();
+		if (ratedDishes > 0) {
+			rating = (rating / ratedDishes) + RatingUtils.getDishCountRating(dishes);
+			if (rating > MAX_RATING) {
+				rating = MAX_RATING;
+			}
+		}		
+		return rating;
 	}
 }

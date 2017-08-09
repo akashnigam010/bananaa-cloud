@@ -12,6 +12,8 @@ public class RatingUtils {
 	private static final Integer MAX_DISH_TRIAL_COUNT = 10;
 	private static final Integer MAX_DISH_COUNT_PER_CUISINE = 10;
 	private static final Float MAX_DISH_RATING = 5.0f;
+	private static final Integer MAX_DISH_COUNT_PER_SUGGESTION = 3;
+	private static final Float MAX_SUGGESTION_RATING = 0.5f;
 
 	public static Float getTriedValue(DishEntity entity) {
 		if (entity.getRecommendations().size() > MAX_DISH_TRIAL_COUNT) {
@@ -41,6 +43,10 @@ public class RatingUtils {
 		} else {
 			return 0.0f;
 		}
+	}
+	
+	public static Float getDishCountRating(List<DishEntity> dishes) {
+		return dishes.size() * (MAX_SUGGESTION_RATING / MAX_DISH_COUNT_PER_SUGGESTION);
 	}
 
 }
