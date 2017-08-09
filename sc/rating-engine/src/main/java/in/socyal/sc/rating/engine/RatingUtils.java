@@ -12,7 +12,7 @@ public class RatingUtils {
 	private static final Integer MAX_DISH_TRIAL_COUNT = 10;
 	private static final Integer MAX_DISH_COUNT_PER_CUISINE = 10;
 	private static final Float MAX_DISH_RATING = 5.0f;
-	private static final Integer MAX_DISH_COUNT_PER_SUGGESTION = 3;
+	private static final Integer MAX_DISH_COUNT_PER_SUGGESTION = 10;
 	private static final Float MAX_SUGGESTION_RATING = 0.5f;
 
 	public static Float getTriedValue(DishEntity entity) {
