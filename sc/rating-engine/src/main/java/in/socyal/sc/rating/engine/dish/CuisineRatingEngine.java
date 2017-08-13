@@ -73,10 +73,18 @@ public class CuisineRatingEngine {
 
 	private Float getCuisineRating(List<DishEntity> dishes) {
 		float totalRating = 0.0f;
+		int ratedDishes = 0;
+		float meanRating = 0.0f;
 		for (DishEntity entity : dishes) {
-			totalRating += entity.getRating();
+			if (entity.getRating() > 0) {
+				totalRating += entity.getRating();
+				ratedDishes++;
+			}
 		}
-		float meanRating = totalRating / dishes.size();
+		if (ratedDishes > 0) {
+			meanRating = totalRating / ratedDishes;
+		}
+		
 		float countRating = RatingUtils.getDishCountPerCuisineValue(dishes);
 		return meanRating * MEAN_RATING_WEIGHTAGE + countRating * COUNT_RATING_WEIGHTAGE;
 	}
