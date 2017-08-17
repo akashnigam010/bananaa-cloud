@@ -93,6 +93,8 @@ function loadDishes(merchantId) {
 								'<td>'+dishes[id].name+'</td>'+
 								'<td>'+getTags(dishes[id].suggestions)+'</td>'+
 								'<td>'+getTags(dishes[id].cuisines)+'</td>'+
+								'<td><button class="bna-button-light font-1-3" style="margin:0; padding: 0; background-color: transparent;"'+
+								' onclick="deleteItem('+id+');">&#10006;</button></td>'+
 								'</tr>';
 			  }
 			  $(".grid-body").html(gridBodyHtml);
@@ -142,6 +144,31 @@ function resetModalCuisines() {
 	editDishCopy.cuisines = [];
 	editDishCopy.cuisinesHtml = '';
 	$("#cuisine-name-display-modal").html(editDishCopy.cuisinesHtml);
+}
+
+function deleteItem(id) {
+	var input = confirm('Are you sure to delete Item Id : ' + id);
+	if (input == true) {
+		var dataOb = {
+				  id : id
+			};
+			$.ajax({
+				  method: "POST",
+				  url: "/socyal/management/deleteItem",
+				  contentType : "application/json",
+				  data: JSON.stringify(dataOb)
+		  	})
+		  	.done(function(response) {
+	    		  if (response.result) {
+	    			  alert('Item successfully deleted, please manually refresh the list');
+	    			  $('#editModal').modal('hide');
+	    		  } else {
+	    			  handleErrorCallback(response);
+	    		  }
+	    	  });
+	} else{ 
+		return;
+	}
 }
 
 function updateDish() {

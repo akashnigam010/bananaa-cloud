@@ -144,6 +144,18 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
+	
+	@RequestMapping(value = "/deleteItem", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse deleteItem(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateIdRequest(request);
+			delegate.deleteItem(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
 
 	@RequestMapping(value = "/addRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse addRecommendations(@RequestBody AddRecommendationsRequest request) {
