@@ -69,6 +69,12 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 		request.setNameId(createNameId(request.getName()));
 		dao.updateItem(request);
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void deleteItem(IdRequest request) {
+		dao.deleteItem(request);
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
