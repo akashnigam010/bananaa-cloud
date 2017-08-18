@@ -33,6 +33,7 @@ import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.ItemImageEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
+import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.ManagementDaoMapper;
@@ -118,6 +119,24 @@ public class ManagementDao {
 		}
 		
 		sessionFactory.getCurrentSession().save(dish);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void deleteItem(IdRequest request) {
+		DishEntity dish = (DishEntity) sessionFactory.getCurrentSession().get(DishEntity.class, request.getId());
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.createAlias("dish", "dish");
+		criteria.add(Restrictions.eq("dish.id", request.getId()));
+		List<RecommendationEntity> rcmds = criteria.list();
+		if (rcmds != null) {
+			for (RecommendationEntity rcmd : rcmds) {
+				sessionFactory.getCurrentSession().delete(rcmd);
+			}
+		}
+		
+		dish.setCuisines(null);
+		dish.setSuggestions(null);
+		sessionFactory.getCurrentSession().delete(dish);
 	}
 	
 	public void addRecommendations(Integer id, Float rating, Integer rcmdCount) throws BusinessException {

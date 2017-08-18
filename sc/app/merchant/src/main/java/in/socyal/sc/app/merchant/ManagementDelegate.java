@@ -38,6 +38,8 @@ public interface ManagementDelegate {
 	StatusResponse runTagsRatingEngineForMerchant(IdRequest request);
 
 	public void updateItem(UpdateItemRequest request) throws BusinessException;
+	
+	public void deleteItem(IdRequest request);
 
 	public GetAllItemsResponse getAllItems(IdRequest request) throws BusinessException;
 }
