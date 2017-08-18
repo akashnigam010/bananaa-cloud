@@ -200,7 +200,10 @@ function updateDish() {
 				var newDishTdHtml = 	'<td>'+editDishCopy.id+'</td>'+
 									'<td>'+editDishCopy.name+'</td>'+
 									'<td>'+getTags(editDishCopy.suggestions)+'</td>'+
-									'<td>'+getTags(editDishCopy.cuisines)+'</td>';
+									'<td>'+getTags(editDishCopy.cuisines)+'</td>'+
+									'<td><button class="bna-button-light font-1-3" style="margin:0; padding: 0; background-color: transparent;"'+
+									' onclick="deleteItem('+editDishCopy.id+');">&#10006;</button></td>';
+				
 				$('#'+editDishCopy.id+'').html(newDishTdHtml);
 				//update original data structure with new details
 				data[editDishCopy.id] = editDishCopy;
