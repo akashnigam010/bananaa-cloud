@@ -62,6 +62,10 @@ function getMyItemRecommendation() {
 
 function activateUpdateRcmdModal() {
 	$("#addItemRecommendButton").on('mouseup', function(e){
+		if ($("#loginStatus").html() == 'false') {
+    		activateLogin();
+    		return;
+		}
 		rcmdOb = {
     		id: itemId,
     		name: itemName,
