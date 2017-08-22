@@ -281,9 +281,9 @@ function manualLogin() {
     password = $("#m_password").val();
 
     if (!validateEmail(email)) {
-        addError('Please check your email');
+        addError('Invalid email entered');
     } else if (!password) {
-        addError('Please enter a password');
+        addError('Please enter your password');
     } else {
         var dataOb = {
 			email : email,
@@ -314,7 +314,7 @@ function register() {
     if (!name) {
         addError('Please enter your name');
     } else if (!validateEmail(email)) {
-        addError('Please check your email');
+        addError('Invalid email entered');
     } else if (!password) {
         addError('Please enter a password');
     } else {
@@ -343,7 +343,7 @@ function register() {
 function forgotPassword() {
     var email = $("#f_email").val();
     if (!validateEmail(email)) {
-        addError('Incorrect email entered');
+        addError('Invalid email entered');
     } else {
         var dataOb = {
 			email : email
@@ -356,7 +356,7 @@ function forgotPassword() {
       	})
       	  .done(function(response) {
       		  if (response.result) {
-      			addSuccess('Please check your email for the password');
+      			addSuccess('We have emailed you the password. Please check your mail box');
       		  } else {
       			handleErrorResponseLoginModal(response.statusCodes.statusCode[0].description);
       		  }		
@@ -366,7 +366,7 @@ function forgotPassword() {
 
 function handleErrorResponseLoginModal(desc) {
 	addError(desc);
-  	$("#login-info").html('Login');
+	$("#login-info").html('Login');
 	$('#login-dropdown').addClass('hide');
 	$('#login-dropdown-mini').addClass('hide');
 	$('#loginModal').modal('show');
@@ -384,6 +384,10 @@ function addError(msg) {
     $(".login-success").addClass('hide');
     $(".login-error").html(msg);
     $(".login-error").removeClass('hide');
+    setTimeout(function(){
+		$(".login-error").addClass('hide');
+		$(".login-title").removeClass('hide');
+	}, 3000);
 }
 
 function addSuccess(msg) {
@@ -391,4 +395,8 @@ function addSuccess(msg) {
     $(".login-error").addClass('hide');
     $(".login-success").html(msg);
     $(".login-success").removeClass('hide');
+    setTimeout(function(){
+		$(".login-success").addClass('hide');
+		$(".login-title").removeClass('hide');
+	}, 10000);
 }
