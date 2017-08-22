@@ -14,6 +14,7 @@ public class UserDto implements Serializable {
 	private String lastName;
 	private String nameId;
 	private Float credibility;
+	private String password;
 	private String imageUrl;
 	private String email;
 	private Calendar createdDateTime;
@@ -149,5 +150,13 @@ public class UserDto implements Serializable {
 
 	public void setTotalReviews(Integer totalReviews) {
 		this.totalReviews = totalReviews;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

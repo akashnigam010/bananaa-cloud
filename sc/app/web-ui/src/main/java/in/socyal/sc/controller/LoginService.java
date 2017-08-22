@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.LoginRequest;
+import in.socyal.sc.api.login.request.MLoginRequest;
 import in.socyal.sc.api.login.request.SetLocationRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.merchant.dto.CityDto;
@@ -53,6 +54,47 @@ public class LoginService {
 			validator.validateLoginRequest(request);
 			response = delegate.federatedLogin(request);
 			addLoginCookie(response);
+			cookieHelper.addDefaultCityCookie(httpResponse);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/mLogin", method = RequestMethod.POST, headers = "Accept=application/json")
+	public LoginResponse mLogin(@RequestBody MLoginRequest request) {
+		LoginResponse response = new LoginResponse();
+		try {
+			validator.validateLoginRequest(request);
+			response = delegate.manualLogin(request);
+			addLoginCookie(response);
+			cookieHelper.addDefaultCityCookie(httpResponse);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = "Accept=application/json")
+	public LoginResponse register(@RequestBody MLoginRequest request) {
+		LoginResponse response = new LoginResponse();
+		try {
+			validator.validateRegisterRequest(request);
+			response = delegate.register(request);
+			addLoginCookie(response);
+			cookieHelper.addDefaultCityCookie(httpResponse);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/resetPassword", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse resetPassword(@RequestBody MLoginRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateResetPasswordRequest(request);
+			response = delegate.resetPassword(request);
 			cookieHelper.addDefaultCityCookie(httpResponse);
 			return helper.success(response);
 		} catch (BusinessException e) {

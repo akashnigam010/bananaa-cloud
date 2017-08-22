@@ -275,3 +275,120 @@ function loadLocations(e, searchElement) {
         }
     });
 }
+
+function manualLogin() {
+    var email = $("#m_email").val(),
+    password = $("#m_password").val();
+
+    if (!validateEmail(email)) {
+        addError('Please check your email');
+    } else if (!password) {
+        addError('Please enter a password');
+    } else {
+        var dataOb = {
+			email : email,
+			password : password
+    	};
+    	$.ajax({
+      	  method: "POST",
+      	  url: "/socyal/login/mLogin",
+      	  contentType : "application/json",
+      	  data: JSON.stringify(dataOb)
+      	})
+      	  .done(function(response) {
+      		  if (response.result) {
+      			addSuccess('Logged in successfully');
+  				location.reload();
+      		  } else {
+      			handleErrorResponseLoginModal(response.statusCodes.statusCode[0].description);
+      		  }		
+      	  });
+    }
+}
+
+function register() {
+    var name = $("#r_name").val(),
+    email = $("#r_email").val(),
+    password = $("#r_password").val();
+
+    if (!name) {
+        addError('Please enter your name');
+    } else if (!validateEmail(email)) {
+        addError('Please check your email');
+    } else if (!password) {
+        addError('Please enter a password');
+    } else {
+        var dataOb = {
+			name : name,
+			email : email,
+			password : password
+    	};
+    	$.ajax({
+      	  method: "POST",
+      	  url: "/socyal/login/register",
+      	  contentType : "application/json",
+      	  data: JSON.stringify(dataOb)
+      	})
+      	  .done(function(response) {
+      		  if (response.result) {
+  			  	addSuccess('Successfully Registered');
+  				location.reload();
+      		  } else {
+      			handleErrorResponseLoginModal(response.statusCodes.statusCode[0].description);
+      		  }		
+      	  });
+    }
+}
+
+function forgotPassword() {
+    var email = $("#f_email").val();
+    if (!validateEmail(email)) {
+        addError('Incorrect email entered');
+    } else {
+        var dataOb = {
+			email : email
+    	};
+    	$.ajax({
+      	  method: "POST",
+      	  url: "/socyal/login/resetPassword",
+      	  contentType : "application/json",
+      	  data: JSON.stringify(dataOb)
+      	})
+      	  .done(function(response) {
+      		  if (response.result) {
+      			addSuccess('Please check your email for the password');
+      		  } else {
+      			handleErrorResponseLoginModal(response.statusCodes.statusCode[0].description);
+      		  }		
+      	  });
+    }
+}
+
+function handleErrorResponseLoginModal(desc) {
+	addError(desc);
+  	$("#login-info").html('Login');
+	$('#login-dropdown').addClass('hide');
+	$('#login-dropdown-mini').addClass('hide');
+	$('#loginModal').modal('show');
+	$("#loginModal").find(".loader").addClass('hide');
+	$("#loginModal").find(".modal-body").removeClass('hide');
+}
+
+function validateEmail(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
+
+function addError(msg) {
+    $(".login-title").addClass('hide');
+    $(".login-success").addClass('hide');
+    $(".login-error").html(msg);
+    $(".login-error").removeClass('hide');
+}
+
+function addSuccess(msg) {
+    $(".login-title").addClass('hide');
+    $(".login-error").addClass('hide');
+    $(".login-success").html(msg);
+    $(".login-success").removeClass('hide');
+}
