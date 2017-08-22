@@ -39,16 +39,19 @@ public class LoginMapper {
 		return user;
 	}
 
-	public UserDto mapFederatedUser(FederatedUser federatedUser) {
+	public UserDto mapFederatedUser(FederatedUser federatedUser, String password) {
 		UserDto user = new UserDto();
 		MutablePair<String, String> names = parseDisplayName(federatedUser.getName());
-		user.setUid(federatedUser.getId().toString());
+		if (StringUtils.isNotBlank(federatedUser.getId())) {
+			user.setUid(federatedUser.getId().toString());
+		}		
 		user.setFirstName(names.getLeft());
 		user.setLastName(names.getRight());
 		user.setNameId(generateUserNameId(user.getFirstName(), user.getLastName()));
 		user.setImageUrl(federatedUser.getPhotoUrl());
 		user.setEmail(federatedUser.getEmail() != null ? federatedUser.getEmail() : null);
 		user.setCredibility(DEFAULT_USER_CREDIBILITY);
+		user.setPassword(password);
 		return user;
 	}
 

@@ -5,6 +5,7 @@ public class FederatedUser {
 	private String name;
 	private String email;
 	private String photoUrl;
+	private boolean isFederatedLogin = true;
 
 	public String getId() {
 		return id;
@@ -36,5 +37,13 @@ public class FederatedUser {
 
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
+	}
+
+	public boolean isFederatedLogin() {
+		return isFederatedLogin;
+	}
+
+	public void setFederatedLogin(boolean isFederatedLogin) {
+		this.isFederatedLogin = isFederatedLogin;
 	}
 }

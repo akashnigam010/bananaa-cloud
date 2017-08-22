@@ -151,7 +151,7 @@ public class DishDaoMapper {
 			dto.setRating(rcmdEntity.getRating());
 			dto.setDescription(rcmdEntity.getDescription());
 			UserDto userDto = new UserDto();
-			userMapper.map(rcmdEntity.getUser(), userDto, false);
+			userMapper.map(rcmdEntity.getUser(), userDto, false, false);
 			MutablePair<Integer, Integer> ratingAndReviewCount = getRatingCount(rcmdEntity.getUser().getRecommendations());
 			userDto.setTotalRatings(ratingAndReviewCount.getLeft());
 			userDto.setTotalReviews(ratingAndReviewCount.getRight());

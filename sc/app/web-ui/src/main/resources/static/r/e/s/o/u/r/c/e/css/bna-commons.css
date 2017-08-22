@@ -685,7 +685,7 @@ input:focus ~ .highlight, textarea:focus ~ .highlight {
 .hr-sect::after {
   content: "";
   flex-grow: 1;
-  background: rgba(0, 0, 0, 0.35);
+  background: #f1f1f1;
   height: 1px;
   font-size: 0px;
   line-height: 0px;

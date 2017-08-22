@@ -32,10 +32,11 @@ public class UserDaoMapper {
 		to.setEmail(from.getEmail());
 		to.setImageUrl(from.getImageUrl());
 		to.setCredibility(from.getCredibility());
+		to.setPassword(from.getPassword());
 		return to;
 	}
 
-	public void map(UserEntity from, UserDto to, Boolean mapRecommendations) {
+	public void map(UserEntity from, UserDto to, Boolean mapRecommendations, Boolean mapPassword) {
 		to.setId(from.getId());
 		to.setFirstName(from.getFirstName());
 		to.setLastName(from.getLastName());
@@ -43,6 +44,9 @@ public class UserDaoMapper {
 		to.setUserUrl("/user/" + from.getNameId());
 		to.setNameId(from.getNameId());
 		to.setCredibility(from.getCredibility());
+		if (mapPassword) {
+			to.setPassword(from.getPassword());
+		}
 		MutablePair<Integer, Integer> ratingAndReviewCount = dishMapper.getRatingCount(from.getRecommendations());
 		to.setTotalRatings(ratingAndReviewCount.getLeft());
 		to.setTotalReviews(ratingAndReviewCount.getRight());

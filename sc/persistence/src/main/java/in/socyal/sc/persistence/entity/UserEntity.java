@@ -29,6 +29,9 @@ public class UserEntity extends BaseEntity implements Serializable {
 	
 	@Column(name = "CREDIBILITY")
 	private Float credibility;
+	
+	@Column(name = "PASSWORD")
+	private String password;
 
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
@@ -114,5 +117,13 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	public void setRecommendations(List<RecommendationEntity> recommendations) {
 		this.recommendations = recommendations;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
