@@ -529,7 +529,7 @@ input, textarea {
 	display: block;
 	width: 90%;
 	border: none;
-	border-bottom: 1px solid #757575;
+	border-bottom:1px solid #f1f1f1;
 	box-shadow: none;
 }
 
@@ -652,6 +652,44 @@ input:focus ~ .highlight, textarea:focus ~ .highlight {
 
 .bna-button-white:hover, .bna-button-white:focus {
   background-color: #E0E1E2;
+}
+
+.bna-button-border {
+    padding: 10px 16px;
+    margin: 10px;
+    line-height: 1.3333333;
+    border-radius: 3px;
+    -webkit-appearance: button;
+    cursor: pointer;
+    align-items: flex-start;
+    text-align: center;
+    background-color: #fff;
+    color: #9932CC;
+    border: solid 1px;
+    border-color: #9932CC;
+    outline: none;
+}
+
+.bna-button-border:hover, .bna-button-border:focus {
+  background-color: #f6f6f6;
+}
+
+.hr-sect {
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  margin: 8px 0px;
+}
+.hr-sect::before,
+.hr-sect::after {
+  content: "";
+  flex-grow: 1;
+  background: #f1f1f1;
+  height: 1px;
+  font-size: 0px;
+  line-height: 0px;
+  margin: 0px 8px;
 }
 
 /*Input placeholder css STARTS*/

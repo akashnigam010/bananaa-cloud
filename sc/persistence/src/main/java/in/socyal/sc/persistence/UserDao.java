@@ -31,7 +31,7 @@ public class UserDao {
 		UserEntity entity = (UserEntity) criteria.uniqueResult();
 		if (entity != null) {
 			dto = new UserDto();
-			mapper.map(entity, dto, true);
+			mapper.map(entity, dto, true, false);
 		}
 		return dto;
 	}
@@ -43,7 +43,7 @@ public class UserDao {
 		UserEntity entity = (UserEntity) criteria.uniqueResult();
 		if (entity != null) {
 			dto = new UserDto();
-			mapper.map(entity, dto, false);
+			mapper.map(entity, dto, false, false);
 		}
 		return dto;
 	}
@@ -55,7 +55,19 @@ public class UserDao {
 		UserEntity entity = (UserEntity) criteria.uniqueResult();
 		if (entity != null) {
 			dto = new UserDto();
-			mapper.map(entity, dto, false);
+			mapper.map(entity, dto, false, false);
+		}
+		return dto;
+	}
+	
+	public UserDto getUserByEmailWithPassword(String email) {
+		UserDto dto = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("email", email));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		if (entity != null) {
+			dto = new UserDto();
+			mapper.map(entity, dto, false, true);
 		}
 		return dto;
 	}

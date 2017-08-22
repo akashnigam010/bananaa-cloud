@@ -1,6 +1,7 @@
 package in.socyal.sc.login;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
@@ -15,20 +16,26 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.login.request.ClientType;
 import in.socyal.sc.api.login.request.IdTokenRequest;
 import in.socyal.sc.api.login.request.LoginRequest;
+import in.socyal.sc.api.login.request.MLoginRequest;
 import in.socyal.sc.api.login.response.FederatedUser;
 import in.socyal.sc.api.login.response.LoginResponse;
+import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.LoginErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.helper.aws.S3Helper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
 import in.socyal.sc.helper.google.OAuth2GoogleHelper;
+import in.socyal.sc.helper.mail.MailSender;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.UserDao;
 
 @Service
 public class LoginDelegateImpl implements LoginDelegate {
 	private static final Logger LOG = Logger.getLogger(LoginDelegateImpl.class);
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String DEFAULT_PHOTO = "default.user.photo.url";
 
 	@Autowired
 	UserDao userDao;
@@ -44,6 +51,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	FirebaseAuthHelper firebaseHelper;
 	@Autowired
 	S3Helper s3Helper;
+	@Autowired
+	MailSender mailSender;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -96,7 +105,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 			user = userDao.getUserByEmail(federatedUser.getEmail());
 			if (user == null) {
 				// new user with email
-				user = saveNewUser(federatedUser);
+				user = saveNewUser(federatedUser, null);
 			}
 		} else {
 			// email id not passed
@@ -104,7 +113,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 			if (user == null) {
 				// user did not login with this client earlier, save new user
 				// without email
-				user = saveNewUser(federatedUser);
+				user = saveNewUser(federatedUser, null);
 			}
 		}
 
@@ -112,10 +121,65 @@ public class LoginDelegateImpl implements LoginDelegate {
 		return loginResponse;
 	}
 
-	private UserDto saveNewUser(FederatedUser federatedUser) throws BusinessException {
-		UserDto newUser = mapper.mapFederatedUser(federatedUser);
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public LoginResponse manualLogin(MLoginRequest request) throws BusinessException {
+		LoginResponse loginResponse = new LoginResponse();
+		UserDto user = userDao.getUserByEmailWithPassword(request.getEmail());
+		if (user == null) {
+			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
+		} else if (StringUtils.isBlank(user.getPassword())) {
+			throw new BusinessException(LoginErrorCodeType.REGISTERED_VIA_FB_OR_GOOGLE);
+		} else if (!request.getPassword().equalsIgnoreCase(user.getPassword())) {
+			throw new BusinessException(LoginErrorCodeType.INCORRECT_PASSWORD);
+		}
+		loginResponse.setUser(mapper.mapToLoginUserDto(user));
+		return loginResponse;
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public LoginResponse register(MLoginRequest request) throws BusinessException {
+		LoginResponse loginResponse = new LoginResponse();
+		UserDto user = userDao.getUserByEmail(request.getEmail());
+		if (user != null) {
+			throw new BusinessException(LoginErrorCodeType.EMAIL_ALREADY_REGISTERED);
+		} else {
+			FederatedUser federatedUser = new FederatedUser();
+			federatedUser.setName(request.getName());
+			federatedUser.setEmail(request.getEmail());
+			federatedUser.setPhotoUrl(resource.getString(DEFAULT_PHOTO));
+			federatedUser.setFederatedLogin(false);
+			user = saveNewUser(federatedUser, request.getPassword());
+			loginResponse.setUser(mapper.mapToLoginUserDto(user));
+			return loginResponse;
+		}
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public StatusResponse resetPassword(MLoginRequest request) throws BusinessException {
+		StatusResponse statusResponse = new StatusResponse();
+		UserDto user = userDao.getUserByEmailWithPassword(request.getEmail());
+		if (user == null) {
+			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
+		} else if (StringUtils.isBlank(user.getPassword())) {
+			throw new BusinessException(LoginErrorCodeType.REGISTERED_VIA_FB_OR_GOOGLE);
+		} else {
+			// email the password to user
+			request.setName(user.getFirstName());
+			request.setPassword(user.getPassword());
+			mailSender.sendPasswordMail(request);
+			return statusResponse;
+		}
+	}
+	
+	private UserDto saveNewUser(FederatedUser federatedUser, String password) throws BusinessException {
+		UserDto newUser = mapper.mapFederatedUser(federatedUser, password);
 		try {
-			newUser.setImageUrl(s3Helper.saveUserImage(newUser.getImageUrl(), newUser.getNameId()));
+			if (federatedUser.isFederatedLogin()) {
+				newUser.setImageUrl(s3Helper.saveUserImage(newUser.getImageUrl(), newUser.getNameId()));
+			}			
 		} catch (IOException e) {
 			LOG.error("Error occurred while saving user image to S3 : " + e.getMessage() + ", USER : "
 					+ newUser.toString());
