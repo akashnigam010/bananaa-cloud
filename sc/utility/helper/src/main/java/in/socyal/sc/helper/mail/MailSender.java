@@ -20,7 +20,8 @@ import in.socyal.sc.api.manage.request.MessageRequest;
 @Component
 public class MailSender {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
-	private static final String EMAIL_USERNAME = "email.username";
+	private static final String EMAIL_FROM = "email.from";
+	private static final String EMAIL_FROM_ALIAS = "email.from.alias";
 	private static final String EMAIL_PASSWORD = "email.password";
 	private static final String EMAIL_SUBJECT_CONTACT_US = "email.subject";
 	private static final String EMAIL_SUBJECT_PASSWORD_RESET = "email.password.reset.subject";
@@ -30,7 +31,7 @@ public class MailSender {
 		Session session = getSession();
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(resource.getString(EMAIL_USERNAME)));
+			message.setFrom(new InternetAddress(resource.getString(EMAIL_FROM_ALIAS)));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(resource.getString(EMAIL_TO)));
 			message.setSubject(resource.getString(EMAIL_SUBJECT_CONTACT_US));
 			message.setText("Name : " + request.getName() + ", Phone : " + request.getPhone() + ", Email : "
@@ -45,7 +46,7 @@ public class MailSender {
 		Session session = getSession();
 		try {
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("no-reply<contact@bananaa.in>"));
+			message.setFrom(new InternetAddress(resource.getString(EMAIL_FROM_ALIAS)));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(request.getEmail()));
 			message.setContent(
 					"Hello " + request.getName() + ", <br /><br /> Here is your password to login to Bananaa: <b>"
@@ -73,7 +74,7 @@ public class MailSender {
 		Properties props = getProperties();
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(resource.getString(EMAIL_USERNAME),
+				return new PasswordAuthentication(resource.getString(EMAIL_FROM),
 						resource.getString(EMAIL_PASSWORD));
 			}
 		});
