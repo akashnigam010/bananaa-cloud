@@ -91,6 +91,7 @@ public class AdditionalDetailsController {
 	
 	@RequestMapping(value = "/app", method = RequestMethod.GET)
 	public ModelAndView app() {
-		return new ModelAndView("redirect:" + GOOGLE_PLAYSTORE_URL);
+		ModelAndView modelAndView = new ModelAndView("app");
+		return modelAndView;
 	}
 }

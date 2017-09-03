@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:replace="fragments/head :: head(title = 'Download App | Bananaa')"></head>
+<link href="/r/e/s/o/u/r/c/e/css/extras.css" type="text/css" rel="stylesheet"></link>
+<style type="text/css">
+    .hero-image::after {
+        content: "Bananaa Mobile App!"
+    }
+</style>
+<body>
+	<div class="container-fluid">
+        <div th:replace="fragments/plain-header :: plain-header"></div>
+        
+        <div class="row grey-background document-area">
+            <div class="hero-image" align="center">
+                <img class="section-img" src="https://bna-s3.s3.amazonaws.com/img/next.jpg" />                
+            </div>          
+        	<div class="col-xs-12 white-background document-area mini" style="margin-top: 2%;">
+                <div class="section font-1-3 align-center" style="padding-top: 5%;">
+                    <div class="col-xs-12 col-sm-6" style="padding-bottom: 10%">
+                        <p class="font-1-5 bna-color">Android Lovers</p>
+                        <p>You guys are so cute! <span class="font-1-3">&#128536;</span></p> 
+                        <button class="bna-button" onclick="location.href='https://play.google.com/store/apps/details?id=in.bananaa'">Go to Playstore</button>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <p class="font-1-5 bna-color">Apple Fanboys</p>
+                        <p>Hold on tight, app under progress! <span class="font-1-3">&#9996;</span></p>
+                        <button class="bna-button-light" onclick="location.href='https://www.bananaa.in'">Browse in Safari</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+				
+		<div lang="en" th:replace="fragments/footer :: footer"></div>
+	</div>
+</body>
+</html>
