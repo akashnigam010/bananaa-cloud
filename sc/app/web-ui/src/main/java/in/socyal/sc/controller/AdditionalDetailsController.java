@@ -14,6 +14,7 @@ public class AdditionalDetailsController {
 	private ResourceBundle resource = ResourceBundle.getBundle("environment");
 	private static final String USERNAME = "bna.manage.username";
 	private static final String PASSWORD = "bna.manage.password";
+	private static final String GOOGLE_PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=in.bananaa";
 	
 	@RequestMapping(value = "/blogin", method = RequestMethod.GET)
 	public ModelAndView managementConsole() {
@@ -86,5 +87,10 @@ public class AdditionalDetailsController {
 	public ModelAndView next() {
 		ModelAndView modelAndView = new ModelAndView("next");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/app", method = RequestMethod.GET)
+	public ModelAndView app() {
+		return new ModelAndView("redirect:" + GOOGLE_PLAYSTORE_URL);
 	}
 }
