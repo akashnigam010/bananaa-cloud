@@ -3,11 +3,19 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 
-<head th:replace="fragments/head :: head(title = 'Business Login | Bananaa')"></head>
+<head>
+	<meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="shortcut icon" href="https://bna-s3.s3.amazonaws.com/img/favicon.ico" type="image/x-icon"></link>
+    <title>Business Login | Bananaa</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet"></link>
+    <link href="/r/e/s/o/u/r/c/e/css/bna-commons.css" type="text/css" rel="stylesheet"></link>
+</head>
 
 <body>
 	<div class="container-fluid">
-        <div style="padding: 20%;">
+        <div style="padding: 15%;">
          <h2 style="padding-bottom: 5%;">Login to Bananaa</h2>
          <form class="form-horizontal" action="/bna/manage/managementConsole" method="post">
             <div class="form-group">
