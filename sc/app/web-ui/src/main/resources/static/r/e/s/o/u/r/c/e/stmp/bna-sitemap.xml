@@ -63,7 +63,7 @@
 		<changefreq>weekly</changefreq>
 	</url>
 	<url>
-		<loc>https://www.bananaa.in/hyderabad/mustang-gachibowli</loc>
+		<loc>https://www.bananaa.in/hyderabad/diners-pavilion-gachibowli</loc>
 		<changefreq>weekly</changefreq>
 	</url>
 	<url>
@@ -74,7 +74,10 @@
 		<loc>https://www.bananaa.in/hyderabad/cream-stone-hitech-city</loc>
 		<changefreq>weekly</changefreq>
 	</url>
-	
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/indiblaze-hitech-city</loc>
+		<changefreq>weekly</changefreq>
+	</url>
 	<url>
 		<loc>https://www.bananaa.in/hyderabad/urban-asia-kitchen-bar-jubilee-hills</loc>
 		<changefreq>weekly</changefreq>
@@ -96,6 +99,10 @@
 		<changefreq>weekly</changefreq>
 	</url>
 	<url>
+		<loc>https://www.bananaa.in/hyderabad/free-flow-traffic-bar-jubilee-hills</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
 		<loc>https://www.bananaa.in/hyderabad/stone-waters-kitchen-lounge-jubilee-hills</loc>
 		<changefreq>weekly</changefreq>
 	</url>
@@ -110,7 +117,38 @@
 	<url>
 		<loc>https://www.bananaa.in/hyderabad/ulavacharu-jubilee-hills</loc>
 		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/ofen-banjara-hills</loc>
+		<changefreq>weekly</changefreq>
 	</url>	
-	
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/the-fishermans-wharf-gachibowli</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/frio-bistro-gachibowli</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/malaka-spice-jubilee-hills</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/the-spicy-venue-jubilee-hills</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/beyond-coffee-jubilee-hills</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/truffles-bar-cafe-jubilee-hills</loc>
+		<changefreq>weekly</changefreq>
+	</url>
+	<url>
+		<loc>https://www.bananaa.in/hyderabad/shah-ghouse-hotel-restaurant-gachibowli</loc>
+		<changefreq>weekly</changefreq>
+	</url>
 	<!-- Restaurant ENDS -->
 </urlset>
