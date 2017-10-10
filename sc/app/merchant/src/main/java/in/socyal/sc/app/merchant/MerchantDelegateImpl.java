@@ -113,10 +113,15 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public MerchantDetails getMerchantDetails(DetailsRequest request) throws BusinessException {
+	public MerchantDetails getMerchantDetails(DetailsRequest request, boolean isSearchByNameId) throws BusinessException {
 		MerchantDetails response = new MerchantDetails();
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
-		MerchantDto merchantDto = dao.getMerchantDetailsByNameId(request.getMerchantNameId(), filter);
+		MerchantDto merchantDto = null;
+		if (isSearchByNameId) {
+			merchantDto = dao.getMerchantDetailsByNameId(request.getMerchantNameId(), filter);
+		} else {
+			merchantDto = dao.getMerchantDetailsById(request.getId(), filter);
+		}
 		try {
 			mapper.buildMerchantDetailsResponse(merchantDto, response);
 		} catch (ParseException e) {

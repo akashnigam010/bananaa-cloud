@@ -14,7 +14,7 @@ import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 
 public interface MerchantDelegate {
-	MerchantDetails getMerchantDetails(DetailsRequest request) throws BusinessException;
+	MerchantDetails getMerchantDetails(DetailsRequest request, boolean isSearchByNameId) throws BusinessException;
 
 	SearchMerchantResponse searchActiveMerchant(SearchRequest request) throws BusinessException;
 

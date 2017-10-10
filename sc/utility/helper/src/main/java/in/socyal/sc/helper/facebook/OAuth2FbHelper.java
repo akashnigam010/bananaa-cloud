@@ -16,6 +16,7 @@ import com.restfb.types.User;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.LoginErrorCodeType;
 
 @Service
 public class OAuth2FbHelper {
@@ -35,12 +36,19 @@ public class OAuth2FbHelper {
 	 * 
 	 * @param accessToken
 	 * @return
+	 * @throws BusinessException
 	 * @throws FacebookOAuthException
 	 */
-	public User getFbUser(String accessToken) throws FacebookOAuthException {
+	public User getFbUser(String accessToken) throws BusinessException {
 		FacebookClient fbClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_8);
-		User me = fbClient.fetchObject("me", User.class,
-				Parameter.with("fields", "id,first_name,last_name,link,email,gender,picture.width(160).height(160)"));
+		User me = null;
+		try {
+			me = fbClient.fetchObject("me", User.class, Parameter.with("fields",
+					"id,first_name,last_name,link,email,gender,picture.width(160).height(160)"));
+		} catch (FacebookOAuthException e) {
+			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
+		}
+
 		return me;
 	}
 
@@ -58,11 +66,16 @@ public class OAuth2FbHelper {
 	 * @param accessToken
 	 * @param linkToPost
 	 * @throws FacebookOAuthException
+	 * @throws BusinessException 
 	 */
-	public void publishToTimeline(String accessToken, String linkToPost) throws FacebookOAuthException {
+	public void publishToTimeline(String accessToken, String linkToPost) throws BusinessException {
 		FacebookClient fbClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_8);
-		fbClient.publish("me/feed", FacebookType.class, Parameter.with("message", "Testing FB Post"),
-				Parameter.with("link", linkToPost));
+		try {
+			fbClient.publish("me/feed", FacebookType.class, Parameter.with("message", "Testing FB Post"),
+					Parameter.with("link", linkToPost));
+		} catch (FacebookOAuthException e) {
+			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
+		}
 	}
 
 	/**

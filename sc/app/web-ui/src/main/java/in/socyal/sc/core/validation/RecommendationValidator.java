@@ -89,6 +89,22 @@ public class RecommendationValidator extends Validator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
+	
+	public void validateGetMyRecommendationsRequestApp(GetRecommendationRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getMerchantId() == null) {
+			LOG.error("Merchant Id not found while validating get my recommendations request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+
+		if (request.getPage() == null) {
+			LOG.error("Page number not found while validating get my recommendations request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
 
 	public void validateGetMyItemRecommendationRequest(GetRecommendationRequest request, String authToken)
 			throws BusinessException {

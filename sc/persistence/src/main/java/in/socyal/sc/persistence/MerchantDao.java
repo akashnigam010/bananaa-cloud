@@ -50,6 +50,23 @@ public class MerchantDao {
 		this.sessionFactory = sessionFactory;
 	}
 
+	public MerchantDto getMerchantDetailsById(Integer id, MerchantFilterCriteria filter)
+			throws BusinessException {
+		MerchantDto dto = null;
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
+		criteria.add(Restrictions.eq("id", id));
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		MerchantEntity entity = (MerchantEntity) criteria.uniqueResult();
+		if (entity != null) {
+			dto = new MerchantDto();
+			mapper.map(entity, dto, filter);
+		} else {
+			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
+		}
+
+		return dto;
+	}
+	
 	public MerchantDto getMerchantDetailsByNameId(String nameId, MerchantFilterCriteria filter)
 			throws BusinessException {
 		MerchantDto dto = null;
