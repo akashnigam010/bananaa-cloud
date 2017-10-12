@@ -38,8 +38,8 @@ public class AppSearchService {
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
 				List<GlobalSearchItem> merchants = merchantDelegate.searchMerchantsGlobal(request);
-				List<GlobalSearchItem> cuisines = itemDelegate.searchTags(request, TagType.CUISINE);
-				List<GlobalSearchItem> suggestions = itemDelegate.searchTags(request, TagType.SUGGESTION);
+				List<GlobalSearchItem> cuisines = itemDelegate.searchTags(request, TagType.CUISINE, 1, 3);
+				List<GlobalSearchItem> suggestions = itemDelegate.searchTags(request, TagType.SUGGESTION, 1, 3);
 				response.getSearchItems().addAll(merchants);
 				response.getSearchItems().addAll(cuisines);
 				response.getSearchItems().addAll(suggestions);

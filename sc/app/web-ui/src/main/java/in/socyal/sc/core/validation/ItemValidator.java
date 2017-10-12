@@ -35,4 +35,12 @@ public class ItemValidator extends Validator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
+
+	public void validateSearchTagRequest(SearchRequest request) throws BusinessException {
+		if (request.getSearchString() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}		
+	}
+	
+	
 }

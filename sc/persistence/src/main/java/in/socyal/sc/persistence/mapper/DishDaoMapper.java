@@ -86,7 +86,8 @@ public class DishDaoMapper {
 				tag = new GlobalSearchItem(SearchType.CUISINE);
 			} else if (entity instanceof SuggestionEntity) {
 				tag = new GlobalSearchItem(SearchType.DISH);
-			}			
+			}	
+			tag.setId(entity.getId());
 			tag.setName(entity.getName());
 			tag.setNameId(entity.getNameId());
 			dtos.add(tag);
