@@ -18,7 +18,7 @@ import in.socyal.sc.api.type.TagType;
 public interface ItemDelegate {
 	SearchItemsResponse searchItems(SearchRequest request);
 
-	List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType);
+	List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType, Integer page, Integer resultsPerPage);
 
 	ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException;
 

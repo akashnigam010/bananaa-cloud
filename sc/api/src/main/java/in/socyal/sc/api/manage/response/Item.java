@@ -7,6 +7,7 @@ import in.socyal.sc.api.manage.request.Tag;
 public class Item {
 	private Integer id;
 	private String name;
+	private Integer vegnonveg;
 	private List<Tag> suggestions;
 	private List<Tag> cuisines;
 	private String thumbnail;
@@ -58,5 +59,13 @@ public class Item {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public Integer getVegnonveg() {
+		return vegnonveg;
+	}
+
+	public void setVegnonveg(Integer vegnonveg) {
+		this.vegnonveg = vegnonveg;
 	}
 }

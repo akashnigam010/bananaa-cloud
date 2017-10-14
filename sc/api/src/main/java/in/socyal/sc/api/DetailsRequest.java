@@ -6,6 +6,7 @@ public class DetailsRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String merchantNameId;
 	private String itemNameId;
+	private Integer id;
 
 	public DetailsRequest() {
 	}
@@ -28,5 +29,13 @@ public class DetailsRequest implements Serializable {
 
 	public void setItemNameId(String itemNameId) {
 		this.itemNameId = itemNameId;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

@@ -60,7 +60,7 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public void deleteItem(IdRequest request) {
+	public void deleteItem(IdRequest request) throws BusinessException {
 		dao.deleteItem(request);
 	}
 

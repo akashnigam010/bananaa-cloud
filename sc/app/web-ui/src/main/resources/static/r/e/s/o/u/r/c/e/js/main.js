@@ -116,6 +116,8 @@ function handleErrorCallback(response) {
 	    		$('#login-dropdown').addClass('hide');
 	    		$('#login-dropdown-mini').addClass('hide');
 	    		$('#loginModal').modal('show');
+		  } else if (response.statusCodes.statusCode[0].code == '10603' ) {
+			  alert(response.statusCodes.statusCode[0].description);
 		  } else {
 			  alert('Something is not right, please try again after refreshing the page.');
 		  }

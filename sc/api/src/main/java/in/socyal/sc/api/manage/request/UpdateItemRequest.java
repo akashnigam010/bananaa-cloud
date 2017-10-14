@@ -7,6 +7,7 @@ public class UpdateItemRequest {
 	private Integer id;
 	private String name;
 	private String nameId;
+	private Integer vegnonveg;
 	private List<Tag> cuisines;
 	private List<Tag> suggestions;
 	private String imageUrl;
@@ -91,5 +92,13 @@ public class UpdateItemRequest {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public Integer getVegnonveg() {
+		return vegnonveg;
+	}
+
+	public void setVegnonveg(Integer vegnonveg) {
+		this.vegnonveg = vegnonveg;
 	}
 }

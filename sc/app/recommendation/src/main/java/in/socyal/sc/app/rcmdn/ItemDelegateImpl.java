@@ -91,8 +91,8 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType) {
-		return dishDao.searchTags(request.getSearchString(), 1, 3, tagType);
+	public List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType, Integer page, Integer resultsPerPage) {
+		return dishDao.searchTags(request.getSearchString(), page, resultsPerPage, tagType);
 	}
 
 	@Override

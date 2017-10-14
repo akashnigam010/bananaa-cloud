@@ -3,6 +3,7 @@ package in.socyal.sc.api.merchant.response;
 import in.socyal.sc.api.type.SearchType;
 
 public class GlobalSearchItem {
+	private Integer id;
 	private String nameId;
 	private String name;
 	private String shortAddress;
@@ -11,6 +12,14 @@ public class GlobalSearchItem {
 	
 	public GlobalSearchItem(SearchType type) {
 		this.type = type;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getNameId() {

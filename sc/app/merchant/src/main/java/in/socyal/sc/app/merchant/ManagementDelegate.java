@@ -39,7 +39,7 @@ public interface ManagementDelegate {
 
 	public void updateItem(UpdateItemRequest request) throws BusinessException;
 	
-	public void deleteItem(IdRequest request);
+	public void deleteItem(IdRequest request) throws BusinessException;
 
 	public GetAllItemsResponse getAllItems(IdRequest request) throws BusinessException;
 }
