@@ -14,10 +14,18 @@ public class AdditionalDetailsController {
 	private ResourceBundle resource = ResourceBundle.getBundle("environment");
 	private static final String USERNAME = "bna.manage.username";
 	private static final String PASSWORD = "bna.manage.password";
+	private static final String USERNAME_VENDOR = "bna.vendor.username";
+	private static final String PASSWORD_VENDOR = "bna.vendor.password";
 	private static final String GOOGLE_PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=in.bananaa";
 	
 	@RequestMapping(value = "/blogin", method = RequestMethod.GET)
 	public ModelAndView managementConsole() {
+		ModelAndView modelAndView = new ModelAndView("blogin");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/bna/manage/managementConsole", method = RequestMethod.GET)
+	public ModelAndView blogin() {
 		ModelAndView modelAndView = new ModelAndView("blogin");
 		return modelAndView;
 	}
@@ -30,6 +38,8 @@ public class AdditionalDetailsController {
 		if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
 			if (username.equals(resource.getString(USERNAME)) && password.equals(resource.getString(PASSWORD))) {
 				modelAndView.setViewName("manage");
+			} else if (username.equals(resource.getString(USERNAME_VENDOR)) && password.equals(resource.getString(PASSWORD_VENDOR))) {
+				modelAndView.setViewName("vendor");
 			} else {
 				modelAndView.setViewName("blogin");
 			}			

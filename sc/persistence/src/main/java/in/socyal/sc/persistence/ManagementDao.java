@@ -96,6 +96,7 @@ public class ManagementDao {
 		}
 		dish.setName(request.getName());
 		dish.setNameId(request.getNameId());
+		dish.setVegnonveg(request.getVegnonveg());
 		dish.setThumbnail(request.getThumbnail());
 		dish.setImageUrl(request.getImageUrl());
 		dish.setIsActive(request.getIsActive());

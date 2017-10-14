@@ -29,6 +29,7 @@ public class ManagementDaoMapper {
 		DishEntity entity = new DishEntity(cal, cal);
 		entity.setName(request.getName());
 		entity.setNameId(request.getNameId());
+		entity.setVegnonveg(request.getVegnonveg());
 		entity.setMerchant(merchant);
 		entity.setImageUrl(request.getImageUrl());
 		entity.setThumbnail(request.getThumbnail());
@@ -57,6 +58,7 @@ public class ManagementDaoMapper {
 			item = new Item();
 			item.setId(dish.getId());
 			item.setName(dish.getName());
+			item.setVegnonveg(dish.getVegnonveg());
 			item.setThumbnail(dish.getThumbnail());
 			item.setImage(dish.getImageUrl());
 			item.setCuisines(mapCuisines(dish.getCuisines()));

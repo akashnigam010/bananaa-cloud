@@ -21,7 +21,8 @@ public class ManageValidator {
 	}
 
 	public void validateAddItemRequest(AddItemRequest request) throws BusinessException {
-		if (StringUtils.isBlank(request.getName()) || request.getMerchantId() == null || request.getIsActive() == null
+		if (StringUtils.isBlank(request.getName()) || request.getVegnonveg() == null || request.getVegnonveg() == 0
+				|| request.getMerchantId() == null || request.getIsActive() == null
 				|| StringUtils.isBlank(request.getImageUrl()) || StringUtils.isBlank(request.getThumbnail())) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
@@ -41,7 +42,7 @@ public class ManageValidator {
 	}
 
 	public void validateUpdateItemRequest(UpdateItemRequest request) throws BusinessException {
-		if (request.getId() == null || StringUtils.isBlank(request.getName())) {
+		if (request.getId() == null || StringUtils.isBlank(request.getName()) || request.getVegnonveg() == null || request.getVegnonveg() == 0) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

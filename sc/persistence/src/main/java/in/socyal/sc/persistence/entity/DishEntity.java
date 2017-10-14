@@ -26,6 +26,9 @@ public class DishEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "NAME_ID")
 	private String nameId;
+	
+	@Column(name = "VEGNONVEG")
+	private Integer vegnonveg;
 
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "DISH_SUGGESTION_MAPPING", joinColumns = { @JoinColumn(name = "DISH_ID") }, inverseJoinColumns = {
@@ -90,6 +93,14 @@ public class DishEntity extends BaseEntity implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+	
+	public Integer getVegnonveg() {
+		return vegnonveg;
+	}
+
+	public void setVegnonveg(Integer vegnonveg) {
+		this.vegnonveg = vegnonveg;
 	}
 
 	public MerchantEntity getMerchant() {

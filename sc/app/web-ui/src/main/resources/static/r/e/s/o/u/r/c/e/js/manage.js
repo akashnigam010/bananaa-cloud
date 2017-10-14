@@ -113,11 +113,17 @@ function addItem() {
 	var $itemName = '';
 	var $imageUrl = $("#image").val().trim();
 	var $thumbnail = $("#thumbnail").val().trim();
+	var $vegNonveg = $("input:radio[name ='vegOrNonVeg']:checked").val();
 	//var $isActive = ($("#isActive:checked").val() == 'true') ? true : false;
 	var $isActive = true;
 
 	if (currentMerchant) {
 		if (currentMerchant.name == $merchantName) {
+			if ($vegNonveg === undefined) {
+				alertMessage('Please select Veg or Non veg Type');
+				return;
+			}
+			
 			$merchantId = currentMerchant.id;
 			var itemName = $('#itemName');
 			$itemName = itemName.val();
@@ -140,6 +146,7 @@ function addItem() {
 				if (input == true) {
 					var dataOb = {
 							name : $itemName,
+							vegnonveg : $vegNonveg,
 							merchantId : $merchantId,
 							cuisineIds : cuisines,
 							suggestionIds : suggestions,
@@ -158,7 +165,7 @@ function addItem() {
 			      			  alertMessage($itemName + ' successfully added');
 							  // reset dish name
 			      			  $("#itemName").val('');
-							  
+			      			  $('input[name="vegOrNonVeg"]').prop('checked', false);
 			      			  //reset cuisine data						  
 							  cuisines = [];
 							  $("#cuisineName").val('');
