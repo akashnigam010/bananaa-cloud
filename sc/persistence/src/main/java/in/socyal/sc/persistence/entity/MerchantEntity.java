@@ -61,6 +61,9 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 	@OrderBy("rating desc")
 	private List<MerchantSuggestionRatingEntity> suggestionRatings;
 	
+	@Column(name = "CAN_EDIT")
+	private Boolean canEdit;
+	
 	public MerchantEntity() {
 
 	}
@@ -163,5 +166,13 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 
 	public void setSuggestionRatings(List<MerchantSuggestionRatingEntity> suggestionRatings) {
 		this.suggestionRatings = suggestionRatings;
+	}
+
+	public Boolean getCanEdit() {
+		return canEdit;
+	}
+
+	public void setCanEdit(Boolean canEdit) {
+		this.canEdit = canEdit;
 	}
 }

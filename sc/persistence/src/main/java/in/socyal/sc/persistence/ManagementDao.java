@@ -74,6 +74,7 @@ public class ManagementDao {
 	@SuppressWarnings("unchecked")
 	public void addItem(AddItemRequest request) throws BusinessException {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());
+		canDishesBeUpdated(merchant);
 		Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
 		suggestionCriteria.add(Restrictions.in("id", request.getSuggestionIds()));
 		Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
@@ -94,6 +95,7 @@ public class ManagementDao {
 		if (dish == null) {
 			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
 		}
+		canDishesBeUpdated(dish.getMerchant());
 		dish.setName(request.getName());
 		dish.setNameId(request.getNameId());
 		dish.setVegnonveg(request.getVegnonveg());
@@ -123,8 +125,12 @@ public class ManagementDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void deleteItem(IdRequest request) {
+	public void deleteItem(IdRequest request) throws BusinessException {
 		DishEntity dish = (DishEntity) sessionFactory.getCurrentSession().get(DishEntity.class, request.getId());
+		if (dish == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
+		}
+		canDishesBeUpdated(dish.getMerchant());
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.createAlias("dish", "dish");
 		criteria.add(Restrictions.eq("dish.id", request.getId()));
@@ -211,6 +217,12 @@ public class ManagementDao {
 			throw new BusinessException(MerchantErrorCodeType.MERCHANT_DETAILS_NOT_FOUND);
 		}
 		return merchant;
+	}
+	
+	private void canDishesBeUpdated(MerchantEntity entity) throws BusinessException {
+		if (!entity.getCanEdit()) {
+			throw new BusinessException(DishErrorCodeType.CAN_NOT_ADD_EDIT_DISH);
+		}
 	}
 	
 	/**
