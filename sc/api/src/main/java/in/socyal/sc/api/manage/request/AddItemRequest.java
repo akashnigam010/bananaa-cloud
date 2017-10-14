@@ -4,6 +4,7 @@ import java.util.List;
 
 public class AddItemRequest {
 	private String name;
+	private Integer vegnonveg;
 	private Integer merchantId;
 	private List<Integer> cuisineIds;
 	private List<Integer> suggestionIds;
@@ -74,5 +75,13 @@ public class AddItemRequest {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public Integer getVegnonveg() {
+		return vegnonveg;
+	}
+
+	public void setVegnonveg(Integer vegnonveg) {
+		this.vegnonveg = vegnonveg;
 	}
 }

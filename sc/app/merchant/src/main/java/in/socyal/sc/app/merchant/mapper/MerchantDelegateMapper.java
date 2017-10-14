@@ -22,6 +22,7 @@ import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.merchant.response.TrendingMerchant;
 import in.socyal.sc.api.type.SearchType;
+import in.socyal.sc.app.response.MerchantDetailsResponse;
 import in.socyal.sc.date.type.DateFormatType;
 import in.socyal.sc.date.util.DateTimeUtil;
 
@@ -137,5 +138,20 @@ public class MerchantDelegateMapper {
 		response.setType(merchantDto.getTypes());
 		response.setRatedCuisines(merchantDto.getRatedCuisines());
 		response.setMerchantUrl(merchantDto.getMerchantUrl());
+	}
+	
+	public MerchantDetailsResponse mapToMerchantDetailsResponse(MerchantDetails details) {
+		MerchantDetailsResponse response = new MerchantDetailsResponse();
+		response.setId(details.getId());
+		response.setName(details.getName());
+		response.setShortAddress(details.getShortAddress());
+		response.setLongAddress(details.getLongAddress());
+		response.setImageUrl(details.getImageUrl());
+		response.setPhone(details.getPhone());
+		response.setOpeningHours(details.getOpeningHours());
+		response.setType(details.getType());
+		response.setAverageCost(details.getAverageCost());
+		response.setRatedCuisines(details.getRatedCuisines());
+		return response;
 	}
 }

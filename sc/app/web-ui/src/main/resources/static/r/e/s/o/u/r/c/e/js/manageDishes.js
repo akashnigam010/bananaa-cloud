@@ -2,6 +2,7 @@ var data = {};
 var dishes = {};
 var editDish = {};
 var editDishCopy = {};
+var selectRestaurantId = '';
 
 $(document).ready(function() {
 	$('#restaurantNameModal').typeahead({
@@ -11,6 +12,7 @@ $(document).ready(function() {
     		merchantSource(query, process);
         },
         updater:function (restaurant) {
+        	selectRestaurantId = restaurant.id;
         	loadDishes(restaurant.id);
 	    	return restaurant;
 	    }
@@ -88,11 +90,12 @@ function loadDishes(merchantId) {
 			  dishes = data;
 			  var gridBodyHtml = '';
 			  for (id in dishes) {
-				gridBodyHtml += '<tr class="cursor-pointer" id="'+id+'" onclick="editRow(this.id);">'+
-								'<td>'+id+'</td>'+
-								'<td>'+dishes[id].name+'</td>'+
-								'<td>'+getTags(dishes[id].suggestions)+'</td>'+
-								'<td>'+getTags(dishes[id].cuisines)+'</td>'+
+				gridBodyHtml += '<tr class="cursor-pointer" id="'+id+'">'+
+								'<td onclick="editRow(this);">'+id+'</td>'+
+								'<td onclick="editRow(this);">'+dishes[id].name+'</td>'+
+								'<td onclick="editRow(this);">'+getVegnonveg(dishes[id].vegnonveg)+'</td>'+
+								'<td onclick="editRow(this);">'+getTags(dishes[id].suggestions)+'</td>'+
+								'<td onclick="editRow(this);">'+getTags(dishes[id].cuisines)+'</td>'+
 								'<td><button class="bna-button-light font-1-3" style="margin:0; padding: 0; background-color: transparent;"'+
 								' onclick="deleteItem('+id+');">&#10006;</button></td>'+
 								'</tr>';
@@ -102,6 +105,18 @@ function loadDishes(merchantId) {
 			  handleErrorCallback(response);
 		  }
 	  });
+}
+
+function getVegnonveg(vegnonveg) {
+	if (vegnonveg == 1) {
+		return '&#127808;';
+	} else if (vegnonveg == 2) {
+		return '&#127831';
+	} else if (vegnonveg == 3) {
+		return '&#127829';
+	} else {
+		return '';
+	} 
 }
 
 function getTags(tags) {
@@ -116,7 +131,8 @@ function getTags(tags) {
 	return tagHtml;
 }
 
-function editRow(row) {
+function editRow(child) {
+	var row = $(child).closest('tr').attr('id');
 	editDish = dishes[row];
 	// create deep copy of dish being edited
 	editDishCopy = jQuery.extend(true, {}, editDish);
@@ -128,6 +144,12 @@ function editRow(row) {
 
 function setModalValues(dish) {
 	$("#itemNameModal").val(dish.name);
+	var radioVal = dish.vegnonveg;
+	if (radioVal == 1 || radioVal == 2 || radioVal == 3) {
+		$("input:radio[name=vegOrNonVegModal][value=" + radioVal + "]").prop('checked', true);
+	} else {
+		$('input[name="vegOrNonVegModal"]').prop('checked', false);
+	}	
 	$("#suggestion-name-display-modal").html(dish.suggestionsHtml);
 	$("#cuisine-name-display-modal").html(dish.cuisinesHtml);
 	$("#imageModal").val(dish.image);
@@ -160,7 +182,13 @@ function deleteItem(id) {
 		  	})
 		  	.done(function(response) {
 	    		  if (response.result) {
-	    			  alert('Item successfully deleted, please manually refresh the list');
+	    			  alert('Item successfully deleted, refereshing list');
+	    			  if (selectRestaurantId != '') {
+	    				  loadDishes(selectRestaurantId);
+	    			  } else {
+	    				  alert('Please select a restaurant');
+	    			  }
+	    			  
 	    			  $('#editModal').modal('hide');
 	    		  } else {
 	    			  handleErrorCallback(response);
@@ -171,16 +199,31 @@ function deleteItem(id) {
 	}
 }
 
+function refreshList() {
+	if (selectRestaurantId != '') {
+		loadDishes(selectRestaurantId);		  
+	} else {
+		alert('Please select a restaurant');
+	}
+	return;
+}
+
 function updateDish() {
 	editDishCopy.name = $("#itemNameModal").val();
 	editDishCopy.image = $("#imageModal").val();
 	editDishCopy.thumbnail = $("#thumbnailModal").val();
+	editDishCopy.vegnonveg = $("input:radio[name ='vegOrNonVegModal']:checked").val();
+	if (editDishCopy.vegnonveg === undefined) {
+		alert("Please select veg/non veg type");
+		return;
+	}
 	if (isDishEdited()) {
 		$(".loader-animation").removeClass('hide');
 		//service call to update dish details	
 		var dataOb = {
 			  id : editDishCopy.id,
 			  name : editDishCopy.name,
+			  vegnonveg: editDishCopy.vegnonveg,
 			  thumbnail: editDishCopy.thumbnail,
 			  imageUrl: editDishCopy.image,
 			  isActive: true,
@@ -197,10 +240,11 @@ function updateDish() {
 	  		$(".loader-animation").addClass('hide');
     		  if (response.result) {
     			//update row with new details
-				var newDishTdHtml = 	'<td>'+editDishCopy.id+'</td>'+
-									'<td>'+editDishCopy.name+'</td>'+
-									'<td>'+getTags(editDishCopy.suggestions)+'</td>'+
-									'<td>'+getTags(editDishCopy.cuisines)+'</td>'+
+				var newDishTdHtml = 	'<td onclick="editRow(this);">'+editDishCopy.id+'</td>'+
+									'<td onclick="editRow(this);">'+editDishCopy.name+'</td>'+
+									'<td onclick="editRow(this);">'+getVegnonveg(editDishCopy.vegnonveg)+'</td>'+
+									'<td onclick="editRow(this);">'+getTags(editDishCopy.suggestions)+'</td>'+
+									'<td onclick="editRow(this);">'+getTags(editDishCopy.cuisines)+'</td>'+
 									'<td><button class="bna-button-light font-1-3" style="margin:0; padding: 0; background-color: transparent;"'+
 									' onclick="deleteItem('+editDishCopy.id+');">&#10006;</button></td>';
 				
@@ -223,7 +267,8 @@ function isDishEdited() {
 		isTagEdited(editDishCopy.suggestions, editDish.suggestions) || 
 		isTagEdited(editDishCopy.cuisines, editDish.cuisines) || 
 		editDishCopy.thumbnail != editDish.thumbnail || 
-		editDishCopy.image != editDish.image) {
+		editDishCopy.image != editDish.image ||
+		editDishCopy.vegnonveg != editDish.vegnonveg) {
 		return true;
 	} else {
 		return false;

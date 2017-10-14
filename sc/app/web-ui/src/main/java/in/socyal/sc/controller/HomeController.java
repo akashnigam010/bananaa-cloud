@@ -165,7 +165,7 @@ public class HomeController {
 					DetailsRequest request = new DetailsRequest(restLocalityOrTagNameId);
 					MerchantDetails response = null;
 					try {
-						response = merchantDelegate.getMerchantDetails(request);
+						response = merchantDelegate.getMerchantDetails(request, true);
 					} catch (BusinessException e) {
 						// Merchant Details not found
 						return globalSearch(modelAndView, locationCookie, restLocalityOrTagNameId, page);

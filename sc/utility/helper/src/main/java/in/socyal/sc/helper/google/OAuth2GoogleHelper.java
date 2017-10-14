@@ -1,5 +1,6 @@
 package in.socyal.sc.helper.google;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 import org.jboss.logging.Logger;
@@ -9,11 +10,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 import in.socyal.sc.api.google.GoogleUser;
 import in.socyal.sc.api.google.TokenInfo;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.LoginErrorCodeType;
 
 @Service
 public class OAuth2GoogleHelper {
@@ -23,6 +30,7 @@ public class OAuth2GoogleHelper {
 	private static final String VERIFY_ACCESS_TOKEN_URL = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=";
 	private static final String REVOKE_ACCESS_TOKEN_URL = "https://accounts.google.com/o/oauth2/revoke?token=";
 	private static final String GOOGLE_CLIENT_ID = "bna.google.client.id";
+	private static final String GOOGLE_CLIENT_SECRET = "bna.google.client.secret";
 
 	/**
 	 * First checks for the validity/authenticity of the passed access token.
@@ -84,5 +92,25 @@ public class OAuth2GoogleHelper {
 			LOG.error(
 					"***** Exception occurred while revoking google access token.*****. Access Token : " + accessToken);
 		}
+	}
+
+	public GoogleUser getGoogleUserNew(String serverAuthToken) throws BusinessException {
+		GoogleIdToken idToken;
+		try {
+			GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(new NetHttpTransport(),
+					JacksonFactory.getDefaultInstance(), "https://www.googleapis.com/oauth2/v4/token",
+					resource.getString(GOOGLE_CLIENT_ID), resource.getString(GOOGLE_CLIENT_SECRET), serverAuthToken, "")
+							.execute();
+			idToken = tokenResponse.parseIdToken();
+		} catch (IOException e) {
+			throw new BusinessException(LoginErrorCodeType.INCORRECT_FB_TOKEN);
+		}
+		GoogleIdToken.Payload payload = idToken.getPayload();
+		GoogleUser googleUser = new GoogleUser();
+		googleUser.setId(payload.getSubject());
+		googleUser.setName((String) payload.get("name"));
+		googleUser.setPicture((String) payload.get("picture"));
+		googleUser.setEmail(payload.getEmail());
+		return googleUser;
 	}
 }

@@ -192,8 +192,7 @@ public class LoginDelegateImpl implements LoginDelegate {
 	private FederatedUser getFederatedUser(LoginRequest request) throws BusinessException {
 		FederatedUser federatedUser = null;
 		if (request.getClient() == ClientType.GOOGLE) {
-			federatedUser = mapper.mapGoogleUser(googleHelper.getGoogleUser(request.getAccessToken()));
-			// googleHelper.revokeToken(request.getAccessToken());
+			federatedUser = mapper.mapGoogleUser(googleHelper.getGoogleUserNew(request.getAccessToken()));
 		} else if (request.getClient() == ClientType.FACEBOOK) {
 			federatedUser = mapper.mapFacebookUser(fbHelper.getFbUser(request.getAccessToken()));
 		} else {

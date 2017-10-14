@@ -1,7 +1,6 @@
 package in.socyal.sc.helper.security.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -64,29 +63,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-        	RestAuthenticationEntryPoint entryPoint = new RestAuthenticationEntryPoint();
-            http
+        	http
             	.authorizeRequests()
-            	      .antMatchers("/", "/index.html", "/socyal/login/fbLogin", "/socyal/location/**", "/socyal/merchant/**",
-            			"/socyal/checkin/**", "/socyal/user/**", "/socyal/feedback/**", "/socyal/reward/**, /socyal/notification/**").permitAll()
+            	      .antMatchers("/", "/index.html", "/socyal/login/fbLogin", "/socyal/location/**", "/socyal/merchant/**", "/socyal/user/**",
+            	"/bna/merchant/**", "/bna/login/**", "/bna/search/**").permitAll()
             	      .and().authorizeRequests().antMatchers("/manage").hasAnyAuthority("ROLE_ADMIN").and()
             	.authorizeRequests()
-            		  .antMatchers("/socyal/checkin/**").authenticated().and()
-            		  .addFilterBefore(customJwtAuthenticationFilter("/socyal/checkin/**"), AbstractPreAuthenticatedProcessingFilter.class)
-//                .authorizeRequests()
-//	          		  .antMatchers("/socyal/merchant/**").authenticated().and()
-//	          		  .addFilterBefore(customJwtAuthenticationFilter("/socyal/merchant/**"), AbstractPreAuthenticatedProcessingFilter.class)
-//            	.authorizeRequests()
-//                	  .antMatchers("/socyal/user/**").authenticated().and()
-//                	  .addFilterBefore(customJwtAuthenticationFilter("/socyal/user/**"), AbstractPreAuthenticatedProcessingFilter.class)
-//                .authorizeRequests()
-//                      .antMatchers("/socyal/feedback/**").authenticated().and()
-//                      .addFilterBefore(customJwtAuthenticationFilter("/socyal/feedback/**"), AbstractPreAuthenticatedProcessingFilter.class)
-//                .authorizeRequests()
-//                      .antMatchers("/socyal/reward/**").authenticated().and()
-//                      .addFilterBefore(customJwtAuthenticationFilter("/socyal/reward/**"), AbstractPreAuthenticatedProcessingFilter.class)
-//                .formLogin()
-//					.loginPage("/manage/login").permitAll().and()
+	          		  .antMatchers("/bna/foodview/**").authenticated().and()
+	          		  .addFilterBefore(customJwtAuthenticationFilter("/bna/foodview/**"), AbstractPreAuthenticatedProcessingFilter.class)
     			.csrf().disable();
         }
         
