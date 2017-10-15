@@ -1,6 +1,7 @@
 package in.socyal.sc.api.type;
 
 public enum TagType {
+	VEGNONVEG("VEGNONVEG"),
 	CUISINE("CUISINE"),
 	SUGGESTION("SUGGESTION");
 

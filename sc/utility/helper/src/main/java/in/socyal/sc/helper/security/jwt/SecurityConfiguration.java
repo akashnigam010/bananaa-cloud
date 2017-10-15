@@ -71,6 +71,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             	.authorizeRequests()
 	          		  .antMatchers("/bna/foodview/**").authenticated().and()
 	          		  .addFilterBefore(customJwtAuthenticationFilter("/bna/foodview/**"), AbstractPreAuthenticatedProcessingFilter.class)
+          		.authorizeRequests()
+          		  .antMatchers("/bna/user/**").authenticated().and()
+          		  .addFilterBefore(customJwtAuthenticationFilter("/bna/user/**"), AbstractPreAuthenticatedProcessingFilter.class)
     			.csrf().disable();
         }
         

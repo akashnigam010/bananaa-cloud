@@ -4,9 +4,14 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -41,6 +46,20 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private List<RecommendationEntity> recommendations;
+	
+	@ManyToOne
+	@JoinColumn(name = "VEGNONVEG_ID")
+	private VegnonvegEntity vegnonvegPreference;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "USER_SUGGESTION_PREF_MAPPING", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "SUGGESTION_ID") })
+	private List<SuggestionEntity> suggestionPreferences;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name = "USER_CUISINE_PREF_MAPPING", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "CUISINE_ID") })
+	private List<CuisineEntity> cuisinePreferences;
 
 	public UserEntity() {
 
@@ -125,5 +144,29 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public List<SuggestionEntity> getSuggestionPreferences() {
+		return suggestionPreferences;
+	}
+
+	public void setSuggestionPreferences(List<SuggestionEntity> suggestionPreferences) {
+		this.suggestionPreferences = suggestionPreferences;
+	}
+
+	public List<CuisineEntity> getCuisinePreferences() {
+		return cuisinePreferences;
+	}
+
+	public void setCuisinePreferences(List<CuisineEntity> cuisinePreferences) {
+		this.cuisinePreferences = cuisinePreferences;
+	}
+
+	public VegnonvegEntity getVegnonvegPreference() {
+		return vegnonvegPreference;
+	}
+
+	public void setVegnonvegPreference(VegnonvegEntity vegnonvegPreference) {
+		this.vegnonvegPreference = vegnonvegPreference;
 	}
 }
