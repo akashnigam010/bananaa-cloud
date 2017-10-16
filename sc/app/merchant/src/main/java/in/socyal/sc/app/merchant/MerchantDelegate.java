@@ -3,6 +3,7 @@ package in.socyal.sc.app.merchant;
 import java.util.List;
 
 import in.socyal.sc.api.DetailsRequest;
+import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
@@ -26,5 +27,5 @@ public interface MerchantDelegate {
 	
 	MerchantListForTagResponse getAllSortedMerchants(LocationCookieDto cookieDto, Integer page) throws BusinessException;
 
-	List<GlobalSearchItem> searchMerchantsGlobal(SearchRequest request) throws BusinessException;
+	List<GlobalSearchItem> searchMerchantsGlobal(GenericSearchRequest request) throws BusinessException;
 }

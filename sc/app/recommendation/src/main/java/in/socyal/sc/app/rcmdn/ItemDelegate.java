@@ -3,6 +3,7 @@ package in.socyal.sc.app.rcmdn;
 import java.util.List;
 
 import in.socyal.sc.api.DetailsRequest;
+import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
@@ -18,7 +19,10 @@ import in.socyal.sc.api.type.TagType;
 public interface ItemDelegate {
 	SearchItemsResponse searchItems(SearchRequest request);
 
-	List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType, Integer page, Integer resultsPerPage);
+	List<GlobalSearchItem> searchTags(GenericSearchRequest request, TagType tagType, Integer page, Integer resultsPerPage);
+
+	List<GlobalSearchItem> searchTagsWithUserPrefs(GenericSearchRequest request, TagType tagType, Integer page,
+			Integer resultsPerPage) throws BusinessException;
 
 	ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException;
 

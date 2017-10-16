@@ -80,17 +80,41 @@ public class DishDaoMapper {
 	
 	public List<GlobalSearchItem> mapTagsShortDetails(List<TagEntity> entites) {
 		List<GlobalSearchItem> dtos = new ArrayList<>();
-		GlobalSearchItem tag = null;
 		for (TagEntity entity : entites) {
-			if (entity instanceof CuisineEntity) {
-				tag = new GlobalSearchItem(SearchType.CUISINE);
-			} else if (entity instanceof SuggestionEntity) {
-				tag = new GlobalSearchItem(SearchType.DISH);
-			}	
-			tag.setId(entity.getId());
-			tag.setName(entity.getName());
-			tag.setNameId(entity.getNameId());
-			dtos.add(tag);
+			dtos.add(mapTagShortDetails(entity));
+		}
+		return dtos;
+	}
+	
+	public GlobalSearchItem mapTagShortDetails(TagEntity entity) {
+		GlobalSearchItem tag = null;
+		if (entity instanceof CuisineEntity) {
+			tag = new GlobalSearchItem(SearchType.CUISINE);
+		} else if (entity instanceof SuggestionEntity) {
+			tag = new GlobalSearchItem(SearchType.DISH);
+		}	
+		tag.setId(entity.getId());
+		tag.setName(entity.getName());
+		tag.setNameId(entity.getNameId());
+		return tag;
+	}
+	
+	public List<GlobalSearchItem> mapTagsWithPreferences(List<? extends TagEntity> entities, List<? extends TagEntity> userPrefs) {
+		List<GlobalSearchItem> dtos = new ArrayList<>();
+		GlobalSearchItem dto = null;
+		Integer prefIndex = 0, matchId = null;
+		if (userPrefs != null) {
+			matchId = userPrefs.get(prefIndex).getId();
+		}
+		for (TagEntity entity : entities) {
+			dto = mapTagShortDetails(entity);
+			if (matchId != null && matchId.equals(dto.getId())) {
+				dto.setIsSelected(true);
+				if (prefIndex < userPrefs.size()-1) {
+					matchId = userPrefs.get(++prefIndex).getId();
+				}				
+			}
+			dtos.add(dto);
 		}
 		return dtos;
 	}

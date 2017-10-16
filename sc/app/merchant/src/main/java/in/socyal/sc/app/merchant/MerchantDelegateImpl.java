@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.DetailsRequest;
+import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
@@ -144,7 +145,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public List<GlobalSearchItem> searchMerchantsGlobal(SearchRequest request) throws BusinessException {
+	public List<GlobalSearchItem> searchMerchantsGlobal(GenericSearchRequest request) throws BusinessException {
 		MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, false, false, false, false);
 		List<MerchantDto> merchants = dao.searchActiveMerchant(request.getSearchString(), filter);
 		return mapper.buildSearchMerchantsGlobalResponse(merchants);

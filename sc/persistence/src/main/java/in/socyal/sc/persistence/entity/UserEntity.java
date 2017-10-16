@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 @Entity
@@ -54,11 +55,13 @@ public class UserEntity extends BaseEntity implements Serializable {
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "USER_SUGGESTION_PREF_MAPPING", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
 			@JoinColumn(name = "SUGGESTION_ID") })
+	@OrderBy
 	private List<SuggestionEntity> suggestionPreferences;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinTable(name = "USER_CUISINE_PREF_MAPPING", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
 			@JoinColumn(name = "CUISINE_ID") })
+	@OrderBy
 	private List<CuisineEntity> cuisinePreferences;
 
 	public UserEntity() {
