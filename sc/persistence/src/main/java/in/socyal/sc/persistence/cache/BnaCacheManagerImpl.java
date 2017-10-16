@@ -1,10 +1,9 @@
 package in.socyal.sc.persistence.cache;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,49 +15,71 @@ import in.socyal.sc.persistence.entity.SuggestionEntity;
 public class BnaCacheManagerImpl implements BnaCacheManager {
 	@Autowired
 	BnaCacheSource cacheSource;
+	
+	private CuisineEntity[] searchCuisines(String searchString) {
+		CuisineEntity[] cuisinesArray = cacheSource.getCuisinesArray();
+		if (StringUtils.isNotBlank(searchString)) {
+			List<CuisineEntity> matches = new ArrayList<>();
+			for (int i = 0; i < cuisinesArray.length; i++) {
+				if (cuisinesArray[i].getName().toLowerCase().contains(searchString.toLowerCase())) {
+					matches.add(cuisinesArray[i]);
+				}
+			}
+			if (matches.size() > 0) {
+				return matches.toArray(new CuisineEntity[matches.size()]);
+			}			
+		}
+		return cuisinesArray;
+	}
+	
+	private SuggestionEntity[] searchSuggestions(String searchString) {
+		SuggestionEntity[] suggestionsArray = cacheSource.getSuggestionsArray();
+		if (StringUtils.isNotBlank(searchString)) {
+			List<SuggestionEntity> matches = new ArrayList<>();
+			for (int i = 0; i < suggestionsArray.length; i++) {
+				if (suggestionsArray[i].getName().toLowerCase().contains(searchString.toLowerCase())) {
+					matches.add(suggestionsArray[i]);
+				}
+			}
+			if (matches.size() > 0) {
+				return matches.toArray(new SuggestionEntity[matches.size()]);
+			}			
+		}
+		return suggestionsArray;
+	}
 
 	@Override
-	public Map<Integer, CuisineEntity> getCuisinesMap(int page, int resultsPerPage) {
-		CuisineEntity[] cuisinesArray = cacheSource.getCuisinesArray();
-		Map<Integer, CuisineEntity> returnMap = new HashMap<>();
+	public List<CuisineEntity> getCuisines(int page, int resultsPerPage, String searchString) {
+		CuisineEntity[] cuisinesArray = searchCuisines(searchString);
+		List<CuisineEntity> returnMap = new ArrayList<>();
 		int startIndex = (page - 1) * resultsPerPage;
 		int end = page * resultsPerPage;
 		if (end > cuisinesArray.length) {
 			end = cuisinesArray.length;
 		}
 		for (int i = startIndex; i < end; i++) {
-			returnMap.put(cuisinesArray[i].getId(), cuisinesArray[i]);
+			returnMap.add(cuisinesArray[i]);
 		}
 		return returnMap;
 	}
 
 	@Override
-	public List<CuisineEntity> getCuisines(int page, int resultsPerPage) {
-		return new ArrayList<CuisineEntity>(getCuisinesMap(page, resultsPerPage).values());
-	}
-
-	@Override
-	public Map<Integer, SuggestionEntity> getSuggestionsMap(int page, int resultsPerPage) {
-		SuggestionEntity[] suggestionsArray = cacheSource.getSuggestionsArray();
-		Map<Integer, SuggestionEntity> returnMap = new HashMap<>();
+	public List<SuggestionEntity> getSuggestions(int page, int resultsPerPage, String searchString) {
+		SuggestionEntity[] suggestionsArray = searchSuggestions(searchString);
+		List<SuggestionEntity> returnMap = new ArrayList<>();
 		int startIndex = (page - 1) * resultsPerPage;
 		int end = page * resultsPerPage;
 		if (end > suggestionsArray.length) {
 			end = suggestionsArray.length;
 		}
 		for (int i = startIndex; i < end; i++) {
-			returnMap.put(suggestionsArray[i].getId(), suggestionsArray[i]);
+			returnMap.add(suggestionsArray[i]);
 		}
 		return returnMap;
 	}
 
 	@Override
-	public List<SuggestionEntity> getSuggestions(int page, int resultsPerPage) {
-		return new ArrayList<SuggestionEntity>(getSuggestionsMap(page, resultsPerPage).values());
-	}
-
-	@Override
-	public Map<Integer, LocalityEntity> getLocalities() {
+	public List<LocalityEntity> getLocalities() {
 		return null;
 	}
 

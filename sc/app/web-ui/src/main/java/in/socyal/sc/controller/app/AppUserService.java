@@ -69,7 +69,10 @@ public class AppUserService {
 		SearchTagResponse response = new SearchTagResponse();
 		List<GlobalSearchItem> searchItems;
 		try {
-			searchItems = itemDelegate.searchTagsWithUserPrefs(request, tagType, 1, 7);
+			if (request.getPage() == null) {
+				request.setPage(1);
+			}
+			searchItems = itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), 10);
 			response.setSearchItems(searchItems);
 			return helper.success(response);
 		} catch (BusinessException e) {

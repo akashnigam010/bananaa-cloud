@@ -36,10 +36,10 @@ public class CacheDao {
 			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
 		if (tagType == TagType.CUISINE) {
-			return mapper.mapTagsWithPreferences(cacheManager.getCuisines(page, resultsPerPage),
+			return mapper.mapTagsWithPreferences(cacheManager.getCuisines(page, resultsPerPage, searchString),
 					user.getCuisinePreferences());
 		} else {
-			return mapper.mapTagsWithPreferences(cacheManager.getSuggestions(page, resultsPerPage),
+			return mapper.mapTagsWithPreferences(cacheManager.getSuggestions(page, resultsPerPage, searchString),
 					user.getSuggestionPreferences());
 		}
 	}
