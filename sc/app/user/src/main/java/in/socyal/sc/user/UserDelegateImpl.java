@@ -33,16 +33,19 @@ public class UserDelegateImpl implements UserDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public void getUserPreferences(Integer userId) throws BusinessException {
-		userDao.getUserPreferences(userId);
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void saveUserPreferences(SavePreferencesRequest request) throws BusinessException {
 		if (!jwtHelper.isUserLoggedIn()) {
 			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
 		}
 		userDao.saveUserPreferences(request, jwtHelper.getUserId());		
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public Integer getVegnonvegPreference() throws BusinessException {
+		if (!jwtHelper.isUserLoggedIn()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		return userDao.getVegnonvegPreference(jwtHelper.getUserId());
 	}
 }

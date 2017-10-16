@@ -7,5 +7,5 @@ import in.socyal.sc.api.user.request.SavePreferencesRequest;
 public interface UserDelegate {
 	UserDetailsResponse getUserDetails(String userNameId) throws BusinessException;
 	void saveUserPreferences(SavePreferencesRequest request) throws BusinessException;
-	void getUserPreferences(Integer userId) throws BusinessException;
+	Integer getVegnonvegPreference() throws BusinessException;
 }

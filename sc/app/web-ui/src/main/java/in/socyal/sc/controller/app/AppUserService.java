@@ -17,6 +17,7 @@ import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.user.request.SavePreferencesRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
+import in.socyal.sc.app.response.VegnonvegPreferenceResponse;
 import in.socyal.sc.core.validation.ItemValidator;
 import in.socyal.sc.user.UserDelegate;
 
@@ -32,17 +33,16 @@ public class AppUserService {
 	@Autowired
 	ItemValidator validator;
 
-	// @RequestMapping(value = "/getUserPreferences", method =
-	// RequestMethod.POST, headers = "Accept=application/json")
-	// public StatusResponse searchCuisine(@RequestBody SearchRequest request) {
-	// StatusResponse response = new StatusResponse();
-	// try {
-	// delegate.getUserPreferences(request.getMerchantId());
-	// return helper.success(response);
-	// } catch (BusinessException e) {
-	// return helper.failure(response, e);
-	// }
-	// }
+	@RequestMapping(value = "/getVegnonvegPreference", method = RequestMethod.POST, headers = "Accept=application/json")
+	public VegnonvegPreferenceResponse searchCuisine() {
+		VegnonvegPreferenceResponse response = new VegnonvegPreferenceResponse();
+		try {
+			response.setId(delegate.getVegnonvegPreference());
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
 
 	@RequestMapping(value = "/saveUserPreferences", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse saveUserPreferences(@RequestBody SavePreferencesRequest request) {

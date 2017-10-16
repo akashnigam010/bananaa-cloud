@@ -88,19 +88,6 @@ public class UserDao {
 		return user;
 	}
 
-	public void getUserPreferences(Integer userId) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
-		criteria.add(Restrictions.eq("id", userId));
-		UserEntity entity = (UserEntity) criteria.uniqueResult();
-		for (SuggestionEntity s : entity.getSuggestionPreferences()) {
-			System.out.println(s.getName());
-		}
-		for (CuisineEntity s : entity.getCuisinePreferences()) {
-			System.out.println(s.getName());
-		}
-		System.out.println("Hurray" + entity.getFirstName());
-	}
-
 	@SuppressWarnings("unchecked")
 	public void saveUserPreferences(SavePreferencesRequest request, Integer userId) throws BusinessException {
 		boolean isPreferenceChanged = false;
@@ -142,6 +129,21 @@ public class UserDao {
 		if (isPreferenceChanged) {
 			user.setUpdatedDateTime(Calendar.getInstance());
 			sessionFactory.getCurrentSession().save(user);
+		}
+	}
+	
+	public Integer getVegnonvegPreference(Integer userId) throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", userId));
+		UserEntity user = (UserEntity) criteria.uniqueResult();
+		if (user == null) {
+			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
+		}
+		VegnonvegEntity entity = user.getVegnonvegPreference();
+		if (entity != null) {
+			return entity.getId();
+		} else {
+			return null;
 		}
 	}
 }
