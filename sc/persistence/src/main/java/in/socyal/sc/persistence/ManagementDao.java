@@ -17,7 +17,6 @@ import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.engine.request.IdRequest;
@@ -25,6 +24,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.Item;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;

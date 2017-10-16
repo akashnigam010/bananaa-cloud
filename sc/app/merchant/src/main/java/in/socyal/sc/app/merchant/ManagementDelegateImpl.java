@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
@@ -21,6 +20,7 @@ import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
 import in.socyal.sc.api.manage.response.Item;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.helper.mail.MailSender;
 import in.socyal.sc.persistence.ManagementDao;

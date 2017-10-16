@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.DetailsRequest;
-import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
@@ -19,6 +18,7 @@ import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetails;

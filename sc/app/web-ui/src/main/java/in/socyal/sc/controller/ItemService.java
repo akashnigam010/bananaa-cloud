@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
@@ -18,6 +17,7 @@ import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItem;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.core.validation.ItemValidator;
 import in.socyal.sc.helper.LocalityCookieHelper;

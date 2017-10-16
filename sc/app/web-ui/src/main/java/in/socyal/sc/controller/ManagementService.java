@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.engine.request.IdListRequest;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
@@ -20,6 +19,7 @@ import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
 import in.socyal.sc.api.response.StatusResponse;
