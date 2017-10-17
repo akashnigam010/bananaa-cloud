@@ -72,7 +72,7 @@ public class AppUserService {
 			if (request.getPage() == null) {
 				request.setPage(1);
 			}
-			searchItems = itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), 10);
+			searchItems = itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), 20);
 			response.setSearchItems(searchItems);
 			return helper.success(response);
 		} catch (BusinessException e) {

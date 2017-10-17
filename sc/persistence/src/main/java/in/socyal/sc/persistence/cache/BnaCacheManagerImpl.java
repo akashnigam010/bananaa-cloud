@@ -25,9 +25,7 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 					matches.add(cuisinesArray[i]);
 				}
 			}
-			if (matches.size() > 0) {
-				return matches.toArray(new CuisineEntity[matches.size()]);
-			}			
+			return matches.toArray(new CuisineEntity[matches.size()]);
 		}
 		return cuisinesArray;
 	}
@@ -41,9 +39,7 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 					matches.add(suggestionsArray[i]);
 				}
 			}
-			if (matches.size() > 0) {
-				return matches.toArray(new SuggestionEntity[matches.size()]);
-			}			
+			return matches.toArray(new SuggestionEntity[matches.size()]);		
 		}
 		return suggestionsArray;
 	}
