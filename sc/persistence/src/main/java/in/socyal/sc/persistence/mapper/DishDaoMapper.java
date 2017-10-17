@@ -100,10 +100,10 @@ public class DishDaoMapper {
 	}
 	
 	public List<GlobalSearchItem> mapTagsWithPreferences(List<? extends TagEntity> entities, List<? extends TagEntity> userPrefs) {
-		List<GlobalSearchItem> dtos = new ArrayList<>();
+		List<GlobalSearchItem> dtos = new ArrayList<>();;
 		GlobalSearchItem dto = null;
 		Integer prefIndex = 0, matchId = null;
-		if (userPrefs != null) {
+		if (userPrefs.size() > 0) {
 			matchId = userPrefs.get(prefIndex).getId();
 		}
 		for (TagEntity entity : entities) {
