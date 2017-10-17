@@ -1,5 +1,6 @@
 package in.socyal.sc.persistence;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -10,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.LoginErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.api.user.request.SavePreferencesRequest;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
@@ -88,50 +89,98 @@ public class UserDao {
 		return user;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void saveUserPreferences(SavePreferencesRequest request, Integer userId) throws BusinessException {
-		boolean isPreferenceChanged = false;
+	public void saveVegnonvegPreference(Integer vegnonvegId, Integer userId) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.eq("id", userId));
 		UserEntity user = (UserEntity) criteria.uniqueResult();
 		if (user == null) {
 			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
-		if (request.getVegnonvegId() != null) {
-			if (user.getVegnonvegPreference() == null
-					|| !user.getVegnonvegPreference().getId().equals(request.getVegnonvegId())) {
-				Criteria vnvCriteria = sessionFactory.getCurrentSession().createCriteria(VegnonvegEntity.class);
-				vnvCriteria.add(Restrictions.eq("id", request.getVegnonvegId()));
-				VegnonvegEntity vnvEntity = (VegnonvegEntity) vnvCriteria.uniqueResult();
-				if (vnvEntity != null) {
-					user.setVegnonvegPreference(vnvEntity);
-					isPreferenceChanged = true;
-				}
+		if (user.getVegnonvegPreference() == null || !user.getVegnonvegPreference().getId().equals(vegnonvegId)) {
+			Criteria vnvCriteria = sessionFactory.getCurrentSession().createCriteria(VegnonvegEntity.class);
+			vnvCriteria.add(Restrictions.eq("id", vegnonvegId));
+			VegnonvegEntity vnvEntity = (VegnonvegEntity) vnvCriteria.uniqueResult();
+			if (vnvEntity != null) {
+				user.setVegnonvegPreference(vnvEntity);
+				user.setUpdatedDateTime(Calendar.getInstance());
+				sessionFactory.getCurrentSession().save(user);
 			}
 		}
+	}
 
-		if (request.getCuisinePreferences() != null) {
-			Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
-			cuisineCriteria.add(Restrictions.in("id", request.getCuisinePreferences()));
-			List<CuisineEntity> cuisines = cuisineCriteria.list();
-			user.setCuisinePreferences(cuisines);
-			isPreferenceChanged = true;
+	public void updateTagPreference(Integer id, Integer userId, TagType tagType, boolean isRemove)
+			throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", userId));
+		UserEntity user = (UserEntity) criteria.uniqueResult();
+		if (user == null) {
+			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
-
-		if (request.getSuggestionPreferences() != null) {
-			Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
-			suggestionCriteria.add(Restrictions.in("id", request.getSuggestionPreferences()));
-			List<SuggestionEntity> suggestions = suggestionCriteria.list();
-			user.setSuggestionPreferences(suggestions);
-			isPreferenceChanged = true;
-		}
-
-		if (isPreferenceChanged) {
-			user.setUpdatedDateTime(Calendar.getInstance());
-			sessionFactory.getCurrentSession().save(user);
+		if (tagType == TagType.CUISINE) {
+			List<CuisineEntity> cuisinePrefs = user.getCuisinePreferences();
+			if (isRemove) {
+				List<CuisineEntity> newPrefs = new ArrayList<>();
+				for (CuisineEntity cuisine : cuisinePrefs) {
+					if (!cuisine.getId().equals(id)) {
+						newPrefs.add(cuisine);
+					}
+				}
+				user.setUpdatedDateTime(Calendar.getInstance());
+				user.setCuisinePreferences(newPrefs);
+			} else {
+				if (cuisinePrefs == null) {
+					cuisinePrefs = new ArrayList<>();
+				}
+				boolean canUpdate = true;
+				Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
+				cuisineCriteria.add(Restrictions.eq("id", id));
+				CuisineEntity newCuisine = (CuisineEntity) cuisineCriteria.uniqueResult();
+				for (CuisineEntity s : cuisinePrefs) {
+					if (s.getId().equals(newCuisine.getId())) {
+						canUpdate = false;
+						break;
+					}
+				}
+				if (canUpdate) {
+					cuisinePrefs.add(newCuisine);
+					user.setUpdatedDateTime(Calendar.getInstance());
+					user.setCuisinePreferences(cuisinePrefs);
+				}
+			}
+		} else if (tagType == TagType.SUGGESTION) {
+			List<SuggestionEntity> suggestionPrefs = user.getSuggestionPreferences();
+			if (isRemove) {
+				List<SuggestionEntity> newPrefs = new ArrayList<>();
+				for (SuggestionEntity suggestion : suggestionPrefs) {
+					if (!suggestion.getId().equals(id)) {
+						newPrefs.add(suggestion);
+					}
+				}
+				user.setUpdatedDateTime(Calendar.getInstance());
+				user.setSuggestionPreferences(newPrefs);
+			} else {
+				if (suggestionPrefs == null) {
+					suggestionPrefs = new ArrayList<>();
+				}
+				boolean canUpdate = true;
+				Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
+				suggestionCriteria.add(Restrictions.eq("id", id));
+				SuggestionEntity newSuggestion = (SuggestionEntity) suggestionCriteria.uniqueResult();
+				for (SuggestionEntity s : suggestionPrefs) {
+					if (s.getId().equals(newSuggestion.getId())) {
+						canUpdate = false;
+						break;
+					}
+				}
+				if (canUpdate) {
+					suggestionPrefs.add(newSuggestion);
+					user.setUpdatedDateTime(Calendar.getInstance());
+					user.setSuggestionPreferences(suggestionPrefs);
+				}				
+			}
 		}
 	}
-	
+
 	public Integer getVegnonvegPreference(Integer userId) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.eq("id", userId));

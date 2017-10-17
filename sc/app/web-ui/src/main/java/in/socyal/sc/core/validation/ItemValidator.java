@@ -3,6 +3,7 @@ package in.socyal.sc.core.validation;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
@@ -32,6 +33,12 @@ public class ItemValidator extends Validator {
 		
 		if (request.getResultsPerPage() == null) {
 			LOG.error("Results Per Page number not found while validating get popular items request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateIdRequest(IdRequest request) throws BusinessException {
+		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

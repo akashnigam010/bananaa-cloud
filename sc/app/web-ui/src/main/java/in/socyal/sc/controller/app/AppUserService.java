@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.GenericSearchRequest;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.SearchTagResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
-import in.socyal.sc.api.user.request.SavePreferencesRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.app.response.VegnonvegPreferenceResponse;
 import in.socyal.sc.core.validation.ItemValidator;
@@ -44,11 +44,60 @@ public class AppUserService {
 		}
 	}
 
-	@RequestMapping(value = "/saveUserPreferences", method = RequestMethod.POST, headers = "Accept=application/json")
-	public StatusResponse saveUserPreferences(@RequestBody SavePreferencesRequest request) {
+	@RequestMapping(value = "/saveVegnonvegPreference", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse saveVegnonvegPreference(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
 		try {
-			delegate.saveUserPreferences(request);
+			validator.validateIdRequest(request);
+			delegate.saveVegnonvegPreference(request.getId());
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/addCuisinePreference", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse addCuisinePreference(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateIdRequest(request);
+			delegate.updateTagPreference(request.getId(), TagType.CUISINE, false);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/removeCuisinePreference", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse removeCuisinePreference(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateIdRequest(request);
+			delegate.updateTagPreference(request.getId(), TagType.CUISINE, true);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/addSuggestionPreference", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse addSuggestionPreference(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateIdRequest(request);
+			delegate.updateTagPreference(request.getId(), TagType.SUGGESTION, false);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/removeSuggestionPreference", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse removeSuggestionPreference(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateIdRequest(request);
+			delegate.updateTagPreference(request.getId(), TagType.SUGGESTION, true);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
