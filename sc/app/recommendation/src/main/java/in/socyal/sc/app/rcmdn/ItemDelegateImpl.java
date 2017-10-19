@@ -69,7 +69,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public AppItemDetailsResponse getItemDetailsById(IdRequest request) throws BusinessException {
-		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true);
+		DishFilterCriteria dishCriteria = new DishFilterCriteria(true, true);
 		DishDto dto = dishDao.getItemDetailsById(request.getId(), dishCriteria);
 		AppItemDetailsResponse response = mapper.mapAppDetailsReponse(dto);
 		return response;

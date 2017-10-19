@@ -15,12 +15,10 @@ public class DishFilterCriteria {
 		this.mapImages = mapAllFilters;
 	}
 
-	public DishFilterCriteria(Boolean mapSuggestions, Boolean mapCuisines, Boolean mapRecommendationsCount) {
-		this.mapSuggestions = mapSuggestions;
-		this.mapCuisines = mapCuisines;
-		this.mapRecommendations = Boolean.FALSE;
+	public DishFilterCriteria(Boolean mapImages, Boolean mapRecommendationsCount) {
+		this(Boolean.FALSE);
 		this.mapRecommendationsCount = mapRecommendationsCount;
-		this.mapImages = Boolean.FALSE;
+		this.mapImages = mapImages;
 	}
 
 	public DishFilterCriteria(Boolean mapSuggestions, Boolean mapCuisines, Boolean mapRecommendations,
