@@ -66,18 +66,10 @@ public class ItemMapper implements Serializable {
 	
 	public List<RecommendationDto> mapReviews(List<RecommendationDto> recommendations) {
 		List<RecommendationDto> dtos = new ArrayList<>();
-		RecommendationDto dto = null;
+		// add only objects where description is not empty
 		for (RecommendationDto rcmd : recommendations) {
 			if (StringUtils.isNotBlank(rcmd.getDescription())) {
-				dto = new RecommendationDto();
-				dto.setId(rcmd.getId());
-				dto.setRating(rcmd.getRating());
-				dto.setUpdatedDateTime(rcmd.getUpdatedDateTime());
-				dto.setTimeDiff(rcmd.getTimeDiff());
-				dto.setDescription(rcmd.getDescription());
-				dto.setDish(rcmd.getDish());
-				dto.setUser(rcmd.getUser());
-				dtos.add(dto);
+				dtos.add(rcmd);
 			}			
 		}
 		return dtos;

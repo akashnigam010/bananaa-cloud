@@ -2,7 +2,7 @@ package in.socyal.sc.api.merchant.response;
 
 import in.socyal.sc.api.type.RatingColorType;
 
-public class Recommendation  {
+public class MyFoodview  {
 	private Integer id;
 	private Integer itemId;
 	private String name;

@@ -6,14 +6,14 @@ import in.socyal.sc.api.response.GenericResponse;
 
 public class ItemRecommendationResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Recommendation recommendation;
+	private MyFoodview recommendation;
 	private boolean recommended = Boolean.FALSE;
 
-	public Recommendation getRecommendation() {
+	public MyFoodview getRecommendation() {
 		return recommendation;
 	}
 
-	public void setRecommendation(Recommendation recommendation) {
+	public void setRecommendation(MyFoodview recommendation) {
 		this.recommendation = recommendation;
 	}
 
