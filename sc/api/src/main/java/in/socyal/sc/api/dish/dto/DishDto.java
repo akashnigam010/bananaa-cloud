@@ -24,6 +24,7 @@ public class DishDto implements Serializable {
 	private Boolean isActive;
 	private String itemUrl;
 	private List<RecommendationDto> recommendations;
+	private Integer recommendationCount;
 	private String ratingClass;
 
 	public Integer getId() {
@@ -144,5 +145,13 @@ public class DishDto implements Serializable {
 
 	public void setRatingClass(String ratingClass) {
 		this.ratingClass = ratingClass;
+	}
+
+	public Integer getRecommendationCount() {
+		return recommendationCount;
+	}
+
+	public void setRecommendationCount(Integer recommendationCount) {
+		this.recommendationCount = recommendationCount;
 	}
 }

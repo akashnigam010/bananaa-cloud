@@ -12,6 +12,7 @@ import in.socyal.sc.api.item.response.Item;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.SearchItem;
 import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.merchant.response.AppItemDetailsResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.persistence.entity.DishCount;
 
@@ -49,6 +50,20 @@ public class ItemMapper implements Serializable {
 		response.setItems(items);
 		return response;
 	}
+	
+	public AppItemDetailsResponse mapAppDetailsReponse(DishDto dto) {
+		AppItemDetailsResponse response = new AppItemDetailsResponse();
+		response.setId(dto.getId());
+		response.setName(dto.getName());
+		response.setMerchantId(dto.getMerchant().getId());
+		response.setMerchantName(dto.getMerchant().getName());
+		response.setShortAddress(dto.getMerchant().getAddress().getLocality().getShortAddress());
+		response.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
+		response.setImageUrl(dto.getImageUrl());
+		response.setTotalRatings(dto.getRecommendationCount());
+		return response;
+	}
+	
 	public List<RecommendationDto> mapReviews(List<RecommendationDto> recommendations) {
 		List<RecommendationDto> dtos = new ArrayList<>();
 		RecommendationDto dto = null;

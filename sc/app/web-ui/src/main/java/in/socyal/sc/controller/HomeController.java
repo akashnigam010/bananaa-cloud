@@ -340,7 +340,7 @@ public class HomeController {
 		DetailsRequest detailsRequest = new DetailsRequest();
 		detailsRequest.setItemNameId(itemNameId);
 		detailsRequest.setMerchantNameId(merchantNameId);
-		ItemDetailsResponse response = itemDelegate.getItemDetails(detailsRequest);
+		ItemDetailsResponse response = itemDelegate.getItemDetailsWithFoodviews(detailsRequest);
 		modelAndView.addObject("detail", response);
 		modelAndView.addObject("description", getItemMetaDescription(response));
 		modelAndView.addObject("fbDescription", getItemMetaDescription(response));

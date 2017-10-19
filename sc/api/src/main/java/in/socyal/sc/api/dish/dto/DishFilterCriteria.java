@@ -4,20 +4,23 @@ public class DishFilterCriteria {
 	private Boolean mapSuggestions;
 	private Boolean mapCuisines;
 	private Boolean mapRecommendations;
+	private Boolean mapRecommendationsCount;
 	private Boolean mapImages;
 
 	public DishFilterCriteria(Boolean mapAllFilters) {
 		this.mapSuggestions = mapAllFilters;
 		this.mapCuisines = mapAllFilters;
 		this.mapRecommendations = mapAllFilters;
-		this.setMapImages(mapAllFilters);
+		this.mapRecommendationsCount = mapAllFilters;
+		this.mapImages = mapAllFilters;
 	}
 
-	public DishFilterCriteria(Boolean mapSuggestions, Boolean mapCuisines) {
+	public DishFilterCriteria(Boolean mapSuggestions, Boolean mapCuisines, Boolean mapRecommendationsCount) {
 		this.mapSuggestions = mapSuggestions;
 		this.mapCuisines = mapCuisines;
 		this.mapRecommendations = Boolean.FALSE;
-		this.setMapImages(Boolean.FALSE);
+		this.mapRecommendationsCount = mapRecommendationsCount;
+		this.mapImages = Boolean.FALSE;
 	}
 
 	public DishFilterCriteria(Boolean mapSuggestions, Boolean mapCuisines, Boolean mapRecommendations,
@@ -25,7 +28,8 @@ public class DishFilterCriteria {
 		this.mapSuggestions = mapSuggestions;
 		this.mapCuisines = mapCuisines;
 		this.mapRecommendations = mapRecommendations;
-		this.setMapImages(mapImages);
+		this.mapRecommendationsCount = Boolean.FALSE;
+		this.mapImages = mapImages;
 	}
 
 	public Boolean getMapSuggestions() {
@@ -58,5 +62,13 @@ public class DishFilterCriteria {
 
 	public void setMapImages(Boolean mapImages) {
 		this.mapImages = mapImages;
+	}
+
+	public Boolean getMapRecommendationsCount() {
+		return mapRecommendationsCount;
+	}
+
+	public void setMapRecommendationsCount(Boolean mapRecommendationsCount) {
+		this.mapRecommendationsCount = mapRecommendationsCount;
 	}
 }

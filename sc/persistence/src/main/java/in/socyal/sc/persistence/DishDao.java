@@ -194,7 +194,19 @@ public class DishDao {
 		return Collections.emptyList();
 	}
 
-	public DishDto getItemDetails(String merchantNameId, String dishNameId) throws BusinessException {
+	public DishDto getItemDetailsById(Integer id, DishFilterCriteria dishCriteria) throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.eq("id", id));
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		DishEntity entity = (DishEntity) criteria.uniqueResult();
+		if (entity == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_DETAILS_NOT_FOUND);
+		}
+		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
+		return mapper.map(entity, filterCriteria, dishCriteria);
+	}
+	
+	public DishDto getItemDetailsByNameId(String merchantNameId, String dishNameId, DishFilterCriteria dishCriteria) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.createAlias("merchant", "m");
 		criteria.add(Restrictions.eq("m.nameId", merchantNameId));
@@ -205,7 +217,6 @@ public class DishDao {
 			throw new BusinessException(DishErrorCodeType.DISH_DETAILS_NOT_FOUND);
 		}
 		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
-		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
 		return mapper.map(entity, filterCriteria, dishCriteria);
 	}
 

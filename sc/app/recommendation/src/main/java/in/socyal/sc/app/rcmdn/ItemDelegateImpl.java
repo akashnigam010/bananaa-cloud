@@ -12,6 +12,8 @@ import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.dish.dto.DishFilterCriteria;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTag;
@@ -20,6 +22,7 @@ import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.SearchRequest;
+import in.socyal.sc.api.merchant.response.AppItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetails;
@@ -62,11 +65,21 @@ public class ItemDelegateImpl implements ItemDelegate {
 				request.getResultsPerPage());
 		return mapper.map(result, response);
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public AppItemDetailsResponse getItemDetailsById(IdRequest request) throws BusinessException {
+		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true);
+		DishDto dto = dishDao.getItemDetailsById(request.getId(), dishCriteria);
+		AppItemDetailsResponse response = mapper.mapAppDetailsReponse(dto);
+		return response;
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException {
-		DishDto dto = dishDao.getItemDetails(request.getMerchantNameId(), request.getItemNameId());
+	public ItemDetailsResponse getItemDetailsWithFoodviews(DetailsRequest request) throws BusinessException {
+		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
+		DishDto dto = dishDao.getItemDetailsByNameId(request.getMerchantNameId(), request.getItemNameId(), dishCriteria);
 		ItemDetailsResponse response = new ItemDetailsResponse();
 		response.setDish(dto);
 		response.setReviews(mapper.mapReviews(dto.getRecommendations()));

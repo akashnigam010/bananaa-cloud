@@ -67,6 +67,10 @@ public class DishDaoMapper {
 		if (dishCriteria.getMapRecommendations()) {
 			dto.setRecommendations(mapRecommendations(entity));
 		}
+		
+		if (dishCriteria.getMapRecommendationsCount()) {
+			dto.setRecommendationCount(entity.getRecommendations().size());
+		}
 
 		dto.setIsActive(entity.getIsActive());
 		if (merchantCriteria != null) {
