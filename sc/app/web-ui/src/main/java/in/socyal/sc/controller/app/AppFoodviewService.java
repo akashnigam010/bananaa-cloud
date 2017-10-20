@@ -13,6 +13,9 @@ import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.MyFoodviewsResponse;
 import in.socyal.sc.api.merchant.response.UserFoodviewsResponse;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
+import in.socyal.sc.api.recommendation.request.RatingRequest;
+import in.socyal.sc.api.recommendation.request.ReviewRequest;
+import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.controller.MerchantService;
 import in.socyal.sc.core.validation.RecommendationValidator;
@@ -67,6 +70,32 @@ public class AppFoodviewService {
 		try {
 			validator.validateGetUserFoodviewRequestApp(request);
 			response = delegate.getUsersFoodviews(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			LOG.debug(e.getMessage());
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/saveRating", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse saveRating(@RequestBody RatingRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateRatingRequestApp(request);
+			delegate.saveRating(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			LOG.debug(e.getMessage());
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/saveFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse saveReview(@RequestBody ReviewRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateReviewRequestApp(request);
+			delegate.saveReview(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

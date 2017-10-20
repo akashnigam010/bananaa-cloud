@@ -54,9 +54,9 @@ public class RecommendationDao {
 			recommendation = new RecommendationEntity(cal, cal);
 			recommendation.setDish(new DishEntity(request.getId()));
 			recommendation.setUser(new UserEntity(userId));
-			recommendation.setRating(request.getRating().floatValue());
+			recommendation.setRating(request.getRating());
 		} else {
-			recommendation.setRating(request.getRating().floatValue());
+			recommendation.setRating(request.getRating());
 			recommendation.setUpdatedDateTime(cal);
 		}
 		session.saveOrUpdate(recommendation);

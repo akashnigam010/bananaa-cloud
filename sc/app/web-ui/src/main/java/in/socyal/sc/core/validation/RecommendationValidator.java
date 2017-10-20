@@ -28,11 +28,33 @@ public class RecommendationValidator extends Validator {
 		}
 	}
 	
+	public void validateRatingRequestApp(RatingRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getId() == null || request.getRating() == null) {
+			LOG.error("Dish Id or rating value not found while validating save rating request request - app");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
 	public void validateReviewRequest(ReviewRequest request, String authToken)
 			throws BusinessException {
 		validateUserAndThrowException(authToken);
 		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
 			LOG.error("Dish Id or review desc not found while validating save rating request request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateReviewRequestApp(ReviewRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
+			LOG.error("Dish Id or review desc not found while validating save rating request request - app");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
