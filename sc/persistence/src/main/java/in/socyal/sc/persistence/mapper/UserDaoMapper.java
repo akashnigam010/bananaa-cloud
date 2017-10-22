@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
+import in.socyal.sc.api.user.dto.Profile;
+import in.socyal.sc.api.user.dto.Tag;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.date.util.TimestampHelper;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
+import in.socyal.sc.persistence.entity.TagEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 
 @Component
@@ -66,5 +69,29 @@ public class UserDaoMapper {
 			Collections.sort(dtos);
 			to.setRecommendations(dtos);
 		}
+	}
+
+	public Profile map(UserEntity entity) {
+		Profile profile = new Profile();
+		profile.setId(entity.getId());
+		profile.setName(entity.getFirstName() + " " + entity.getLastName());
+		profile.setImageUrl(entity.getImageUrl());
+		profile.setLevel(entity.getCredibility());
+		MutablePair<Integer, Integer> ratingAndReviewCount = dishMapper.getRatingCount(entity.getRecommendations());
+		profile.setRatingCount(ratingAndReviewCount.getLeft());
+		profile.setFoodviewCount(ratingAndReviewCount.getRight());
+		profile.setCuisines(mapTagsForProfile(entity.getCuisinePreferences()));
+		profile.setDishes(mapTagsForProfile(entity.getSuggestionPreferences()));
+		return profile;
+	}
+
+	private List<Tag> mapTagsForProfile(List<? extends TagEntity> tags) {
+		List<Tag> profileTags = new ArrayList<>();
+		Tag profileTag = null;
+		for (TagEntity tag : tags) {
+			profileTag = new Tag(tag.getId(), tag.getName());
+			profileTags.add(profileTag);
+		}
+		return profileTags;
 	}
 }

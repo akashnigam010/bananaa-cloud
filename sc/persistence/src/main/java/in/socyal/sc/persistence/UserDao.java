@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.LoginErrorCodeType;
+import in.socyal.sc.api.user.dto.Profile;
 import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
@@ -194,5 +195,15 @@ public class UserDao {
 		} else {
 			return null;
 		}
+	}
+	
+	public Profile getUserProfile(Integer id) throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", id));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		if (entity == null) {
+			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
+		}
+		return mapper.map(entity);
 	}
 }

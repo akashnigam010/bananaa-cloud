@@ -16,6 +16,7 @@ import in.socyal.sc.api.item.response.SearchTagResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
+import in.socyal.sc.api.user.dto.ProfileResponse;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.app.response.VegnonvegPreferenceResponse;
 import in.socyal.sc.core.validation.ItemValidator;
@@ -31,8 +32,22 @@ public class AppUserService {
 	@Autowired
 	ItemDelegate itemDelegate;
 	@Autowired
+	UserDelegate userDelegate;
+	@Autowired
 	ItemValidator validator;
 
+	@RequestMapping(value = "/getProfile", method = RequestMethod.POST, headers = "Accept=application/json")
+	public ProfileResponse getPreferences(@RequestBody IdRequest request) {
+		ProfileResponse response = new ProfileResponse();
+		try {
+			validator.validateIdRequest(request);
+			response.setProfile(userDelegate.getUserProfile(request));
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
 	@RequestMapping(value = "/getVegnonvegPreference", method = RequestMethod.POST, headers = "Accept=application/json")
 	public VegnonvegPreferenceResponse searchCuisine() {
 		VegnonvegPreferenceResponse response = new VegnonvegPreferenceResponse();
