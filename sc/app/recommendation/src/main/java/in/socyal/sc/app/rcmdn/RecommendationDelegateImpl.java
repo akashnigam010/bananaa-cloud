@@ -7,10 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.IdPageRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.response.Foodview;
+import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
-import in.socyal.sc.api.merchant.response.MyFoodview;
-import in.socyal.sc.api.merchant.response.MyFoodviewsResponse;
 import in.socyal.sc.api.merchant.response.UserFoodview;
 import in.socyal.sc.api.merchant.response.UserFoodviewsResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
@@ -56,24 +57,34 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public MyFoodviewsResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException {
-		MyFoodviewsResponse response = new MyFoodviewsResponse();
+	public FoodviewsResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException {
+		FoodviewsResponse response = new FoodviewsResponse();
 		if (!jwtHelper.isUserLoggedIn()) {
 			return response;
 		}
-		List<RecommendationDto> result = dao.getMyRecommendations(jwtHelper.getUserId(), request.getMerchantId(),
+		List<RecommendationDto> result = dao.getRecommendations(jwtHelper.getUserId(), request.getMerchantId(),
 				request.getPage());
-		List<MyFoodview> rcmdns = mapper.map(result);
+		List<Foodview> rcmdns = mapper.map(result);
 		response.setRecommendations(rcmdns);
 		if (result.size() > 0) {
 			response.setMerchantName(result.get(0).getDish().getMerchant().getName());
 		}
 		return response;
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public FoodviewsResponse getAllRecommendations(IdPageRequest request) throws BusinessException {
+		FoodviewsResponse response = new FoodviewsResponse();
+		List<Foodview> rcmdns = mapper.map(dao.getRecommendations(jwtHelper.getUserId(), null,
+				request.getPage()));
+		response.setRecommendations(rcmdns);
+		return response;
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public ItemRecommendationResponse getMyDishRecommendation(Integer itemId) throws BusinessException {
+	public ItemRecommendationResponse getMyDishRecommendations(Integer itemId) throws BusinessException {
 		ItemRecommendationResponse response = new ItemRecommendationResponse();
 		if (!jwtHelper.isUserLoggedIn()) {
 			return response;
@@ -88,7 +99,7 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public UserFoodviewsResponse getUsersFoodviews(GetRecommendationRequest request) throws BusinessException {
+	public UserFoodviewsResponse getUsersFoodviewsForItem(GetRecommendationRequest request) throws BusinessException {
 		UserFoodviewsResponse response = new UserFoodviewsResponse();
 		// whether user is logged in or not is already checked in validator.
 		// It is mandatory that the user must be logged in post this point

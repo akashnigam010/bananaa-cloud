@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ import in.socyal.sc.persistence.entity.UserEntity;
 
 @Component
 public class UserDaoMapper {
+	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String VEG_PREF = "user.pref.veg";
+	private static final String NONVEG_PREF = "user.pref.nonveg";
+	private static final String ANY_PREF = "user.pref.anything";
 	@Autowired
 	DishDaoMapper dishMapper;
 	@Autowired
@@ -82,6 +87,17 @@ public class UserDaoMapper {
 		profile.setFoodviewCount(ratingAndReviewCount.getRight());
 		profile.setCuisines(mapTagsForProfile(entity.getCuisinePreferences()));
 		profile.setDishes(mapTagsForProfile(entity.getSuggestionPreferences()));
+		if (entity.getStatus() != null) {
+			profile.setStatus(entity.getStatus().getStatus());
+		} else {
+			if (entity.getVegnonvegPreference() != null) {
+				switch (entity.getVegnonvegPreference().getId()) {
+					case 1: profile.setStatus(resource.getString(VEG_PREF)); break;
+					case 2: profile.setStatus(resource.getString(NONVEG_PREF)); break;
+					case 3: profile.setStatus(resource.getString(ANY_PREF)); break;
+				}
+			}
+		}
 		return profile;
 	}
 

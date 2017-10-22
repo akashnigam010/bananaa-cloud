@@ -18,6 +18,7 @@ import in.socyal.sc.api.user.dto.UserDto;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
+import in.socyal.sc.persistence.entity.UserStatusEntity;
 import in.socyal.sc.persistence.entity.VegnonvegEntity;
 import in.socyal.sc.persistence.mapper.UserDaoMapper;
 
@@ -205,5 +206,21 @@ public class UserDao {
 			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
 		return mapper.map(entity);
+	}
+	
+	public void saveStatus(String status, Integer userId) throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
+		criteria.add(Restrictions.eq("id", userId));
+		UserEntity entity = (UserEntity) criteria.uniqueResult();
+		if (entity == null) {
+			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
+		}
+		UserStatusEntity statusEntity = entity.getStatus();
+		if (statusEntity == null) {
+			statusEntity = new UserStatusEntity();
+		}
+		statusEntity.setStatus(status);
+		entity.setStatus(statusEntity);
+		sessionFactory.getCurrentSession().saveOrUpdate(entity);
 	}
 }

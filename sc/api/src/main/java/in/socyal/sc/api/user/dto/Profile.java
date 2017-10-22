@@ -9,6 +9,7 @@ public class Profile implements Serializable {
 	private String imageUrl;
 	private String name;
 	private Float level;
+	private String status;
 	private Integer vegnonvegId;
 	private Integer ratingCount;
 	private Integer foodviewCount;
@@ -85,5 +86,13 @@ public class Profile implements Serializable {
 
 	public void setDishes(List<Tag> dishes) {
 		this.dishes = dishes;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

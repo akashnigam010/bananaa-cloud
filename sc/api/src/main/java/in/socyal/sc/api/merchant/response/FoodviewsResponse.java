@@ -6,19 +6,19 @@ import java.util.List;
 
 import in.socyal.sc.api.response.GenericResponse;
 
-public class MyFoodviewsResponse extends GenericResponse implements Serializable {
+public class FoodviewsResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private List<MyFoodview> recommendations;
+	private List<Foodview> recommendations;
 	private String merchantName;
 
-	public List<MyFoodview> getRecommendations() {
+	public List<Foodview> getRecommendations() {
 		if (this.recommendations == null) {
 			this.recommendations = new ArrayList<>();
 		}
 		return recommendations;
 	}
 
-	public void setRecommendations(List<MyFoodview> recommendations) {
+	public void setRecommendations(List<Foodview> recommendations) {
 		this.recommendations = recommendations;
 	}
 

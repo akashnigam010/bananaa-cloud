@@ -44,6 +44,10 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	@Column(name = "EMAIL")
 	private String email;
+	
+	@ManyToOne
+	@JoinColumn(name = "USER_STATUS_ID")
+	private UserStatusEntity status;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private List<RecommendationEntity> recommendations;
@@ -171,5 +175,13 @@ public class UserEntity extends BaseEntity implements Serializable {
 
 	public void setVegnonvegPreference(VegnonvegEntity vegnonvegPreference) {
 		this.vegnonvegPreference = vegnonvegPreference;
+	}
+
+	public UserStatusEntity getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatusEntity status) {
+		this.status = status;
 	}
 }

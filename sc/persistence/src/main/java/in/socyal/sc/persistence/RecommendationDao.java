@@ -82,14 +82,17 @@ public class RecommendationDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
+	public List<RecommendationDto> getRecommendations(Integer userId, Integer merchantId, Integer page) {
 		List<RecommendationDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.createAlias("user", "u");
-		criteria.createAlias("dish", "d");
-		criteria.createAlias("d.merchant", "m");
 		criteria.add(Restrictions.eq("u.id", userId));
-		criteria.add(Restrictions.eq("m.id", merchantId));
+		if (merchantId != null) {
+			criteria.createAlias("dish", "d");
+			criteria.createAlias("d.merchant", "m");
+			criteria.add(Restrictions.eq("m.id", merchantId));
+		}		
+		
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);

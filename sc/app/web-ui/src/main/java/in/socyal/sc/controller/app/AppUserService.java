@@ -9,15 +9,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.GenericSearchRequest;
+import in.socyal.sc.api.IdPageRequest;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.SearchTagResponse;
+import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.user.dto.ProfileResponse;
+import in.socyal.sc.api.user.request.StatusRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
+import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.app.response.VegnonvegPreferenceResponse;
 import in.socyal.sc.core.validation.ItemValidator;
 import in.socyal.sc.user.UserDelegate;
@@ -34,6 +38,8 @@ public class AppUserService {
 	@Autowired
 	UserDelegate userDelegate;
 	@Autowired
+	RecommendationDelegate recommendationDelegate;
+	@Autowired
 	ItemValidator validator;
 
 	@RequestMapping(value = "/getProfile", method = RequestMethod.POST, headers = "Accept=application/json")
@@ -42,6 +48,29 @@ public class AppUserService {
 		try {
 			validator.validateIdRequest(request);
 			response.setProfile(userDelegate.getUserProfile(request));
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/getAllRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
+	public FoodviewsResponse getAllRecommendations(@RequestBody IdPageRequest request) {
+		FoodviewsResponse response = new FoodviewsResponse();
+		try {
+			validator.validateIdPageRequest(request);
+			response = recommendationDelegate.getAllRecommendations(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/saveStatus", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse saveStatus(@RequestBody StatusRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			userDelegate.saveStatus(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
