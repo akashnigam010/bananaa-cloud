@@ -76,7 +76,7 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public FoodviewsResponse getAllRecommendations(IdPageRequest request) throws BusinessException {
 		FoodviewsResponse response = new FoodviewsResponse();
-		List<Foodview> rcmdns = mapper.map(dao.getRecommendations(jwtHelper.getUserId(), null,
+		List<Foodview> rcmdns = mapper.map(dao.getRecommendations(request.getId(), null,
 				request.getPage()));
 		response.setRecommendations(rcmdns);
 		return response;

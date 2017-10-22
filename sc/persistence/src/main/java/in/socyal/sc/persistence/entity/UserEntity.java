@@ -45,7 +45,7 @@ public class UserEntity extends BaseEntity implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_STATUS_ID")
 	private UserStatusEntity status;
 

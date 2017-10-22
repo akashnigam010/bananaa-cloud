@@ -216,10 +216,13 @@ public class UserDao {
 			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
 		UserStatusEntity statusEntity = entity.getStatus();
+		Calendar current = Calendar.getInstance();
 		if (statusEntity == null) {
 			statusEntity = new UserStatusEntity();
+			statusEntity.setCreatedDateTime(current);
 		}
 		statusEntity.setStatus(status);
+		statusEntity.setUpdatedDateTime(current);
 		entity.setStatus(statusEntity);
 		sessionFactory.getCurrentSession().saveOrUpdate(entity);
 	}
