@@ -13,6 +13,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
+import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.GetAllItemsResponse;
@@ -226,6 +227,18 @@ public class ManagementService {
 		try {
 			validator.validateSendMessageRequest(request);
 			delegate.contactUsMessage(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/updateVegNonvegValues", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse updateVegNonvegValues(@RequestBody DishVegnonvegValuesRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateDishVegnonvegValueRequest(request);
+			delegate.updateDishVegnonvegValues(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

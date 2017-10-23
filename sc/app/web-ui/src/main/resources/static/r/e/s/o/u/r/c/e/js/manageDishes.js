@@ -93,7 +93,7 @@ function loadDishes(merchantId) {
 				gridBodyHtml += '<tr class="cursor-pointer" id="'+id+'">'+
 								'<td onclick="editRow(this);">'+id+'</td>'+
 								'<td onclick="editRow(this);">'+dishes[id].name+'</td>'+
-								'<td onclick="editRow(this);">'+getVegnonveg(dishes[id].vegnonveg)+'</td>'+
+								'<td>'+getVegnonveg(dishes[id].vegnonveg, id)+'</td>'+
 								'<td onclick="editRow(this);">'+getTags(dishes[id].suggestions)+'</td>'+
 								'<td onclick="editRow(this);">'+getTags(dishes[id].cuisines)+'</td>'+
 								'<td><button class="bna-button-light font-1-3" style="margin:0; padding: 0; background-color: transparent;"'+
@@ -107,16 +107,65 @@ function loadDishes(merchantId) {
 	  });
 }
 
-function getVegnonveg(vegnonveg) {
+function getVegnonveg(vegnonveg, id) {
+	var radio1 = '<input class="no-margin" type="radio" name="vegOrNonVeg'+id+'" value="1"></input>';
+	var radio2 = '<input class="no-margin" type="radio" name="vegOrNonVeg'+id+'" value="2"></input>';
+	var radio3 = '<input class="no-margin" type="radio" name="vegOrNonVeg'+id+'" value="3"></input>';
 	if (vegnonveg == 1) {
-		return '&#127808;';
+		radio1 = '<input class="no-margin" type="radio" name="vegOrNonVeg'+id+'" value="1" checked="checked"></input>';
 	} else if (vegnonveg == 2) {
-		return '&#127831';
+		radio2 = '<input class="no-margin" type="radio" name="vegOrNonVeg'+id+'" value="2" checked="checked"></input>';
 	} else if (vegnonveg == 3) {
-		return '&#127829';
-	} else {
-		return '';
-	} 
+		radio3 = '<input class="no-margin" type="radio" name="vegOrNonVeg'+id+'" value="3" checked="checked"></input>';
+	}
+	
+	return '<div>'+
+              '<div class="radio-inline">'+
+                radio1+
+              '</div>'+
+              '<div class="radio-inline">'+
+                radio2+
+              '</div>'+
+              '<div class="radio-inline">'+
+                radio3+
+              '</div>'+
+            '</div>';
+}
+
+function saveVegNonvegValues() {
+	var input = confirm("Are you sure you want to bulk update ?? This is a costly process.");
+	if(input) {
+		var updateArr = [];
+		var radioVal;
+		for (id in dishes) {
+			radioVal = $('input[name=vegOrNonVeg'+id+']:checked').val();
+			if (radioVal != undefined) {
+				updateArr.push({
+					id : id,
+					value : radioVal
+				})
+			}	
+		}
+		var dataOb = {
+    			values : updateArr
+    	};
+		$(".loader-animation").removeClass('hide');
+		$.ajax({
+			  method: "POST",
+			  url: "/socyal/management/updateVegNonvegValues",
+			  contentType : "application/json",
+			  data: JSON.stringify(dataOb)
+	  	})
+	  	.done(function(response) {
+	  		$(".loader-animation").addClass('hide');
+			  if (response.result) {
+				  alert('Saved successfully');
+			  } else {
+				  handleErrorCallback(response);
+			  }
+		  });
+	}
+	return;
 }
 
 function getTags(tags) {

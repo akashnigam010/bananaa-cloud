@@ -13,6 +13,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
+import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.GetAllItemsResponse;
@@ -149,5 +150,11 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 			response.getDishes().put(item.getId(), item);
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void updateDishVegnonvegValues(DishVegnonvegValuesRequest request) throws BusinessException {
+		dao.updateDishVegnonvegValues(request);
 	}
 }
