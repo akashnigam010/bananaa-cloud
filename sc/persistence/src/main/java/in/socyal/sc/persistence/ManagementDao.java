@@ -17,14 +17,16 @@ import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import in.socyal.sc.api.SearchRequest;
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
+import in.socyal.sc.api.manage.request.DishVegnonvegValue;
+import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.Item;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
@@ -209,6 +211,29 @@ public class ManagementDao {
 		@SuppressWarnings("unchecked")
 		List<ItemImageEntity> entities = criteria.list();
 		return mapper.mapItemImages(entities);
+	}
+	
+	public void updateDishVegnonvegValues(DishVegnonvegValuesRequest request) throws BusinessException {
+		Timestamp ts = new Timestamp(Calendar.getInstance().getTime().getTime());
+		try {
+			sessionFactory.getCurrentSession().doWork(new Work() {
+				@Override
+				public void execute(Connection con) throws SQLException {
+					PreparedStatement st = con.prepareStatement(
+							"UPDATE `bna`.`dish` set `VEGNONVEG` = ?, `UPDATED_DATETIME` = ? WHERE `ID` = ?");
+					for (DishVegnonvegValue value : request.getValues()) {
+						st.setInt(1, value.getValue());
+						st.setTimestamp(2, ts);
+						st.setInt(3, value.getId());
+						st.addBatch();
+					}
+
+					st.executeBatch();
+				}
+			});
+		} catch (Throwable e) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
 	}
 
 	private MerchantEntity getMerchantById(Integer id) throws BusinessException {

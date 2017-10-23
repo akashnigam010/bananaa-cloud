@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.GlobalSearchResponse;
@@ -48,9 +49,12 @@ public class MerchantService {
 		GlobalSearchResponse response = new GlobalSearchResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
-				List<GlobalSearchItem> merchants = delegate.searchMerchantsGlobal(request);
-				List<GlobalSearchItem> cuisines = itemDelegate.searchTags(request, TagType.CUISINE, 1, 3);
-				List<GlobalSearchItem> suggestions = itemDelegate.searchTags(request, TagType.SUGGESTION, 1, 3);
+				GenericSearchRequest searchRequest = new GenericSearchRequest();
+				searchRequest.setSearchString(request.getSearchString());
+				searchRequest.setId(request.getMerchantId());
+				List<GlobalSearchItem> merchants = delegate.searchMerchantsGlobal(searchRequest);
+				List<GlobalSearchItem> cuisines = itemDelegate.searchTags(searchRequest, TagType.CUISINE, 1, 3);
+				List<GlobalSearchItem> suggestions = itemDelegate.searchTags(searchRequest, TagType.SUGGESTION, 1, 3);
 				response.getSearchItems().addAll(merchants);
 				response.getSearchItems().addAll(cuisines);
 				response.getSearchItems().addAll(suggestions);

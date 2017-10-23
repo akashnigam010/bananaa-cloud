@@ -95,6 +95,7 @@ public class MerchantDelegateMapper {
 		GlobalSearchItem item = null;
 		for (MerchantDto dto : merchants) {
 			item = new GlobalSearchItem(SearchType.RESTAURANT);
+			item.setId(dto.getId());
 			item.setName(dto.getName());
 			item.setNameId(dto.getNameId());
 			item.setShortAddress(dto.getAddress().getLocality().getShortAddress());

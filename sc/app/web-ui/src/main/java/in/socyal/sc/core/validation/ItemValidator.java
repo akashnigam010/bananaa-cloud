@@ -3,9 +3,11 @@ package in.socyal.sc.core.validation;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.IdPageRequest;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.items.request.TrendingRequest;
+import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 
 @Component
@@ -35,12 +37,16 @@ public class ItemValidator extends Validator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
-
-	public void validateSearchTagRequest(SearchRequest request) throws BusinessException {
-		if (request.getSearchString() == null) {
+	
+	public void validateIdRequest(IdRequest request) throws BusinessException {
+		if (request.getId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
-		}		
+		}
 	}
 	
-	
+	public void validateIdPageRequest(IdPageRequest request) throws BusinessException {
+		if (request.getId() == null || request.getPage() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
 }

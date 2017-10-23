@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
-import in.socyal.sc.api.merchant.response.RecommendationResponse;
+import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
@@ -103,9 +103,9 @@ public class RecommendationService {
 	}
 
 	@RequestMapping(value = "/getMyRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
-	public RecommendationResponse getMyRecommendations(@RequestBody GetRecommendationRequest request,
+	public FoodviewsResponse getMyRecommendations(@RequestBody GetRecommendationRequest request,
 			@CookieValue(name = "blc", defaultValue = "") String blc) {
-		RecommendationResponse response = new RecommendationResponse();
+		FoodviewsResponse response = new FoodviewsResponse();
 		try {
 			validator.validateGetMyRecommendationsRequest(request, blc);
 			response = delegate.getMyRecommendations(request);
@@ -122,7 +122,7 @@ public class RecommendationService {
 		ItemRecommendationResponse response = new ItemRecommendationResponse();
 		try {
 			validator.validateGetMyItemRecommendationRequest(request, blc);
-			response = delegate.getMyDishRecommendation(request);
+			response = delegate.getMyDishRecommendations(request.getItemId());
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

@@ -1,7 +1,6 @@
 package in.socyal.sc.persistence;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 

@@ -28,11 +28,33 @@ public class RecommendationValidator extends Validator {
 		}
 	}
 	
+	public void validateRatingRequestApp(RatingRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getId() == null || request.getRating() == null) {
+			LOG.error("Dish Id or rating value not found while validating save rating request request - app");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
 	public void validateReviewRequest(ReviewRequest request, String authToken)
 			throws BusinessException {
 		validateUserAndThrowException(authToken);
 		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
 			LOG.error("Dish Id or review desc not found while validating save rating request request");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateReviewRequestApp(ReviewRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
+			LOG.error("Dish Id or review desc not found while validating save rating request request - app");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
@@ -90,18 +112,45 @@ public class RecommendationValidator extends Validator {
 		}
 	}
 	
-	public void validateGetMyRecommendationsRequestApp(GetRecommendationRequest request)
+	public void validateGetMyFoodviewsRequestApp(GetRecommendationRequest request)
 			throws BusinessException {
 		if (!jwtTokenHelper.isUserLoggedIn()) {
 			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
 		}
 		if (request.getMerchantId() == null) {
-			LOG.error("Merchant Id not found while validating get my recommendations request");
+			LOG.error("Merchant Id not found while validating get my foodviews request - app");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 
 		if (request.getPage() == null) {
-			LOG.error("Page number not found while validating get my recommendations request");
+			LOG.error("Page number not found while validating get my foodviews request - app");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateGetMyFoodviewRequestApp(GetRecommendationRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getItemId() == null) {
+			LOG.error("Item Id not found while validating get my foodview request - app");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateGetUserFoodviewRequestApp(GetRecommendationRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getItemId() == null) {
+			LOG.error("Item Id not found while validating get users foodview request - app");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+
+		if (request.getPage() == null) {
+			LOG.error("Page number not found while validating get my recommendations request - app");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

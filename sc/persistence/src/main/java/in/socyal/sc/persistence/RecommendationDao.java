@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.response.UserFoodview;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
 import in.socyal.sc.api.recommendation.request.ReviewRequest;
@@ -26,6 +28,8 @@ import in.socyal.sc.persistence.mapper.RecommendationDaoMapper;
 
 @Repository
 public class RecommendationDao {
+	private ResourceBundle resource = ResourceBundle.getBundle("environment");
+	private static final String BNA_USER_ID = "user.id";
 	private static final Integer RESULTS_PER_PAGE = 5;
 	@Autowired
 	SessionFactory sessionFactory;
@@ -50,9 +54,9 @@ public class RecommendationDao {
 			recommendation = new RecommendationEntity(cal, cal);
 			recommendation.setDish(new DishEntity(request.getId()));
 			recommendation.setUser(new UserEntity(userId));
-			recommendation.setRating(request.getRating().floatValue());
+			recommendation.setRating(request.getRating());
 		} else {
-			recommendation.setRating(request.getRating().floatValue());
+			recommendation.setRating(request.getRating());
 			recommendation.setUpdatedDateTime(cal);
 		}
 		session.saveOrUpdate(recommendation);
@@ -78,14 +82,17 @@ public class RecommendationDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<RecommendationDto> getMyRecommendations(Integer userId, Integer merchantId, Integer page) {
+	public List<RecommendationDto> getRecommendations(Integer userId, Integer merchantId, Integer page) {
 		List<RecommendationDto> response = new ArrayList<>();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.createAlias("user", "u");
-		criteria.createAlias("dish", "d");
-		criteria.createAlias("d.merchant", "m");
 		criteria.add(Restrictions.eq("u.id", userId));
-		criteria.add(Restrictions.eq("m.id", merchantId));
+		if (merchantId != null) {
+			criteria.createAlias("dish", "d");
+			criteria.createAlias("d.merchant", "m");
+			criteria.add(Restrictions.eq("m.id", merchantId));
+		}		
+		
 		int firstResult = ((page - 1) * RESULTS_PER_PAGE);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(RESULTS_PER_PAGE);
@@ -114,6 +121,26 @@ public class RecommendationDao {
 			mapper.map(entity, dto);
 		}
 		return dto;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserFoodview> getOtherUsersFoodviews(Integer userId, Integer dishId, Integer page, Integer resultsPerPage) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		List<Integer> userIds = new ArrayList<>();
+		userIds.add(userId);
+		userIds.add(Integer.parseInt(resource.getString(BNA_USER_ID)));
+		criteria.add(Restrictions.ne("user.id", userId));
+		criteria.add(Restrictions.not(Restrictions.in("user.id", userIds)));
+		criteria.add(Restrictions.eq("dish.id", dishId));
+		int firstResult = ((page - 1) * resultsPerPage);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(resultsPerPage);
+		List<RecommendationEntity> entities = criteria.list();
+		if (entities != null) {
+			return mapper.mapRecommendationsWithUser(entities);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 	public void addRecommendation(Integer userId, Integer dishId, String description) {

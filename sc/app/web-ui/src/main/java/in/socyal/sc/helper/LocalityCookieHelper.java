@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.dto.CityDto;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
+import in.socyal.sc.api.location.dto.CityDto;
+import in.socyal.sc.api.location.dto.LocalityDto;
 import in.socyal.sc.cache.CityCache;
 import in.socyal.sc.cache.LocalityCache;
 
