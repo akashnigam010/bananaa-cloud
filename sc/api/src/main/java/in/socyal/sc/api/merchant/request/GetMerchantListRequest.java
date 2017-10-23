@@ -2,7 +2,7 @@ package in.socyal.sc.api.merchant.request;
 
 import java.io.Serializable;
 
-import in.socyal.sc.api.merchant.dto.Location;
+import in.socyal.sc.api.location.dto.Location;
 
 public class GetMerchantListRequest implements Serializable {
 	private static final long serialVersionUID = 1L;

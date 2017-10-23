@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import in.socyal.sc.persistence.DishDao;
+import in.socyal.sc.persistence.LocationDao;
+import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.CuisineEntity;
-import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 
 @Component
@@ -15,40 +16,48 @@ public class BnaCacheSourceImpl implements BnaCacheSource {
 	@Autowired
 	DishDao dishDao;
 	@Autowired
-	BnaCacheMapper mapper;
+	LocationDao locationDao;
 
-	private CuisineEntity[] cuisinesArray = null;
-	private SuggestionEntity[] suggestionsArray = null;
+	private List<CuisineEntity> cuisines = null;
+	private List<SuggestionEntity> suggestions = null;
+	private List<CityEntity> cities = null;
 
 	@Override
-	public CuisineEntity[] getCuisinesArray() {
-		if (cuisinesArray == null) {
-			setCuisinesArray();
+	public List<CuisineEntity> getCuisines() {
+		if (cuisines == null) {
+			refreshCuisines();
 		}
-		return cuisinesArray;
+		return cuisines;
 	}
 
 	@Override
-	public SuggestionEntity[] getSuggestionsArray() {
-		if (suggestionsArray == null) {
-			setSuggestionsArray();
+	public List<SuggestionEntity> getSuggestions() {
+		if (suggestions == null) {
+			refreshSuggestions();
 		}
-		return suggestionsArray;
+		return suggestions;
 	}
 
 	@Override
-	public LocalityEntity[] getLocalitiesArray() {
-		// TODO: add implementation
-		return null;
+	public List<CityEntity> getCities() {
+		if (cities == null) {
+			refreshCities();
+		}
+		return cities;
 	}
 
-	private void setCuisinesArray() {
-		List<CuisineEntity> cuisines = dishDao.getAllCuisines();
-		cuisinesArray = mapper.mapCuisinesArray(cuisines);
+	@Override
+	public void refreshCuisines() {
+		cuisines = dishDao.getAllCuisines();
 	}
 
-	private void setSuggestionsArray() {
-		List<SuggestionEntity> suggestions = dishDao.getAllSuggestions();
-		suggestionsArray = mapper.mapSuggestionsArray(suggestions);
+	@Override
+	public void refreshSuggestions() {
+		suggestions = dishDao.getAllSuggestions();
+	}
+
+	@Override
+	public void refreshCities() {
+		cities = locationDao.getCities();
 	}
 }

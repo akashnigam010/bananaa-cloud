@@ -11,21 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.location.dto.CityDto;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.LoginErrorCodeType;
 import in.socyal.sc.persistence.cache.BnaCacheManager;
+import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
+import in.socyal.sc.persistence.mapper.LocationDaoMapper;
 
 @Repository
 public class CacheDao {
 	@Autowired
 	BnaCacheManager cacheManager;
 	@Autowired
-	DishDaoMapper mapper;
+	DishDaoMapper dishMapper;
+	@Autowired
+	LocationDaoMapper locationMapper;
 	@Autowired
 	SessionFactory sessionFactory;
 
@@ -40,12 +45,17 @@ public class CacheDao {
 			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
 		if (tagType == TagType.CUISINE) {
-			return mapper.mapTagsWithPreferences(cacheManager.getCuisines(page, resultsPerPage, searchString),
+			return dishMapper.mapTagsWithPreferences(cacheManager.getCuisines(page, resultsPerPage, searchString),
 					filterUserPreferencesOnSearchStringCuisines(user, searchString));
 		} else {
-			return mapper.mapTagsWithPreferences(cacheManager.getSuggestions(page, resultsPerPage, searchString),
+			return dishMapper.mapTagsWithPreferences(cacheManager.getSuggestions(page, resultsPerPage, searchString),
 					filterUserPreferencesOnSearchStringSuggestions(user, searchString));
 		}
+	}
+	
+	public List<CityDto> getCities() {
+		List<CityEntity> cities = cacheManager.getCities();
+		return locationMapper.map(cities);
 	}
 	
 	private List<CuisineEntity> filterUserPreferencesOnSearchStringCuisines(UserEntity user, String searchString) {

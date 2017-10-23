@@ -1,12 +1,14 @@
 package in.socyal.sc.persistence.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,6 +26,9 @@ public class CityEntity implements Serializable {
 
 	@Column(name = "NAME_ID")
 	private String nameId;
+
+	@OneToMany(mappedBy = "city")
+	private List<LocalityEntity> localities;
 
 	public Integer getId() {
 		return id;
@@ -47,5 +52,13 @@ public class CityEntity implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public List<LocalityEntity> getLocalities() {
+		return localities;
+	}
+
+	public void setLocalities(List<LocalityEntity> localities) {
+		this.localities = localities;
 	}
 }

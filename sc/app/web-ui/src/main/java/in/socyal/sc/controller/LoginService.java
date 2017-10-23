@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.location.dto.CityDto;
+import in.socyal.sc.api.location.dto.LocalityDto;
 import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.request.MLoginRequest;
 import in.socyal.sc.api.login.request.SetLocationRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
-import in.socyal.sc.api.merchant.dto.CityDto;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.cache.CityCache;
 import in.socyal.sc.cache.LocalityCache;
