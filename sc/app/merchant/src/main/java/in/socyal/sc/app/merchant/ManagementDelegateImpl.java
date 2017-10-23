@@ -24,6 +24,7 @@ import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.helper.mail.MailSender;
 import in.socyal.sc.persistence.ManagementDao;
+import in.socyal.sc.persistence.cache.BnaCacheManager;
 import in.socyal.sc.rating.engine.dish.CuisineRatingEngine;
 import in.socyal.sc.rating.engine.dish.DishRatingEngine;
 import in.socyal.sc.rating.engine.dish.SuggestionRatingEngine;
@@ -41,6 +42,8 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	SuggestionRatingEngine tagRatingEngine;
 	@Autowired
 	MailSender mailSender;
+	@Autowired
+	BnaCacheManager cacheManager;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -74,12 +77,14 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addCuisine(AddRequest request) {
 		dao.addCuisine(WordUtils.capitalizeFully(request.getName().trim()));
+		cacheManager.refreshCuisinesCache();
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void addSuggestion(AddRequest request) {
 		dao.addSuggestion(WordUtils.capitalizeFully(request.getName().trim()));
+		cacheManager.refreshSuggestionsCache();
 	}
 
 	@Override

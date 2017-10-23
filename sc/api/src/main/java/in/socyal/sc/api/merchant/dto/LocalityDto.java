@@ -45,7 +45,10 @@ public class LocalityDto implements Serializable {
 	}
 
 	public String getShortAddress() {
-		return this.name + ", " + this.city.getName();
+		if (this.city != null) {
+			return this.name + ", " + this.city.getName();
+		}
+		return null;
 	}
 
 	public String getNameId() {

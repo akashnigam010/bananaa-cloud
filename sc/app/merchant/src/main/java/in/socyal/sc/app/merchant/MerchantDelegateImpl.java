@@ -13,6 +13,7 @@ import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.merchant.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
@@ -27,6 +28,7 @@ import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.persistence.CacheDao;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.RecommendationDao;
 
@@ -38,6 +40,8 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 	
 	@Autowired
 	MerchantDao dao;
+	@Autowired
+	CacheDao cacheDao;
 	@Autowired
 	MerchantDelegateMapper mapper;
 	@Autowired
@@ -171,5 +175,11 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 		List<TrendingMerchantResultDto> result = dao.getAllSortedMerchants(cookieDto, filter, PAGE, RESULTS_PER_PAGE_TRENDING);
 		mapper.map(result, response);
 		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public List<LocalityDto> getLocalities() {
+		return cacheDao.getAllLocalities();
 	}
 }

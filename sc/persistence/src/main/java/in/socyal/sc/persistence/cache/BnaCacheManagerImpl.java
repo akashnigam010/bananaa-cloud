@@ -16,79 +16,81 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 	@Autowired
 	BnaCacheSource cacheSource;
 	
-	private CuisineEntity[] searchCuisines(String searchString) {
-		CuisineEntity[] cuisinesArray = cacheSource.getCuisinesArray();
+	private List<CuisineEntity> searchCuisines(String searchString) {
+		List<CuisineEntity> cuisines = cacheSource.getCuisines();
 		if (StringUtils.isNotBlank(searchString)) {
 			List<CuisineEntity> matches = new ArrayList<>();
-			for (int i = 0; i < cuisinesArray.length; i++) {
-				if (cuisinesArray[i].getName().toLowerCase().contains(searchString.toLowerCase())) {
-					matches.add(cuisinesArray[i]);
+			for (int i = 0; i < cuisines.size(); i++) {
+				if (cuisines.get(i).getName().toLowerCase().contains(searchString.toLowerCase())) {
+					matches.add(cuisines.get(i));
 				}
 			}
-			return matches.toArray(new CuisineEntity[matches.size()]);
+			return matches;
 		}
-		return cuisinesArray;
+		return cuisines;
 	}
 	
-	private SuggestionEntity[] searchSuggestions(String searchString) {
-		SuggestionEntity[] suggestionsArray = cacheSource.getSuggestionsArray();
+	private List<SuggestionEntity> searchSuggestions(String searchString) {
+		List<SuggestionEntity> suggestions = cacheSource.getSuggestions();
 		if (StringUtils.isNotBlank(searchString)) {
 			List<SuggestionEntity> matches = new ArrayList<>();
-			for (int i = 0; i < suggestionsArray.length; i++) {
-				if (suggestionsArray[i].getName().toLowerCase().contains(searchString.toLowerCase())) {
-					matches.add(suggestionsArray[i]);
+			for (int i = 0; i < suggestions.size(); i++) {
+				if (suggestions.get(i).getName().toLowerCase().contains(searchString.toLowerCase())) {
+					matches.add(suggestions.get(i));
 				}
 			}
-			return matches.toArray(new SuggestionEntity[matches.size()]);		
+			return matches;		
 		}
-		return suggestionsArray;
+		return suggestions;
 	}
 
 	@Override
 	public List<CuisineEntity> getCuisines(int page, int resultsPerPage, String searchString) {
-		CuisineEntity[] cuisinesArray = searchCuisines(searchString);
+		List<CuisineEntity> cuisinesArray = searchCuisines(searchString);
 		List<CuisineEntity> returnMap = new ArrayList<>();
 		int startIndex = (page - 1) * resultsPerPage;
 		int end = page * resultsPerPage;
-		if (end > cuisinesArray.length) {
-			end = cuisinesArray.length;
+		if (end > cuisinesArray.size()) {
+			end = cuisinesArray.size();
 		}
 		for (int i = startIndex; i < end; i++) {
-			returnMap.add(cuisinesArray[i]);
+			returnMap.add(cuisinesArray.get(i));
 		}
 		return returnMap;
 	}
 
 	@Override
 	public List<SuggestionEntity> getSuggestions(int page, int resultsPerPage, String searchString) {
-		SuggestionEntity[] suggestionsArray = searchSuggestions(searchString);
+		List<SuggestionEntity> suggestions = searchSuggestions(searchString);
 		List<SuggestionEntity> returnMap = new ArrayList<>();
 		int startIndex = (page - 1) * resultsPerPage;
 		int end = page * resultsPerPage;
-		if (end > suggestionsArray.length) {
-			end = suggestionsArray.length;
+		if (end > suggestions.size()) {
+			end = suggestions.size();
 		}
 		for (int i = startIndex; i < end; i++) {
-			returnMap.add(suggestionsArray[i]);
+			returnMap.add(suggestions.get(i));
 		}
 		return returnMap;
 	}
 
 	@Override
 	public List<LocalityEntity> getLocalities() {
-		return null;
+		return cacheSource.getLocalities();
 	}
 
 	@Override
 	public void refreshCuisinesCache() {
-
+		cacheSource.refreshCuisines();
 	}
 
 	@Override
 	public void refreshSuggestionsCache() {
+		cacheSource.refreshSuggestions();
 	}
 
 	@Override
 	public void refreshLocalitiesCache() {
+		cacheSource.refreshLocalities();
 	}
 }

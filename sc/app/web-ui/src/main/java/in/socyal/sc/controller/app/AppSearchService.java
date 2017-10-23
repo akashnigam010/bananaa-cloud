@@ -13,6 +13,7 @@ import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
+import in.socyal.sc.api.location.response.LocalitiesResponse;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.GlobalSearchResponse;
@@ -69,5 +70,12 @@ public class AppSearchService {
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);
 		}
+	}
+	
+	@RequestMapping(value = "/getPopularLocalities", method = RequestMethod.GET, headers = "Accept=application/json")
+	public LocalitiesResponse getPopularLocalities() {
+		LocalitiesResponse response = new LocalitiesResponse();
+		response.setLocalities(merchantDelegate.getLocalities());
+		return responseHelper.success(response);
 	}
 }
