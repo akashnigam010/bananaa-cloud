@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.DetailsRequest;
-import in.socyal.sc.api.SearchRequest;
+import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.dish.dto.DishDto;
+import in.socyal.sc.api.dish.dto.DishFilterCriteria;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTag;
@@ -19,6 +21,8 @@ import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
+import in.socyal.sc.api.merchant.request.SearchRequest;
+import in.socyal.sc.api.merchant.response.AppItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetails;
@@ -27,6 +31,8 @@ import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.app.rcmdn.mapper.ItemMapper;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
+import in.socyal.sc.persistence.CacheDao;
 import in.socyal.sc.persistence.DishDao;
 
 @Component
@@ -37,6 +43,10 @@ public class ItemDelegateImpl implements ItemDelegate {
 	ItemMapper mapper;
 	@Autowired
 	MerchantDelegateMapper merchantMapper;
+	@Autowired
+	JwtTokenHelper jwtHelper;
+	@Autowired
+	CacheDao cacheDao;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -55,11 +65,21 @@ public class ItemDelegateImpl implements ItemDelegate {
 				request.getResultsPerPage());
 		return mapper.map(result, response);
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public AppItemDetailsResponse getItemDetailsById(IdRequest request) throws BusinessException {
+		DishFilterCriteria dishCriteria = new DishFilterCriteria(true, true);
+		DishDto dto = dishDao.getItemDetailsById(request.getId(), dishCriteria);
+		AppItemDetailsResponse response = mapper.mapAppDetailsReponse(dto);
+		return response;
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public ItemDetailsResponse getItemDetails(DetailsRequest request) throws BusinessException {
-		DishDto dto = dishDao.getItemDetails(request.getMerchantNameId(), request.getItemNameId());
+	public ItemDetailsResponse getItemDetailsWithFoodviews(DetailsRequest request) throws BusinessException {
+		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
+		DishDto dto = dishDao.getItemDetailsByNameId(request.getMerchantNameId(), request.getItemNameId(), dishCriteria);
 		ItemDetailsResponse response = new ItemDetailsResponse();
 		response.setDish(dto);
 		response.setReviews(mapper.mapReviews(dto.getRecommendations()));
@@ -91,8 +111,25 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public List<GlobalSearchItem> searchTags(SearchRequest request, TagType tagType, Integer page, Integer resultsPerPage) {
+	public List<GlobalSearchItem> searchTags(GenericSearchRequest request, TagType tagType, Integer page,
+			Integer resultsPerPage) {
 		return dishDao.searchTags(request.getSearchString(), page, resultsPerPage, tagType);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public List<GlobalSearchItem> searchTagsWithUserPrefs(GenericSearchRequest request, TagType tagType, Integer page,
+			Integer resultsPerPage) throws BusinessException {
+		if (!jwtHelper.isUserLoggedIn()) {
+			return searchTags(request, tagType, page, resultsPerPage);
+		} else {
+			Integer userId = jwtHelper.getUserId();
+			if (userId == null) {
+				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+			}
+			return cacheDao.searchTagsWithUserPrefs(request.getSearchString(), page, resultsPerPage, tagType,
+					jwtHelper.getUserId());
+		}
 	}
 
 	@Override
@@ -114,7 +151,7 @@ public class ItemDelegateImpl implements ItemDelegate {
 				response.getMerchants().add(merchant);
 			}
 			response.setPage(page);
-		}		
+		}
 		return response;
 	}
 }

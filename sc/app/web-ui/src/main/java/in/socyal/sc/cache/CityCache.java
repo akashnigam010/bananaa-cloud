@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.dto.CityDto;
+import in.socyal.sc.api.location.dto.CityDto;
 import in.socyal.sc.persistence.LocationDao;
 
 @Component

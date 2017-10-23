@@ -1,6 +1,5 @@
 package in.socyal.sc.app.rcmdn;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +7,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.socyal.sc.api.IdPageRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.merchant.response.Foodview;
+import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
-import in.socyal.sc.api.merchant.response.Recommendation;
-import in.socyal.sc.api.merchant.response.RecommendationResponse;
+import in.socyal.sc.api.merchant.response.UserFoodview;
+import in.socyal.sc.api.merchant.response.UserFoodviewsResponse;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
@@ -34,7 +36,7 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 	JwtTokenHelper jwtHelper;
 	@Autowired
 	RecommendationMapper mapper;
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void saveRating(RatingRequest request) throws BusinessException {
@@ -52,41 +54,58 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 		}
 		dao.saveReview(request, jwtHelper.getUserId());
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public RecommendationResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException {
-		RecommendationResponse response = new RecommendationResponse();
+	public FoodviewsResponse getMyRecommendations(GetRecommendationRequest request) throws BusinessException {
+		FoodviewsResponse response = new FoodviewsResponse();
 		if (!jwtHelper.isUserLoggedIn()) {
 			return response;
 		}
-		List<RecommendationDto> result = dao.getMyRecommendations(
-				jwtHelper.getUserId(), request.getMerchantId(), request.getPage());
-		List<Recommendation> rcmdns = new ArrayList<>();
-		//FIXME : Remove multiple calls for each recommendation to db to fetch total recommendation count
-		for (RecommendationDto dto : result) {
-			Integer dishRcmdnCount = dao.getDishRecommendationCount(dto.getDish().getId());
-			rcmdns.add(mapper.map(dto, dishRcmdnCount));
-		}
+		List<RecommendationDto> result = dao.getRecommendations(jwtHelper.getUserId(), request.getMerchantId(),
+				request.getPage());
+		List<Foodview> rcmdns = mapper.map(result);
 		response.setRecommendations(rcmdns);
 		if (result.size() > 0) {
 			response.setMerchantName(result.get(0).getDish().getMerchant().getName());
-		}		
+		}
 		return response;
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public ItemRecommendationResponse getMyDishRecommendation(GetRecommendationRequest request) throws BusinessException {
+	public FoodviewsResponse getAllRecommendations(IdPageRequest request) throws BusinessException {
+		FoodviewsResponse response = new FoodviewsResponse();
+		List<Foodview> rcmdns = mapper.map(dao.getRecommendations(request.getId(), null,
+				request.getPage()));
+		response.setRecommendations(rcmdns);
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public ItemRecommendationResponse getMyDishRecommendations(Integer itemId) throws BusinessException {
 		ItemRecommendationResponse response = new ItemRecommendationResponse();
 		if (!jwtHelper.isUserLoggedIn()) {
 			return response;
 		}
-		RecommendationDto dto = dao.getMyDishRecommendation(jwtHelper.getUserId(), request.getItemId());
+		RecommendationDto dto = dao.getMyDishRecommendation(jwtHelper.getUserId(), itemId);
 		if (dto != null) {
 			response.setRecommended(Boolean.TRUE);
-			response.setRecommendation(mapper.map(dto, null));
+			response.setRecommendation(mapper.map(dto));
 		}
+		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public UserFoodviewsResponse getUsersFoodviewsForItem(GetRecommendationRequest request) throws BusinessException {
+		UserFoodviewsResponse response = new UserFoodviewsResponse();
+		// whether user is logged in or not is already checked in validator.
+		// It is mandatory that the user must be logged in post this point
+		List<UserFoodview> dtos = dao.getOtherUsersFoodviews(jwtHelper.getUserId(), request.getItemId(),
+				request.getPage(), 10);
+		response.setFoodviews(dtos);
 		return response;
 	}
 

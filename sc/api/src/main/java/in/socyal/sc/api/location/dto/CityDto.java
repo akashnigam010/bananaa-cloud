@@ -1,13 +1,14 @@
-package in.socyal.sc.api.merchant.dto;
+package in.socyal.sc.api.location.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class CityDto implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	private Integer id;
 	private String name;
 	private String nameId;
+	private List<LocalityDto> localities;
 
 	public Integer getId() {
 		return id;
@@ -31,5 +32,13 @@ public class CityDto implements Serializable {
 
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
+	}
+
+	public List<LocalityDto> getLocalities() {
+		return localities;
+	}
+
+	public void setLocalities(List<LocalityDto> localities) {
+		this.localities = localities;
 	}
 }

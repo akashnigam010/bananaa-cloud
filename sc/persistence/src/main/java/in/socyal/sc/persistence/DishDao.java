@@ -194,7 +194,19 @@ public class DishDao {
 		return Collections.emptyList();
 	}
 
-	public DishDto getItemDetails(String merchantNameId, String dishNameId) throws BusinessException {
+	public DishDto getItemDetailsById(Integer id, DishFilterCriteria dishCriteria) throws BusinessException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
+		criteria.add(Restrictions.eq("id", id));
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		DishEntity entity = (DishEntity) criteria.uniqueResult();
+		if (entity == null) {
+			throw new BusinessException(DishErrorCodeType.DISH_DETAILS_NOT_FOUND);
+		}
+		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
+		return mapper.map(entity, filterCriteria, dishCriteria);
+	}
+	
+	public DishDto getItemDetailsByNameId(String merchantNameId, String dishNameId, DishFilterCriteria dishCriteria) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.createAlias("merchant", "m");
 		criteria.add(Restrictions.eq("m.nameId", merchantNameId));
@@ -205,7 +217,6 @@ public class DishDao {
 			throw new BusinessException(DishErrorCodeType.DISH_DETAILS_NOT_FOUND);
 		}
 		MerchantFilterCriteria filterCriteria = new MerchantFilterCriteria(Boolean.FALSE, Boolean.TRUE);
-		DishFilterCriteria dishCriteria = new DishFilterCriteria(false, false, true, true);
 		return mapper.map(entity, filterCriteria, dishCriteria);
 	}
 
@@ -224,7 +235,7 @@ public class DishDao {
 		criteria.setMaxResults(resultsPerPage);
 		return mapper.mapTagsShortDetails(criteria.list());
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<PopularTag> getPopularCuisines(LocationCookieDto cookieDto, Integer page, Integer resultsPerPage)
 			throws BusinessException {
@@ -308,5 +319,37 @@ public class DishDao {
 		criteria.setResultTransformer(Transformers.aliasToBean(DishCount.class));
 		List<DishCount> entities = (List<DishCount>) criteria.list();
 		return entities;
+	}
+	
+	/**
+	 * To be used for caching purpose only
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<CuisineEntity> getAllCuisines() {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
+		criteria.addOrder(Order.asc("id"));
+		List<CuisineEntity> cuisines = criteria.list();
+		if (cuisines != null) {
+			return cuisines;
+		} else {
+			return Collections.emptyList();
+		}
+	}
+	
+	/**
+	 * To be used for caching purpose only
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SuggestionEntity> getAllSuggestions() {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
+		criteria.addOrder(Order.asc("id"));
+		List<SuggestionEntity> suggestions = criteria.list();
+		if (suggestions != null) {
+			return suggestions;
+		} else {
+			return Collections.emptyList();
+		}
 	}
 }

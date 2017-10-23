@@ -1,23 +1,45 @@
 package in.socyal.sc.persistence.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import in.socyal.sc.api.merchant.dto.CityDto;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
+import in.socyal.sc.api.location.dto.CityDto;
+import in.socyal.sc.api.location.dto.LocalityDto;
 import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.LocalityEntity;
 
 @Component
 public class LocationDaoMapper {
 
-	public void map(List<LocalityEntity> localities, List<LocalityDto> localityDtos) {
-		for (LocalityEntity entity : localities) {
-			localityDtos.add(map(entity));
+	public List<CityDto> map(List<CityEntity> entities) {
+		List<CityDto> cities = new ArrayList<>();
+		CityDto city = null;
+		for (CityEntity entity : entities) {
+			city = new CityDto();
+			city.setId(entity.getId());
+			city.setName(entity.getName());
+			city.setNameId(entity.getNameId());
+			city.setLocalities(mapShortLocality(entity.getLocalities()));
+			cities.add(city);
 		}
+		return cities;
 	}
-
+	
+	private List<LocalityDto> mapShortLocality(List<LocalityEntity> entities) {
+		List<LocalityDto> localities = new ArrayList<>();
+		LocalityDto locality = null;
+		for (LocalityEntity entity : entities) {
+			locality = new LocalityDto();
+			locality.setId(entity.getId());
+			locality.setName(entity.getName());
+			locality.setNameId(entity.getNameId());
+			localities.add(locality);
+		}
+		return localities;
+	}
+	
 	public LocalityDto map(LocalityEntity entity) {
 		LocalityDto dto = new LocalityDto();
 		dto.setId(entity.getId());

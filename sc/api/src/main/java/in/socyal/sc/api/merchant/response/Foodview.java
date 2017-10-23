@@ -2,10 +2,12 @@ package in.socyal.sc.api.merchant.response;
 
 import in.socyal.sc.api.type.RatingColorType;
 
-public class Recommendation  {
+public class Foodview  {
 	private Integer id;
 	private Integer itemId;
 	private String name;
+	private Integer merchantId;
+	private String merchantName;
 	private String description;
 	private Integer totalRcmdns;
 	private String thumbnail;
@@ -88,5 +90,21 @@ public class Recommendation  {
 
 	public void setRating(String rating) {
 		this.rating = rating;
+	}
+
+	public Integer getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Integer merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
 	}
 }

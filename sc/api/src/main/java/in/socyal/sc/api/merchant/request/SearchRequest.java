@@ -1,4 +1,4 @@
-package in.socyal.sc.api;
+package in.socyal.sc.api.merchant.request;
 
 public class SearchRequest {
 	private String searchString;

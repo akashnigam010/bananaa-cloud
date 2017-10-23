@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import in.socyal.sc.api.item.response.Tag;
+import in.socyal.sc.api.location.dto.AddressDto;
 
 public class MerchantDto implements Serializable {
 	private static final long serialVersionUID = 1L;

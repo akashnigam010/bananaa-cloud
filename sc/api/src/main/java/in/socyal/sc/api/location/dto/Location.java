@@ -1,4 +1,4 @@
-package in.socyal.sc.api.merchant.dto;
+package in.socyal.sc.api.location.dto;
 
 import java.io.Serializable;
 

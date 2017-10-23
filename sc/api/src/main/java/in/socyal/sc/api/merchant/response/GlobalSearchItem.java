@@ -9,6 +9,7 @@ public class GlobalSearchItem {
 	private String shortAddress;
 	private String merchantUrl;
 	private SearchType type;
+	private Boolean isSelected = Boolean.FALSE;
 	
 	public GlobalSearchItem(SearchType type) {
 		this.type = type;
@@ -60,5 +61,13 @@ public class GlobalSearchItem {
 
 	public void setType(SearchType type) {
 		this.type = type;
+	}
+
+	public Boolean getIsSelected() {
+		return isSelected;
+	}
+
+	public void setIsSelected(Boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 }
