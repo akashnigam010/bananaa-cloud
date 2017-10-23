@@ -41,6 +41,7 @@ public class ItemMapper implements Serializable {
 			item.setName(dto.getName());
 			item.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
 			item.setThumbnail(dto.getThumbnail());
+			item.setImageUrl(dto.getImageUrl());
 			item.setNameId(dto.getNameId());
 			item.setRecommendations(dto.getRecommendations().size());
 			item.setItemUrl(dto.getItemUrl());
