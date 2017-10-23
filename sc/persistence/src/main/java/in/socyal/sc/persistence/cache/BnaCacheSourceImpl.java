@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.persistence.DishDao;
 import in.socyal.sc.persistence.LocationDao;
+import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.CuisineEntity;
-import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 
 @Component
@@ -20,7 +20,7 @@ public class BnaCacheSourceImpl implements BnaCacheSource {
 
 	private List<CuisineEntity> cuisines = null;
 	private List<SuggestionEntity> suggestions = null;
-	private List<LocalityEntity> localities = null;
+	private List<CityEntity> cities = null;
 
 	@Override
 	public List<CuisineEntity> getCuisines() {
@@ -39,11 +39,11 @@ public class BnaCacheSourceImpl implements BnaCacheSource {
 	}
 
 	@Override
-	public List<LocalityEntity> getLocalities() {
-		if (localities == null) {
-			refreshLocalities();
+	public List<CityEntity> getCities() {
+		if (cities == null) {
+			refreshCities();
 		}
-		return localities;
+		return cities;
 	}
 
 	@Override
@@ -53,11 +53,11 @@ public class BnaCacheSourceImpl implements BnaCacheSource {
 
 	@Override
 	public void refreshSuggestions() {
-		suggestions = dishDao.getAllSuggestions();		
+		suggestions = dishDao.getAllSuggestions();
 	}
 
 	@Override
-	public void refreshLocalities() {
-		localities = locationDao.getLocalities();		
+	public void refreshCities() {
+		cities = locationDao.getCities();
 	}
 }

@@ -7,15 +7,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.CuisineEntity;
-import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 
 @Component
 public class BnaCacheManagerImpl implements BnaCacheManager {
 	@Autowired
 	BnaCacheSource cacheSource;
-	
+
 	private List<CuisineEntity> searchCuisines(String searchString) {
 		List<CuisineEntity> cuisines = cacheSource.getCuisines();
 		if (StringUtils.isNotBlank(searchString)) {
@@ -29,7 +29,7 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 		}
 		return cuisines;
 	}
-	
+
 	private List<SuggestionEntity> searchSuggestions(String searchString) {
 		List<SuggestionEntity> suggestions = cacheSource.getSuggestions();
 		if (StringUtils.isNotBlank(searchString)) {
@@ -39,7 +39,7 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 					matches.add(suggestions.get(i));
 				}
 			}
-			return matches;		
+			return matches;
 		}
 		return suggestions;
 	}
@@ -75,8 +75,8 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 	}
 
 	@Override
-	public List<LocalityEntity> getLocalities() {
-		return cacheSource.getLocalities();
+	public List<CityEntity> getCities() {
+		return cacheSource.getCities();
 	}
 
 	@Override
@@ -91,6 +91,6 @@ public class BnaCacheManagerImpl implements BnaCacheManager {
 
 	@Override
 	public void refreshLocalitiesCache() {
-		cacheSource.refreshLocalities();
+		cacheSource.refreshCities();
 	}
 }

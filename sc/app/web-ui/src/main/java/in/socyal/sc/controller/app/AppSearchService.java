@@ -75,7 +75,7 @@ public class AppSearchService {
 	@RequestMapping(value = "/getPopularLocalities", method = RequestMethod.GET, headers = "Accept=application/json")
 	public LocalitiesResponse getPopularLocalities() {
 		LocalitiesResponse response = new LocalitiesResponse();
-		response.setLocalities(merchantDelegate.getLocalities());
+		response.setCities(merchantDelegate.getCities());
 		return responseHelper.success(response);
 	}
 }

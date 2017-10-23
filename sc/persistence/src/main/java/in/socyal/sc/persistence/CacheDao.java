@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
+import in.socyal.sc.api.location.dto.CityDto;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.LoginErrorCodeType;
 import in.socyal.sc.persistence.cache.BnaCacheManager;
+import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.CuisineEntity;
-import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.entity.UserEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
@@ -53,9 +53,9 @@ public class CacheDao {
 		}
 	}
 	
-	public List<LocalityDto> getAllLocalities() {
-		List<LocalityEntity> entities = cacheManager.getLocalities();
-		return locationMapper.map(entities);
+	public List<CityDto> getCities() {
+		List<CityEntity> cities = cacheManager.getCities();
+		return locationMapper.map(cities);
 	}
 	
 	private List<CuisineEntity> filterUserPreferencesOnSearchStringCuisines(UserEntity user, String searchString) {

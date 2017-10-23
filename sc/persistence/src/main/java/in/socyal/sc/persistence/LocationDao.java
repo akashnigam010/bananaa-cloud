@@ -10,16 +10,14 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import in.socyal.sc.api.merchant.dto.CityDto;
-import in.socyal.sc.api.merchant.dto.LocalityDto;
+import in.socyal.sc.api.location.dto.CityDto;
+import in.socyal.sc.api.location.dto.LocalityDto;
 import in.socyal.sc.persistence.entity.CityEntity;
 import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.mapper.LocationDaoMapper;
 
 @Repository
 public class LocationDao {
-	private static Integer RESULTS_PER_PAGE = 10;
-
 	@Autowired
 	SessionFactory sessionFactory;
 	@Autowired
@@ -32,13 +30,12 @@ public class LocationDao {
 		this.sessionFactory = sessionFactory;
 	}
 
-	public List<LocalityEntity> getLocalities() {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LocalityEntity.class);
-		criteria.setMaxResults(RESULTS_PER_PAGE);
+	public List<CityEntity> getCities() {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CityEntity.class);
 		@SuppressWarnings("unchecked")
-		List<LocalityEntity> localities = (List<LocalityEntity>) criteria.list();
-		if (localities != null) {
-			return localities;
+		List<CityEntity> cities = (List<CityEntity>) criteria.list();
+		if (cities != null) {
+			return cities;
 		}
 		return Collections.emptyList();
 	}
