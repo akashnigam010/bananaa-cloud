@@ -7,6 +7,7 @@ public class Item {
 	private String nameId;
 	private String name;
 	private String thumbnail;
+	private String imageUrl;
 	private Integer recommendations;
 	private String itemUrl;
 	private String ratingClass;
@@ -79,5 +80,13 @@ public class Item {
 
 	public void setRatingClass(String ratingClass) {
 		this.ratingClass = ratingClass;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 }
