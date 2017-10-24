@@ -8,7 +8,7 @@ import in.socyal.sc.api.response.GenericResponse;
 
 public class LocalitiesResponse extends GenericResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
-	List<CityDto> cities;
+	private List<CityDto> cities;
 
 	public List<CityDto> getCities() {
 		return cities;

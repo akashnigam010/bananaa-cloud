@@ -174,6 +174,7 @@ public class DishDao {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
 		criteria.add(Restrictions.eq("merchant.id", merchantId));
 		criteria.addOrder(Order.desc("rating"));
+		criteria.addOrder(Order.asc("id"));
 		int firstResult = ((page - 1) * resultsPerPage);
 		criteria.setFirstResult(firstResult);
 		criteria.setMaxResults(resultsPerPage);

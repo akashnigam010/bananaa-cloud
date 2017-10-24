@@ -43,7 +43,7 @@ public class AppItemService {
 		ItemsResponse response = new ItemsResponse();
 		try {
 			validator.validateIdPageRequest(request);
-			TrendingRequest itemsRequest = new TrendingRequest(request.getId(), 5, request.getPage());
+			TrendingRequest itemsRequest = new TrendingRequest(request.getId(), 10, request.getPage());
 			response = delegate.getPopularItems(itemsRequest);
 			return helper.success(response);
 		} catch (BusinessException e) {
