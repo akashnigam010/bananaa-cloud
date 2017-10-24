@@ -27,11 +27,21 @@
        top: 100%;
      }
      .loader-animation-rating {
-          position: absolute;
-          height: 15%;
-          left: 50%;
-          top: 50%; 
-        }
+       position: absolute;
+       height: 15%;
+       left: 50%;
+       top: 50%; 
+     }
+     .no-margin {
+       margin: -4px 0 0 !important;
+     }
+     .radio-inline {
+       padding-left: 0px;
+       padding-right: 15px;
+     }
+     .new-rest-label {
+       text-align: left !important;
+     }
 	</style>
 </head>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
@@ -64,6 +74,8 @@
                           <li><a data-toggle="tab" href="#tagsTab">Tags</a></li>
                           <li><a data-toggle="tab" href="#addRcmdTab">Recommendations</a></li>
                           <li><a data-toggle="tab" href="#ratingTab">Rate Engines</a></li>
+                          <li><a data-toggle="tab" href="#editFlagsTab">Edit Flags</a></li>
+                          <li><a data-toggle="tab" href="#merchantTab">Add new Restaurant</a></li>
                         </ul>
 
                         <div class="tab-content">
@@ -288,6 +300,117 @@
                                 <button type="button" class="bna-button" onclick="rateManyRestaurants();">Run Engine</button>
                               </div>
                             </div>
+                          </div>
+                          
+                          <div id="editFlagsTab" class="tab-pane fade">
+                            <form class="form-horizontal padding">
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Restaurant Name</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" data-provide="typeahead" id="restaurantNameFlag" required="required" autocomplete="off" />
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Is Active</label>
+                                <div class="col-sm-10">
+                                  <div class="checkbox col-sm-1">
+                                    <input type="radio" name="rbIsActive" value="true">Yes</input>    
+                                  </div>
+                                  <div class="checkbox col-sm-1">
+                                    <input type="radio" name="rbIsActive" value="false">No</input>                                    
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Can Edit Menu</label>
+                                <div class="col-sm-10">
+                                  <div class="checkbox col-sm-1">
+                                    <input type="radio" name="rbCanEdit" value="true">Yes</input>    
+                                  </div>
+                                  <div class="checkbox col-sm-1">
+                                    <input type="radio" name="rbCanEdit" value="false">No</input>                                    
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                  <button type="button" class="btn btn-default bna-button" onclick="updateFlags()">Update Flags</button>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                          
+                          <div id="merchantTab" class="tab-pane fade">
+                            <form class="form-horizontal padding">
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Name</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="nameNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">XYZ Bar And Cafe</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Name ID</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="nameIdNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">xyz-bar-and-cafe-hitech-city</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Phone</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="phoneNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">1231231232</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Address</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="addressNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">Level 10, Inorbit Mall, Hitech City, Hyderabad</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Locality ID</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="localityIdNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">3</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Type</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="typeNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">Fine Dining, Bar, Casual Dining</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Average Cost</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="averageCostNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">1650</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Image URL</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="imageUrlNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">https://s3.ap-south-1.amazonaws.com/bna-s3/rest-img/air-cube-jubilee-hills.jpg</label>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-sm-2 control-label bold">Thumbnail</label>
+                                <div class="col-sm-5">
+                                  <input class="form-control" type="text" id="thumbnailNew" required="required" autocomplete="off" />
+                                </div>
+                                <label class="col-sm-3 control-label new-rest-label">https://s3.ap-south-1.amazonaws.com/bna-s3/rest-img/t/air-cube-jubilee-hills.jpg</label>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                  <button type="button" class="btn btn-default bna-button" onclick="addNewMerchant()">Add Restaurant</button>
+                                </div>
+                              </div>
+                            </form>
                           </div>
                                                   
                         </div>                        

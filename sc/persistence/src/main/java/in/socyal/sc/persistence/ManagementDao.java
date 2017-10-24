@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
@@ -24,8 +25,11 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.DishVegnonvegValue;
 import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
+import in.socyal.sc.api.manage.request.MerchantFlagsRequest;
+import in.socyal.sc.api.manage.request.NewMerchantRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.Item;
+import in.socyal.sc.api.manage.response.MerchantFlagsResponse;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
@@ -34,6 +38,7 @@ import in.socyal.sc.api.type.error.MerchantErrorCodeType;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.ItemImageEntity;
+import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
@@ -50,7 +55,7 @@ public class ManagementDao {
 
 	@Autowired
 	ManagementDaoMapper mapper;
-	
+
 	@Autowired
 	DishDaoMapper dishDaoMapper;
 
@@ -60,7 +65,7 @@ public class ManagementDao {
 	public ManagementDao(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Item> getAllItems(IdRequest request) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(DishEntity.class);
@@ -70,9 +75,9 @@ public class ManagementDao {
 		if (entities != null) {
 			return mapper.map(entities);
 		}
-		return Collections.EMPTY_LIST;		
+		return Collections.EMPTY_LIST;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void addItem(AddItemRequest request) throws BusinessException {
 		MerchantEntity merchant = getMerchantById(request.getMerchantId());
@@ -90,7 +95,7 @@ public class ManagementDao {
 		}
 		sessionFactory.getCurrentSession().save(entity);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void updateItem(UpdateItemRequest request) throws BusinessException {
 		DishEntity dish = (DishEntity) sessionFactory.getCurrentSession().get(DishEntity.class, request.getId());
@@ -106,7 +111,7 @@ public class ManagementDao {
 		dish.setIsActive(request.getIsActive());
 		List<Integer> suggestionIds = request.getSuggestionIds();
 		List<Integer> cuisineIds = request.getCuisineIds();
-		
+
 		if (suggestionIds.size() > 0) {
 			Criteria suggestionCriteria = sessionFactory.getCurrentSession().createCriteria(SuggestionEntity.class);
 			suggestionCriteria.add(Restrictions.in("id", suggestionIds));
@@ -114,7 +119,7 @@ public class ManagementDao {
 		} else {
 			dish.setSuggestions(null);
 		}
-		
+
 		if (cuisineIds.size() > 0) {
 			Criteria cuisineCriteria = sessionFactory.getCurrentSession().createCriteria(CuisineEntity.class);
 			cuisineCriteria.add(Restrictions.in("id", cuisineIds));
@@ -122,10 +127,10 @@ public class ManagementDao {
 		} else {
 			dish.setCuisines(null);
 		}
-		
+
 		sessionFactory.getCurrentSession().save(dish);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void deleteItem(IdRequest request) throws BusinessException {
 		DishEntity dish = (DishEntity) sessionFactory.getCurrentSession().get(DishEntity.class, request.getId());
@@ -142,12 +147,12 @@ public class ManagementDao {
 				sessionFactory.getCurrentSession().delete(rcmd);
 			}
 		}
-		
+
 		dish.setCuisines(null);
 		dish.setSuggestions(null);
 		sessionFactory.getCurrentSession().delete(dish);
 	}
-	
+
 	public void addRecommendations(Integer id, Float rating, Integer rcmdCount) throws BusinessException {
 		Timestamp ts = new Timestamp(Calendar.getInstance().getTime().getTime());
 		try {
@@ -212,7 +217,7 @@ public class ManagementDao {
 		List<ItemImageEntity> entities = criteria.list();
 		return mapper.mapItemImages(entities);
 	}
-	
+
 	public void updateDishVegnonvegValues(DishVegnonvegValuesRequest request) throws BusinessException {
 		Timestamp ts = new Timestamp(Calendar.getInstance().getTime().getTime());
 		try {
@@ -236,6 +241,36 @@ public class ManagementDao {
 		}
 	}
 
+	public MerchantFlagsResponse getActiveAndEditFlags(IdRequest request) throws BusinessException {
+		MerchantEntity entity = getMerchantById(request.getId());
+		MerchantFlagsResponse response = new MerchantFlagsResponse();
+		response.setIsActive(entity.getIsActive());
+		response.setCanEdit(entity.getCanEdit());
+		return response;
+	}
+
+	public void setActiveAndEditFlags(MerchantFlagsRequest request) throws BusinessException {
+		MerchantEntity entity = getMerchantById(request.getId());
+		entity.setIsActive(request.getIsActive());
+		entity.setCanEdit(request.getCanEdit());
+		sessionFactory.getCurrentSession().saveOrUpdate(entity);
+	}
+	
+	@Transactional
+	public void saveNewMerchant(NewMerchantRequest request) throws BusinessException {
+		LocalityEntity locality = (LocalityEntity) sessionFactory.getCurrentSession().get(LocalityEntity.class, request.getLocalityId());
+		if (locality == null) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		MerchantEntity newMerchant = mapper.mapNewMerchant(request, locality);
+		try {
+			sessionFactory.getCurrentSession().save(newMerchant);
+		} catch (Exception e) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		
+	}
+
 	private MerchantEntity getMerchantById(Integer id) throws BusinessException {
 		MerchantEntity merchant = (MerchantEntity) sessionFactory.getCurrentSession().get(MerchantEntity.class, id);
 		if (merchant == null) {
@@ -243,13 +278,13 @@ public class ManagementDao {
 		}
 		return merchant;
 	}
-	
+
 	private void canDishesBeUpdated(MerchantEntity entity) throws BusinessException {
 		if (!entity.getCanEdit()) {
 			throw new BusinessException(DishErrorCodeType.CAN_NOT_ADD_EDIT_DISH);
 		}
 	}
-	
+
 	/**
 	 * Generates unique nameId cuisine and suggestion names
 	 * 
@@ -261,7 +296,7 @@ public class ManagementDao {
 		String[] nameArr = name.split(" ");
 		StringBuilder nameId = new StringBuilder();
 		int i;
-		for (i=0; i<nameArr.length-1; i++) {
+		for (i = 0; i < nameArr.length - 1; i++) {
 			nameId.append(nameArr[i].toLowerCase().trim() + "-");
 		}
 		nameId.append(nameArr[i].toLowerCase().trim());
