@@ -14,12 +14,14 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
+import in.socyal.sc.api.manage.request.MerchantFlagsRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
 import in.socyal.sc.api.manage.response.GetItemImagesResponse;
 import in.socyal.sc.api.manage.response.GetSuggestionsResponse;
+import in.socyal.sc.api.manage.response.MerchantFlagsResponse;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.MerchantShortDetails;
 import in.socyal.sc.api.merchant.response.SearchMerchantResponse;
@@ -53,10 +55,10 @@ public class ManagementService {
 				delegate.runCuisineRatingEngineForMerchant(idRequest);
 				delegate.runTagsRatingEngineForMerchant(idRequest);
 			}
-		}		
+		}
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/runRatingEngineForMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse runRatingEngineForMerchant(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -67,21 +69,21 @@ public class ManagementService {
 		}
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/runDishRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse runDishRatingEngine(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
 		delegate.runDishRatingEngineForMerchant(request);
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/runCuisineRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse runCuisineRatingEngine(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
 		delegate.runCuisineRatingEngineForMerchant(request);
 		return helper.success(response);
 	}
-	
+
 	@RequestMapping(value = "/runTagsRatingEngine", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse runTagsRatingEngine(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -121,7 +123,7 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/addItem", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse addItem(@RequestBody AddItemRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -133,7 +135,7 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/updateItem", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse updateItem(@RequestBody UpdateItemRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -145,7 +147,7 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/deleteItem", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse deleteItem(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -232,13 +234,36 @@ public class ManagementService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/updateVegNonvegValues", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse updateVegNonvegValues(@RequestBody DishVegnonvegValuesRequest request) {
 		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateDishVegnonvegValueRequest(request);
 			delegate.updateDishVegnonvegValues(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+
+	@RequestMapping(value = "/getActiveAndEditFlags", method = RequestMethod.POST, headers = "Accept=application/json")
+	public MerchantFlagsResponse getActiveAndEditFlags(@RequestBody IdRequest request) {
+		MerchantFlagsResponse response = null;
+		try {
+			response = delegate.getActiveAndEditFlags(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+
+	@RequestMapping(value = "/setActiveAndEditFlags", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse setActiveAndEditFlags(@RequestBody MerchantFlagsRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateFlagsRequest(request);
+			delegate.setActiveAndEditFlags(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

@@ -9,6 +9,7 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.AddRecommendationsRequest;
 import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
+import in.socyal.sc.api.manage.request.MerchantFlagsRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
@@ -58,5 +59,12 @@ public class ManageValidator {
 		if (request.getValues() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
+	}
+
+	public void validateFlagsRequest(MerchantFlagsRequest request) throws BusinessException {
+		if (request.getId() == null || (request.getIsActive() == null && request.getCanEdit() == null)) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+		
 	}
 }
