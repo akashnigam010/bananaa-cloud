@@ -16,6 +16,7 @@ import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
 import in.socyal.sc.api.manage.request.MerchantFlagsRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
+import in.socyal.sc.api.manage.request.NewMerchantRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
@@ -264,6 +265,18 @@ public class ManagementService {
 		try {
 			validator.validateFlagsRequest(request);
 			delegate.setActiveAndEditFlags(request);
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/addNewMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse addNewMerchant(@RequestBody NewMerchantRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateNewMerchantRequest(request);
+			delegate.saveNewMerchant(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

@@ -16,6 +16,7 @@ import in.socyal.sc.api.manage.request.AddRequest;
 import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
 import in.socyal.sc.api.manage.request.MerchantFlagsRequest;
 import in.socyal.sc.api.manage.request.MessageRequest;
+import in.socyal.sc.api.manage.request.NewMerchantRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.GetAllItemsResponse;
 import in.socyal.sc.api.manage.response.GetCuisinesResponse;
@@ -178,5 +179,11 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public void setActiveAndEditFlags(MerchantFlagsRequest request) throws BusinessException {
 		dao.setActiveAndEditFlags(request);
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void saveNewMerchant(NewMerchantRequest request) throws BusinessException {
+		dao.saveNewMerchant(request);
 	}
 }

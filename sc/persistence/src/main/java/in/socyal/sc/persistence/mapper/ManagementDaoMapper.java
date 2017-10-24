@@ -9,11 +9,15 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.dish.dto.ItemImageDto;
 import in.socyal.sc.api.manage.request.AddItemRequest;
+import in.socyal.sc.api.manage.request.NewMerchantRequest;
 import in.socyal.sc.api.manage.request.Tag;
 import in.socyal.sc.api.manage.response.Item;
+import in.socyal.sc.persistence.entity.AddressEntity;
+import in.socyal.sc.persistence.entity.ContactEntity;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.ItemImageEntity;
+import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
 import in.socyal.sc.persistence.entity.TagEntity;
@@ -66,6 +70,51 @@ public class ManagementDaoMapper {
 			dishes.add(item);
 		}
 		return dishes;
+	}
+	
+	public MerchantEntity mapNewMerchant(NewMerchantRequest request, LocalityEntity locality) {
+		Calendar calendar = Calendar.getInstance();
+		MerchantEntity entity = new MerchantEntity();
+		entity.setName(request.getName());
+		entity.setNameId(request.getNameId());
+		entity.setThumbnail(request.getThumbnail());
+		entity.setImageUrl(request.getImageUrl());
+		entity.setContact(getContact(request.getPhone(), calendar));
+		entity.setAddress(getAddress(request.getAddress(), calendar, locality));
+		entity.setAverageCost(request.getAverageCost().doubleValue());
+		entity.setType(getType(request.getType()));
+		entity.setIsActive(Boolean.FALSE);
+		entity.setCanEdit(Boolean.FALSE);
+		entity.setCreatedDateTime(calendar);
+		entity.setUpdatedDateTime(calendar);
+		return entity;
+	}
+	
+	private ContactEntity getContact(String phone, Calendar calendar) {
+		ContactEntity entity = new ContactEntity();
+		entity.setPhone1(phone);
+		entity.setCreatedDateTime(calendar);
+		entity.setUpdatedDateTime(calendar);
+		return entity;
+	}
+	
+	private AddressEntity getAddress(String address, Calendar calendar, LocalityEntity locality) {
+		AddressEntity entity = new AddressEntity();
+		entity.setAddress(address);
+		entity.setLocality(locality);
+		entity.setCreatedDateTime(calendar);
+		entity.setUpdatedDateTime(calendar);
+		return entity;
+	}
+	
+	private String getType(List<String> type) {
+		String typeString = "";
+		int i=0;
+		for (i = 0; i < type.size() - 1; i++) {
+			typeString += type.get(i) + ", ";
+		}
+		typeString += type.get(i);
+		return typeString;
 	}
 
 	private List<Tag> mapSuggestions(List<SuggestionEntity> tags) {

@@ -16,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.dish.dto.ItemImageDto;
@@ -25,6 +26,7 @@ import in.socyal.sc.api.manage.request.AddItemRequest;
 import in.socyal.sc.api.manage.request.DishVegnonvegValue;
 import in.socyal.sc.api.manage.request.DishVegnonvegValuesRequest;
 import in.socyal.sc.api.manage.request.MerchantFlagsRequest;
+import in.socyal.sc.api.manage.request.NewMerchantRequest;
 import in.socyal.sc.api.manage.request.UpdateItemRequest;
 import in.socyal.sc.api.manage.response.Item;
 import in.socyal.sc.api.manage.response.MerchantFlagsResponse;
@@ -36,6 +38,7 @@ import in.socyal.sc.api.type.error.MerchantErrorCodeType;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.ItemImageEntity;
+import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
@@ -251,6 +254,21 @@ public class ManagementDao {
 		entity.setIsActive(request.getIsActive());
 		entity.setCanEdit(request.getCanEdit());
 		sessionFactory.getCurrentSession().saveOrUpdate(entity);
+	}
+	
+	@Transactional
+	public void saveNewMerchant(NewMerchantRequest request) throws BusinessException {
+		LocalityEntity locality = (LocalityEntity) sessionFactory.getCurrentSession().get(LocalityEntity.class, request.getLocalityId());
+		if (locality == null) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		MerchantEntity newMerchant = mapper.mapNewMerchant(request, locality);
+		try {
+			sessionFactory.getCurrentSession().save(newMerchant);
+		} catch (Exception e) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		
 	}
 
 	private MerchantEntity getMerchantById(Integer id) throws BusinessException {
