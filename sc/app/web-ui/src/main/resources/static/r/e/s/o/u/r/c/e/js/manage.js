@@ -1,6 +1,7 @@
 var timeout;
 var suggestions = [];
 var cuisines = [];
+var selectRestaurantFlagId = '';
 $(document).ready(function() {
 	$("#rcmd-recommendations").val(0);
     $('#restaurantName').typeahead({
@@ -103,7 +104,135 @@ $(document).ready(function() {
             return item;
         }
     });
+    
+    $('#restaurantNameFlag').typeahead({
+    	minLength: 2,
+    	autoSelect: true,
+    	source: function(query, process) {
+    		merchantSource(query, process);
+        },
+        updater:function (restaurant) {
+        	selectRestaurantFlagId = restaurant.id;
+        	loadFlags(restaurant.id);
+	    	return restaurant;
+	    }
+    });
+    
 });
+
+function loadFlags(merchantId) {
+	$(".loader-animation").removeClass('hide');
+	var dataOb = {
+			  id : merchantId
+		};
+		$.ajax({
+			  method: "POST",
+			  url: "/socyal/management/getActiveAndEditFlags",
+			  contentType : "application/json",
+			  data: JSON.stringify(dataOb)
+	  	})
+	  	.done(function(response) {
+	  		$(".loader-animation").addClass('hide');
+			  if (response.result) {
+				  if (response.isActive) {
+					  $('input[name=rbIsActive][value=true]').prop('checked', true);
+				  } else {
+					  $('input[name=rbIsActive][value=false]').prop('checked', true);
+				  }
+				  if (response.canEdit) {
+					  $('input[name=rbCanEdit][value=true]').prop('checked', true);
+				  } else {
+					  $('input[name=rbCanEdit][value=false]').prop('checked', true);
+				  }				  
+			  } else {
+				  handleErrorCallback(response);
+			  }
+		  });
+}
+
+function updateFlags() {
+	if (selectRestaurantFlagId == '') {
+		alert('Please select a restaurant');
+		return;
+	} else {
+		var input = confirm("Are you sure you want to update flag values?");
+		if(input) {
+			var dataOb = {
+    			id : selectRestaurantFlagId,
+    			isActive : $('input[name=rbIsActive]:checked').val(),
+    			canEdit : $('input[name=rbCanEdit]:checked').val()
+	    	};
+			$(".loader-animation").removeClass('hide');
+			$.ajax({
+				  method: "POST",
+				  url: "/socyal/management/setActiveAndEditFlags",
+				  contentType : "application/json",
+				  data: JSON.stringify(dataOb)
+		  	})
+		  	.done(function(response) {
+		  		$(".loader-animation").addClass('hide');
+				  if (response.result) {
+					  alert('Saved successfully');
+				  } else {
+					  handleErrorCallback(response);
+				  }
+			  });
+		}
+		return;
+	}
+}
+
+function addNewMerchant() {
+	var name = $("#nameNew").val().trim();
+	var nameId = $("#nameIdNew").val().trim();
+	var phone =  $("#phoneNew").val().trim();
+	var address = $("#addressNew").val().trim();
+	var localityId = $("#localityIdNew").val().trim();
+	var typeStr = $("#typeNew").val().trim();
+	var averageCost = $("#averageCostNew").val().trim();
+	var imageUrl = $("#imageUrlNew").val().trim();
+	var thumbnail = $("#thumbnailNew").val().trim();
+	if (name == '' || nameId == '' || phone == '' || address == '' || localityId == '' || 
+		typeStr == '' || averageCost == '' || imageUrl == '' || thumbnail == '') {
+		alert('Incomplete Data. Aborting!');
+		return;
+	}
+	var type = typeStr.split(",").map(function(item) {
+	  return item.trim();
+	});
+	
+	var input = confirm("Are you sure you want to create this new Restaurant?");
+	if(input) {
+		var dataOb = {
+				name : name,
+				nameId : nameId,
+				phone : phone,
+				address : address,
+				localityId : localityId,
+				type : type,
+				averageCost : averageCost,
+				imageUrl : imageUrl,
+				thumbnail : thumbnail
+    	};
+		$(".loader-animation").removeClass('hide');
+		$.ajax({
+			  method: "POST",
+			  url: "/socyal/management/addNewMerchant",
+			  contentType : "application/json",
+			  data: JSON.stringify(dataOb)
+	  	})
+	  	.done(function(response) {
+	  		$(".loader-animation").addClass('hide');
+			  if (response.result) {
+				  alert('Restaurant created successfully!');
+			  } else {
+				  handleErrorCallback(response);
+			  }
+		  });
+	}
+	return;
+	
+}
 
 function addItem() {
 	var merchant = $('#restaurantName');
