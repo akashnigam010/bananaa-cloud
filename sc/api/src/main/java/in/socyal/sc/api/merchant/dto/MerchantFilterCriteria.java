@@ -3,6 +3,7 @@ package in.socyal.sc.api.merchant.dto;
 public class MerchantFilterCriteria {
 	private Boolean mapImage;
 	private Boolean mapAddress;
+	private Boolean mapShortAddress = Boolean.FALSE;;
 	private Boolean mapTimings;
 	private Boolean mapCuisineRatings;
 	private Boolean mapSuggestionRatings;
@@ -11,6 +12,7 @@ public class MerchantFilterCriteria {
 	public MerchantFilterCriteria(Boolean value) {
 		this.mapImage = value;
 		this.mapAddress = value;
+		this.mapShortAddress = value;
 		this.mapTimings = value;
 		this.mapCuisineRatings = value;
 		this.mapSuggestionRatings = value;
@@ -79,5 +81,13 @@ public class MerchantFilterCriteria {
 
 	public void setMapSuggestionRatings(Boolean mapSuggestionRatings) {
 		this.mapSuggestionRatings = mapSuggestionRatings;
+	}
+
+	public Boolean getMapShortAddress() {
+		return mapShortAddress;
+	}
+
+	public void setMapShortAddress(Boolean mapShortAddress) {
+		this.mapShortAddress = mapShortAddress;
 	}
 }

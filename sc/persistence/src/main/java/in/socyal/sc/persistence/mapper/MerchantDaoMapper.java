@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.location.dto.AddressDto;
+import in.socyal.sc.api.location.dto.CityDto;
+import in.socyal.sc.api.location.dto.LocalityDto;
 import in.socyal.sc.api.merchant.dto.ContactDto;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
@@ -78,7 +80,20 @@ public class MerchantDaoMapper {
 				map(entity.getAddress(), addressDto);
 				dto.setAddress(addressDto);
 			}
-		}		
+		}
+		
+		if (filter.getMapShortAddress() && !filter.getMapAddress()) {
+			if (entity.getAddress() != null) {
+				AddressDto addressDto = new AddressDto();
+				LocalityDto localityDto = new LocalityDto();
+				CityDto cityDto = new CityDto();
+				cityDto.setName(entity.getAddress().getLocality().getCity().getName());
+				localityDto.setCity(cityDto);
+				localityDto.setName(entity.getAddress().getLocality().getName());
+				addressDto.setLocality(localityDto);
+				dto.setAddress(addressDto);
+			}
+		}
 		
 		if (filter.getMapTimings()) {
 			dto.setTimings(mapTimingDtos(entity.getTimings()));
