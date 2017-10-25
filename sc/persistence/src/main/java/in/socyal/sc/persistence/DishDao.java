@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
@@ -14,6 +15,9 @@ import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,6 +31,8 @@ import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.user.dto.UserTagPreference;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishCount;
 import in.socyal.sc.persistence.entity.DishEntity;
@@ -320,6 +326,38 @@ public class DishDao {
 		criteria.setResultTransformer(Transformers.aliasToBean(DishCount.class));
 		List<DishCount> entities = (List<DishCount>) criteria.list();
 		return entities;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserTagPreference> getTagsMappedWithUserPrefs(TagType tagType, String searchString,
+			Integer userId, Integer page, Integer resultsPerPage) throws BusinessException {
+		StringBuilder queryBuilder = new StringBuilder();
+		queryBuilder.append("SELECT TAG.ID AS id, TAG.NAME AS name, IF(USPM.USER_ID IS NULL, 0, 1) AS selected ");
+		if (tagType == TagType.CUISINE) {
+			queryBuilder.append("FROM CUISINE TAG LEFT OUTER JOIN USER_SUGGESTION_PREF_MAPPING USPM ");
+		} else if (tagType == TagType.SUGGESTION) {
+			queryBuilder.append("FROM SUGGESTION TAG LEFT OUTER JOIN USER_SUGGESTION_PREF_MAPPING USPM ");
+		} else {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		queryBuilder.append("ON USPM.SUGGESTION_ID = TAG.ID ");
+		queryBuilder.append("AND USPM.USER_ID = :userId ");
+		if (StringUtils.isNotBlank(searchString)) {
+			queryBuilder.append("WHERE TAG.NAME LIKE '%:userId%' ");
+		}
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
+		if (StringUtils.isNotBlank(searchString)) {
+			query.setString("searchStr", searchString);
+		}
+		query.setInteger("userId", userId);
+		int firstResult = ((page - 1) * resultsPerPage);
+		query.setFirstResult(firstResult);
+		query.setMaxResults(resultsPerPage);
+		query.addScalar("id", new IntegerType());
+		query.addScalar("name", new StringType());
+		query.addScalar("selected", new BooleanType());
+		query.setResultTransformer(Transformers.aliasToBean(UserTagPreference.class));
+		return query.list();
 	}
 	
 	/**

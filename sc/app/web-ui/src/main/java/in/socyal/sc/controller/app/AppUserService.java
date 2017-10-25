@@ -1,7 +1,5 @@
 package in.socyal.sc.controller.app;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +13,6 @@ import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.SearchTagResponse;
 import in.socyal.sc.api.merchant.response.FoodviewsResponse;
-import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.user.dto.ProfileResponse;
@@ -53,7 +50,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getAllRecommendations", method = RequestMethod.POST, headers = "Accept=application/json")
 	public FoodviewsResponse getAllRecommendations(@RequestBody IdPageRequest request) {
 		FoodviewsResponse response = new FoodviewsResponse();
@@ -65,7 +62,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/saveStatus", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse saveStatus(@RequestBody StatusRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -76,7 +73,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getVegnonvegPreference", method = RequestMethod.POST, headers = "Accept=application/json")
 	public VegnonvegPreferenceResponse searchCuisine() {
 		VegnonvegPreferenceResponse response = new VegnonvegPreferenceResponse();
@@ -99,7 +96,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/addCuisinePreference", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse addCuisinePreference(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -111,7 +108,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/removeCuisinePreference", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse removeCuisinePreference(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -123,7 +120,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/addSuggestionPreference", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse addSuggestionPreference(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -135,7 +132,7 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/removeSuggestionPreference", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse removeSuggestionPreference(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -160,14 +157,13 @@ public class AppUserService {
 
 	private SearchTagResponse searchTag(GenericSearchRequest request, TagType tagType) {
 		SearchTagResponse response = new SearchTagResponse();
-		List<GlobalSearchItem> searchItems;
 		try {
 			if (request.getPage() == null) {
 				request.setPage(1);
 			}
 			int resultsPerPage = request.getPage() == 1 ? 20 : 30;
-			searchItems = itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), resultsPerPage);
-			response.setSearchItems(searchItems);
+			response.setSearchItems(
+					itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), resultsPerPage));
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

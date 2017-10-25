@@ -17,13 +17,14 @@ import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.type.TagType;
+import in.socyal.sc.api.user.dto.UserTagPreference;
 
 public interface ItemDelegate {
 	SearchItemsResponse searchItems(SearchRequest request);
 
 	List<GlobalSearchItem> searchTags(GenericSearchRequest request, TagType tagType, Integer page, Integer resultsPerPage);
 
-	List<GlobalSearchItem> searchTagsWithUserPrefs(GenericSearchRequest request, TagType tagType, Integer page,
+	List<UserTagPreference> searchTagsWithUserPrefs(GenericSearchRequest request, TagType tagType, Integer page,
 			Integer resultsPerPage) throws BusinessException;
 
 	ItemsResponse getPopularItems(TrendingRequest request) throws BusinessException;

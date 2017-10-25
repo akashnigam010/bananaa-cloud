@@ -29,6 +29,8 @@ import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.type.error.UserErrorCodeType;
+import in.socyal.sc.api.user.dto.UserTagPreference;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.app.rcmdn.mapper.ItemMapper;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
@@ -118,17 +120,13 @@ public class ItemDelegateImpl implements ItemDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public List<GlobalSearchItem> searchTagsWithUserPrefs(GenericSearchRequest request, TagType tagType, Integer page,
-			Integer resultsPerPage) throws BusinessException {
+	public List<UserTagPreference> searchTagsWithUserPrefs(GenericSearchRequest request, TagType tagType,
+			Integer page, Integer resultsPerPage) throws BusinessException {
 		if (!jwtHelper.isUserLoggedIn()) {
-			return searchTags(request, tagType, page, resultsPerPage);
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
 		} else {
-			Integer userId = jwtHelper.getUserId();
-			if (userId == null) {
-				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
-			}
-			return cacheDao.searchTagsWithUserPrefs(request.getSearchString(), page, resultsPerPage, tagType,
-					jwtHelper.getUserId());
+			return dishDao.getTagsMappedWithUserPrefs(tagType, request.getSearchString(), jwtHelper.getUserId(), page,
+					resultsPerPage);
 		}
 	}
 
