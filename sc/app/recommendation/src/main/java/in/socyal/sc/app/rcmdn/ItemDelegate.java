@@ -5,11 +5,13 @@ import java.util.List;
 import in.socyal.sc.api.DetailsRequest;
 import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
+import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
+import in.socyal.sc.api.items.request.GetFoodSuggestionsRequest;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.AppItemDetailsResponse;
@@ -39,4 +41,6 @@ public interface ItemDelegate {
 
 	MerchantListForTagResponse searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page)
 			throws BusinessException;
+
+	List<DishDto> getSuggestions(GetFoodSuggestionsRequest request) throws BusinessException;
 }

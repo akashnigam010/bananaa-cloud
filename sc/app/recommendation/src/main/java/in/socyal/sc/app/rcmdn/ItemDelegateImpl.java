@@ -19,6 +19,7 @@ import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTag;
 import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
+import in.socyal.sc.api.items.request.GetFoodSuggestionsRequest;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.request.SearchRequest;
@@ -151,5 +152,15 @@ public class ItemDelegateImpl implements ItemDelegate {
 			response.setPage(page);
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public List<DishDto> getSuggestions(GetFoodSuggestionsRequest request) throws BusinessException {
+		if (!jwtHelper.isUserLoggedIn()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		} else {
+			return dishDao.getSuggestions(jwtHelper.getUserId(), request);
+		}
 	}
 }

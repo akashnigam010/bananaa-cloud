@@ -11,7 +11,9 @@ import in.socyal.sc.api.IdPageRequest;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.item.response.GetFoodSuggestionsResponse;
 import in.socyal.sc.api.item.response.SearchTagResponse;
+import in.socyal.sc.api.items.request.GetFoodSuggestionsRequest;
 import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
@@ -144,7 +146,19 @@ public class AppUserService {
 			return helper.failure(response, e);
 		}
 	}
-
+	
+	@RequestMapping(value = "/getSuggestions", method = RequestMethod.POST, headers = "Accept=application/json")
+	public GetFoodSuggestionsResponse getSuggestions(@RequestBody GetFoodSuggestionsRequest request) {
+		GetFoodSuggestionsResponse response = new GetFoodSuggestionsResponse();
+		try {
+			validator.validateFoodSuggestionsRequest(request);
+			response.setDishes(itemDelegate.getSuggestions(request));
+			return helper.success(response);
+		} catch (BusinessException e) {
+			return helper.failure(response, e);
+		}
+	}
+	
 	@RequestMapping(value = "/searchCuisineWithUserPrefs", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchTagResponse searchCuisine(@RequestBody GenericSearchRequest request) {
 		return searchTag(request, TagType.CUISINE);
@@ -161,9 +175,8 @@ public class AppUserService {
 			if (request.getPage() == null) {
 				request.setPage(1);
 			}
-			int resultsPerPage = request.getPage() == 1 ? 20 : 30;
 			response.setSearchItems(
-					itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), resultsPerPage));
+					itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), 30));
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);
