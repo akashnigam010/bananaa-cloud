@@ -102,26 +102,6 @@ public class DishDaoMapper {
 		tag.setNameId(entity.getNameId());
 		return tag;
 	}
-	
-	public List<GlobalSearchItem> mapTagsWithPreferences(List<? extends TagEntity> entities, List<? extends TagEntity> userPrefs) {
-		List<GlobalSearchItem> dtos = new ArrayList<>();;
-		GlobalSearchItem dto = null;
-		Integer prefIndex = 0, matchId = null;
-		if (userPrefs.size() > 0) {
-			matchId = userPrefs.get(prefIndex).getId();
-		}
-		for (TagEntity entity : entities) {
-			dto = mapTagShortDetails(entity);
-			if (matchId != null && matchId.equals(dto.getId())) {
-				dto.setIsSelected(true);
-				if (prefIndex < userPrefs.size()-1) {
-					matchId = userPrefs.get(++prefIndex).getId();
-				}				
-			}
-			dtos.add(dto);
-		}
-		return dtos;
-	}
 
 	public List<SuggestionDto> mapSuggestions(List<SuggestionEntity> entites) {
 		List<SuggestionDto> dtos = new ArrayList<>();

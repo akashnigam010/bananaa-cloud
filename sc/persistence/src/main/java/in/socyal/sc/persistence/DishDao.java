@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
@@ -14,6 +15,9 @@ import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.BooleanType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,11 +26,14 @@ import in.socyal.sc.api.dish.dto.DishDto;
 import in.socyal.sc.api.dish.dto.DishFilterCriteria;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.PopularTag;
+import in.socyal.sc.api.items.request.GetFoodSuggestionsRequest;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
+import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.user.dto.UserTagPreference;
 import in.socyal.sc.persistence.entity.CuisineEntity;
 import in.socyal.sc.persistence.entity.DishCount;
 import in.socyal.sc.persistence.entity.DishEntity;
@@ -320,6 +327,116 @@ public class DishDao {
 		criteria.setResultTransformer(Transformers.aliasToBean(DishCount.class));
 		List<DishCount> entities = (List<DishCount>) criteria.list();
 		return entities;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserTagPreference> getTagsMappedWithUserPrefs(TagType tagType, String searchString,
+			Integer userId, Integer page, Integer resultsPerPage) throws BusinessException {
+		StringBuilder queryBuilder = new StringBuilder();
+		queryBuilder.append("SELECT TAG.ID AS id, TAG.NAME AS name, IF(USPM.USER_ID IS NULL, 0, 1) AS selected ");
+		if (tagType == TagType.CUISINE) {
+			queryBuilder.append("FROM CUISINE TAG LEFT OUTER JOIN USER_SUGGESTION_PREF_MAPPING USPM ");
+		} else if (tagType == TagType.SUGGESTION) {
+			queryBuilder.append("FROM SUGGESTION TAG LEFT OUTER JOIN USER_SUGGESTION_PREF_MAPPING USPM ");
+		} else {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		queryBuilder.append("ON USPM.SUGGESTION_ID = TAG.ID ");
+		queryBuilder.append("AND USPM.USER_ID = :userId ");
+		if (StringUtils.isNotBlank(searchString)) {
+			queryBuilder.append("WHERE TAG.NAME LIKE '%:userId%' ");
+		}
+		queryBuilder.append("ORDER BY TAG.NAME ");
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
+		if (StringUtils.isNotBlank(searchString)) {
+			query.setString("searchStr", searchString);
+		}
+		query.setInteger("userId", userId);
+		int firstResult = ((page - 1) * resultsPerPage);
+		query.setFirstResult(firstResult);
+		query.setMaxResults(resultsPerPage);
+		query.addScalar("id", new IntegerType());
+		query.addScalar("name", new StringType());
+		query.addScalar("selected", new BooleanType());
+		query.setResultTransformer(Transformers.aliasToBean(UserTagPreference.class));
+		return query.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<DishDto> getSuggestions(Integer userId, GetFoodSuggestionsRequest request) {
+		StringBuilder queryBuilder = new StringBuilder();
+		queryBuilder.append("select * from ( ");
+		queryBuilder.append("select distinct d.* from dish d ");
+		queryBuilder.append("join ");
+		queryBuilder.append(getBuilderWithLocationQuery(request.getIsCity()));
+		queryBuilder.append("left outer join ");
+		queryBuilder.append("(dish_suggestion_mapping dsm join user_suggestion_pref_mapping uspm ");
+		queryBuilder.append("on dsm.suggestion_id = uspm.suggestion_id) ");
+		queryBuilder.append("on d.id = dsm.dish_id ");
+		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
+		queryBuilder.append("and uspm.user_id = :userId ");
+		queryBuilder.append("and m.is_active = 1 ");
+		queryBuilder.append("and d.rating > :minRating ");
+		queryBuilder.append("and d.is_active = 1 ");
+		queryBuilder.append("union ");
+		queryBuilder.append("select distinct d.* from dish d ");
+		queryBuilder.append("join ");
+		queryBuilder.append(getBuilderWithLocationQuery(request.getIsCity()));
+		queryBuilder.append("left outer join ");
+		queryBuilder.append("(dish_cuisine_mapping dcm join user_cuisine_pref_mapping ucpm ");
+		queryBuilder.append("on dcm.cuisine_id = ucpm.cuisine_id) ");
+		queryBuilder.append("on d.id = dcm.dish_id ");
+		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
+		queryBuilder.append("and ucpm.user_id = :userId ");
+		queryBuilder.append("and m.is_active = 1 ");
+		queryBuilder.append("and d.rating > :minRating ");
+		queryBuilder.append("and d.is_active = 1 ");
+		queryBuilder.append(") as food_suggestions order by rating desc ");
+		
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
+		query.addEntity(DishEntity.class);
+		
+		query.setInteger("locationId", request.getLocationId());
+		query.setInteger("userId", userId);
+		query.setFloat("minRating", 4.0f);
+		
+		int firstResult = (request.getPage() - 1) * RESULTS_PER_PAGE;
+		query.setFirstResult(firstResult);
+		query.setMaxResults(RESULTS_PER_PAGE);
+		
+		List<DishEntity> dishes = query.list();
+		MerchantFilterCriteria merchantFilterCriteria = new MerchantFilterCriteria(false);
+		merchantFilterCriteria.setMapShortAddress(true);
+		DishFilterCriteria dishFilterCriteria = new DishFilterCriteria(true, true);
+		dishFilterCriteria.setMapSuggestions(true);
+		return mapper.map(dishes, merchantFilterCriteria, dishFilterCriteria);
+	}
+	
+	private StringBuilder getBuilderWithLocationQuery(boolean isCity) {
+		StringBuilder queryBuilder = new StringBuilder();
+		if (isCity) {
+			queryBuilder.append("(merchant m ");
+			queryBuilder.append("join ");
+			queryBuilder.append("(address a join locality l ");
+			queryBuilder.append("on a.locality_id = l.id) ");
+			queryBuilder.append("on m.address_id = a.id) ");
+			queryBuilder.append("on d.merchant_id = m.id ");
+		} else {
+			queryBuilder.append("(merchant m join address a ");
+			queryBuilder.append("on m.address_id = a.id) ");
+			queryBuilder.append("on d.merchant_id = m.id ");
+		}
+		return queryBuilder;
+	}
+	
+	private StringBuilder getBuilderWhereClause(boolean isCity) {
+		StringBuilder queryBuilder = new StringBuilder();
+		if (isCity) {
+			queryBuilder.append("where l.city_id = :locationId ");
+		} else {
+			queryBuilder.append("where a.locality_id = :locationId ");
+		}
+		return queryBuilder;
 	}
 	
 	/**

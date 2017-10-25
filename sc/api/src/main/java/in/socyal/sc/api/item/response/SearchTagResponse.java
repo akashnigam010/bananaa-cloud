@@ -2,18 +2,18 @@ package in.socyal.sc.api.item.response;
 
 import java.util.List;
 
-import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.response.GenericResponse;
+import in.socyal.sc.api.user.dto.UserTagPreference;
 
 public class SearchTagResponse extends GenericResponse {
 	private static final long serialVersionUID = 1L;
-	private List<GlobalSearchItem> searchItems;
+	private List<UserTagPreference> searchItems;
 
-	public List<GlobalSearchItem> getSearchItems() {
+	public List<UserTagPreference> getSearchItems() {
 		return searchItems;
 	}
 
-	public void setSearchItems(List<GlobalSearchItem> searchItems) {
+	public void setSearchItems(List<UserTagPreference> searchItems) {
 		this.searchItems = searchItems;
 	}
 }

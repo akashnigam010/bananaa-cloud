@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import in.socyal.sc.api.IdPageRequest;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
+import in.socyal.sc.api.items.request.GetFoodSuggestionsRequest;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
@@ -48,5 +49,11 @@ public class ItemValidator extends Validator {
 		if (request.getId() == null || request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
+	}
+
+	public void validateFoodSuggestionsRequest(GetFoodSuggestionsRequest request) throws BusinessException {
+		if (request.getLocationId() == null || request.getIsCity() == null || request.getPage() == null) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}		
 	}
 }
