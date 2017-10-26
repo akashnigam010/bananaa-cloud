@@ -333,23 +333,26 @@ public class DishDao {
 	public List<UserTagPreference> getTagsMappedWithUserPrefs(TagType tagType, String searchString,
 			Integer userId, Integer page, Integer resultsPerPage) throws BusinessException {
 		StringBuilder queryBuilder = new StringBuilder();
-		queryBuilder.append("SELECT TAG.ID AS id, TAG.NAME AS name, IF(USPM.USER_ID IS NULL, 0, 1) AS selected ");
 		if (tagType == TagType.CUISINE) {
-			queryBuilder.append("FROM CUISINE TAG LEFT OUTER JOIN USER_SUGGESTION_PREF_MAPPING USPM ");
+			queryBuilder.append("SELECT TAG.ID AS id, TAG.NAME AS name, IF(UCPM.USER_ID IS NULL, 0, 1) AS selected ");
+			queryBuilder.append("FROM CUISINE TAG LEFT OUTER JOIN USER_CUISINE_PREF_MAPPING UCPM ");
+			queryBuilder.append("ON UCPM.CUISINE_ID = TAG.ID ");
+			queryBuilder.append("AND UCPM.USER_ID = :userId ");
 		} else if (tagType == TagType.SUGGESTION) {
+			queryBuilder.append("SELECT TAG.ID AS id, TAG.NAME AS name, IF(USPM.USER_ID IS NULL, 0, 1) AS selected ");
 			queryBuilder.append("FROM SUGGESTION TAG LEFT OUTER JOIN USER_SUGGESTION_PREF_MAPPING USPM ");
+			queryBuilder.append("ON USPM.SUGGESTION_ID = TAG.ID ");
+			queryBuilder.append("AND USPM.USER_ID = :userId ");
 		} else {
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
-		queryBuilder.append("ON USPM.SUGGESTION_ID = TAG.ID ");
-		queryBuilder.append("AND USPM.USER_ID = :userId ");
 		if (StringUtils.isNotBlank(searchString)) {
-			queryBuilder.append("WHERE TAG.NAME LIKE '%:userId%' ");
+			queryBuilder.append("WHERE TAG.NAME LIKE :searchStr ");
 		}
 		queryBuilder.append("ORDER BY TAG.NAME ");
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
 		if (StringUtils.isNotBlank(searchString)) {
-			query.setString("searchStr", searchString);
+			query.setString("searchStr", "%"+searchString+"%");
 		}
 		query.setInteger("userId", userId);
 		int firstResult = ((page - 1) * resultsPerPage);
