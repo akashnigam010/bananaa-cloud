@@ -7,7 +7,7 @@ import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.location.dto.CityDto;
-import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
+import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
@@ -24,9 +24,14 @@ public interface MerchantDelegate {
 
 	GetTrendingMerchantsResponse getTrendingMerchants(LocationCookieDto cookieDto) throws BusinessException;
 
-	MerchantListForTagResponse getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException;
+	MerchantListForTagResponse getMerchantsByTagNameId(SearchMerchantRequest request) throws BusinessException;
+	
+	MerchantListForTagResponse getMerchantsByTagId(SearchMerchantRequest request) throws BusinessException;
 
 	MerchantListForTagResponse getAllSortedMerchants(LocationCookieDto cookieDto, Integer page)
+			throws BusinessException;
+	
+	MerchantListForTagResponse getAllSortedMerchantsForMobile(LocationCookieDto cookieDto, Integer page)
 			throws BusinessException;
 
 	List<GlobalSearchItem> searchMerchantsGlobal(GenericSearchRequest request) throws BusinessException;

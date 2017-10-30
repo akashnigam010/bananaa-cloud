@@ -3,6 +3,7 @@ package in.socyal.sc.app.rcmdn;
 import java.text.ParseException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,6 +20,7 @@ import in.socyal.sc.api.item.response.ItemsResponse;
 import in.socyal.sc.api.item.response.PopularTag;
 import in.socyal.sc.api.item.response.PopularTagResponse;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
+import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.items.request.GetFoodSuggestionsRequest;
 import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
@@ -131,6 +133,9 @@ public class ItemDelegateImpl implements ItemDelegate {
 		}
 	}
 
+	/**
+	 * Used by web app only. For app, see {@link #searchDishByNameForMobile(String, LocationCookieDto, Integer)}}
+	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public MerchantListForTagResponse searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page)
@@ -144,12 +149,50 @@ public class ItemDelegateImpl implements ItemDelegate {
 				merchant = new MerchantDetails();
 				try {
 					merchantMapper.buildMerchantTagResponse(dto, merchant);
+					/*
+					 * Make sure to not add any other details other than the
+					 * name in the search tag. Logic on web site makes use of
+					 * dishCount to render different components. If dishCount is
+					 * > 0, the below logic for this method will fail.
+					 */
+					if (StringUtils.isNotBlank(dto.getExtraTag())) {
+						Tag tag = new Tag();
+						tag.setName(dto.getExtraTag());
+						merchant.setSearchTag(tag);
+					}
 				} catch (ParseException e) {
 					throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 				}
 				response.getMerchants().add(merchant);
 			}
 			response.setPage(page);
+		}
+		return response;
+	}
+	
+	/**
+	 * Used by mobile app only. For web, see {@link #searchDishByName(String, LocationCookieDto, Integer)}}
+	 */
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public MerchantListForTagResponse searchDishByNameForMobile(String searchString, LocationCookieDto cookieDto, Integer page)
+			throws BusinessException {
+		MerchantListForTagResponse response = new MerchantListForTagResponse();
+		List<MerchantDto> dtos = dishDao.searchDishByName(searchString, cookieDto, page);
+		MerchantDetails merchant = null;
+		for (MerchantDto dto : dtos) {
+			merchant = new MerchantDetails();
+			try {
+				merchantMapper.buildMerchantTagResponse(dto, merchant);
+				if (StringUtils.isNotBlank(dto.getExtraTag())) {
+					Tag tag = new Tag();
+					tag.setName(dto.getExtraTag());
+					merchant.setSearchTag(tag);
+				}
+			} catch (ParseException e) {
+				throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+			}
+			response.getMerchants().add(merchant);
 		}
 		return response;
 	}
