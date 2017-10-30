@@ -41,6 +41,9 @@ public interface ItemDelegate {
 
 	MerchantListForTagResponse searchDishByName(String searchString, LocationCookieDto cookieDto, Integer page)
 			throws BusinessException;
+	
+	MerchantListForTagResponse searchDishByNameForMobile(String searchString, LocationCookieDto cookieDto, Integer page)
+			throws BusinessException;
 
 	List<DishDto> getSuggestions(GetFoodSuggestionsRequest request) throws BusinessException;
 }

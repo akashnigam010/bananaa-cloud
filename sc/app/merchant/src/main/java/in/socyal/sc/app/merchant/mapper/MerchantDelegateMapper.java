@@ -130,6 +130,7 @@ public class MerchantDelegateMapper {
 	}
 
 	public void buildMerchantTagResponse(MerchantDto merchantDto, MerchantDetails response) throws ParseException {
+		response.setId(merchantDto.getId());
 		response.setAverageCost(merchantDto.getAverageCost().intValue() + "");
 		response.setNameId(merchantDto.getNameId());
 		response.setThumbnail(merchantDto.getThumbnail());
@@ -138,6 +139,7 @@ public class MerchantDelegateMapper {
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
 		response.setRatedCuisines(merchantDto.getRatedCuisines());
+		response.getRatedCuisines().addAll(merchantDto.getRatedSuggestions());
 		response.setMerchantUrl(merchantDto.getMerchantUrl());
 	}
 	

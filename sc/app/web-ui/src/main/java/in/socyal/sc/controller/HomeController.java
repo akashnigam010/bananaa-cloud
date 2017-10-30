@@ -26,7 +26,7 @@ import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.location.dto.CityDto;
 import in.socyal.sc.api.location.dto.LocalityDto;
 import in.socyal.sc.api.login.response.LoginStatus;
-import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
+import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.response.ItemDetailsResponse;
 import in.socyal.sc.api.merchant.response.MerchantDetails;
 import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
@@ -366,7 +366,7 @@ public class HomeController {
 		String location = null;
 		ModelAndView modelAndView = tagSearch.getModelAndView();
 		modelAndView.setViewName("tag-search");
-		SearchMerchantByTagRequest request = new SearchMerchantByTagRequest();
+		SearchMerchantRequest request = new SearchMerchantRequest();
 		request.setNameId(tag.getNameId());
 		request.setPage(tagSearch.getPage());
 		request.setType(tag.getTagType());
@@ -379,7 +379,7 @@ public class HomeController {
 			location = getLocation(tagSearch.getCity(), tagSearch.getLocality());
 		}
 		
-		MerchantListForTagResponse response = merchantDelegate.getMerchantsByTag(request);
+		MerchantListForTagResponse response = merchantDelegate.getMerchantsByTagNameId(request);
 		modelAndView.addObject("detail", response);
 		String metaDescription = getTagMetaDescription(tagName, location);
 		response.setLocation(location);
