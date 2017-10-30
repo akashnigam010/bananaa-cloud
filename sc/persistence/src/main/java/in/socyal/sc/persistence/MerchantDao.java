@@ -21,7 +21,7 @@ import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
-import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
+import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.MerchantErrorCodeType;
@@ -83,7 +83,7 @@ public class MerchantDao {
 		return dto;
 	}
 	
-	public Integer getMerchantSearchByTagPages(SearchMerchantByTagRequest request) throws BusinessException {
+	public Integer getMerchantSearchByTagPages(SearchMerchantRequest request) throws BusinessException {
 		Criteria criteria = getMerchantSearchByTagCriteria(request);
 		criteria.setProjection(Projections.rowCount());
 		Long totalCount = (Long) criteria.uniqueResult();
@@ -94,13 +94,19 @@ public class MerchantDao {
 		}
 	}
 	
+	/**
+	 * For mobile app, see {@link #getMerchantsByTagId(SearchMerchantRequest)}}
+	 * @param request
+	 * @return
+	 * @throws BusinessException
+	 */
 	@SuppressWarnings("unchecked")
-	public List<MerchantDto> getMerchantsByTag(SearchMerchantByTagRequest request) throws BusinessException {
+	public List<MerchantDto> getMerchantsByTagNameId(SearchMerchantRequest request) throws BusinessException {
 		List<MerchantDto> merchants = new ArrayList<>();
 		Criteria criteria = getMerchantSearchByTagCriteria(request);
 		MerchantFilterCriteria filter = null;
 		if (request.getType() == TagType.CUISINE) {
-			filter = new MerchantFilterCriteria(true, true, true, true, false, true);
+			filter = new MerchantFilterCriteria(true);
 		} else if (request.getType() == TagType.SUGGESTION) {
 			filter = new MerchantFilterCriteria(true);
 		}
@@ -114,7 +120,53 @@ public class MerchantDao {
 		return merchants;
 	}
 	
-	private Criteria getMerchantSearchByTagCriteria(SearchMerchantByTagRequest request) throws BusinessException {
+	/**
+	 * For web, see {@link #getMerchantsByTagNameId(SearchMerchantRequest)}}
+	 * @param request
+	 * @return
+	 * @throws BusinessException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MerchantDto> getMerchantsByTagId(SearchMerchantRequest request) throws BusinessException {
+		List<MerchantDto> merchants = new ArrayList<>();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
+		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
+		if (request.getType() == TagType.CUISINE) {
+			criteria.createAlias("cuisineRatings", "cuisineRatings");
+			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
+			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
+			criteria.add(Restrictions.eq("cuisine.id", request.getTagId()));
+			criteria.addOrder(Order.desc("cuisineRatings.rating"));
+		} else if (request.getType() == TagType.SUGGESTION) {
+			criteria.createAlias("suggestionRatings", "suggestionRatings");
+			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
+			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
+			criteria.add(Restrictions.eq("suggestion.id", request.getTagId()));
+			criteria.addOrder(Order.desc("suggestionRatings.rating"));
+		} else {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+
+		criteria.createAlias("address", "address");
+		criteria.createAlias("address.locality", "locality");
+		if (!request.getIsCity()) {
+			criteria.add(Restrictions.eq("locality.id", request.getLocationId()));
+		} else {
+			criteria.createAlias("locality.city", "city");
+			criteria.add(Restrictions.eq("city.id", request.getLocationId()));
+		}
+		MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
+		int firstResult = ((request.getPage() - 1) * RESULTS_PER_PAGE);
+		criteria.setFirstResult(firstResult);
+		criteria.setMaxResults(RESULTS_PER_PAGE);
+		List<MerchantEntity> entities = criteria.list();
+		if (entities != null &&  entities.size() > 0) {
+			mapper.map(entities, merchants, filter);
+		} 
+		return merchants;
+	}
+	
+	private Criteria getMerchantSearchByTagCriteria(SearchMerchantRequest request) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(MerchantEntity.class);
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		if (request.getType() == TagType.CUISINE) {
@@ -238,11 +290,20 @@ public class MerchantDao {
 		criteria.add(Restrictions.eq("merchant.isActive", Boolean.TRUE));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
-		if (cookieDto.isCitySearch()) {
-			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+		if (cookieDto.isSearchById()) {
+			if (cookieDto.getIsCity()) {
+				criteria.createAlias("locality.city", "city");
+				criteria.add(Restrictions.eq("city.id", cookieDto.getId()));
+			} else {
+				criteria.add(Restrictions.eq("locality.id", cookieDto.getId()));
+			}
 		} else {
-			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+			if (cookieDto.isCitySearch()) {
+				criteria.createAlias("locality.city", "city");
+				criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+			} else {
+				criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+			}
 		}	
 		
 		ProjectionList projList = Projections.projectionList();

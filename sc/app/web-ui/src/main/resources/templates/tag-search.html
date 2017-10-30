@@ -71,20 +71,26 @@
                                                 	<span th:text="${merchant.searchTag.name}"></span>
                                                 	<span>dishes</span> 
                                                 </div>
+												<!-- will render only when generic search for dish is called. The search tag must not contain any other details other that matching dish name as merchant.searchTag.name -->
+												<div class="padding-top" th:if="${merchant.searchTag != null and merchant.searchTag.dishCount == null and merchant.searchTag.name != null }">                                                
+                                                	<span>Serves : '</span>
+                                                	<span class="bold" th:text="${merchant.searchTag.name}"></span>
+                                                	<span>'</span>
+                                                </div>
                                             </div>
                                             <div class="float-right">
-                                            	<div th:if="${merchant.searchTag != null}">
+                                            	<div th:if="${merchant.searchTag != null and merchant.searchTag.rating != null}">
                                             		<span th:class="${merchant.searchTag.ratingClass} + ' float-right rating-rcmd bold'" style="padding: 5px 10px; font-size: 1.1em;" th:text="${merchant.searchTag.rating}"></span>
                                             	</div>
-                                            	<div th:unless="${merchant.searchTag != null}">
+                                            	<!-- <div th:unless="${merchant.searchTag != null and merchant.searchTag.rating != null}">
                                             		<span class="float-right rating-rcmd bold r25" style="padding: 5px 10px; font-size: 1.1em;">-.-</span>
-                                            	</div>
-                                            	<div th:if="${merchant.searchTag != null}">
+                                            	</div> -->
+                                            	<div th:if="${merchant.searchTag != null and merchant.searchTag.rating != null and merchant.searchTag.name != null}">
 													<div class="float-right light padding-top">
 	                                            		Rated in
 	                                            	</div>
                                             	</div>
-                                            	<div th:if="${merchant.searchTag != null}">
+                                            	<div th:if="${merchant.searchTag != null and merchant.searchTag.rating != null}">
 													<div class="float-right light" th:text="${merchant.searchTag.name}"></div>
                                             	</div>
                                             </div>
@@ -110,7 +116,7 @@
                                         	</div>
                                         	<div class="info-highlights">
                                         		<div class="upper float-left light">
-	                                        		Cuisines
+	                                        		Known For
 	                                        	</div>
 	                                        	<div style="margin-left: 30%;">
 	                                        		<span th:each="cuisine, iterStat : ${merchant.ratedCuisines}">
