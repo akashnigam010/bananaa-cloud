@@ -3,7 +3,7 @@ package in.socyal.sc.api.type;
 public enum SearchType {
 	RESTAURANT("RESTAURANT"), 
 	CUISINE("CUISINE"), 
-	DISH("DISH");
+	SUGGESTION("SUGGESTION");
 
 	private String name;
 
