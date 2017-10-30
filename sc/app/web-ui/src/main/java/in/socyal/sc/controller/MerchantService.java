@@ -13,7 +13,7 @@ import in.socyal.sc.api.GenericSearchRequest;
 import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.request.SearchMerchantByTagRequest;
+import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.GetTrendingMerchantsResponse;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
@@ -105,10 +105,10 @@ public class MerchantService {
 	}
 
 	@RequestMapping(value = "/getMerchantsByTag", method = RequestMethod.POST, headers = "Accept=application/json")
-	public MerchantListForTagResponse getMerchantsByTag(@RequestBody SearchMerchantByTagRequest request) {
+	public MerchantListForTagResponse getMerchantsByTag(@RequestBody SearchMerchantRequest request) {
 		MerchantListForTagResponse response = new MerchantListForTagResponse();
 		try {
-			response = delegate.getMerchantsByTag(request);
+			response = delegate.getMerchantsByTagNameId(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			return responseHelper.failure(response, e);

@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.socyal.sc.api.GenericSearchRequest;
+import in.socyal.sc.api.cache.dto.LocationCookieDto;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.item.response.SearchItemsResponse;
 import in.socyal.sc.api.location.response.LocalitiesResponse;
+import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.merchant.response.GlobalSearchItem;
 import in.socyal.sc.api.merchant.response.GlobalSearchResponse;
+import in.socyal.sc.api.merchant.response.MerchantListForTagResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
@@ -77,5 +80,36 @@ public class AppSearchService {
 		LocalitiesResponse response = new LocalitiesResponse();
 		response.setCities(merchantDelegate.getCities());
 		return responseHelper.success(response);
+	}
+	
+	@RequestMapping(value = "/searchMerchants", method = RequestMethod.POST, headers = "Accept=application/json")
+	public MerchantListForTagResponse searchMerchants(@RequestBody SearchMerchantRequest request) {
+		MerchantListForTagResponse response = new MerchantListForTagResponse();
+		try {
+			validator.validateSearchMerchantsRequest(request);
+			if (request.getIsTagSearch()) {
+				if (request.getType() != null) {
+					// tag search where tag is provided
+					response = merchantDelegate.getMerchantsByTagId(request);
+				} else {
+					// no tag => all merchants search
+					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity());
+					response = merchantDelegate.getAllSortedMerchantsForMobile(cookieDto, request.getPage());
+				}
+			} else {
+				if (StringUtils.isNotBlank(request.getSearchString())) {
+					// not tag search => search for places serving the passed string in their menu
+					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity());
+					response = itemDelegate.searchDishByNameForMobile(request.getSearchString(), cookieDto, request.getPage());
+				} else {
+					// no tag search and no search string => all merchants search
+					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity());
+					response = merchantDelegate.getAllSortedMerchantsForMobile(cookieDto, request.getPage());
+				}
+			}
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			return responseHelper.failure(response, e);
+		}
 	}
 }

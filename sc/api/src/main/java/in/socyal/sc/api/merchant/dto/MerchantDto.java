@@ -22,6 +22,7 @@ public class MerchantDto implements Serializable {
 	private String merchantUrl;
 	private List<Tag> ratedCuisines;
 	private List<Tag> ratedSuggestions;
+	private String extraTag;
 
 	public Integer getId() {
 		return id;
@@ -131,5 +132,13 @@ public class MerchantDto implements Serializable {
 
 	public void setRatedSuggestions(List<Tag> ratedSuggestions) {
 		this.ratedSuggestions = ratedSuggestions;
+	}
+
+	public String getExtraTag() {
+		return extraTag;
+	}
+
+	public void setExtraTag(String extraTag) {
+		this.extraTag = extraTag;
 	}
 }

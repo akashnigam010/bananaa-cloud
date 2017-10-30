@@ -95,11 +95,12 @@ public class DishDao {
 		List<MerchantWrapperEntity> merchants = criteria.list();
 		if (merchants != null && !merchants.isEmpty()) {
 			List<MerchantDto> merchantDtos = new ArrayList<>();
-			MerchantFilterCriteria filter = new MerchantFilterCriteria(true, true, true, true, false, true);
+			MerchantFilterCriteria filter = new MerchantFilterCriteria(true);
 			MerchantDto dto = null;
 			for (MerchantWrapperEntity wrapper : merchants) {
 				dto = new MerchantDto();
 				merchantDaoMapper.map(wrapper.getMerchant(), dto, filter);
+				dto.setExtraTag(wrapper.getDishName());
 				merchantDtos.add(dto);
 			}
 			return merchantDtos;
@@ -114,15 +115,25 @@ public class DishDao {
 		criteria.add(Restrictions.eq("merchant.isActive", Boolean.TRUE));
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
-		if (cookieDto.isCitySearch()) {
-			criteria.createAlias("locality.city", "city");
-			criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+		if (cookieDto.isSearchById()) {
+			if (cookieDto.getIsCity()) {
+				criteria.createAlias("locality.city", "city");
+				criteria.add(Restrictions.eq("city.id", cookieDto.getId()));
+			} else {
+				criteria.add(Restrictions.eq("locality.id", cookieDto.getId()));
+			}
 		} else {
-			criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+			if (cookieDto.isCitySearch()) {
+				criteria.createAlias("locality.city", "city");
+				criteria.add(Restrictions.eq("city.nameId", cookieDto.getCityId()));
+			} else {
+				criteria.add(Restrictions.eq("locality.nameId", cookieDto.getLocalityId()));
+			}
 		}
 
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.property("merchant").as("merchant"));
+		projList.add(Projections.property("name").as("dishName"));
 		projList.add(Projections.groupProperty("merchant.id"));
 		criteria.setProjection(projList);
 		return criteria;
@@ -379,7 +390,7 @@ public class DishDao {
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
 		queryBuilder.append("and uspm.user_id = :userId ");
 		queryBuilder.append("and m.is_active = 1 ");
-		queryBuilder.append("and d.rating > :minRating ");
+		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
 		queryBuilder.append("union ");
 		queryBuilder.append("select distinct d.* from dish d ");
@@ -392,7 +403,7 @@ public class DishDao {
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
 		queryBuilder.append("and ucpm.user_id = :userId ");
 		queryBuilder.append("and m.is_active = 1 ");
-		queryBuilder.append("and d.rating > :minRating ");
+		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
 		queryBuilder.append(") as food_suggestions order by rating desc ");
 		
