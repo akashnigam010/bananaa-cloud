@@ -59,8 +59,8 @@ public class ItemValidator extends Validator {
 	}
 
 	public void validateSearchMerchantsRequest(SearchMerchantRequest request) throws BusinessException {
-		if (request.getTagId() == null || request.getLocationId() == null || request.getIsTagSearch() == null
-				|| request.getIsCity() == null || request.getPage() == null) {
+		if (request.getLocationId() == null || request.getIsTagSearch() == null || request.getIsCity() == null
+				|| request.getPage() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 
