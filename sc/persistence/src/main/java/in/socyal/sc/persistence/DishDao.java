@@ -379,7 +379,7 @@ public class DishDao {
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
 		queryBuilder.append("and uspm.user_id = :userId ");
 		queryBuilder.append("and m.is_active = 1 ");
-		queryBuilder.append("and d.rating > :minRating ");
+		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
 		queryBuilder.append("union ");
 		queryBuilder.append("select distinct d.* from dish d ");
@@ -392,7 +392,7 @@ public class DishDao {
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
 		queryBuilder.append("and ucpm.user_id = :userId ");
 		queryBuilder.append("and m.is_active = 1 ");
-		queryBuilder.append("and d.rating > :minRating ");
+		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
 		queryBuilder.append(") as food_suggestions order by rating desc ");
 		
