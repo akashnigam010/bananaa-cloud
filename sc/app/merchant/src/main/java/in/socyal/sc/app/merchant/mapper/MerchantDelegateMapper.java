@@ -138,14 +138,16 @@ public class MerchantDelegateMapper {
 		response.setOpeningHours(getOpeningHours(merchantDto.getTimings()));
 		response.setShortAddress(merchantDto.getAddress().getLocality().getShortAddress());
 		response.setType(merchantDto.getTypes());
-		if (merchantDto.getRatedCuisines().size() > 3) {
-			merchantDto.setRatedCuisines(merchantDto.getRatedCuisines().subList(0, 3));
+		
+		response.setRatedCuisines(merchantDto.getRatedCuisines());
+		if (response.getRatedCuisines().size() > 3) {
+			response.setRatedCuisines(response.getRatedCuisines().subList(0, 3));
 		}
 		if (merchantDto.getRatedSuggestions().size() > 3) {
-			merchantDto.setRatedSuggestions(merchantDto.getRatedSuggestions().subList(0, 3));
+			response.getRatedCuisines().addAll(merchantDto.getRatedSuggestions().subList(0, 3));
+		} else {
+			response.getRatedCuisines().addAll(merchantDto.getRatedSuggestions());
 		}
-		response.setRatedCuisines(merchantDto.getRatedCuisines());
-		response.getRatedCuisines().addAll(merchantDto.getRatedSuggestions());
 		response.setMerchantUrl(merchantDto.getMerchantUrl());
 	}
 	
