@@ -14,6 +14,7 @@ public class AppItemDetailsResponse extends GenericResponse implements Serializa
 	private String shortAddress;
 	private String rating;
 	private String imageUrl;
+	private String itemUrl;
 	private String ratingClass;
 	private Integer totalRatings;
 
@@ -92,5 +93,13 @@ public class AppItemDetailsResponse extends GenericResponse implements Serializa
 
 	public void setTotalRatings(Integer totalRatings) {
 		this.totalRatings = totalRatings;
+	}
+
+	public String getItemUrl() {
+		return itemUrl;
+	}
+
+	public void setItemUrl(String itemUrl) {
+		this.itemUrl = itemUrl;
 	}
 }

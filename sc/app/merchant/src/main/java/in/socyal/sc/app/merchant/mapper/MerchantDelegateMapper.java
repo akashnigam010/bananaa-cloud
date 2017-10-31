@@ -158,6 +158,7 @@ public class MerchantDelegateMapper {
 		response.setShortAddress(details.getShortAddress());
 		response.setLongAddress(details.getLongAddress());
 		response.setImageUrl(details.getImageUrl());
+		response.setMerchantUrl(details.getMerchantUrl());
 		response.setPhone(details.getPhone());
 		response.setOpeningHours(details.getOpeningHours());
 		response.setType(details.getType());

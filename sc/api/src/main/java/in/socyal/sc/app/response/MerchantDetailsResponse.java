@@ -15,6 +15,7 @@ public class MerchantDetailsResponse extends GenericResponse {
 	private String shortAddress;
 	private String imageUrl;
 	private String thumbnail;
+	private String merchantUrl;
 	private String phone;
 	private List<String> openingHours;
 	private List<String> type;
@@ -125,5 +126,13 @@ public class MerchantDetailsResponse extends GenericResponse {
 
 	public void setItems(List<Item> items) {
 		this.items = items;
+	}
+
+	public String getMerchantUrl() {
+		return merchantUrl;
+	}
+
+	public void setMerchantUrl(String merchantUrl) {
+		this.merchantUrl = merchantUrl;
 	}
 }
