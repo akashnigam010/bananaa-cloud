@@ -30,6 +30,9 @@ public class LocalityEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "CITY_ID", nullable = false)
 	private CityEntity city;
+	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
 
 	@Column(name = "LATITUDE")
 	private Double latitude;
@@ -83,5 +86,13 @@ public class LocalityEntity implements Serializable {
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }
