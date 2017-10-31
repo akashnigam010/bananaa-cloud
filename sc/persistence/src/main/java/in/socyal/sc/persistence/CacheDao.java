@@ -28,6 +28,7 @@ public class CacheDao {
 
 	public List<CityDto> getCities() {
 		List<CityEntity> cities = cacheManager.getCities();
+		// map only active entities
 		return locationMapper.map(cities);
 	}
 }
