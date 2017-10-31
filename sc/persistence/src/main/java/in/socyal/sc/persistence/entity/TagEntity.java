@@ -16,6 +16,9 @@ public class TagEntity extends BaseEntity implements Serializable {
 	@Column(name = "NAME_ID")
 	private String nameId;
 	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
+	
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
 
@@ -60,5 +63,13 @@ public class TagEntity extends BaseEntity implements Serializable {
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 }

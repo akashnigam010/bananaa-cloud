@@ -358,8 +358,12 @@ public class DishDao {
 		} else {
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
+	
 		if (StringUtils.isNotBlank(searchString)) {
 			queryBuilder.append("WHERE TAG.NAME LIKE :searchStr ");
+			queryBuilder.append("AND TAG.IS_ACTIVE = 1 ");
+		} else {
+			queryBuilder.append("WHERE TAG.IS_ACTIVE = 1 ");
 		}
 		queryBuilder.append("ORDER BY TAG.NAME ");
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
