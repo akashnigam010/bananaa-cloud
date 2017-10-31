@@ -31,6 +31,7 @@ public class TagEntity extends BaseEntity implements Serializable {
 
 	public TagEntity(Calendar createdDateTime, Calendar updatedDateTime) {
 		super(createdDateTime, updatedDateTime);
+		this.isActive = Boolean.TRUE;
 	}
 
 	public String getName() {
