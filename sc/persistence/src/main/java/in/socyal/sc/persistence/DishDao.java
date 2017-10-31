@@ -52,6 +52,7 @@ public class DishDao {
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
 	private static final String MINIMUM_TAG_RATING_SEARCH = "minimum.rating.search";
+	private static final Float MINIMUM_DISH_RATING_FOR_SUGGESTIONS = 3.8f;
 
 	@Autowired
 	DishDaoMapper mapper;
@@ -357,8 +358,12 @@ public class DishDao {
 		} else {
 			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
 		}
+	
 		if (StringUtils.isNotBlank(searchString)) {
 			queryBuilder.append("WHERE TAG.NAME LIKE :searchStr ");
+			queryBuilder.append("AND TAG.IS_ACTIVE = 1 ");
+		} else {
+			queryBuilder.append("WHERE TAG.IS_ACTIVE = 1 ");
 		}
 		queryBuilder.append("ORDER BY TAG.NAME ");
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
@@ -412,7 +417,7 @@ public class DishDao {
 		
 		query.setInteger("locationId", request.getLocationId());
 		query.setInteger("userId", userId);
-		query.setFloat("minRating", 4.0f);
+		query.setFloat("minRating", MINIMUM_DISH_RATING_FOR_SUGGESTIONS);
 		
 		int firstResult = (request.getPage() - 1) * RESULTS_PER_PAGE;
 		query.setFirstResult(firstResult);
@@ -423,6 +428,7 @@ public class DishDao {
 		merchantFilterCriteria.setMapShortAddress(true);
 		DishFilterCriteria dishFilterCriteria = new DishFilterCriteria(true, true);
 		dishFilterCriteria.setMapSuggestions(true);
+		dishFilterCriteria.setMapCuisines(true);		
 		return mapper.map(dishes, merchantFilterCriteria, dishFilterCriteria);
 	}
 	

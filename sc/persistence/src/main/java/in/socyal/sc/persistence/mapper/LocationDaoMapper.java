@@ -31,11 +31,14 @@ public class LocationDaoMapper {
 		List<LocalityDto> localities = new ArrayList<>();
 		LocalityDto locality = null;
 		for (LocalityEntity entity : entities) {
-			locality = new LocalityDto();
-			locality.setId(entity.getId());
-			locality.setName(entity.getName());
-			locality.setNameId(entity.getNameId());
-			localities.add(locality);
+			// mapping localities which are active
+			if (entity.getIsActive()) {
+				locality = new LocalityDto();
+				locality.setId(entity.getId());
+				locality.setName(entity.getName());
+				locality.setNameId(entity.getNameId());
+				localities.add(locality);
+			}
 		}
 		return localities;
 	}

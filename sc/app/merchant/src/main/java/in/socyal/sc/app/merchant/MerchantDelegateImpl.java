@@ -171,7 +171,7 @@ public class MerchantDelegateImpl implements MerchantDelegate {
 				}
 			} else {
 				for (Tag tag : tags) {
-					if (tag.getId().equals(request.getTagId())) {
+					if (tag.getId().equals(request.getTagId()) && tag.getTagType() == request.getType()) {
 						merchant.setSearchTag(tag);
 						break;
 					}
