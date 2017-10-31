@@ -19,6 +19,7 @@ public class MerchantDetails {
 	private String longAddress;
 	private String phone;
 	private List<Tag> ratedCuisines;
+	private List<Tag> ratedSuggestions;
 	private Tag searchTag;
 
 	public Integer getId() {
@@ -134,5 +135,16 @@ public class MerchantDetails {
 
 	public void setMerchantUrl(String merchantUrl) {
 		this.merchantUrl = merchantUrl;
+	}
+
+	public List<Tag> getRatedSuggestions() {
+		if (this.ratedSuggestions == null) {
+			this.ratedSuggestions = new ArrayList<>();
+		}
+		return ratedSuggestions;
+	}
+
+	public void setRatedSuggestions(List<Tag> ratedSuggestions) {
+		this.ratedSuggestions = ratedSuggestions;
 	}
 }

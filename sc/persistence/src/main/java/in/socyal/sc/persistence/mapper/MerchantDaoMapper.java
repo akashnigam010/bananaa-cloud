@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.cuisine.dto.CuisineDto;
 import in.socyal.sc.api.item.response.Tag;
 import in.socyal.sc.api.location.dto.AddressDto;
 import in.socyal.sc.api.location.dto.CityDto;
@@ -23,6 +24,7 @@ import in.socyal.sc.api.merchant.dto.MerchantDto;
 import in.socyal.sc.api.merchant.dto.MerchantFilterCriteria;
 import in.socyal.sc.api.merchant.dto.TimingDto;
 import in.socyal.sc.api.merchant.dto.TrendingMerchantResultDto;
+import in.socyal.sc.api.suggestion.dto.SuggestionDto;
 import in.socyal.sc.helper.NumberUtils;
 import in.socyal.sc.persistence.entity.AddressEntity;
 import in.socyal.sc.persistence.entity.ContactEntity;
@@ -108,7 +110,7 @@ public class MerchantDaoMapper {
 					// drops below minimum required rating
 					break;
 				}
-				tag = new Tag();
+				tag = new CuisineDto();
 				tag.setId(tagEntity.getCuisine().getId());
 				tag.setName(tagEntity.getCuisine().getName());
 				tag.setNameId(tagEntity.getCuisine().getNameId());
@@ -131,7 +133,7 @@ public class MerchantDaoMapper {
 					// rating drops below minimum required rating
 					break;
 				}
-				tag = new Tag();
+				tag = new SuggestionDto();
 				tag.setId(tagEntity.getSuggestion().getId());
 				tag.setName(tagEntity.getSuggestion().getName());
 				tag.setNameId(tagEntity.getSuggestion().getNameId());
