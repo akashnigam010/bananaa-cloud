@@ -23,6 +23,7 @@ public class DishDto implements Serializable {
 	private String thumbnail;
 	private Boolean isActive;
 	private String itemUrl;
+	private String itemUrlAbsolute;
 	private List<RecommendationDto> recommendations;
 	private Integer recommendationCount;
 	private String ratingClass;
@@ -153,5 +154,13 @@ public class DishDto implements Serializable {
 
 	public void setRecommendationCount(Integer recommendationCount) {
 		this.recommendationCount = recommendationCount;
+	}
+
+	public String getItemUrlAbsolute() {
+		return itemUrlAbsolute;
+	}
+
+	public void setItemUrlAbsolute(String itemUrlAbsolute) {
+		this.itemUrlAbsolute = itemUrlAbsolute;
 	}
 }

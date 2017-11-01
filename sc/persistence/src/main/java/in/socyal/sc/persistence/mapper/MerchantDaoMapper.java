@@ -38,6 +38,7 @@ import in.socyal.sc.persistence.entity.TrendingMerchantResultEntity;
 @Component
 public class MerchantDaoMapper {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
+	private static final String HOME_URL = "home.url";
 	private static final String MINIMUM_TAG_RATING_DISPLAY = "minimum.rating.display";
 	
 	@Autowired
@@ -71,6 +72,7 @@ public class MerchantDaoMapper {
 		dto.setNameId(entity.getNameId());
 		dto.setName(entity.getName());
 		dto.setMerchantUrl("/" + entity.getAddress().getLocality().getCity().getNameId() + "/" + entity.getNameId());
+		dto.setMerchantUrlAbsolute(resource.getString(HOME_URL) + "/" + entity.getAddress().getLocality().getCity().getNameId() + "/" + entity.getNameId());
 		if (filter.getMapImage()) {
 			dto.setImageUrl(entity.getImageUrl());
 			dto.setThumbnail(entity.getThumbnail());
