@@ -149,6 +149,7 @@ public class MerchantDelegateMapper {
 			response.getRatedCuisines().addAll(merchantDto.getRatedSuggestions());
 		}
 		response.setMerchantUrl(merchantDto.getMerchantUrl());
+		response.setMerchantUrlAbsolute(merchantDto.getMerchantUrlAbsolute());
 	}
 	
 	public MerchantDetailsResponse mapToMerchantDetailsResponse(MerchantDetails details) {
@@ -159,6 +160,7 @@ public class MerchantDelegateMapper {
 		response.setLongAddress(details.getLongAddress());
 		response.setImageUrl(details.getImageUrl());
 		response.setMerchantUrl(details.getMerchantUrl());
+		response.setMerchantUrlAbsolute(details.getMerchantUrlAbsolute());
 		response.setPhone(details.getPhone());
 		response.setOpeningHours(details.getOpeningHours());
 		response.setType(details.getType());
