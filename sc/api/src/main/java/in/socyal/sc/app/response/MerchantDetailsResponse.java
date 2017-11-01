@@ -16,6 +16,7 @@ public class MerchantDetailsResponse extends GenericResponse {
 	private String imageUrl;
 	private String thumbnail;
 	private String merchantUrl;
+	private String merchantUrlAbsolute;
 	private String phone;
 	private List<String> openingHours;
 	private List<String> type;
@@ -134,5 +135,13 @@ public class MerchantDetailsResponse extends GenericResponse {
 
 	public void setMerchantUrl(String merchantUrl) {
 		this.merchantUrl = merchantUrl;
+	}
+
+	public String getMerchantUrlAbsolute() {
+		return merchantUrlAbsolute;
+	}
+
+	public void setMerchantUrlAbsolute(String merchantUrlAbsolute) {
+		this.merchantUrlAbsolute = merchantUrlAbsolute;
 	}
 }

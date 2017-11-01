@@ -20,6 +20,7 @@ public class MerchantDto implements Serializable {
 	private Double averageCost;
 	private List<String> types;
 	private String merchantUrl;
+	private String merchantUrlAbsolute;
 	private List<Tag> ratedCuisines;
 	private List<Tag> ratedSuggestions;
 	private String extraTag;
@@ -140,5 +141,13 @@ public class MerchantDto implements Serializable {
 
 	public void setExtraTag(String extraTag) {
 		this.extraTag = extraTag;
+	}
+
+	public String getMerchantUrlAbsolute() {
+		return merchantUrlAbsolute;
+	}
+
+	public void setMerchantUrlAbsolute(String merchantUrlAbsolute) {
+		this.merchantUrlAbsolute = merchantUrlAbsolute;
 	}
 }

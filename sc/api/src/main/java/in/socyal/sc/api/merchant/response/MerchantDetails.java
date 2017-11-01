@@ -13,6 +13,7 @@ public class MerchantDetails {
 	private String imageUrl;
 	private String thumbnail;
 	private String merchantUrl;
+	private String merchantUrlAbsolute;
 	private List<String> openingHours;
 	private List<String> type;
 	private String averageCost;
@@ -134,5 +135,13 @@ public class MerchantDetails {
 
 	public void setMerchantUrl(String merchantUrl) {
 		this.merchantUrl = merchantUrl;
+	}
+
+	public String getMerchantUrlAbsolute() {
+		return merchantUrlAbsolute;
+	}
+
+	public void setMerchantUrlAbsolute(String merchantUrlAbsolute) {
+		this.merchantUrlAbsolute = merchantUrlAbsolute;
 	}
 }

@@ -78,6 +78,7 @@ public class DishDaoMapper {
 			merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);
 			dto.setMerchant(merchant);
 			dto.setItemUrl(dto.getMerchant().getNameId() + "/" + dto.getNameId());
+			dto.setItemUrlAbsolute(dto.getMerchant().getMerchantUrlAbsolute() + "/" + dto.getNameId());
 		}
 		return dto;
 	}
@@ -148,6 +149,7 @@ public class DishDaoMapper {
 		merchantMapper.map(entity.getMerchant(), merchant, merchantCriteria);
 		dto.setMerchant(merchant);
 		dto.setItemUrl(merchant.getMerchantUrl() + "/" + entity.getNameId());
+		dto.setItemUrl(merchant.getMerchantUrlAbsolute() + "/" + entity.getNameId());
 		return dto;
 	}
 
