@@ -52,7 +52,7 @@ public class DishDao {
 	private static final String NAME = "name";
 	private static final Integer RESULTS_PER_PAGE = 10;
 	private static final String MINIMUM_TAG_RATING_SEARCH = "minimum.rating.search";
-	private static final Float MINIMUM_DISH_RATING_FOR_SUGGESTIONS = 3.8f;
+	private static final Float MINIMUM_DISH_RATING_FOR_SUGGESTIONS = 2.5f;
 
 	@Autowired
 	DishDaoMapper mapper;
@@ -389,7 +389,10 @@ public class DishDao {
 		queryBuilder.append("join ");
 		queryBuilder.append(getBuilderWithLocationQuery(request.getIsCity()));
 		queryBuilder.append("left outer join ");
-		queryBuilder.append("(dish_suggestion_mapping dsm join user_suggestion_pref_mapping uspm ");
+		queryBuilder.append("(dish_suggestion_mapping dsm ");
+		queryBuilder.append("join ");
+		queryBuilder.append("(user_suggestion_pref_mapping uspm ");
+		queryBuilder.append("join user u on uspm.user_id = u.id) ");
 		queryBuilder.append("on dsm.suggestion_id = uspm.suggestion_id) ");
 		queryBuilder.append("on d.id = dsm.dish_id ");
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
@@ -397,12 +400,17 @@ public class DishDao {
 		queryBuilder.append("and m.is_active = 1 ");
 		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
+		queryBuilder.append(getBuilderVegNonVegPrefClause());
+		queryBuilder.append("and d.image_url not like '%item-img%' ");
 		queryBuilder.append("union ");
 		queryBuilder.append("select distinct d.* from dish d ");
 		queryBuilder.append("join ");
 		queryBuilder.append(getBuilderWithLocationQuery(request.getIsCity()));
 		queryBuilder.append("left outer join ");
-		queryBuilder.append("(dish_cuisine_mapping dcm join user_cuisine_pref_mapping ucpm ");
+		queryBuilder.append("(dish_cuisine_mapping dcm ");		
+		queryBuilder.append("join ");
+		queryBuilder.append("(user_cuisine_pref_mapping ucpm ");
+		queryBuilder.append("join user u on ucpm.user_id = u.id) ");
 		queryBuilder.append("on dcm.cuisine_id = ucpm.cuisine_id) ");
 		queryBuilder.append("on d.id = dcm.dish_id ");
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
@@ -410,6 +418,8 @@ public class DishDao {
 		queryBuilder.append("and m.is_active = 1 ");
 		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
+		queryBuilder.append("and d.image_url not like '%item-img%' ");
+		queryBuilder.append(getBuilderVegNonVegPrefClause());
 		queryBuilder.append(") as food_suggestions order by rating desc ");
 		
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryBuilder.toString());
@@ -456,6 +466,12 @@ public class DishDao {
 		} else {
 			queryBuilder.append("where a.locality_id = :locationId ");
 		}
+		return queryBuilder;
+	}
+	
+	private StringBuilder getBuilderVegNonVegPrefClause() {
+		StringBuilder queryBuilder = new StringBuilder();
+		queryBuilder.append("and case when u.vegnonveg_id = 1 then d.vegnonveg in (1, 3) else 1 = 1 end ");
 		return queryBuilder;
 	}
 	
