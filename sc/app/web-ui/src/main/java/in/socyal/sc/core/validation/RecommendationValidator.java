@@ -5,11 +5,12 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.ReviewRequest;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 
@@ -23,7 +24,7 @@ public class RecommendationValidator extends Validator {
 			throws BusinessException {
 		validateUserAndThrowException(authToken);
 		if (request.getId() == null || request.getRating() == null) {
-			LOG.error("Dish Id or rating value not found while validating save rating request request");
+			LOG.error("Dish Id or rating value not found while validating save rating request");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
@@ -34,27 +35,38 @@ public class RecommendationValidator extends Validator {
 			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
 		}
 		if (request.getId() == null || request.getRating() == null) {
-			LOG.error("Dish Id or rating value not found while validating save rating request request - app");
+			LOG.error("Dish Id or rating value not found while validating save rating request - app");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 	
-	public void validateReviewRequest(ReviewRequest request, String authToken)
+	public void validateReviewRequest(FoodviewRequest request, String authToken)
 			throws BusinessException {
 		validateUserAndThrowException(authToken);
 		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
-			LOG.error("Dish Id or review desc not found while validating save rating request request");
+			LOG.error("Dish Id or review desc not found while validating save rating request");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}
 	
-	public void validateReviewRequestApp(ReviewRequest request)
+	public void validateSaveFoodviewRequestApp(FoodviewRequest request)
 			throws BusinessException {
 		if (!jwtTokenHelper.isUserLoggedIn()) {
 			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
 		}
-		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
-			LOG.error("Dish Id or review desc not found while validating save rating request request - app");
+		if (request.getId() == null || request.getRating() == null) {
+			LOG.error("Dish Id or rating not found while validating save rating request - app");
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
+	}
+	
+	public void validateDeleteFoodviewRequestApp(IdRequest request)
+			throws BusinessException {
+		if (!jwtTokenHelper.isUserLoggedIn()) {
+			throw new BusinessException(GenericErrorCodeType.LOGIN_REQUIRED);
+		}
+		if (request.getId() == null) {
+			LOG.error("Foodview Id not found while validating delete foodview request - app");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

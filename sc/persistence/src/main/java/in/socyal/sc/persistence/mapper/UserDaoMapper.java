@@ -24,7 +24,7 @@ public class UserDaoMapper {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
 	private static final String VEG_PREF = "user.pref.veg";
 	private static final String NONVEG_PREF = "user.pref.nonveg";
-	private static final String ANY_PREF = "user.pref.anything";
+
 	@Autowired
 	DishDaoMapper dishMapper;
 	@Autowired
@@ -79,7 +79,8 @@ public class UserDaoMapper {
 	public Profile map(UserEntity entity) {
 		Profile profile = new Profile();
 		profile.setId(entity.getId());
-		profile.setName(entity.getFirstName() + " " + entity.getLastName());
+		profile.setFirstName(entity.getFirstName());
+		profile.setLastName(entity.getLastName());
 		profile.setImageUrl(entity.getImageUrl());
 		profile.setLevel(entity.getCredibility());
 		MutablePair<Integer, Integer> ratingAndReviewCount = dishMapper.getRatingCount(entity.getRecommendations());
@@ -94,7 +95,6 @@ public class UserDaoMapper {
 				switch (entity.getVegnonvegPreference().getId()) {
 					case 1: profile.setStatus(resource.getString(VEG_PREF)); break;
 					case 2: profile.setStatus(resource.getString(NONVEG_PREF)); break;
-					case 3: profile.setStatus(resource.getString(ANY_PREF)); break;
 				}
 			}
 		}

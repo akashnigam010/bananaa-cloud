@@ -6,6 +6,7 @@ import in.socyal.sc.api.login.request.LoginRequest;
 import in.socyal.sc.api.login.request.MLoginRequest;
 import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.response.StatusResponse;
+import in.socyal.sc.api.user.request.ProfileRequest;
 
 public interface LoginDelegate {
 	/**
@@ -47,4 +48,6 @@ public interface LoginDelegate {
 	 * @throws BusinessException
 	 */
 	StatusResponse resetPassword(MLoginRequest request) throws BusinessException;
+
+	public void saveProfile(ProfileRequest request) throws BusinessException;
 }

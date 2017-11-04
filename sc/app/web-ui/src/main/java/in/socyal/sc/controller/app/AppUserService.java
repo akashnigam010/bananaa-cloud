@@ -18,11 +18,12 @@ import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.user.dto.ProfileResponse;
-import in.socyal.sc.api.user.request.StatusRequest;
+import in.socyal.sc.api.user.request.ProfileRequest;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.app.response.VegnonvegPreferenceResponse;
 import in.socyal.sc.core.validation.ItemValidator;
+import in.socyal.sc.login.LoginDelegate;
 import in.socyal.sc.user.UserDelegate;
 
 @RestController
@@ -38,6 +39,8 @@ public class AppUserService {
 	UserDelegate userDelegate;
 	@Autowired
 	RecommendationDelegate recommendationDelegate;
+	@Autowired
+	LoginDelegate loginDelegate;
 	@Autowired
 	ItemValidator validator;
 
@@ -65,11 +68,12 @@ public class AppUserService {
 		}
 	}
 
-	@RequestMapping(value = "/saveStatus", method = RequestMethod.POST, headers = "Accept=application/json")
-	public StatusResponse saveStatus(@RequestBody StatusRequest request) {
+	@RequestMapping(value = "/saveProfile", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse saveProfile(@RequestBody ProfileRequest request) {
 		StatusResponse response = new StatusResponse();
 		try {
-			userDelegate.saveStatus(request);
+			validator.validateSaveProfileRequest(request);
+			loginDelegate.saveProfile(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

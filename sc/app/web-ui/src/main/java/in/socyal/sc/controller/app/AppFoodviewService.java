@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
@@ -14,7 +15,7 @@ import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.merchant.response.UserFoodviewsResponse;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.ReviewRequest;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.controller.MerchantService;
@@ -91,11 +92,24 @@ public class AppFoodviewService {
 	}
 	
 	@RequestMapping(value = "/saveFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
-	public StatusResponse saveReview(@RequestBody ReviewRequest request) {
+	public StatusResponse saveFoodview(@RequestBody FoodviewRequest request) {
 		StatusResponse response = new StatusResponse();
 		try {
-			validator.validateReviewRequestApp(request);
-			delegate.saveReview(request);
+			validator.validateSaveFoodviewRequestApp(request);
+			delegate.saveFoodview(request);
+			return responseHelper.success(response);
+		} catch (BusinessException e) {
+			LOG.debug(e.getMessage());
+			return responseHelper.failure(response, e);
+		}
+	}
+	
+	@RequestMapping(value = "/deleteFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
+	public StatusResponse saveReview(@RequestBody IdRequest request) {
+		StatusResponse response = new StatusResponse();
+		try {
+			validator.validateDeleteFoodviewRequestApp(request);
+			delegate.deleteFoodview(request);
 			return responseHelper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());
