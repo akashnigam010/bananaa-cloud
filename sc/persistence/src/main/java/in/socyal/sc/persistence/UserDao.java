@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -208,21 +209,29 @@ public class UserDao {
 		return mapper.map(entity);
 	}
 	
-	public void saveStatus(String status, Integer userId) throws BusinessException {
+	public void saveProfile(MutablePair<String, String> name, String status, Integer userId) throws BusinessException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserEntity.class);
 		criteria.add(Restrictions.eq("id", userId));
 		UserEntity entity = (UserEntity) criteria.uniqueResult();
 		if (entity == null) {
 			throw new BusinessException(LoginErrorCodeType.USER_NOT_FOUND);
 		}
-		UserStatusEntity statusEntity = entity.getStatus();
 		Calendar current = Calendar.getInstance();
+		if (!entity.getFirstName().equals(name.getLeft())) {
+			entity.setFirstName(name.getLeft());
+			entity.setUpdatedDateTime(current);
+		}
+		if (entity.getLastName() == null || !entity.getLastName().equals(name.getRight())) {
+			entity.setLastName(name.getRight());
+			entity.setUpdatedDateTime(current);
+		}
+		UserStatusEntity statusEntity = entity.getStatus();
 		if (statusEntity == null) {
 			statusEntity = new UserStatusEntity();
 			statusEntity.setCreatedDateTime(current);
 		}
 		statusEntity.setStatus(status);
-		statusEntity.setUpdatedDateTime(current);
+		statusEntity.setUpdatedDateTime(current);		
 		entity.setStatus(statusEntity);
 		sessionFactory.getCurrentSession().saveOrUpdate(entity);
 	}

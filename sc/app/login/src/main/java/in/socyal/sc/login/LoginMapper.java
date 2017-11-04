@@ -84,16 +84,21 @@ public class LoginMapper {
 
 	}
 
-	private MutablePair<String, String> parseDisplayName(String displayName) {
+	public MutablePair<String, String> parseDisplayName(String displayName) {
 		MutablePair<String, String> names = new MutablePair<>();
 		String[] nameString = displayName.split(" ");
 		StringBuilder firstName = new StringBuilder();
-		int i;
-		for (i = 0; i < nameString.length - 1; i++) {
-			firstName.append(nameString[i] + " ");
+		if (nameString.length == 1) {
+			firstName.append(nameString[0]);
+			names.setLeft(firstName.toString().trim());
+		} else {
+			int i;
+			for (i = 0; i < nameString.length - 1; i++) {
+				firstName.append(nameString[i] + " ");
+			}
+			names.setLeft(firstName.toString().trim());
+			names.setRight(nameString[i]);
 		}
-		names.setLeft(firstName.toString().trim());
-		names.setRight(nameString[i]);
 		return names;
 	}
 

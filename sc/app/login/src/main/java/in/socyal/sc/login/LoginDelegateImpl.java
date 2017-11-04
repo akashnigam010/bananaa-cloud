@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,15 @@ import in.socyal.sc.api.login.response.LoginResponse;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
 import in.socyal.sc.api.type.error.LoginErrorCodeType;
+import in.socyal.sc.api.type.error.UserErrorCodeType;
 import in.socyal.sc.api.user.dto.UserDto;
+import in.socyal.sc.api.user.request.ProfileRequest;
 import in.socyal.sc.helper.aws.S3Helper;
 import in.socyal.sc.helper.facebook.OAuth2FbHelper;
 import in.socyal.sc.helper.firebase.FirebaseAuthHelper;
 import in.socyal.sc.helper.google.OAuth2GoogleHelper;
 import in.socyal.sc.helper.mail.MailSender;
+import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.MerchantDao;
 import in.socyal.sc.persistence.UserDao;
 
@@ -53,6 +57,8 @@ public class LoginDelegateImpl implements LoginDelegate {
 	S3Helper s3Helper;
 	@Autowired
 	MailSender mailSender;
+	@Autowired
+	JwtTokenHelper jwtHelper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
@@ -172,6 +178,19 @@ public class LoginDelegateImpl implements LoginDelegate {
 			mailSender.sendPasswordMail(request);
 			return statusResponse;
 		}
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void saveProfile(ProfileRequest request) throws BusinessException {
+		if (!jwtHelper.isUserLoggedIn()) {
+			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
+		}
+		if (request.getStatus() == null) {
+			request.setStatus("");
+		}
+		MutablePair<String, String> name = mapper.parseDisplayName(request.getName().trim());
+		userDao.saveProfile(name, request.getStatus(), jwtHelper.getUserId());
 	}
 	
 	private UserDto saveNewUser(FederatedUser federatedUser, String password) throws BusinessException {

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.socyal.sc.api.IdPageRequest;
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.response.Foodview;
 import in.socyal.sc.api.merchant.response.FoodviewsResponse;
@@ -18,7 +19,7 @@ import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.ReviewRequest;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.type.error.DishErrorCodeType;
 import in.socyal.sc.api.type.error.UserErrorCodeType;
 import in.socyal.sc.app.rcmdn.mapper.RecommendationMapper;
@@ -48,11 +49,17 @@ public class RecommendationDelegateImpl implements RecommendationDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public void saveReview(ReviewRequest request) throws BusinessException {
+	public void saveFoodview(FoodviewRequest request) throws BusinessException {
 		if (!dishDao.isDishExists(request.getId())) {
 			throw new BusinessException(DishErrorCodeType.DISH_ID_NOT_FOUND);
 		}
-		dao.saveReview(request, jwtHelper.getUserId());
+		dao.saveFoodview(request, jwtHelper.getUserId());
+	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
+	public void deleteFoodview(IdRequest request) throws BusinessException {
+		dao.deleteFoodview(request, jwtHelper.getUserId());
 	}
 
 	@Override

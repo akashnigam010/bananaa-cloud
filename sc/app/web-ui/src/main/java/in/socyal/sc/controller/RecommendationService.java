@@ -15,7 +15,7 @@ import in.socyal.sc.api.merchant.response.FoodviewsResponse;
 import in.socyal.sc.api.recommendation.request.EditRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.ReviewRequest;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.core.validation.RecommendationValidator;
@@ -47,12 +47,12 @@ public class RecommendationService {
 	}
 
 	@RequestMapping(value = "/saveReview", method = RequestMethod.POST, headers = "Accept=application/json")
-	public StatusResponse saveReview(@RequestBody ReviewRequest request,
+	public StatusResponse saveReview(@RequestBody FoodviewRequest request,
 			@CookieValue(name = "blc", defaultValue = "") String blc) {
 		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateReviewRequest(request, blc);
-			delegate.saveReview(request);
+			delegate.saveFoodview(request);
 			return helper.success(response);
 		} catch (BusinessException e) {
 			LOG.debug(e.getMessage());

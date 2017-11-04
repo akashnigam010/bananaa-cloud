@@ -1,7 +1,8 @@
 package in.socyal.sc.api.recommendation.request;
 
-public class ReviewRequest {
+public class FoodviewRequest {
 	private Integer id;
+	private Float rating;
 	private String description;
 
 	public Integer getId() {
@@ -18,5 +19,13 @@ public class ReviewRequest {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Float getRating() {
+		return rating;
+	}
+
+	public void setRating(Float rating) {
+		this.rating = rating;
 	}
 }

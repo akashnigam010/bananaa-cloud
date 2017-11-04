@@ -15,11 +15,12 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.exception.BusinessException;
 import in.socyal.sc.api.merchant.response.UserFoodview;
 import in.socyal.sc.api.recommendation.dto.RecommendationDto;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.ReviewRequest;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.type.error.RecommendationErrorCodeType;
 import in.socyal.sc.persistence.entity.DishEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
@@ -62,7 +63,7 @@ public class RecommendationDao {
 		session.saveOrUpdate(recommendation);
 	}
 
-	public void saveReview(ReviewRequest request, Integer userId) {
+	public void saveFoodview(FoodviewRequest request, Integer userId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
 		criteria.add(Restrictions.eq("user.id", userId));
@@ -73,12 +74,25 @@ public class RecommendationDao {
 			recommendation = new RecommendationEntity(cal, cal);
 			recommendation.setDish(new DishEntity(request.getId()));
 			recommendation.setUser(new UserEntity(userId));
+			recommendation.setRating(request.getRating());
 			recommendation.setDescription(request.getDescription());
 		} else {
+			recommendation.setRating(request.getRating());
 			recommendation.setDescription(request.getDescription());
 			recommendation.setUpdatedDateTime(cal);
 		}
 		session.saveOrUpdate(recommendation);
+	}
+	
+	public void deleteFoodview(IdRequest request, Integer userId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RecommendationEntity.class);
+		criteria.add(Restrictions.eq("user.id", userId));
+		criteria.add(Restrictions.eq("id", request.getId()));
+		RecommendationEntity recommendation = (RecommendationEntity) criteria.uniqueResult();
+		if (recommendation != null) {
+			session.delete(recommendation);
+		}		
 	}
 
 	@SuppressWarnings("unchecked")

@@ -7,7 +7,8 @@ public class Profile implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String imageUrl;
-	private String name;
+	private String firstName;
+	private String lastName;
 	private Float level;
 	private String status;
 	private Integer vegnonvegId;
@@ -32,12 +33,20 @@ public class Profile implements Serializable {
 		this.imageUrl = imageUrl;
 	}
 
-	public String getName() {
-		return name;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public Float getLevel() {
