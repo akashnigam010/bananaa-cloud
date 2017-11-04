@@ -63,8 +63,6 @@ public class UserDelegateImpl implements UserDelegate {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public Profile getUserProfile(IdRequest request) throws BusinessException {
-		Profile profile = userDao.getUserProfile(request.getId());
-		profile.setVegnonvegId(userDao.getVegnonvegPreference(request.getId()));		
-		return profile;
+		return userDao.getUserProfile(request.getId());
 	}
 }
