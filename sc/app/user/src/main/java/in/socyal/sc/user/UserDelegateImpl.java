@@ -12,7 +12,6 @@ import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.api.type.error.UserErrorCodeType;
 import in.socyal.sc.api.user.dto.Profile;
 import in.socyal.sc.api.user.dto.UserDto;
-import in.socyal.sc.api.user.request.StatusRequest;
 import in.socyal.sc.helper.security.jwt.JwtTokenHelper;
 import in.socyal.sc.persistence.UserDao;
 
@@ -67,17 +66,5 @@ public class UserDelegateImpl implements UserDelegate {
 		Profile profile = userDao.getUserProfile(request.getId());
 		profile.setVegnonvegId(userDao.getVegnonvegPreference(request.getId()));		
 		return profile;
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public void saveStatus(StatusRequest request) throws BusinessException {
-		if (!jwtHelper.isUserLoggedIn()) {
-			throw new BusinessException(UserErrorCodeType.USER_NOT_LOGGED_IN);
-		}
-		if (request.getStatus() == null) {
-			request.setStatus("");
-		}
-		userDao.saveStatus(request.getStatus(), jwtHelper.getUserId());
 	}
 }

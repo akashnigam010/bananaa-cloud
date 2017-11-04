@@ -1,5 +1,6 @@
 package in.socyal.sc.core.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import in.socyal.sc.api.items.request.TrendingRequest;
 import in.socyal.sc.api.merchant.request.SearchMerchantRequest;
 import in.socyal.sc.api.merchant.request.SearchRequest;
 import in.socyal.sc.api.type.error.GenericErrorCodeType;
+import in.socyal.sc.api.user.request.ProfileRequest;
 
 @Component
 public class ItemValidator extends Validator {
@@ -64,5 +66,11 @@ public class ItemValidator extends Validator {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 
+	}
+	
+	public void validateSaveProfileRequest(ProfileRequest request) throws BusinessException {
+		if (StringUtils.isEmpty(request.getName())) {
+			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
+		}
 	}
 }
