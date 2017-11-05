@@ -14,6 +14,7 @@ public class SearchMerchantRequest {
 	private Integer locationId;
 	private Boolean isCity;
 	private Boolean isTagSearch;
+	private Boolean isMerchantSearch;
 	private String searchString;
 
 	public String getNameId() {
@@ -94,5 +95,13 @@ public class SearchMerchantRequest {
 
 	public void setIsTagSearch(Boolean isTagSearch) {
 		this.isTagSearch = isTagSearch;
+	}
+
+	public Boolean getIsMerchantSearch() {
+		return isMerchantSearch;
+	}
+
+	public void setIsMerchantSearch(Boolean isMerchantSearch) {
+		this.isMerchantSearch = isMerchantSearch;
 	}
 }

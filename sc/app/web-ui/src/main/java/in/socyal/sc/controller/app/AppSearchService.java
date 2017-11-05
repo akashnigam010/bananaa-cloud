@@ -93,18 +93,27 @@ public class AppSearchService {
 					response = merchantDelegate.getMerchantsByTagId(request);
 				} else {
 					// no tag => all merchants search
-					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity());
+					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity(), 
+							request.getSearchString());
 					response = merchantDelegate.getAllSortedMerchantsForMobile(cookieDto, request.getPage());
 				}
 			} else {
-				if (StringUtils.isNotBlank(request.getSearchString())) {
-					// not tag search => search for places serving the passed string in their menu
-					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity());
-					response = itemDelegate.searchDishByNameForMobile(request.getSearchString(), cookieDto, request.getPage());
-				} else {
-					// no tag search and no search string => all merchants search
-					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity());
+				if (request.getIsMerchantSearch()) {
+					LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity(), 
+							request.getSearchString());
 					response = merchantDelegate.getAllSortedMerchantsForMobile(cookieDto, request.getPage());
+				} else {
+					if (StringUtils.isNotBlank(request.getSearchString())) {
+						// not tag search => search for places serving the passed string in their menu
+						LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity(), 
+								request.getSearchString());
+						response = itemDelegate.searchDishByNameForMobile(request.getSearchString(), cookieDto, request.getPage());
+					} else {
+						// no tag search and no search string => all merchants search
+						LocationCookieDto cookieDto = new LocationCookieDto(request.getLocationId(), request.getIsCity(), 
+								request.getSearchString());
+						response = merchantDelegate.getAllSortedMerchantsForMobile(cookieDto, request.getPage());
+					}
 				}
 			}
 			return responseHelper.success(response);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
@@ -288,6 +289,9 @@ public class MerchantDao {
 		criteria.add(Restrictions.ge("rating", 3.0));
 		criteria.createAlias("merchant", "merchant");
 		criteria.add(Restrictions.eq("merchant.isActive", Boolean.TRUE));
+		if (StringUtils.isNotBlank(cookieDto.getSearchString())) {
+			criteria.add(Restrictions.ilike("merchant.name", cookieDto.getSearchString(), MatchMode.ANYWHERE));
+		}
 		criteria.createAlias("merchant.address", "address");
 		criteria.createAlias("address.locality", "locality");
 		if (cookieDto.isSearchById()) {
