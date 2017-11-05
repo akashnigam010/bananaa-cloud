@@ -9,6 +9,7 @@ public class LocationCookieDto {
 	// to be used by app services only
 	private Integer id;
 	private Boolean isCity;
+	private String searchString;
 	private boolean isSearchById;;
 	
 	/**
@@ -16,10 +17,11 @@ public class LocationCookieDto {
 	 * @param id
 	 * @param isCity
 	 */
-	public LocationCookieDto(Integer id, Boolean isCity) {
+	public LocationCookieDto(Integer id, Boolean isCity, String searchString) {
 		this.id = id;
 		this.isCity = isCity;
 		this.isSearchById = true;
+		this.searchString = searchString;
 	}
 
 	/**
@@ -63,5 +65,13 @@ public class LocationCookieDto {
 	
 	public boolean isSearchById() {
 		return isSearchById;
+	}
+
+	public String getSearchString() {
+		return searchString;
+	}
+
+	public void setSearchString(String searchString) {
+		this.searchString = searchString;
 	}
 }
