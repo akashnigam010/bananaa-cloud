@@ -134,13 +134,13 @@ public class MerchantDao {
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		if (request.getType() == TagType.CUISINE) {
 			criteria.createAlias("cuisineRatings", "cuisineRatings");
-			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
+			criteria.add(Restrictions.ge("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
 			criteria.add(Restrictions.eq("cuisine.id", request.getTagId()));
 			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
 			criteria.createAlias("suggestionRatings", "suggestionRatings");
-			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
+			criteria.add(Restrictions.ge("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
 			criteria.add(Restrictions.eq("suggestion.id", request.getTagId()));
 			criteria.addOrder(Order.desc("suggestionRatings.rating"));
@@ -172,13 +172,13 @@ public class MerchantDao {
 		criteria.add(Restrictions.eq("isActive", Boolean.TRUE));
 		if (request.getType() == TagType.CUISINE) {
 			criteria.createAlias("cuisineRatings", "cuisineRatings");
-			criteria.add(Restrictions.gt("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
+			criteria.add(Restrictions.ge("cuisineRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 			criteria.createAlias("cuisineRatings.cuisine", "cuisine");
 			criteria.add(Restrictions.eq("cuisine.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("cuisineRatings.rating"));
 		} else if (request.getType() == TagType.SUGGESTION) {
 			criteria.createAlias("suggestionRatings", "suggestionRatings");
-			criteria.add(Restrictions.gt("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
+			criteria.add(Restrictions.ge("suggestionRatings.rating", Float.parseFloat(resource.getString(MINIMUM_TAG_RATING_SEARCH))));
 			criteria.createAlias("suggestionRatings.suggestion", "suggestion");
 			criteria.add(Restrictions.eq("suggestion.nameId", request.getNameId()));
 			criteria.addOrder(Order.desc("suggestionRatings.rating"));
