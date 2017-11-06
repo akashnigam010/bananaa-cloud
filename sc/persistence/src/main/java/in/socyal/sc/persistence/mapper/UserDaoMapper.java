@@ -24,6 +24,7 @@ public class UserDaoMapper {
 	private ResourceBundle resource = ResourceBundle.getBundle("bananaa-application");
 	private static final String VEG_PREF = "user.pref.veg";
 	private static final String NONVEG_PREF = "user.pref.nonveg";
+	private static final String ANYTHING = "user.pref.anything";
 
 	@Autowired
 	DishDaoMapper dishMapper;
@@ -95,6 +96,7 @@ public class UserDaoMapper {
 				switch (entity.getVegnonvegPreference().getId()) {
 					case 1: profile.setStatus(resource.getString(VEG_PREF)); break;
 					case 2: profile.setStatus(resource.getString(NONVEG_PREF)); break;
+					case 3: profile.setStatus(resource.getString(ANYTHING)); break;
 				}
 			}
 		}
