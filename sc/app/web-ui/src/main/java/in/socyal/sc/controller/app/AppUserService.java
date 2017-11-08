@@ -180,7 +180,7 @@ public class AppUserService {
 				request.setPage(1);
 			}
 			response.setSearchItems(
-					itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), 30));
+					itemDelegate.searchTagsWithUserPrefs(request, tagType, request.getPage(), 50));
 			return helper.success(response);
 		} catch (BusinessException e) {
 			return helper.failure(response, e);

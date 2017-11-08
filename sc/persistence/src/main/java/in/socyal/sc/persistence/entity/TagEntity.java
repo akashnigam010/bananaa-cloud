@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
@@ -18,6 +20,10 @@ public class TagEntity extends BaseEntity implements Serializable {
 	
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
+	
+	@ManyToOne
+	@JoinColumn(name = "VEGNONVEG_ID")
+	private VegnonvegEntity vegnonveg;
 	
 	@Column(name = "IMAGE_URL")
 	private String imageUrl;
@@ -72,5 +78,13 @@ public class TagEntity extends BaseEntity implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public VegnonvegEntity getVegnonveg() {
+		return vegnonveg;
+	}
+
+	public void setVegnonveg(VegnonvegEntity vegnonveg) {
+		this.vegnonveg = vegnonveg;
 	}
 }
