@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.FoodviewsResponse;
+import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.UserFoodviewsResponse;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.rcmdn.RecommendationDelegate;
 import in.socyal.sc.controller.MerchantService;
@@ -93,6 +93,7 @@ public class AppFoodviewService {
 	
 	@RequestMapping(value = "/saveFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse saveFoodview(@RequestBody FoodviewRequest request) {
+		JsonHelper.logRequest(request, AppFoodviewService.class, "/bna/foodview/saveFoodview");
 		StatusResponse response = new StatusResponse();
 		try {
 			validator.validateSaveFoodviewRequestApp(request);
