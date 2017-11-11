@@ -10,17 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 import in.socyal.sc.api.engine.request.IdRequest;
 import in.socyal.sc.api.helper.ResponseHelper;
 import in.socyal.sc.api.helper.exception.BusinessException;
-import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.FoodviewsResponse;
+import in.socyal.sc.api.merchant.response.ItemRecommendationResponse;
 import in.socyal.sc.api.merchant.response.UserFoodviewsResponse;
+import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.recommendation.request.GetRecommendationRequest;
 import in.socyal.sc.api.recommendation.request.RatingRequest;
-import in.socyal.sc.api.recommendation.request.FoodviewRequest;
 import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.rcmdn.RecommendationDelegate;
-import in.socyal.sc.controller.MerchantService;
 import in.socyal.sc.core.validation.RecommendationValidator;
-import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.security.jwt.JwtHelper;
 
 @RestController
@@ -35,10 +33,9 @@ public class AppFoodviewService {
 	ResponseHelper responseHelper;
 	@Autowired
 	JwtHelper jwtDetailsHelper;
-	
+
 	@RequestMapping(value = "/getMyFoodviews", method = RequestMethod.POST, headers = "Accept=application/json")
 	public FoodviewsResponse getMyFoodviews(@RequestBody GetRecommendationRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/bna/foodview/getMyFoodviews");
 		FoodviewsResponse response = new FoodviewsResponse();
 		try {
 			validator.validateGetMyFoodviewsRequestApp(request);
@@ -49,10 +46,9 @@ public class AppFoodviewService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getMyFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
 	public ItemRecommendationResponse getMyFoodview(@RequestBody GetRecommendationRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/bna/foodview/getMyFoodview");
 		ItemRecommendationResponse response = new ItemRecommendationResponse();
 		try {
 			validator.validateGetMyFoodviewRequestApp(request);
@@ -63,10 +59,9 @@ public class AppFoodviewService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/getOtherUsersFoodviews", method = RequestMethod.POST, headers = "Accept=application/json")
 	public UserFoodviewsResponse getOtherUsersFoodviews(@RequestBody GetRecommendationRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/bna/foodview/getOtherUsersFoodviews");
 		UserFoodviewsResponse response = new UserFoodviewsResponse();
 		try {
 			validator.validateGetUserFoodviewRequestApp(request);
@@ -77,7 +72,7 @@ public class AppFoodviewService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/saveRating", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse saveRating(@RequestBody RatingRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -90,7 +85,7 @@ public class AppFoodviewService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/saveFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse saveFoodview(@RequestBody FoodviewRequest request) {
 		StatusResponse response = new StatusResponse();
@@ -103,7 +98,7 @@ public class AppFoodviewService {
 			return responseHelper.failure(response, e);
 		}
 	}
-	
+
 	@RequestMapping(value = "/deleteFoodview", method = RequestMethod.POST, headers = "Accept=application/json")
 	public StatusResponse saveReview(@RequestBody IdRequest request) {
 		StatusResponse response = new StatusResponse();

@@ -43,8 +43,8 @@ public class RecommendationValidator extends Validator {
 	public void validateReviewRequest(FoodviewRequest request, String authToken)
 			throws BusinessException {
 		validateUserAndThrowException(authToken);
-		if (request.getId() == null || StringUtils.isBlank(request.getDescription())) {
-			LOG.error("Dish Id or review desc not found while validating save rating request");
+		if (request.getId() == null || request.getRating() == null || StringUtils.isBlank(request.getDescription())) {
+			LOG.error("Dish Id or rating or review desc not found while validating save rating request");
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

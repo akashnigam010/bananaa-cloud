@@ -24,7 +24,6 @@ import in.socyal.sc.api.type.TagType;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.core.validation.ItemValidator;
-import in.socyal.sc.helper.JsonHelper;
 
 @RestController
 @RequestMapping(value = "/bna/search")
@@ -42,7 +41,6 @@ public class AppSearchService {
 
 	@RequestMapping(value = "/gSearch", method = RequestMethod.POST, headers = "Accept=application/json")
 	public GlobalSearchResponse globalSearch(@RequestBody GenericSearchRequest request) {
-		JsonHelper.logRequest(request, AppSearchService.class, "/search/globalSearch");
 		GlobalSearchResponse response = new GlobalSearchResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
