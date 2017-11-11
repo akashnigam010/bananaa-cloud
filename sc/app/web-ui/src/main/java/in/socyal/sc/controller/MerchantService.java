@@ -72,7 +72,6 @@ public class MerchantService {
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/merchant/searchMerchant");
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {

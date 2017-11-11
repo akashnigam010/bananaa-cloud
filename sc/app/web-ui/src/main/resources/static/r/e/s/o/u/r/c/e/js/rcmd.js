@@ -337,6 +337,7 @@ function openRecommendationModal(rcmdOb) {
 function addRecommendation() {
 	var dataOb = {
 		id: revItem.id,
+		rating: revItem.rating,
 		description: revItem.review
 	};
 	if (handleReview(dataOb.description)) {

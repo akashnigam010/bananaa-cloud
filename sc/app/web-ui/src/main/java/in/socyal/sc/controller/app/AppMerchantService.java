@@ -16,14 +16,12 @@ import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.merchant.mapper.MerchantDelegateMapper;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.app.response.MerchantDetailsResponse;
-import in.socyal.sc.controller.MerchantService;
 import in.socyal.sc.core.validation.MerchantValidator;
-import in.socyal.sc.helper.JsonHelper;
 
 @RestController
 @RequestMapping(value = "/bna/merchant")
 public class AppMerchantService {
-	
+
 	@Autowired
 	MerchantDelegate merchantDelegate;
 	@Autowired
@@ -34,10 +32,9 @@ public class AppMerchantService {
 	MerchantValidator validator;
 	@Autowired
 	ResponseHelper responseHelper;
-	
+
 	@RequestMapping(value = "/getDetails", method = RequestMethod.POST, headers = "Accept=application/json")
 	public MerchantDetailsResponse getDetails(@RequestBody DetailsRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/bna/merchant/getDetails");
 		MerchantDetailsResponse response = null;
 		try {
 			validator.validateGetDetailsByIdRequest(request);

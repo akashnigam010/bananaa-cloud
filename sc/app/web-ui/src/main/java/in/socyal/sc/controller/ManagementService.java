@@ -30,7 +30,6 @@ import in.socyal.sc.api.response.StatusResponse;
 import in.socyal.sc.app.merchant.ManagementDelegate;
 import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.core.validation.ManageValidator;
-import in.socyal.sc.helper.JsonHelper;
 
 @RestController
 @RequestMapping(value = "/socyal/management")
@@ -94,7 +93,6 @@ public class ManagementService {
 
 	@RequestMapping(value = "/searchMerchant", method = RequestMethod.POST, headers = "Accept=application/json")
 	public SearchMerchantResponse searchMerchant(@RequestBody SearchRequest request) {
-		JsonHelper.logRequest(request, MerchantService.class, "/merchant/searchMerchant");
 		SearchMerchantResponse response = new SearchMerchantResponse();
 		try {
 			if (request.getSearchString().length() >= MINIMUM_SEARCH_STRING_LENGTH) {
