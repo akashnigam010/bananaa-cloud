@@ -50,6 +50,7 @@ public class DishDaoMapper {
 		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setNameId(entity.getNameId());
+		dto.setCost(entity.getCost());
 		dto.setRating(entity.getRating());
 		if (dishCriteria.getMapSuggestions()) {
 			dto.setSuggestions(mapSuggestions(entity.getSuggestions()));

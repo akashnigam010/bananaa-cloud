@@ -6,6 +6,7 @@ public class Item {
 	private Integer id;
 	private String nameId;
 	private String name;
+	private String cost;
 	private String thumbnail;
 	private String imageUrl;
 	private Integer recommendations;
@@ -88,5 +89,13 @@ public class Item {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 }
