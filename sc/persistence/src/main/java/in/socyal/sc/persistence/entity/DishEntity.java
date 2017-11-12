@@ -27,6 +27,9 @@ public class DishEntity extends BaseEntity implements Serializable {
 	@Column(name = "NAME_ID")
 	private String nameId;
 	
+	@Column(name = "COST")
+	private String cost;
+	
 	@Column(name = "VEGNONVEG")
 	private Integer vegnonveg;
 
@@ -94,7 +97,15 @@ public class DishEntity extends BaseEntity implements Serializable {
 	public void setNameId(String nameId) {
 		this.nameId = nameId;
 	}
-	
+		
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
+	}
+
 	public Integer getVegnonveg() {
 		return vegnonveg;
 	}

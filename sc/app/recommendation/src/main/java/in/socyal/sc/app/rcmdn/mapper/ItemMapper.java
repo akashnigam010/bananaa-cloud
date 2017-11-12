@@ -39,6 +39,7 @@ public class ItemMapper implements Serializable {
 			Item item = new Item();
 			item.setId(dto.getId());
 			item.setName(dto.getName());
+			item.setCost(dto.getCost());
 			item.setRating(dto.getRating() != null ? dto.getRating().toString() : "");
 			item.setThumbnail(dto.getThumbnail());
 			item.setImageUrl(dto.getImageUrl());
@@ -56,6 +57,7 @@ public class ItemMapper implements Serializable {
 		AppItemDetailsResponse response = new AppItemDetailsResponse();
 		response.setId(dto.getId());
 		response.setName(dto.getName());
+		response.setCost(dto.getCost());
 		response.setMerchantId(dto.getMerchant().getId());
 		response.setMerchantName(dto.getMerchant().getName());
 		response.setShortAddress(dto.getMerchant().getAddress().getLocality().getShortAddress());

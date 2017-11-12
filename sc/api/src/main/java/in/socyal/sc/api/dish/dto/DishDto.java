@@ -15,6 +15,7 @@ public class DishDto implements Serializable {
 	private Integer id;
 	private String name;
 	private String nameId;
+	private String cost;
 	private Float rating;
 	private List<SuggestionDto> suggestions;
 	private List<CuisineDto> cuisines;
@@ -42,6 +43,14 @@ public class DishDto implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 
 	public MerchantDto getMerchant() {

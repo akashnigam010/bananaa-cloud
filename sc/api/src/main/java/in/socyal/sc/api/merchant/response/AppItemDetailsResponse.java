@@ -10,6 +10,7 @@ public class AppItemDetailsResponse extends GenericResponse implements Serializa
 	private Integer id;
 	private Integer merchantId;
 	private String name;
+	private String cost;
 	private String merchantName;
 	private String shortAddress;
 	private String rating;
@@ -110,5 +111,13 @@ public class AppItemDetailsResponse extends GenericResponse implements Serializa
 
 	public void setItemUrlAbsolute(String itemUrlAbsolute) {
 		this.itemUrlAbsolute = itemUrlAbsolute;
+	}
+
+	public String getCost() {
+		return cost;
+	}
+
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 }
