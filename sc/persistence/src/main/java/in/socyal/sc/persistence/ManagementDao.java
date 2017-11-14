@@ -42,6 +42,7 @@ import in.socyal.sc.persistence.entity.LocalityEntity;
 import in.socyal.sc.persistence.entity.MerchantEntity;
 import in.socyal.sc.persistence.entity.RecommendationEntity;
 import in.socyal.sc.persistence.entity.SuggestionEntity;
+import in.socyal.sc.persistence.entity.VegnonvegEntity;
 import in.socyal.sc.persistence.mapper.DishDaoMapper;
 import in.socyal.sc.persistence.mapper.ManagementDaoMapper;
 
@@ -178,19 +179,33 @@ public class ManagementDao {
 		}
 	}
 
-	public void addCuisine(String name) {
+	public void addCuisine(String name, Integer vegnonvegId) throws BusinessException {
 		Calendar cal = Calendar.getInstance();
 		CuisineEntity entity = new CuisineEntity(cal, cal);
 		entity.setName(name);
 		entity.setNameId(generateNameId(name));
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(VegnonvegEntity.class);
+		criteria.add(Restrictions.eq("id", vegnonvegId));
+		VegnonvegEntity vnvEntity = (VegnonvegEntity) criteria.uniqueResult();
+		if (vnvEntity == null) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		entity.setVegnonveg(vnvEntity);
 		sessionFactory.getCurrentSession().save(entity);
 	}
 
-	public void addSuggestion(String name) {
+	public void addSuggestion(String name, Integer vegnonvegId) throws BusinessException {
 		Calendar cal = Calendar.getInstance();
 		SuggestionEntity entity = new SuggestionEntity(cal, cal);
 		entity.setName(name);
 		entity.setNameId(generateNameId(name));
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(VegnonvegEntity.class);
+		criteria.add(Restrictions.eq("id", vegnonvegId));
+		VegnonvegEntity vnvEntity = (VegnonvegEntity) criteria.uniqueResult();
+		if (vnvEntity == null) {
+			throw new BusinessException(GenericErrorCodeType.GENERIC_ERROR);
+		}
+		entity.setVegnonveg(vnvEntity);
 		sessionFactory.getCurrentSession().save(entity);
 	}
 

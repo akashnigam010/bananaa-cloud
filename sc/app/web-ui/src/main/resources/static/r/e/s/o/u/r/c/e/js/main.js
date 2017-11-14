@@ -146,10 +146,14 @@ function searchConfig(element, loc) {
     			displayTxt += '<span class="font-0-8">' +
                 				searchItem.shortAddress + 
                 			  '</span></div>';
-    		} else if (searchItem.type == 'CUISINE' || searchItem.type == 'DISH') {
+    		} else if (searchItem.type == 'CUISINE') {
     			displayTxt += '<span class="font-0-8">' +
     							searchItem.type + 
 							  '</span></div>';
+    		} else if (searchItem.type == 'SUGGESTION') {
+    			displayTxt += '<span class="font-0-8">' +
+				'DISH' + 
+			  '</span></div>';
     		}
 	        return displayTxt;
 		},
@@ -196,7 +200,7 @@ function searchConfig(element, loc) {
         	if (searchItem.type != null) {
         		if (searchItem.type == 'RESTAURANT') {
         			window.location.href = searchItem.merchantUrl;
-        		} else if (searchItem.type == 'CUISINE' || searchItem.type == 'DISH') {
+        		} else if (searchItem.type == 'CUISINE' || searchItem.type == 'SUGGESTION') {
         			var l = getLocationUrlString(loc.val());
         			window.location.href = '/' + l + '/' + searchItem.nameId;
         		}

@@ -18,7 +18,7 @@ import in.socyal.sc.api.type.error.GenericErrorCodeType;
 @Component
 public class ManageValidator {
 	public void validateAddRequest(AddRequest request) throws BusinessException {
-		if (StringUtils.isBlank(request.getName())) {
+		if (StringUtils.isBlank(request.getName()) || request.getVegnonvegId() == null) {
 			throw new BusinessException(GenericErrorCodeType.REQUEST_VALIDATION_FAILED);
 		}
 	}

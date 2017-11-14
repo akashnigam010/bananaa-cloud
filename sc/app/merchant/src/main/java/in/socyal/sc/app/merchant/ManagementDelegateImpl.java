@@ -82,15 +82,15 @@ public class ManagementDelegateImpl implements ManagementDelegate {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public void addCuisine(AddRequest request) {
-		dao.addCuisine(WordUtils.capitalizeFully(request.getName().trim()));
+	public void addCuisine(AddRequest request) throws BusinessException {
+		dao.addCuisine(WordUtils.capitalizeFully(request.getName().trim()), request.getVegnonvegId());
 		cacheManager.refreshCuisinesCache();
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
-	public void addSuggestion(AddRequest request) {
-		dao.addSuggestion(WordUtils.capitalizeFully(request.getName().trim()));
+	public void addSuggestion(AddRequest request) throws BusinessException {
+		dao.addSuggestion(WordUtils.capitalizeFully(request.getName().trim()), request.getVegnonvegId());
 		cacheManager.refreshSuggestionsCache();
 	}
 
