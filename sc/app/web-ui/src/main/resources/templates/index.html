@@ -11,178 +11,152 @@
 	<script type="text/javascript" th:src="'/r/e/s/o/u/r/c/e/js/' + ${loginStatus.bnaEnv} + '/login.js'"></script>
 	<div class="container-fluid">
 		<div class="hide" id="loginStatus" th:text="${loginStatus.status}"></div>
-		<!-- Top Banner STARTS -->
-		<div class="row home-banner">
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <!-- <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p> -->
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="btn-group login-info pull-right">
-                            <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
-                            </button>
-                            <ul id="login-dropdown" class="dropdown-menu pull-right">
-                                <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="javascript:logout();">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
+		<div style="height: 100vh;">
+			<!-- Top Banner STARTS -->
+			<div class="row home-banner vh-top">
+	            <div class="col-xs-12">
+	                <div class="row">
+	                    <div class="col-xs-6">
+	                        <!-- <p class="simpson header-icon cursor-pointer" onclick="location.href='/'">bananaa</p> -->
+	                    </div>
+	                    <div class="col-xs-6">
+	                        <div class="btn-group login-info pull-right">
+	                            <button type="button" id="login-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+	                                aria-haspopup="true" aria-expanded="false">
+	                                <span id="login-info" th:text="${loginStatus.status} ? ${loginStatus.firstName} : 'Login'"></span> <span class="caret"></span>                        
+	                            </button>
+	                            <ul id="login-dropdown" class="dropdown-menu pull-right">
+	                                <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
+	                                <li role="separator" class="divider"></li>
+	                                <li><a href="javascript:logout();">Logout</a></li>
+	                            </ul>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="col-xs-12">
+	                <div class="row padding-4">
+	                    <div class="col-xs-12 align-center logo-wrapper" style="font-size: 3em;">
+	                        <!-- <img class="logo-round" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/logo-pr.svg" alt="bananaa-logo" /> -->
+	                        <p class="simpson header-icon" style=" padding-left: 0%;">bananaa</p>                    
+	                    </div>
+	                    <div class="col-xs-12 hidden-sm hidden-md hidden-lg tagline align-center white">
+	                        <span>
+	                            Food suggestions
+	                        </span>
+	                    </div>
+	                    <div class="col-xs-12 hidden-xs tagline align-center white">
+	                        <span>
+	                            Food suggestions
+	                        </span>
+	                    </div>
+						
+						<div class="col-xs-12 align-center home-search-wrapper">
+	                        <form class="form-horizontal inline-block location-wrapper">
+	                            <div class="form-group-lg has-feedback float-left full-width">
+	                                <input type="text" id="search-location" data-provide="typeahead" class="form-control cursor-pointer form-input i-height" 
+	                                	autocomplete="off" th:value="${location}" placeholder="Type your location" />
+	                                <i class="glyphicon icon-location form-control-feedback i-height i-width"></i>
+	                            </div>
+	                        </form>
+	
+	                        <form class="form-horizontal inline-block search-wrapper">
+	                            <div class="form-group-lg has-feedback float-left full-width">
+	                                <input type="text" id="search-field" name="search" data-provide="typeahead" class="global-search form-control noloading form-input i-height" 
+	                                	placeholder="Search for a restaurant, cuisine or dish" autocomplete="off" />
+	                                <i class="glyphicon icon-search form-control-feedback i-height i-width"></i>
+	                                <div class="input-loader-animation-div">
+	                                    <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+	                                </div>                                
+	                            </div>
+	                        </form>
+	                        <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
+	                            <div class="form-group-lg has-feedback float-left">
+	                                <button type="button" onclick="clickSearchHome();" class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
+	                            </div>
+	                        </form>
+	                    </div>					
+					</div>
+	            </div>            
+	        </div>
+			<!-- Top Banner ENDS -->
+			<div class="row bna-bg align-center vh-bottom" style="font-size: 2.5em; position: relative;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
+                    Your search for better food ends here !
                 </div>
             </div>
-            <div class="col-xs-12">
-                <div class="row padding-4">
-                    <div class="col-xs-12 align-center logo-wrapper" style="font-size: 3em;">
-                        <!-- <img class="logo-round" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/logo-pr.svg" alt="bananaa-logo" /> -->
-                        <p class="simpson header-icon" style=" padding-left: 0%;">bananaa</p>                    
-                    </div>
-                    <div class="col-xs-12 hidden-sm hidden-md hidden-lg tagline align-center white">
-                        <span>
-                            Food suggestions, <br/>for you, by all
-                        </span>
-                    </div>
-                    <div class="col-xs-12 hidden-xs tagline align-center white">
-                        <span>
-                            Food suggestions, for you, by all
-                        </span>
-                    </div>
-					
-					<div class="col-xs-12 align-center home-search-wrapper">
-                        <form class="form-horizontal inline-block location-wrapper">
-                            <div class="form-group-lg has-feedback float-left full-width">
-                                <input type="text" id="search-location" data-provide="typeahead" class="form-control cursor-pointer form-input i-height" 
-                                	autocomplete="off" th:value="${location}" placeholder="Type your location" />
-                                <i class="glyphicon icon-location form-control-feedback i-height i-width"></i>
-                            </div>
-                        </form>
-
-                        <form class="form-horizontal inline-block search-wrapper">
-                            <div class="form-group-lg has-feedback float-left full-width">
-                                <input type="text" id="search-field" name="search" data-provide="typeahead" class="global-search form-control noloading form-input i-height" 
-                                	placeholder="Search for a restaurant, cuisine or dish" autocomplete="off" />
-                                <i class="glyphicon icon-search form-control-feedback i-height i-width"></i>
-                                <div class="input-loader-animation-div">
-                                    <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
-                                </div>                                
-                            </div>
-                        </form>
-                        <form class="form-horizontal inline-block hidden-xs" style="margin-left: 5px;">
-                            <div class="form-group-lg has-feedback float-left">
-                                <button type="button" onclick="clickSearchHome();" class="bna-button i-height" style="margin: 0px; width: 100px;">Search</button>
-                            </div>
-                        </form>
-                    </div>					
-				</div>
-            </div>            
-        </div>
-		<!-- Top Banner ENDS -->
+		</div>
 		
-		<div class="row">
-            <div class="col-xs-12 padding">
-                <div class="align-center">
-                    <span class="font-2">What is it?</span><br/>
-                    <span class="font-2">Well first, let us take you to that troublesome time</span><br />
-                    <span style="font-size: 5em;">&#129300;</span>
+		<div style="height: 100vh;">
+            <div class="row" style="height: 35%">
+                <div class="col-xs-12 align-center padding" style="font-size: 3em;">
+                    <div class="col-xs-12 bna-color">
+                        <p>Say hello to Bananaa!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"  style="height: 30%">
+                <div class="col-xs-12 align-center">
+                    <div class="col-xs-12">
+                        <img src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/v2/logo_512.png" style="width: 150px;" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"  style="height: 35%">
+                <div class="col-xs-12 align-center padding" style="font-size: 2.5em; padding: 5%;">
+                    <div class="col-xs-12">
+                        <p>Food Suggestions like never before ❤️</p>
+                    </div>
+                </div>
+            </div>
+        </div>     
+
+        <div class="row">
+            <div class="col-xs-12 align-center font-1-5 padding bna-bg">
+                <div>
+                    <img src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/v2/ic_food.png" style="width: 100px;"/>
+                </div>
+                <div class="col-xs-12" style="margin-top: 3%;">
+                    <p>Explore the most recommended dishes at restaurants</p>
                 </div>
             </div>
         </div>
 
-        <!-- Meme section STARTS -->
-        <div class="row meme-wrapper">
-            <div class="col-xs-12">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
-                        <div class="row">
-                            <div class="align-center">
-                                <div class="meme-text" style="padding-bottom: 3%;">
-                                    You and your hungry friend at a restaurant..   
-                                </div> 
-                                <div class="col-xs-12 padding-bottom">
-                                    <div class="col-xs-6 meme-image-div align-right">
-                                        <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/happy-1.jpg" alt="" />    
-                                    </div>
-                                    <div class="col-xs-6 meme-image-div align-left">
-                                        <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/happy-2.jpg" alt="" />
-                                    </div>
-                                </div>                                
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="align-center">
-                                <div class="meme-text" style="padding-bottom: 3%;">
-                                    And after a long hustle with the menu..
-                                </div>                               
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="row padding-top">
-                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-left">
-                                <div class="meme-image-div float-left" style="margin-right: 2%;">
-                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/waiter.jpg" alt="" />
-                                </div>                                
-                                <span class="meme-text">Waiter appears</span><br />
-                                <span class="meme-text bna-color">"Your order, Sir?"</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-right">
-                                <div class="meme-image-div float-right" style="margin-left: 2%;">
-                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/me.jpg" alt="" />
-                                </div>                                
-                                <span class="meme-text">You</span><br />
-                                <div class="meme-text bna-color">"In a moment please. <br />We need to go through the menu again."</div>
-                            </div>
-                        </div>
-                        <div class="row" style="padding-top: 10%;">
-                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-right">
-                                <div class="meme-image-div float-right" style="margin-left: 2%;">
-                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/suspicious.jpg" alt="" />
-                                </div>                                
-                                <span class="meme-text">You to your friend</span><br/>
-                                <span class="meme-text bna-color">"I have no idea what these dishes are. <br />What do you suggest?"</span>
-                            </div>
-                        </div>
-                        <div class="row padding-top">
-                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-left">
-                                <div class="meme-image-div float-left" style="margin-right: 2%;">
-                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/smirk.jpg" alt="" />
-                                </div>                                
-                                <span class="meme-text">Friend</span><br />
-                                <span class="meme-text bna-color">"Don't know man, maybe we should just order something regular. <br />
-                                Schezwan Noodles ?"</span>
-                            </div>
-                        </div>
-                        <div class="row padding-top">
-                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-right">
-                                <div class="meme-image-div float-right" style="margin-left: 2%;">
-                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/okay.jpg" alt="" />
-                                </div>                                
-                                <span class="meme-text">You</span><br />
-                                <span class="meme-text bna-color">"Yeah okay. <br />I wanted to try something different though."</span>
-                            </div>
-                        </div>
-                        <div class="row padding-top">
-                            <div class="col-xs-12 col-md-8 col-md-offset-2 align-left">
-                                <div class="meme-image-div float-left" style="margin-right: 2%;">
-                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/thinking.jpg" alt="" />
-                                </div>                                
-                                <span class="meme-text">Friend</span><br />
-                                <span class="meme-text bna-color">"Hey! you know what. Why don't we just find what people love eating here on Bananaa"</span>
-                            </div>
-                        </div>
-                        <div class="row padding-top">
-                            <div class="col-xs-12 align-center">
-                                <span style="font-size: 5em;">&#128525;</span>
-                            </div>
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col-xs-12 align-center font-1-5 padding">
+                <div>
+                    <img src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/v2/ic_love.png" style="width: 100px;" />
                 </div>
-            </div>            
+                <div class="col-xs-12" style="margin-top: 3%;">
+                    <p>Save your food preferences and start getting food suggestions around you</p>
+                </div>
+            </div>
         </div>
-        <!-- Meme section ENDS -->
+
+        <div class="row">
+            <div class="col-xs-12 align-center font-1-5 padding bna-bg">
+                <div>
+                    <img src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/v2/ic_rate.png" style="width: 100px;"/>
+                </div>
+                <div class="col-xs-12" style="margin-top: 3%;">
+                    <p>Look through the rated dishes at a restaurant and decide smartly what you'd like to eat.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 align-center font-1-5 padding">
+                <div>
+                    <img src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/suspicious.jpg" style="width: 100px;"/>
+                </div>
+                <div class="col-xs-12" style="margin-top: 3%;">
+                    <p>Still making up your mind?</p>
+                    <p class="cursor-pointer bna-color" id="memeButton">Click here to understand it the meme way</p>
+                </div>
+            </div>
+        </div>
 
 		<!-- Secondary banner STARTS -->
         <div class="row sec-banner-1 padding-top padding-bottom">
@@ -389,6 +363,122 @@
 		<div lang="en" th:replace="fragments/login-modal :: login-modal"></div>
 
 		<div lang="en" th:replace="fragments/footer :: footer"></div>
+		
+		<!-- Meme Modal STARTS -->
+        <div class="modal fade" id="memeModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header align-center">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <img src="https://bna-s3.s3.amazonaws.com/img/clear.svg" />
+                        </button>
+                        <div>
+                            <div class="login-title bold font-1-3 padding-1 bna-color">
+                                Bananaa - The meme Way
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body align-center">
+                        <div class="row meme-wrapper">
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+                                        <div class="row">
+                                            <div class="align-center">
+                                                <div class="meme-text" style="padding-bottom: 3%;">
+                                                    You and your hungry friend at a restaurant..   
+                                                </div> 
+                                                <div class="col-xs-12 padding-bottom">
+                                                    <div class="col-xs-6 meme-image-div align-right">
+                                                        <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/happy-1.jpg" alt="" />    
+                                                    </div>
+                                                    <div class="col-xs-6 meme-image-div align-left">
+                                                        <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/happy-2.jpg" alt="" />
+                                                    </div>
+                                                </div>                                
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="align-center">
+                                                <div class="meme-text" style="padding-bottom: 3%;">
+                                                    And after a long hustle with the menu..
+                                                </div>                               
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="row padding-top">
+                                            <div class="col-xs-12 align-left">
+                                                <div class="meme-image-div float-left" style="margin-right: 2%;">
+                                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/waiter.jpg" alt="" />
+                                                </div>                                
+                                                <span class="meme-text">Waiter appears</span><br />
+                                                <span class="meme-text bna-color">"Your order, Sir?"</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 align-right">
+                                                <div class="meme-image-div float-right" style="margin-left: 2%;">
+                                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/me.jpg" alt="" />
+                                                </div>                                
+                                                <span class="meme-text">You</span><br />
+                                                <div class="meme-text bna-color">"In a moment please. <br />We need to go through the menu again."</div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top: 10%;">
+                                            <div class="col-xs-12 align-right">
+                                                <div class="meme-image-div float-right" style="margin-left: 2%;">
+                                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/suspicious.jpg" alt="" />
+                                                </div>                                
+                                                <span class="meme-text">You to your friend</span><br/>
+                                                <span class="meme-text bna-color">"I have no idea what these dishes are. <br />What do you suggest?"</span>
+                                            </div>
+                                        </div>
+                                        <div class="row padding-top">
+                                            <div class="col-xs-12 align-left">
+                                                <div class="meme-image-div float-left" style="margin-right: 2%;">
+                                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/smirk.jpg" alt="" />
+                                                </div>                                
+                                                <span class="meme-text">Friend</span><br />
+                                                <span class="meme-text bna-color">"Don't know man, maybe we should just order something regular. <br />
+                                                Schezwan Noodles ?"</span>
+                                            </div>
+                                        </div>
+                                        <div class="row padding-top">
+                                            <div class="col-xs-12 align-right">
+                                                <div class="meme-image-div float-right" style="margin-left: 2%;">
+                                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/okay.jpg" alt="" />
+                                                </div>                                
+                                                <span class="meme-text">You</span><br />
+                                                <span class="meme-text bna-color">"Yeah okay. <br />I wanted to try something different though."</span>
+                                            </div>
+                                        </div>
+                                        <div class="row padding-top">
+                                            <div class="col-xs-12 align-left">
+                                                <div class="meme-image-div float-left" style="margin-right: 2%;">
+                                                    <img class="meme-image" src="https://s3.ap-south-1.amazonaws.com/bna-s3/img/meme/thinking.jpg" alt="" />
+                                                </div>                                
+                                                <span class="meme-text">Friend</span><br />
+                                                <span class="meme-text bna-color">"Hey! you know what. Why don't we just find what people love eating here on Bananaa"</span>
+                                            </div>
+                                        </div>
+                                        <div class="row padding-top">
+                                            <div class="col-xs-12 align-center">
+                                                <span style="font-size: 5em;">&#128525;</span>
+                                                <br/>
+                                                <p>That's right!</p>
+                                                <p class="bna-color">#gobananaa</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Meme Modal ENDS -->
 
 	</div>
 
