@@ -390,10 +390,16 @@ function addCuisine() {
 		alertMessage('Enter a cuisine name');
 		return;
 	}	
+	var vegnonvegId = $("#cuisineVegnonvegIdAdd").val();
+	if (vegnonvegId == null || vegnonvegId == '') {
+		alertMessage('Enter Vegnonveg ID');
+		return;
+	}
 
 	if (!current || (current && current.name != $cuisineName)) {
 		var dataOb = {
-    			name : $cuisineName
+    			name : $cuisineName,
+    			vegnonvegId : vegnonvegId
     	};
         return $.ajax({
       	  method: "POST",
@@ -421,10 +427,16 @@ function addSuggestion() {
 		alertMessage('Enter a suggestion name');
 		return;
 	}	
+	var vegnonvegId = $("#suggestionVegnonvegIdAdd").val();
+	if (vegnonvegId == null || vegnonvegId == '') {
+		alertMessage('Enter Vegnonveg ID');
+		return;
+	}
 
 	if (!current || (current && current.name != $suggestionName)) {
 		var dataOb = {
-    			name : $suggestionName
+    			name : $suggestionName,
+    			vegnonvegId : vegnonvegId
     	};
         return $.ajax({
       	  method: "POST",

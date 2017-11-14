@@ -23,9 +23,9 @@ public interface ManagementDelegate {
 
 	public void addRecommendations(AddRecommendationsRequest request) throws BusinessException;
 
-	public void addCuisine(AddRequest request);
+	public void addCuisine(AddRequest request) throws BusinessException;
 
-	public void addSuggestion(AddRequest request);
+	public void addSuggestion(AddRequest request) throws BusinessException;
 
 	public GetCuisinesResponse getCuisines(SearchRequest request);
 
