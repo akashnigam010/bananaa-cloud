@@ -28,6 +28,10 @@ $(document).ready(function() {
 //        });
     };
     
+    $('.downloadPlayStoreBtn').on('mouseup', function (e) {
+        window.location = "https://play.google.com/store/apps/details?id=in.bananaa&hl=en";
+    });
+    
     $('#login-button').on('mouseup', function (e) {
     	activateLogin();
     });
