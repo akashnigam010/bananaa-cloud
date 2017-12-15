@@ -4,6 +4,15 @@ body {
 
 /* Hero Banner CSS - START */
 
+.downloadAppGrp {
+    padding-top: 4%;
+}
+
+.downloadAppBtn {
+    background-color: transparent;
+    border-color: transparent;
+}
+
 .logo-round {
     object-fit: cover;
     height: 85px;
