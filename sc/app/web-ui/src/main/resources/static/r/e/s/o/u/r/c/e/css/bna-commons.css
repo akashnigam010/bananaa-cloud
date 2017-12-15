@@ -498,7 +498,7 @@ body .slick-next, body .slick-prev {
 		url("https://bna-s3.s3.amazonaws.com/img/footer-graphic.png");
 	background-repeat: no-repeat;
 	background-position: left bottom;
-	padding: 10% 0%;
+	padding: 0 0 5% 0;
 }
 
 .social-icon {
@@ -757,4 +757,16 @@ input:focus ~ .highlight, textarea:focus ~ .highlight {
 }
 .r10 {
   background-color: #CD1C26;
+}
+
+.btn-appstore {
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    color: #5a5a5a;
+}
+
+.btn-appstore img {
+    width: 30px;
+    float: left;
 }

@@ -30,7 +30,7 @@ $(document).ready(function() {
     getTrendingRestaurants();
     getTrendingCuisines();
     getTrendingDishes();
-    getStories();
+    //getStories();
 });
 
 function clickSearchHome() {

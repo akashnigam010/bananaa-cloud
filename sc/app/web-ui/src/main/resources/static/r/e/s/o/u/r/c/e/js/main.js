@@ -28,6 +28,10 @@ $(document).ready(function() {
 //        });
     };
     
+    $('.downloadPlayStoreBtn').on('mouseup', function (e) {
+        window.location = "https://play.google.com/store/apps/details?id=in.bananaa&hl=en";
+    });
+    
     $('#login-button').on('mouseup', function (e) {
     	activateLogin();
     });
@@ -367,6 +371,38 @@ function forgotPassword() {
       			handleErrorResponseLoginModal(response.statusCodes.statusCode[0].description);
       		  }		
       	  });
+    }
+}
+
+function subscribe() {
+    var email = $("#subscribeMail").val();
+    if (!validateEmail(email)) {
+        $("#subscriptionError").html("Please check your email");
+        $("#subscriptionError").attr('style', 'color: red;')
+        $("#subscriptionError").removeClass('hide');
+    } else {
+    	var dataOb = {
+    	        name : 'Subscribe',
+    	        phone : 'Subscribe',
+    	        email : email,
+    	        message : 'Subscribe'
+    	    };
+    	    $.ajax({
+    	          method: "POST",
+    	          url: "/socyal/management/sendMessage",
+    	          contentType : "application/json",
+    	          data: JSON.stringify(dataOb)
+    	        })
+    	          .done(function(response) {
+    	        	  if (response.result) {
+    	            	  $("#subscribeMail").val('');
+    	            	  $("#subscriptionError").html("Thank you!");
+    	                  $("#subscriptionError").attr('style', 'color: green;')
+    	                  $("#subscriptionError").removeClass('hide');
+    	              } else {
+    	                  handleErrorCallback(response);
+    	              }                       
+    	          });
     }
 }
 
