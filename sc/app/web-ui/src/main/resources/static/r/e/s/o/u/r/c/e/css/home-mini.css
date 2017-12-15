@@ -4,6 +4,15 @@ body {
 
 /* Hero Banner CSS - START */
 
+.downloadAppGrp {
+    padding-top: 4%;
+}
+
+.downloadAppBtn {
+    background-color: transparent;
+    border-color: transparent;
+}
+
 .logo-round {
     object-fit: cover;
     height: 85px;
@@ -14,7 +23,7 @@ body {
 }
 
 .logo-wrapper {
-    height: 100px;
+    height: 80px;
 }
 
 .sub-banner-logo {
@@ -28,6 +37,14 @@ body {
 .tagline {
     font-size: 2.5em;
     padding-top: 3%;
+}
+
+.vh-top {
+    height: 55%;
+}
+
+.vh-bottom {
+    height: 45%;
 }
 
 .purple-banner {
@@ -65,7 +82,6 @@ body {
 .search-wrapper {
     width: 100%;
     margin-left: 0px;
-    padding-bottom: 5%;
 }
 
 /* Hero Banner CSS - END */

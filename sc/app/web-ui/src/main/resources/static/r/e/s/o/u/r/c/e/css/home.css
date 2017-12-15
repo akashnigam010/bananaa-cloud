@@ -1,5 +1,14 @@
 /* Hero Banner CSS - START */
 
+.downloadAppGrp {
+    padding-top: 2%;
+}
+
+.downloadAppBtn {
+    background-color: transparent;
+    border-color: #000;
+}
+
 .logo-round {
     object-fit: cover;
     height: 120px;
@@ -10,7 +19,7 @@
 }
 
 .logo-wrapper {
-    height: 150px;
+    height: 110px;
 }
 
 .sub-banner-logo {
@@ -27,11 +36,19 @@
     padding-bottom: 1%;
 }
 
+.vh-top {
+    height: 70%;
+}
+
+.vh-bottom {
+    height: 30%;
+}
+
 .home-banner {
     background: linear-gradient(
                      rgba(20,20,20,.2), 
                      rgba(20,20,20,.2)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg.jpg");
+                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/v2/bg-cone.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -84,7 +101,7 @@
 }
 
 .home-search-wrapper {
-    padding-top: 2%;
+    padding-top: 4%;
     padding-bottom: 2%;
 }
 

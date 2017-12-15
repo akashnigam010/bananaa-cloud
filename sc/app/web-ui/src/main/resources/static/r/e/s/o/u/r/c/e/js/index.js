@@ -24,10 +24,13 @@ $(document).ready(function() {
             homeSearch(this.value);
         }
     });
+    $('#memeButton').on('mouseup', function (e) {
+        $('#memeModal').modal('show');
+    });
     getTrendingRestaurants();
     getTrendingCuisines();
     getTrendingDishes();
-    getStories();
+    //getStories();
 });
 
 function clickSearchHome() {
