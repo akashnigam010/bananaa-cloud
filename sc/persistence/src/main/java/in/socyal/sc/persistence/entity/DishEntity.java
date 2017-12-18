@@ -16,11 +16,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import in.socyal.sc.persistence.type.BucketUrlType;
+
 @Entity
 @Table(name = "DISH", schema = "bna")
 public class DishEntity extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Column(name = "NAME")
 	private String name;
 
@@ -46,12 +48,10 @@ public class DishEntity extends BaseEntity implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "MERCHANT_ID")
 	private MerchantEntity merchant;
-
-	@Column(name = "IMAGE_URL")
-	private String imageUrl;
-
-	@Column(name = "THUMBNAIL")
-	private String thumbnail;
+	
+	@ManyToOne
+	@JoinColumn(name = "IMAGE_ID")
+	private DishImageEntity image;
 
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
@@ -123,19 +123,34 @@ public class DishEntity extends BaseEntity implements Serializable {
 	}
 
 	public String getImageUrl() {
-		return imageUrl;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() + this.image.getImage();
 	}
 
+	//TODO : Fix this
 	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+		//this.imageUrl = imageUrl;
+	}
+	
+	/**
+	 * Do not use this directly, instead use {@link #getImageUrl()} and {@link #getThumbnail()}}
+	 * @return
+	 */
+	@Deprecated
+	public DishImageEntity getImage() {
+		return image;
+	}
+
+	public void setImage(DishImageEntity image) {
+		this.image = image;
 	}
 
 	public String getThumbnail() {
-		return thumbnail;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() + this.image.getThumbnail();
 	}
 
+	//TODO : Fix this
 	public void setThumbnail(String thumbnail) {
-		this.thumbnail = thumbnail;
+		//this.thumbnail = thumbnail;
 	}
 
 	public Boolean getIsActive() {
