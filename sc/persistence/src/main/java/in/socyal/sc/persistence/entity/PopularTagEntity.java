@@ -1,5 +1,7 @@
 package in.socyal.sc.persistence.entity;
 
+import in.socyal.sc.persistence.type.BucketUrlType;
+
 public class PopularTagEntity {
 	private Long merchants;
 	private String name;
@@ -31,7 +33,7 @@ public class PopularTagEntity {
 	}
 
 	public String getThumbnail() {
-		return thumbnail;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() + thumbnail;
 	}
 
 	public void setThumbnail(String thumbnail) {

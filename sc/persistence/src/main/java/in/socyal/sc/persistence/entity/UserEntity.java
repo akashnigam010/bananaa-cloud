@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import in.socyal.sc.persistence.type.BucketUrlType;
+
 @Entity
 @Table(name = "USER", schema = "bna")
 public class UserEntity extends BaseEntity implements Serializable {
@@ -114,7 +116,7 @@ public class UserEntity extends BaseEntity implements Serializable {
 	}
 
 	public String getImageUrl() {
-		return imageUrl;
+		return BucketUrlType.USER_PREFIX.getUrlPrefix() + imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
