@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
+import in.socyal.sc.persistence.type.BucketUrlType;
+
 @Entity
 @Table(name = "MERCHANT", schema = "bna")
 public class MerchantEntity extends BaseEntity implements Serializable {
@@ -105,17 +107,19 @@ public class MerchantEntity extends BaseEntity implements Serializable {
 	}
 
 	public String getImageUrl() {
-		return imageUrl;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() + imageUrl;
 	}
 
+	//TODO : Fix this - do not store complete URL
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
 
 	public String getThumbnail() {
-		return thumbnail;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() + thumbnail;
 	}
 
+	//TODO : Fix this - do not store complete thumbnail url
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
 	}

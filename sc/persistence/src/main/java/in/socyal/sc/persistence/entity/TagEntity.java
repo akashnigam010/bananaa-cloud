@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import in.socyal.sc.persistence.type.BucketUrlType;
+
 @MappedSuperclass
 public class TagEntity extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +59,7 @@ public class TagEntity extends BaseEntity implements Serializable {
 	}
 
 	public String getImageUrl() {
-		return imageUrl;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() + imageUrl;
 	}
 
 	public void setImageUrl(String imageUrl) {
@@ -65,7 +67,7 @@ public class TagEntity extends BaseEntity implements Serializable {
 	}
 
 	public String getThumbnail() {
-		return thumbnail;
+		return BucketUrlType.URL_PREFIX.getUrlPrefix() +  thumbnail;
 	}
 
 	public void setThumbnail(String thumbnail) {
