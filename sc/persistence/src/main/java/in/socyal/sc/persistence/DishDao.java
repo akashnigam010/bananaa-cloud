@@ -396,14 +396,14 @@ public class DishDao {
 		queryBuilder.append("(user_suggestion_pref_mapping uspm ");
 		queryBuilder.append("join user u on uspm.user_id = u.id) ");
 		queryBuilder.append("on dsm.suggestion_id = uspm.suggestion_id) ");
-		queryBuilder.append("on d.id = dsm.dish_id ");
+		queryBuilder.append("on d.id = dsm.dish_id, dish_image di ");
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
 		queryBuilder.append("and uspm.user_id = :userId ");
 		queryBuilder.append("and m.is_active = 1 ");
 		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
 		queryBuilder.append(getBuilderVegNonVegPrefClause());
-		queryBuilder.append("and d.image_url not like '%item-img%' ");
+		queryBuilder.append("and di.image not like '%item-img%' ");
 		queryBuilder.append("union ");
 		queryBuilder.append("select distinct d.* from dish d ");
 		queryBuilder.append("join ");
@@ -414,13 +414,13 @@ public class DishDao {
 		queryBuilder.append("(user_cuisine_pref_mapping ucpm ");
 		queryBuilder.append("join user u on ucpm.user_id = u.id) ");
 		queryBuilder.append("on dcm.cuisine_id = ucpm.cuisine_id) ");
-		queryBuilder.append("on d.id = dcm.dish_id ");
+		queryBuilder.append("on d.id = dcm.dish_id, dish_image di ");
 		queryBuilder.append(getBuilderWhereClause(request.getIsCity()));
 		queryBuilder.append("and ucpm.user_id = :userId ");
 		queryBuilder.append("and m.is_active = 1 ");
 		queryBuilder.append("and d.rating >= :minRating ");
 		queryBuilder.append("and d.is_active = 1 ");
-		queryBuilder.append("and d.image_url not like '%item-img%' ");
+		queryBuilder.append("and di.image not like '%item-img%' ");
 		queryBuilder.append(getBuilderVegNonVegPrefClause());
 		queryBuilder.append(") as food_suggestions order by rating desc ");
 		
