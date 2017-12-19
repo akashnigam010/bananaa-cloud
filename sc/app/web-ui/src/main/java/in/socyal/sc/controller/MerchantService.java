@@ -28,6 +28,7 @@ import in.socyal.sc.app.merchant.MerchantDelegate;
 import in.socyal.sc.app.rcmdn.ItemDelegate;
 import in.socyal.sc.helper.JsonHelper;
 import in.socyal.sc.helper.LocalityCookieHelper;
+import in.socyal.sc.persistence.type.BucketUrlType;
 
 @RestController
 @RequestMapping(value = "/socyal/merchant")
@@ -124,17 +125,17 @@ public class MerchantService {
 		StoriesResponse response = new StoriesResponse();
 		Story story1 = new Story();
 		story1.setName("Bananaa - What the Fuzz!");
-		story1.setImageUrl("https://bna-s3.s3.amazonaws.com/img/what-mini.jpg");
+		story1.setImageUrl(BucketUrlType.URL_PREFIX.getUrlPrefix() + "img/what-mini.jpg");
 		story1.setUrl("/about");
 		response.getStories().add(story1);
 		Story story2 = new Story();
 		story2.setName("Food Suggestions. But wait..how ?");
-		story2.setImageUrl("https://bna-s3.s3.amazonaws.com/img/next.jpg");
+		story2.setImageUrl(BucketUrlType.URL_PREFIX.getUrlPrefix() + "img/next.jpg");
 		story2.setUrl("/how");
 		response.getStories().add(story2);
 		// Story story3 = new Story();
 		// story3.setName("Where are we headed ?");
-		// story3.setImageUrl("https://bna-s3.s3.amazonaws.com/img/next.jpg");
+		// story3.setImageUrl(BucketUrlType.URL_PREFIX.getUrlPrefix() + "img/next.jpg");
 		// story3.setUrl("/next");
 		// response.getStories().add(story3);
 		return response;
