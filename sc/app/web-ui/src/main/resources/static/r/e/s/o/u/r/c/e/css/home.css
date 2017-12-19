@@ -48,7 +48,7 @@
     background: linear-gradient(
                      rgba(20,20,20,.2), 
                      rgba(20,20,20,.2)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/v2/bg-cone.jpg");
+                     url("https://bna-ohio.s3.amazonaws.com/commons/v2/bg-cone.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -58,7 +58,7 @@
     background: linear-gradient(
                      rgba(20,20,20, .5), 
                      rgba(20,20,20, .8)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg-sec.jpg");
+                     url("https://bna-ohio.s3.amazonaws.com/commons/home-bg-sec.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -68,7 +68,7 @@
     background: linear-gradient(
                      rgba(20,20,20, .5), 
                      rgba(20,20,20, .8)),
-                     url("https://s3.ap-south-1.amazonaws.com/bna-s3/commons/home-bg-sec-2.jpg");
+                     url("https://bna-ohio.s3.amazonaws.com/commons/home-bg-sec-2.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -88,13 +88,13 @@
 }
 
 .icon-search-home {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
+    background-image: url("https://bna-ohio.s3.amazonaws.com/img/ic_search_black.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .icon-location-home {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+    background-image: url("https://bna-ohio.s3.amazonaws.com/img/ic_location_black.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 25px;

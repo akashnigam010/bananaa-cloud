@@ -92,7 +92,7 @@ body {
 
 .icon-location {
 	background-image:
-		url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+		url("https://bna-ohio.s3.amazonaws.com/img/ic_location_black.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 15px;
@@ -100,7 +100,7 @@ body {
 
 .icon-search {
 	background-image:
-		url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
+		url("https://bna-ohio.s3.amazonaws.com/img/ic_search_black.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 15px;
@@ -495,7 +495,7 @@ body .slick-next, body .slick-prev {
 	color: #adb0b6;
 	height: 20%;
 	background-image:
-		url("https://bna-s3.s3.amazonaws.com/img/footer-graphic.png");
+		url("https://bna-ohio.s3.amazonaws.com/img/footer-graphic.png");
 	background-repeat: no-repeat;
 	background-position: left bottom;
 	padding: 0 0 5% 0;
