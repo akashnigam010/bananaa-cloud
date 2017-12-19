@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import in.socyal.sc.persistence.type.BucketUrlType;
+
 @Controller
 public class AdditionalDetailsController {
 	private ResourceBundle resource = ResourceBundle.getBundle("environment");
@@ -16,7 +18,6 @@ public class AdditionalDetailsController {
 	private static final String PASSWORD = "bna.manage.password";
 	private static final String USERNAME_VENDOR = "bna.vendor.username";
 	private static final String PASSWORD_VENDOR = "bna.vendor.password";
-	private static final String GOOGLE_PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=in.bananaa";
 	
 	@RequestMapping(value = "/blogin", method = RequestMethod.GET)
 	public ModelAndView managementConsole() {
@@ -60,7 +61,7 @@ public class AdditionalDetailsController {
 		modelAndView.addObject("fbDescription", "About Bananaa");
 		modelAndView.addObject("title", "About | Bananaa");
 		modelAndView.addObject("url", "http://www.bananaa.in/about");
-		modelAndView.addObject("imageUrl", "https://bna-s3.s3.amazonaws.com/img/what-mini.jpg");
+		modelAndView.addObject("imageUrl", BucketUrlType.URL_PREFIX.getUrlPrefix() + "img/what-mini.jpg");
 		return modelAndView;
 	}
 
@@ -89,7 +90,7 @@ public class AdditionalDetailsController {
 		modelAndView.addObject("fbDescription", "Recommendations. But wait..how ?");
 		modelAndView.addObject("title", "Recommendations. But wait..how ? | Bananaa");
 		modelAndView.addObject("url", "http://www.bananaa.in/how");
-		modelAndView.addObject("imageUrl", "https://bna-s3.s3.amazonaws.com/img/next.jpg");
+		modelAndView.addObject("imageUrl", BucketUrlType.URL_PREFIX.getUrlPrefix() + "img/next.jpg");
 		return modelAndView;
 	}
 	

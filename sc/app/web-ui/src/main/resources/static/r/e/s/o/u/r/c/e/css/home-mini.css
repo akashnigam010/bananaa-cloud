@@ -61,13 +61,13 @@ body {
 }
 
 .icon-search-home {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg");
+    background-image: url("https://bna-ohio.s3.amazonaws.com/img/ic_search_black.svg");
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .icon-location-home {
-    background-image: url("https://bna-s3.s3.amazonaws.com/img/ic_location_black.svg");
+    background-image: url("https://bna-ohio.s3.amazonaws.com/img/ic_location_black.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 25px;

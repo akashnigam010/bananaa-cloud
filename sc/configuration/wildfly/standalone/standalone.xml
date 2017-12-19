@@ -157,7 +157,7 @@
                         <user-name>root</user-name>
                         <password>root</password>
                     </security>-->
-					<connection-url>jdbc:mysql://bananaa-db.cy9jzufg4lkb.ap-south-1.rds.amazonaws.com:3306/bna</connection-url>
+					<connection-url>jdbc:mysql://bananaa-db.cy9jzufg4lkb.rds.amazonaws.com:3306/bna</connection-url>
                     <driver>mysql</driver>
                     <security>
                         <user-name>admin</user-name>

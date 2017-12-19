@@ -3,8 +3,8 @@ var revItem = {};
 var selectedRating = 0;
 var flashTime = 50;
 var rateVal = new Array();
-var star_e = "https://bna-s3.s3.amazonaws.com/img/rate-e.png";
-var star_f = "https://bna-s3.s3.amazonaws.com/img/rate-f.png";
+var star_e = "https://bna-ohio.s3.amazonaws.com/img/rate-e.png";
+var star_f = "https://bna-ohio.s3.amazonaws.com/img/rate-f.png";
 rateVal[1] = {
 	name: 'EWW',
 	display: 'EWW (>.<)',
