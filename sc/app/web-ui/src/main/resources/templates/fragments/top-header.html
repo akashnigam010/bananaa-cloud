@@ -5,7 +5,7 @@
         <div class="row top-header">
             <div class="simpson header-icon bna-color">
                 <div class="hidden-sm hidden-md hidden-lg float-left">
-                    <img class="cursor-pointer float-left" src="https://bna-s3.s3.amazonaws.com/img/arrow_back_black.svg" onclick="window.history.back()" />
+                    <img class="cursor-pointer float-left" src="https://bna-ohio.s3.amazonaws.com/img/arrow_back_black.svg" onclick="window.history.back()" />
                 </div>
                 <div style="float: left; display: inline;">
                     <span class="cursor-pointer" onclick="location.href='https://www.bananaa.in'" style="margin-left: 5%;">bananaa</span>
@@ -15,7 +15,7 @@
             <!-- mobile screen -->
             <div class="hidden-sm hidden-md hidden-lg">
                 <div class="btn-group pull-right" style="margin-left: 8%">
-                    <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="https://bna-s3.s3.amazonaws.com/img/ic_person_black.svg" />                                
+                    <img id="login-button-mini" class="dropdown-toggle" data-toggle="dropdown" src="https://bna-ohio.s3.amazonaws.com/img/ic_person_black.svg" />                                
                     <ul class="dropdown-menu pull-right" id="login-dropdown-mini">
                         <li><a th:href="'/user/' + ${loginStatus.nameId}">My Profile</a></li>
                             <li role="separator" class="divider"></li>
@@ -23,7 +23,7 @@
                     </ul>
                 </div>
                 <div class="btn-group pull-right">
-                    <img src="https://bna-s3.s3.amazonaws.com/img/ic_search_black.svg" onclick="openSearchModal();" />
+                    <img src="https://bna-ohio.s3.amazonaws.com/img/ic_search_black.svg" onclick="openSearchModal();" />
                 </div>
             </div>
             
@@ -54,7 +54,7 @@
                         <input id="topSearchInput" class="global-search header-search-input noloading" type="text" placeholder="Search for a restaurant, cuisine or dish" />
                         <i class="glyphicon icon-search form-control-feedback" style="width: 15px; height: 40px;"></i>
                         <div class="input-loader-animation-div" style="width: 100%;">
-		                	<img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+		                	<img class="input-loader-animation" src="https://bna-ohio.s3.amazonaws.com/commons/ajax-loader.svg" />
 		                </div>
                     </div>    
                 </div>
@@ -70,7 +70,7 @@
             <div class="modal-content fullscreen-modal-content">                    
                 <div class="modal-header align-center">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <img src="https://bna-s3.s3.amazonaws.com/img/clear.svg" />
+                        <img src="https://bna-ohio.s3.amazonaws.com/img/clear.svg" />
                     </button>
                     <h4 class="modal-title bold">Search</h4>
                 </div>
@@ -86,7 +86,7 @@
                             <input id="modalSearchInput" class="global-search header-search-input noloading" type="text" data-provide="typeahead" placeholder="Search for a restaurant, cuisine or dish" />
                             <i class="glyphicon icon-search form-control-feedback" style="width: 15px; height: 40px;"></i>
                             <div class="input-loader-animation-div" style="height: 100%;">
-		                        <img class="input-loader-animation" src="https://s3.ap-south-1.amazonaws.com/bna-s3/commons/ajax-loader.svg" />
+		                        <img class="input-loader-animation" src="https://bna-ohio.s3.amazonaws.com/commons/ajax-loader.svg" />
 		                    </div>
                         </div>    
                     </div>                    
