@@ -33,7 +33,9 @@ public class S3Helper {
 		s3Client.setEndpoint("https://s3.amazonaws.com");
 		s3Client.putObject(new PutObjectRequest(resource.getString(BUCKET_NAME), nameId + ".jpg", file)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
-		return s3Client.getResourceUrl(resource.getString(BUCKET_NAME), nameId + ".jpg");
+		//return s3Client.getResourceUrl(resource.getString(BUCKET_NAME), nameId + ".jpg");
+		// Only returning the nameId + .jpg since the logic for complete url is moved now
+		return nameId + ".jpg";
 	}
 
 	public AWSCredentials credential() {
