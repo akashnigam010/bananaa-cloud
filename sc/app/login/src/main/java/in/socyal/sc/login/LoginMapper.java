@@ -45,8 +45,8 @@ public class LoginMapper {
 		if (StringUtils.isNotBlank(federatedUser.getId())) {
 			user.setUid(federatedUser.getId().toString());
 		}		
-		user.setFirstName(names.getLeft());
-		user.setLastName(names.getRight());
+		user.setFirstName(names.getLeft() != null ? names.getLeft() : "");
+		user.setLastName(names.getRight() != null ? names.getRight() : "");
 		user.setNameId(generateUserNameId(user.getFirstName(), user.getLastName()));
 		user.setImageUrl(federatedUser.getPhotoUrl());
 		user.setEmail(federatedUser.getEmail() != null ? federatedUser.getEmail() : null);
